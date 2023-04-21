@@ -16,7 +16,7 @@ function FormWdi(props) {
   const { generateInfrastructure, isContainerVisible, wdi } = props;
   const { height, width } = useWindowDimensions();
   const [party, setParty] = useState(false);
-  const [projectName, setProjectName] = useState("example");
+  const [projectName, setProjectName] = useState("");
   const [domain, setDomain] = useState("");
   const [cloudProvider, setCloudProvider] = useState("aws");
   const [awsRegion, setAwsRegion] = useState("ap-south-1");
@@ -128,7 +128,7 @@ function FormWdi(props) {
               <>
                 <FormLabel>Account ID</FormLabel>
                 <Input
-                  type="text"
+                  type="number"
                   placeholder="123456789"
                   marginBottom="10px"
                   onChange={(e) => setAwsAccountId(e.target.value)}

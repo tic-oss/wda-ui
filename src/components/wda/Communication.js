@@ -5,16 +5,14 @@ import {
   AccordionPanel,
   AccordionIcon,
   Box,
-  Button,
   Input,
   Text,
   FormControl,
   FormLabel,
+  CloseButton,
 } from "@chakra-ui/react";
-import { DeleteIcon } from "@chakra-ui/icons";
 
 function Communication({ id, communication, setCommunication }) {
-  
   const handleInputChange = (field, value) => {
     setCommunication((state) => ({
       ...state,
@@ -24,20 +22,25 @@ function Communication({ id, communication, setCommunication }) {
       },
     }));
   };
-  
+  const handleDelete = () => {
+    console.log("delCom");
+  };
 
   return (
     <AccordionItem>
-      <h2>
+      <div
+        style={{ display: "flex", flexDirection: "row", alignItems: "center" }}
+      >
         <AccordionButton>
           <Box as="span" flex="1" textAlign="left">
             <Text>Communication</Text>
           </Box>
           <AccordionIcon />
         </AccordionButton>
-      </h2>
+        <CloseButton size="sm" bg="transparent" onClick={handleDelete} />
+      </div>
       <AccordionPanel pb={4}>
-        <FormControl display="flex" flexDirection="row">
+        <FormControl isRequired display="flex" flexDirection="row">
           <FormLabel width="150px" alignSelf="center">
             Client Name
           </FormLabel>
@@ -45,13 +48,15 @@ function Communication({ id, communication, setCommunication }) {
             placeholder="Client"
             key="clientName"
             name="clientName"
-            onChange={({ target }) => handleInputChange('clientName', target.value)}
+            onChange={({ target }) =>
+              handleInputChange("clientName", target.value)
+            }
             marginBottom="10px"
             defaultValue={communication.clientName}
             type="text"
           />
         </FormControl>
-        <FormControl display="flex" flexDirection="row">
+        <FormControl isRequired display="flex" flexDirection="row">
           <FormLabel width="150px" alignSelf="center">
             Server Name
           </FormLabel>
@@ -59,19 +64,14 @@ function Communication({ id, communication, setCommunication }) {
             placeholder="Server"
             key="serverName"
             name="serverName"
-            onChange={({ target }) => handleInputChange('serverName', target.value)}
+            onChange={({ target }) =>
+              handleInputChange("serverName", target.value)
+            }
             marginBottom="10px"
             defaultValue={communication.serverName}
             type="text"
           />
         </FormControl>
-        <Button
-          size="xs"
-          leftIcon={<DeleteIcon />}
-          marginTop="10px"
-        >
-          Delete
-        </Button>
       </AccordionPanel>
     </AccordionItem>
   );

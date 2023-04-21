@@ -10,17 +10,19 @@ function Infrastructure({ wdi, setWdi }) {
   };
 
   return (
-    <FormControl isRequired>
-     <FormLabel>Enter your Domain Name</FormLabel>
-      <Input
-        type="text"
-        placeholder="Example.com"
-        marginBottom="10px"
-        key="domain"
-        name="domain"
-        onChange={({ target }) => handleInputChange("domain", target.value)}
-        defaultValue={wdi.domain}
-      />
+    <FormControl>
+      <FormControl isRequired>
+        <FormLabel>Enter your Domain Name</FormLabel>
+        <Input
+          type="text"
+          placeholder="example.com"
+          marginBottom="10px"
+          key="domain"
+          name="domain"
+          onChange={({ target }) => handleInputChange("domain", target.value)}
+          defaultValue={wdi.domain}
+        />
+      </FormControl>
       <FormLabel>Select Cloud Provider</FormLabel>
       <Select
         marginBottom="10px"
@@ -38,29 +40,31 @@ function Infrastructure({ wdi, setWdi }) {
 
       {wdi.cloudProvider === "aws" && (
         <>
-        <FormLabel>Account ID</FormLabel>
-        <Input
-          type="text"
-          placeholder="123456789"
-          marginBottom="10px"
-          onChange={({ target }) =>
-          handleInputChange("awsAccountId", target.value)
-        }
-          defaultValue={wdi.awsAccountId}
-        />
-        <FormLabel>Select region</FormLabel>
-        <Select
-          marginBottom="10px"
-          onChange={({ target }) =>
-          handleInputChange("awsRegion", target.value)
-        }
-          defaultValue={wdi.awsRegion}
-        >
-          <option value="ap-south-1">Asia Pacific (Mumbai)</option>
-          <option value="us-east-2">US East (Ohio)</option>
-          <option value="ap-east-1">Asia Pacific (Hong Kong)</option>
-        </Select>
-      </>
+          <FormControl isRequired>
+            <FormLabel>Account ID</FormLabel>
+            <Input
+              type="number"
+              placeholder="123456789"
+              marginBottom="10px"
+              onChange={({ target }) =>
+                handleInputChange("awsAccountId", target.value)
+              }
+              defaultValue={wdi.awsAccountId}
+            />
+          </FormControl>
+          <FormLabel>Select region</FormLabel>
+          <Select
+            marginBottom="10px"
+            onChange={({ target }) =>
+              handleInputChange("awsRegion", target.value)
+            }
+            defaultValue={wdi.awsRegion}
+          >
+            <option value="ap-south-1">Asia Pacific (Mumbai)</option>
+            <option value="us-east-2">US East (Ohio)</option>
+            <option value="ap-east-1">Asia Pacific (Hong Kong)</option>
+          </Select>
+        </>
       )}
 
       <FormLabel>Select Orchestration Provider:</FormLabel>
@@ -99,18 +103,20 @@ function Infrastructure({ wdi, setWdi }) {
 
       {wdi.orchestration === "kubernetes" && (
         <div>
-          <FormLabel>Enter Cluster Name</FormLabel>
-          <Input
-            type="text"
-            placeholder="Demo-cluster"
-            marginBottom="10px"
-            key="clusterName"
-            name="clusterName"
-            onChange={({ target }) =>
-              handleInputChange("clusterName", target.value)
-            }
-            defaultValue={wdi.clusterName}
-          />
+          <FormControl isRequired>
+            <FormLabel>Enter Cluster Name</FormLabel>
+            <Input
+              type="text"
+              placeholder="demo-cluster"
+              marginBottom="10px"
+              key="clusterName"
+              name="clusterName"
+              onChange={({ target }) =>
+                handleInputChange("clusterName", target.value)
+              }
+              defaultValue={wdi.clusterName}
+            />
+          </FormControl>
           {/* <FormLabel>Enter Kubernetes Namespace</FormLabel>
           <Input
             type="text"
@@ -138,38 +144,38 @@ function Infrastructure({ wdi, setWdi }) {
             <option value="traefik">Traefik</option>
           </Select>
           <FormLabel>Enable Monitoring:</FormLabel>
-                <Select
-                  onChange={({ target }) =>
-                  handleInputChange("monitoring", target.value)
-                }
-                defaultValue={wdi.monitoring}
-                  marginBottom="10px"
-                >
-                  <option value="true">Yes</option>
-                  <option value="false">No</option>
-                </Select>
-                <FormLabel>Enable Elastic Cloud:</FormLabel>
-                <Select
-                   onChange={({ target }) =>
-                   handleInputChange("enableECK", target.value)
-                 }
-                  defaultValue={wdi.enableECK}
-                  marginBottom="10px"
-                >
-                  <option value="true">Yes</option>
-                  <option value="false">No</option>
-                </Select>
-                <FormLabel>Enable Web UI:</FormLabel>
-                <Select
-                   onChange={({ target }) =>
-                   handleInputChange("k8sWebUI", target.value)
-                 }
-                 defaultValue={wdi.k8sWebUI}
-                  marginBottom="10px"
-                >
-                  <option value="true">Yes</option>
-                  <option value="false">No</option>
-                </Select>
+          <Select
+            onChange={({ target }) =>
+              handleInputChange("monitoring", target.value)
+            }
+            defaultValue={wdi.monitoring}
+            marginBottom="10px"
+          >
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+          </Select>
+          <FormLabel>Enable Elastic Cloud:</FormLabel>
+          <Select
+            onChange={({ target }) =>
+              handleInputChange("enableECK", target.value)
+            }
+            defaultValue={wdi.enableECK}
+            marginBottom="10px"
+          >
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+          </Select>
+          <FormLabel>Enable Web UI:</FormLabel>
+          <Select
+            onChange={({ target }) =>
+              handleInputChange("k8sWebUI", target.value)
+            }
+            defaultValue={wdi.k8sWebUI}
+            marginBottom="10px"
+          >
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+          </Select>
         </div>
       )}
     </FormControl>

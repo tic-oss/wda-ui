@@ -45,30 +45,33 @@ function Deployment({ application, deployment, setDeployment }) {
           </Editable>
         );
       })}
-      <FormLabel>Docker Repository Name</FormLabel>
-      <Input
-        placeholder=""
-        type="text"
-        key="dockerRepositoryName"
-        name="dockerRepositoryName"
-        onChange={({ target }) =>
-          handleInputChange("dockerRepositoryName", target.value)
-        }
-        marginBottom="10px"
-        defaultValue={deployment.dockerRepositoryName}
-      />
-      <FormLabel>Kubernetes Namespace</FormLabel>
-      <Input
-        placeholder="Wdi"
-        type="text"
-        key="kubernetesNamespace"
-        name="kubernetesNamespace"
-        onChange={({ target }) =>
-          handleInputChange("kubernetesNamespace", target.value)
-        }
-        marginBottom="10px"
-        defaultValue={deployment.kubernetesNamespace}
-      />
+      <FormControl isRequired>
+        <FormLabel>Docker Repository Name</FormLabel>
+        <Input
+          placeholder=""
+          type="text"
+          key="dockerRepositoryName"
+          name="dockerRepositoryName"
+          onChange={({ target }) =>
+            handleInputChange("dockerRepositoryName", target.value)
+          }
+          marginBottom="10px"
+          defaultValue={deployment.dockerRepositoryName}
+        />
+
+        <FormLabel>Kubernetes Namespace</FormLabel>
+        <Input
+          placeholder="Wdi"
+          type="text"
+          key="kubernetesNamespace"
+          name="kubernetesNamespace"
+          onChange={({ target }) =>
+            handleInputChange("kubernetesNamespace", target.value)
+          }
+          marginBottom="10px"
+          defaultValue={deployment.kubernetesNamespace}
+        />
+      </FormControl>
       {/* <FormLabel>Kubernetes Service Type</FormLabel>
       <Select
         key="kubernetesServiceType"
@@ -99,7 +102,7 @@ function Deployment({ application, deployment, setDeployment }) {
 
       {deployment.kubernetesUseDynamicStorage === "true" && (
         <>
-          <FormLabel>Enter Kubernetes Storage Class Name</FormLabel>
+          <FormLabel>Kubernetes Storage Class Name</FormLabel>
           <Input
             placeholder="demoStorageClass"
             type="text"
@@ -125,18 +128,20 @@ function Deployment({ application, deployment, setDeployment }) {
         marginBottom="10px"
         defaultValue={deployment.kubernetesStorageClassName}
       /> */}
-      <FormLabel>Ingress Domain</FormLabel>
-      <Input
-        placeholder=""
-        type="text"
-        key="ingressDomain"
-        name="ingressDomain"
-        onChange={({ target }) =>
-          handleInputChange("ingressDomain", target.value)
-        }
-        marginBottom="10px"
-        defaultValue={deployment.ingressDomain}
-      />
+      <FormControl isRequired>
+        <FormLabel>Ingress Domain</FormLabel>
+        <Input
+          placeholder=""
+          type="text"
+          key="ingressDomain"
+          name="ingressDomain"
+          onChange={({ target }) =>
+            handleInputChange("ingressDomain", target.value)
+          }
+          marginBottom="10px"
+          defaultValue={deployment.ingressDomain}
+        />
+      </FormControl>
       <FormLabel>Ingress Type</FormLabel>
       <Select
         key="ingressType"
