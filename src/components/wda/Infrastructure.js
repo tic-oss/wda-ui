@@ -1,7 +1,18 @@
 import React from "react";
-import { FormControl, FormLabel, Input, Select } from "@chakra-ui/react";
+import {
+  FormControl,
+  FormLabel,
+  Input,
+  Select,
+  FormErrorMessage,
+} from "@chakra-ui/react";
+import { WarningIcon } from "@chakra-ui/icons";
 
 function Infrastructure({ wdi, setWdi }) {
+  const isErrorDomain = wdi.domain === "";
+  const isErrorAccId = wdi.awsAccountId === "";
+  const isErrorCluster = wdi.clusterName === "";
+
   const handleInputChange = (field, value) => {
     setWdi((app) => ({
       ...app,
@@ -11,17 +22,24 @@ function Infrastructure({ wdi, setWdi }) {
 
   return (
     <FormControl>
-      <FormControl isRequired>
+      <FormControl isInvalid={isErrorDomain}>
         <FormLabel>Enter your Domain Name</FormLabel>
         <Input
           type="text"
           placeholder="example.com"
-          marginBottom="10px"
           key="domain"
           name="domain"
           onChange={({ target }) => handleInputChange("domain", target.value)}
           defaultValue={wdi.domain}
         />
+        {!isErrorDomain ? (
+          <div style={{ marginBottom: "10px" }}></div>
+        ) : (
+          <FormErrorMessage marginBottom="10px" fontSize="10px" marginTop="5px">
+            <WarningIcon marginRight="5px" />
+            Required
+          </FormErrorMessage>
+        )}
       </FormControl>
       <FormLabel>Select Cloud Provider</FormLabel>
       <Select
@@ -40,17 +58,28 @@ function Infrastructure({ wdi, setWdi }) {
 
       {wdi.cloudProvider === "aws" && (
         <>
-          <FormControl isRequired>
+          <FormControl isInvalid={isErrorAccId}>
             <FormLabel>Account ID</FormLabel>
             <Input
               type="number"
               placeholder="123456789"
-              marginBottom="10px"
               onChange={({ target }) =>
                 handleInputChange("awsAccountId", target.value)
               }
               defaultValue={wdi.awsAccountId}
             />
+            {!isErrorAccId ? (
+              <div style={{ marginBottom: "10px" }}></div>
+            ) : (
+              <FormErrorMessage
+                marginBottom="10px"
+                fontSize="10px"
+                marginTop="5px"
+              >
+                <WarningIcon marginRight="5px" />
+                Required
+              </FormErrorMessage>
+            )}
           </FormControl>
           <FormLabel>Select region</FormLabel>
           <Select
@@ -103,12 +132,11 @@ function Infrastructure({ wdi, setWdi }) {
 
       {wdi.orchestration === "kubernetes" && (
         <div>
-          <FormControl isRequired>
+          <FormControl isInvalid={isErrorCluster}>
             <FormLabel>Enter Cluster Name</FormLabel>
             <Input
               type="text"
               placeholder="demo-cluster"
-              marginBottom="10px"
               key="clusterName"
               name="clusterName"
               onChange={({ target }) =>
@@ -116,6 +144,18 @@ function Infrastructure({ wdi, setWdi }) {
               }
               defaultValue={wdi.clusterName}
             />
+            {!isErrorCluster ? (
+              <div style={{ marginBottom: "10px" }}></div>
+            ) : (
+              <FormErrorMessage
+                marginBottom="10px"
+                fontSize="10px"
+                marginTop="5px"
+              >
+                <WarningIcon marginRight="5px" />
+                Required
+              </FormErrorMessage>
+            )}
           </FormControl>
           {/* <FormLabel>Enter Kubernetes Namespace</FormLabel>
           <Input

@@ -7,9 +7,16 @@ import {
   Editable,
   EditableInput,
   EditablePreview,
+  FormErrorMessage,
 } from "@chakra-ui/react";
+import { WarningIcon } from "@chakra-ui/icons";
 
 function Deployment({ application, deployment, setDeployment }) {
+  const isErrorRepoName = deployment.dockerRepositoryName === "";
+  const isErrorNamespace = deployment.kubernetesNamespace === "";
+  const isErrorStorage = deployment.kubernetesStorageClassName === "";
+  const isErrorIngressDomain = deployment.ingressDomain === "";
+
   const handleInputChange = (field, value) => {
     setDeployment((app) => ({
       ...app,
@@ -45,7 +52,7 @@ function Deployment({ application, deployment, setDeployment }) {
           </Editable>
         );
       })}
-      <FormControl isRequired>
+      <FormControl isInvalid={isErrorRepoName}>
         <FormLabel>Docker Repository Name</FormLabel>
         <Input
           placeholder=""
@@ -55,10 +62,18 @@ function Deployment({ application, deployment, setDeployment }) {
           onChange={({ target }) =>
             handleInputChange("dockerRepositoryName", target.value)
           }
-          marginBottom="10px"
           defaultValue={deployment.dockerRepositoryName}
         />
-
+        {!isErrorRepoName ? (
+          <div style={{ marginBottom: "10px" }}></div>
+        ) : (
+          <FormErrorMessage marginBottom="10px" fontSize="10px" marginTop="5px">
+            <WarningIcon marginRight="5px" />
+            Required
+          </FormErrorMessage>
+        )}
+      </FormControl>
+      <FormControl isInvalid={isErrorNamespace}>
         <FormLabel>Kubernetes Namespace</FormLabel>
         <Input
           placeholder="Wdi"
@@ -71,6 +86,14 @@ function Deployment({ application, deployment, setDeployment }) {
           marginBottom="10px"
           defaultValue={deployment.kubernetesNamespace}
         />
+        {!isErrorNamespace ? (
+          <div style={{ marginBottom: "10px" }}></div>
+        ) : (
+          <FormErrorMessage marginBottom="10px" fontSize="10px" marginTop="5px">
+            <WarningIcon marginRight="5px" />
+            Required
+          </FormErrorMessage>
+        )}
       </FormControl>
       {/* <FormLabel>Kubernetes Service Type</FormLabel>
       <Select
@@ -102,18 +125,31 @@ function Deployment({ application, deployment, setDeployment }) {
 
       {deployment.kubernetesUseDynamicStorage === "true" && (
         <>
-          <FormLabel>Kubernetes Storage Class Name</FormLabel>
-          <Input
-            placeholder="demoStorageClass"
-            type="text"
-            key="kubernetesStorageClassName"
-            name="kubernetesStorageClassName"
-            onChange={({ target }) =>
-              handleInputChange("kubernetesStorageClassName", target.value)
-            }
-            marginBottom="10px"
-            defaultValue={deployment.kubernetesStorageClassName}
-          />
+          <FormControl isInvalid={isErrorStorage}>
+            <FormLabel>Kubernetes Storage Class Name</FormLabel>
+            <Input
+              placeholder="demoStorageClass"
+              type="text"
+              key="kubernetesStorageClassName"
+              name="kubernetesStorageClassName"
+              onChange={({ target }) =>
+                handleInputChange("kubernetesStorageClassName", target.value)
+              }
+              defaultValue={deployment.kubernetesStorageClassName}
+            />
+            {!isErrorStorage ? (
+              <div style={{ marginBottom: "10px" }}></div>
+            ) : (
+              <FormErrorMessage
+                marginBottom="10px"
+                fontSize="10px"
+                marginTop="5px"
+              >
+                <WarningIcon marginRight="5px" />
+                Required
+              </FormErrorMessage>
+            )}
+          </FormControl>
         </>
       )}
       {/* <FormLabel>Kubernetes Storage Provisioner</FormLabel>
@@ -128,7 +164,7 @@ function Deployment({ application, deployment, setDeployment }) {
         marginBottom="10px"
         defaultValue={deployment.kubernetesStorageClassName}
       /> */}
-      <FormControl isRequired>
+      <FormControl isInvalid={isErrorIngressDomain}>
         <FormLabel>Ingress Domain</FormLabel>
         <Input
           placeholder=""
@@ -138,9 +174,16 @@ function Deployment({ application, deployment, setDeployment }) {
           onChange={({ target }) =>
             handleInputChange("ingressDomain", target.value)
           }
-          marginBottom="10px"
           defaultValue={deployment.ingressDomain}
         />
+        {!isErrorIngressDomain ? (
+          <div style={{ marginBottom: "10px" }}></div>
+        ) : (
+          <FormErrorMessage marginBottom="10px" fontSize="10px" marginTop="5px">
+            <WarningIcon marginRight="5px" />
+            Required
+          </FormErrorMessage>
+        )}
       </FormControl>
       <FormLabel>Ingress Type</FormLabel>
       <Select

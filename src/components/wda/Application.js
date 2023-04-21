@@ -10,9 +10,15 @@ import {
   Input,
   Select,
   CloseButton,
+  FormErrorMessage,
 } from "@chakra-ui/react";
+import { WarningIcon } from "@chakra-ui/icons";
 
 function Application({ application, setApplication, id, entity }) {
+  const isErrorAppName = application.applicationName === "";
+  const isErrorPackageName = application.packageName === "";
+  const isErrorServerPort = application.serverPort === "";
+
   const handleInputChange = (field, value) => {
     setApplication((state) => ({
       ...state,
@@ -38,39 +44,54 @@ function Application({ application, setApplication, id, entity }) {
         >
           <AccordionButton>
             <Box as="span" flex="1" textAlign="left">
-              <FormControl isRequired>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    height: "40px",
-                  }}
-                >
-                  <FormLabel style={{ width: "250px" }}>
-                    Application Name
-                  </FormLabel>
-                  <Input
-                    placeholder="Application"
-                    key="applicationName"
-                    name="applicationName"
-                    onChange={({ target }) =>
-                      handleInputChange("applicationName", target.value)
-                    }
-                    marginBottom="10px"
-                    defaultValue={application.applicationName}
-                    type="text"
-                    sx={{
-                      border: "none",
-                      boxShadow: "none",
-                      outline: "none",
-                      "&:focus": {
-                        outline: "none",
-                        boxShadow: "none",
-                      },
+              <FormControl display="flex" flexDirection="column">
+                <FormControl isInvalid={isErrorAppName}>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
                     }}
-                  />
-                </div>
+                  >
+                    <FormLabel style={{ width: "250px" }}>
+                      Application Name
+                    </FormLabel>
+                    <Input
+                      placeholder="Application"
+                      key="applicationName"
+                      name="applicationName"
+                      onChange={({ target }) =>
+                        handleInputChange("applicationName", target.value)
+                      }
+                      defaultValue={application.applicationName}
+                      type="text"
+                      marginRight="10px"
+                      sx={{
+                        border: "none",
+                        boxShadow: "none",
+                        outline: "none",
+                        "&:focus": {
+                          outline: "none",
+                          boxShadow: "none",
+                        },
+                      }}
+                    />
+                    </div>
+                    <Box>
+                    {!isErrorAppName ? (
+                      <div style={{ marginBottom: "0px" }}></div>
+                    ) : (
+                      <FormErrorMessage
+                        fontSize="10px"
+                        marginTop="5px"
+                      >
+                        <WarningIcon marginRight="5px" marginLeft="180px"/>
+                        Required
+                      </FormErrorMessage>
+                    )}
+                    </Box>
+                  
+                </FormControl>
               </FormControl>
             </Box>
             <AccordionIcon />
@@ -93,7 +114,7 @@ function Application({ application, setApplication, id, entity }) {
               <option value="microservices">Microservices</option>
               <option value="monolithic">Monolithic</option>
             </Select>
-            <FormControl isRequired>
+            <FormControl isInvalid={isErrorPackageName}>
               <FormLabel>Package Name</FormLabel>
               <Input
                 placeholder="com.mycompany.myapp"
@@ -102,10 +123,21 @@ function Application({ application, setApplication, id, entity }) {
                 onChange={({ target }) =>
                   handleInputChange("packageName", target.value)
                 }
-                marginBottom="10px"
                 defaultValue={application.packageName}
                 type="text"
               />
+              {!isErrorPackageName ? (
+                <div style={{ marginBottom: "10px" }}></div>
+              ) : (
+                <FormErrorMessage
+                  marginBottom="10px"
+                  fontSize="10px"
+                  marginTop="5px"
+                >
+                  <WarningIcon marginRight="5px" />
+                  Required
+                </FormErrorMessage>
+              )}
             </FormControl>
             <FormLabel>Authentication Type</FormLabel>
             <Select
@@ -184,7 +216,7 @@ function Application({ application, setApplication, id, entity }) {
               <option value="consul">Consul</option>
               <option value="no">No</option>
             </Select>
-            <FormControl isRequired>
+            <FormControl isInvalid={isErrorServerPort}>
               <FormLabel>Service Port</FormLabel>
               <Input
                 placeholder="9000"
@@ -193,12 +225,23 @@ function Application({ application, setApplication, id, entity }) {
                 onChange={({ target }) =>
                   handleInputChange("serverPort", target.value)
                 }
-                marginBottom="10px"
                 defaultValue={application.serverPort}
                 type="number"
                 min={3000}
                 max={9000}
               />
+              {!isErrorServerPort ? (
+                <div style={{ marginBottom: "10px" }}></div>
+              ) : (
+                <FormErrorMessage
+                  marginBottom="10px"
+                  fontSize="10px"
+                  marginTop="5px"
+                >
+                  <WarningIcon marginRight="5px" />
+                  Required
+                </FormErrorMessage>
+              )}
             </FormControl>
             {/* <NumberInput max={30000} min={9000}>
       <NumberInputField
