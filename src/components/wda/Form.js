@@ -114,7 +114,7 @@ function FormWda() {
           deployment,
           communication,
         }),
-      }, { signal: controller.signal }
+      },
     )
       .then((response) => response.blob())
       .then((blob) => {
