@@ -94,12 +94,6 @@ function FormWda() {
   };
   const handleSubmitWda = (e) => {
     e.preventDefault();
-
-    // TODO: this is not working, need modification
-    // Wait for 3 min 
-    const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 1000*60*3)
-    
     fetch(
       process.env.REACT_APP_API_BASE_URL +
         "/generateJDL?username=" +
@@ -128,10 +122,8 @@ function FormWda() {
       })
       .catch((error) => console.error(error))
       .finally(() => {
-        // If you only wanted to timeout the request, not the response, add:
-        clearTimeout(timeoutId);
         setTimeout(() => setParty(true));
-        // window.location.replace("../../");
+        window.location.replace("../../");
       });
   };
 
@@ -167,7 +159,7 @@ function FormWda() {
       .catch((error) => console.error(error))
       .finally(() => {
         setTimeout(() => setParty(true));
-        // window.location.replace("../../");
+        window.location.replace("../../");
       });
   };
 
