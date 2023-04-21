@@ -137,11 +137,6 @@ function FormWda() {
 
   const handleSubmitWdi = (e) => {
     e.preventDefault();
-
-    const timeoutId = setTimeout(() => {
-      console.log('Request timed out');
-    }, 300000);
-
     fetch(
       process.env.REACT_APP_API_BASE_URL +
         "/generateJDL?username=" +
@@ -171,7 +166,6 @@ function FormWda() {
       })
       .catch((error) => console.error(error))
       .finally(() => {
-        clearTimeout(timeoutId);
         setTimeout(() => setParty(true));
         // window.location.replace("../../");
       });
