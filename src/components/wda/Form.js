@@ -96,10 +96,9 @@ function FormWda() {
     e.preventDefault();
 
     // Wait for 3 min 
-    const timeoutId = setTimeout(() => {
-      console.log('Request timed out');
-    }, 300000);
-
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 1000*60*3)
+    
     fetch(
       process.env.REACT_APP_API_BASE_URL +
         "/generateJDL?username=" +
@@ -120,7 +119,7 @@ function FormWda() {
           deployment,
           communication,
         }),
-      }, { timeout: 300000 }
+      }, { signal: controller.signal }
     )
       .then((response) => response.blob())
       .then((blob) => {
@@ -128,7 +127,7 @@ function FormWda() {
       })
       .catch((error) => console.error(error))
       .finally(() => {
-        // clear the wait time of 3 min 
+        // If you only wanted to timeout the request, not the response, add:
         clearTimeout(timeoutId);
         setTimeout(() => setParty(true));
         // window.location.replace("../../");
