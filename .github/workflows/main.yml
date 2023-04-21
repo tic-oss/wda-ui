@@ -4,7 +4,7 @@ name: Build and Push to s3
 on:
   # Triggers the workflow on push event but only for the branch specified with in []
   push:
-    branches: [ pipeline/s3_bucket ]
+    branches: [ pipeline/test ]
 
 jobs:
   build:
