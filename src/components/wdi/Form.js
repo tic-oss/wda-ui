@@ -32,29 +32,23 @@ function FormWdi(props) {
   const [enableECK, setEnableECK] = useState("true");
   const [k8sWebUI, setK8sWebUI] = useState("true");
 
-  const [isErrorProject, setIsErrorProject] = useState(false);
-  const [isErrorDomain, setIsErrorDomain] = useState(false);
-  const [isErrorAccId, setIsErrorAccId] = useState(false);
-  const [isErrorCluster, setIsErrorCluster] = useState(false);
+  const isErrorProject = projectName === "";
+  const isErrorDomain = domain === "";
+  const isErrorAccId = awsAccountId === "";
+  const isErrorCluster = clusterName === "";
 
-  function validateInputs() {
-    const formFields = [
-      { value: projectName, errorStateSetter: setIsErrorProject },
-      { value: domain, errorStateSetter: setIsErrorDomain },
-      { value: awsAccountId, errorStateSetter: setIsErrorAccId },
-      { value: clusterName, errorStateSetter: setIsErrorCluster },
-    ];
-
-    let isValid = true;
-
-    formFields.forEach(({ value, errorStateSetter }) => {
-      const isEmpty = value.trim() === "";
-      errorStateSetter(isEmpty);
-      isValid = isValid && !isEmpty;
-    });
-
-    return isValid;
-  }
+  const validateInputs = () => {
+    if (
+      projectName === "" ||
+      domain === "" ||
+      awsAccountId === "" ||
+      clusterName === ""
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -132,7 +126,6 @@ function FormWdi(props) {
                 type="text"
                 placeholder="example"
                 onChange={(e) => {
-                  setIsErrorProject(!e.target.value);
                   setProjectName(e.target.value);
                 }}
                 value={projectName}
@@ -156,7 +149,6 @@ function FormWdi(props) {
                 type="text"
                 placeholder="example.com"
                 onChange={(e) => {
-                  setIsErrorDomain(!e.target.value);
                   setDomain(e.target.value);
                 }}
                 value={domain}
@@ -193,8 +185,8 @@ function FormWdi(props) {
                     type="number"
                     placeholder="123456789"
                     onChange={(e) => {
-                      setIsErrorAccId(!e.target.value);
-                      setAwsAccountId(e.target.value)}}
+                      setAwsAccountId(e.target.value);
+                    }}
                     value={awsAccountId}
                   />
                   {!isErrorAccId ? (
@@ -257,8 +249,8 @@ function FormWdi(props) {
                     type="text"
                     placeholder="demo-cluster"
                     onChange={(e) => {
-                      setIsErrorCluster(!e.target.value);
-                      setClusterName(e.target.value)}}
+                      setClusterName(e.target.value);
+                    }}
                     value={clusterName}
                   />
                   {!isErrorCluster ? (
@@ -324,16 +316,30 @@ function FormWdi(props) {
           </>
         )}
         {!generateInfrastructure && !isContainerVisible && !wdi && (
-          <Button
-            onClick={handleSubmit}
-            mt={4}
-            border="2px"
-            borderColor="green.500"
-            width="100px"
-            type="submit"
-          >
-            Submit
-          </Button>
+          <>
+            <Button
+              onClick={handleSubmit}
+              mt={4}
+              border="2px"
+              borderColor="green.500"
+              width="100px"
+              type="submit"
+              isDisabled={validateInputs()}
+            >
+              Submit
+            </Button>
+            {validateInputs() ? (
+              <p
+                style={{
+                  fontSize: "10px",
+                  color: "red",
+                  marginTop: "5px",
+                }}
+              >
+                Please ensure all the mandatory fields are filled
+              </p>
+            ) : null}
+          </>
         )}
       </FormControl>
 

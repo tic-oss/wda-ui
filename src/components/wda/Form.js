@@ -94,6 +94,45 @@ function FormWda() {
       [communicationCounter]: communicationPreFlightTemplate,
     }));
   };
+  const validateInputsWda = () => {
+    let invalidInput = false;
+    Object.values(application).forEach((app) => {
+      if (
+        app.applicationName === "" ||
+        app.packageName === "" ||
+        app.serverPort === ""
+      ) {
+        invalidInput = true;
+      }
+    });
+    Object.values(communication).forEach((comm) => {
+      if (comm.clientName === "" || comm.serverName === "") {
+        invalidInput = true;
+      }
+    });
+    if (
+      invalidInput ||
+      deployment.dockerRepositoryName === "" ||
+      deployment.kubernetesNamespace === "" ||
+      deployment.kubernetesStorageClassName === "" ||
+      deployment.ingressDomain === ""
+    ) {
+      return true;
+    }
+    return false;
+  };
+  const validateInputsWdi = () => {
+    if (
+      validateInputsWda() ||
+      wdi.domain === "" ||
+      wdi.awsAccountId === "" ||
+      wdi.clusterName === ""
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
   const handleSubmitWda = (e) => {
     e.preventDefault();
     fetch(
@@ -364,15 +403,29 @@ function FormWda() {
                   setDeployment={setDeployment}
                 />
                 {!generateInfrastructure && (
-                  <Button
-                    width="100px"
-                    border="2px"
-                    borderColor="green.500"
-                    onClick={handleSubmitWda}
-                    marginTop="10px"
-                  >
-                    Submit
-                  </Button>
+                  <>
+                    <Button
+                      width="100px"
+                      border="2px"
+                      borderColor="green.500"
+                      onClick={handleSubmitWda}
+                      marginTop="10px"
+                      isDisabled={validateInputsWda()}
+                    >
+                      Submit
+                    </Button>
+                    {validateInputsWda() ? (
+                      <p
+                        style={{
+                          fontSize: "10px",
+                          color: "red",
+                          marginTop: "5px",
+                        }}
+                      >
+                        Please ensure all the mandatory fields are filled
+                      </p>
+                    ) : null}
+                  </>
                 )}
               </TabPanel>
               {generateInfrastructure && (
@@ -388,9 +441,21 @@ function FormWda() {
                     borderColor="green.500"
                     onClick={handleSubmitWdi}
                     marginTop="10px"
+                    isDisabled={validateInputsWdi()}
                   >
                     Submit
                   </Button>
+                  {validateInputsWdi ? (
+                    <p
+                      style={{
+                        fontSize: "10px",
+                        color: "red",
+                        marginTop: "5px",
+                      }}
+                    >
+                      Please ensure all the mandatory fields are filled
+                    </p>
+                  ) : null}
                 </TabPanel>
               )}
             </TabPanels>
