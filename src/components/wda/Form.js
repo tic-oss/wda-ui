@@ -17,7 +17,9 @@ import {
   ModalFooter,
   ModalBody,
   Checkbox,
+  CloseButton,
 } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 import { AddIcon } from "@chakra-ui/icons";
 import Application from "./Application";
 // import Entity from "./Entity";
@@ -114,7 +116,7 @@ function FormWda() {
           deployment,
           communication,
         }),
-      },
+      }
     )
       .then((response) => response.blob())
       .then((blob) => {
@@ -168,7 +170,16 @@ function FormWda() {
       <Modal isOpen={isOpen}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Please enter your details</ModalHeader>
+          <ModalHeader>
+            <h2 style={{ display: "inline-block" }}>
+              Please enter your details
+            </h2>
+            <span style={{ float: "right" }}>
+              <Link to="/">
+                <CloseButton style={{ background: "none" }} />
+              </Link>
+            </span>
+          </ModalHeader>
           <ModalBody>
             Enter username
             <Input
