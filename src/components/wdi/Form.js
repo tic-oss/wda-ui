@@ -52,9 +52,6 @@ function FormWdi(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!validateInputs()) {
-      return;
-    }
     fetch(process.env.REACT_APP_API_BASE_URL + "/generate", {
       method: "post",
       headers: {
