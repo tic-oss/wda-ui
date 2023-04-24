@@ -10,7 +10,7 @@ on:
         type: string
   # Triggers the workflow on push event but only for the branch specified with in []
   push:
-    branches: [ aws_lambda_test ]
+    branches: [ main ]
 
 jobs:
   build:
