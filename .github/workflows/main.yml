@@ -3,6 +3,10 @@ name: Build and Push to s3
 # Controls when the workflow will run
 on:
   workflow_dispatch:
+  inputs:
+      tags:
+        description: 'Tags to apply to the release'
+        required: true
   # Triggers the workflow on push event but only for the branch specified with in []
   push:
     branches: [ aws_lambda_test ]
