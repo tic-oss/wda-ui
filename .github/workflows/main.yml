@@ -26,7 +26,9 @@ jobs:
       - if: github.event_name == 'workflow_dispatch'  
         name: Create local changes
         run: |
-          sed -i '/REACT_APP_API_BASE_URL/d' .env && echo 'REACT_APP_API_BASE_URL="http://example.com"' >> .env
+          sed -i '/REACT_APP_API_BASE_URL/d' .env && echo 'REACT_APP_API_BASE_URL="${{ inputs.dNSName }}"' >> .env
+        env:
+          NAME: ${{ inputs.dNSName }}
 
       - if: github.event_name == 'workflow_dispatch'
         name: Commit files
