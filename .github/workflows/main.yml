@@ -23,6 +23,21 @@ jobs:
           # git push --force origin main
           echo "THIS is workFlow dispatch"
 
+        name: Create local changes
+        run: |
+          ...
+        name: Commit files
+          run: |
+            git config --local user.email "tic.dev@comakeit.com"
+            git config --local user.name "comakeit-tic"
+            git commit -a -m "updated DNS name in env"
+
+        name: Push changes
+          uses: ad-m/github-push-action@master
+          with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            branch: ${{ github.ref }}
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
