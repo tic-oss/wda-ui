@@ -4,13 +4,25 @@ name: Build and Push to s3
 on:
   # Triggers the workflow on push event but only for the branch specified with in []
   push:
-    branches: [ main ]
+    branches: [ aws_lambda_test ]
+    
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
+      - if: github.event_name == 'workflow_dispatch'
+        name: Force push changes
+        run: |
+          # git config --global user.name "Your Name"
+          # git config --global user.email "your.email@example.com"
+          # git checkout main
+          # git merge --no-ff ${{ github.ref }}
+          # git push --force origin main
+          echo "THIS is workFlow dispatch"
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
