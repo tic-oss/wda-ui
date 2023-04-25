@@ -331,11 +331,12 @@ function FormWdi(props) {
                   fontSize: "10px",
                   color: "red",
                   marginTop: "5px",
+                  marginBottom: "20px"
                 }}
               >
                 Please ensure all the mandatory fields are filled
               </p>
-            ) : null}
+            ) : <p style={{marginBottom:"20px"}}></p>}
           </>
         )}
       </FormControl>
