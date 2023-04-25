@@ -66,6 +66,7 @@ function Application({ application, setApplication, id, entity }) {
                       defaultValue={application.applicationName}
                       type="text"
                       marginRight="10px"
+                      style={{ border: "1px solid #cfcfcf", boxShadow: "none" }}
                       sx={{
                         border: "none",
                         boxShadow: "none",
@@ -125,6 +126,7 @@ function Application({ application, setApplication, id, entity }) {
                 }
                 defaultValue={application.packageName}
                 type="text"
+                style={{ border: "1px solid #cfcfcf", boxShadow: "none" }}
               />
               {!isErrorPackageName ? (
                 <div style={{ marginBottom: "10px" }}></div>
@@ -226,6 +228,7 @@ function Application({ application, setApplication, id, entity }) {
                   handleInputChange("serverPort", target.value)
                 }
                 defaultValue={application.serverPort}
+                style={{ border: "1px solid #cfcfcf", boxShadow: "none" }}
                 type="number"
                 min={3000}
                 max={9000}
