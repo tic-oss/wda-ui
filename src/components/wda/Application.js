@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   AccordionItem,
   AccordionButton,
@@ -14,12 +14,24 @@ import {
 } from "@chakra-ui/react";
 import { WarningIcon } from "@chakra-ui/icons";
 
-function Application({ application, setApplication, id, entity }) {
-  const isErrorAppName = application.applicationName === "";
+function Application({ application, setApplication, id, entity, applicationNames, setApplicationNames }) {
   const isErrorPackageName = application.packageName === "";
   const isErrorServerPort = application.serverPort === "";
+  const [isDuplicateAppName, setIsDuplicateAppName] = useState(false);
 
+  const checkDuplicateAppName = (field, value) => {
+    if (field === "applicationName") {
+      const isDuplicate = applicationNames.some((name, i) => name === value.trim() && i !== id);
+      setIsDuplicateAppName(isDuplicate);
+      setApplicationNames((names) => {
+        const newNames = [...names];
+        newNames[id] = value.trim();
+        return newNames;
+      });
+    }
+  };
   const handleInputChange = (field, value) => {
+    checkDuplicateAppName(field, value)
     setApplication((state) => ({
       ...state,
       [id]: {
@@ -31,6 +43,7 @@ function Application({ application, setApplication, id, entity }) {
   const handleDelete = () => {
     console.log("delApp");
   };
+  const isErrorAppName = isDuplicateAppName || application.applicationName=== "";
 
   return (
     <>
@@ -87,7 +100,9 @@ function Application({ application, setApplication, id, entity }) {
                         marginTop="5px"
                       >
                         <WarningIcon marginRight="5px" marginLeft="180px"/>
-                        Required
+                        {isDuplicateAppName
+                          ? "Application name already exists"
+                          : "Required"}
                       </FormErrorMessage>
                     )}
                     </Box>

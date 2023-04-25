@@ -58,6 +58,8 @@ function FormWda() {
   const [generateInfrastructure, setGenerateInfrastructure] = useState(false);
   const [username, setUsername] = useState("");
   const [projectName, setProjectName] = useState("");
+  const [applicationNames, setApplicationNames] = useState([]);
+
   useEffect(() => {
     if (party) {
       setTimeout(() => {
@@ -86,6 +88,7 @@ function FormWda() {
       ...prev,
       [applicationCounter]: applicationPreFlightTemplate,
     }));
+    setApplicationNames((prev) => [...prev, ""]);
   };
   const addCommunication = () => {
     setCommunicationCounter((state) => state + 1);
@@ -353,6 +356,8 @@ function FormWda() {
                         id={id}
                         application={application}
                         setApplication={setApplication}
+                        applicationNames={applicationNames}
+                        setApplicationNames={setApplicationNames}
                         // entity={entity}
                         // Client
                         // Name
