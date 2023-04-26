@@ -116,7 +116,7 @@ function FormWda() {
     Object.values(application).forEach((app) => {
       if (
         app.applicationName === "" ||
-        isDuplicateAppName ||
+        // isDuplicateAppName ||
         app.packageName === "" ||
         app.serverPort === ""
       ) {
@@ -430,10 +430,21 @@ function FormWda() {
                       borderColor="green.500"
                       onClick={handleSubmitWda}
                       marginTop="10px"
-                      isDisabled={validateInputsWda()}
+                      isDisabled={validateInputsWda() || isDuplicateAppName}
                     >
                       Submit
                     </Button>
+                    {isDuplicateAppName ? (
+                      <p
+                        style={{
+                          fontSize: "10px",
+                          color: "red",
+                          marginTop: "5px",
+                        }}
+                      >
+                        Make sure application names are unique
+                      </p>
+                    ) : null}
                     {validateInputsWda() ? (
                       <p
                         style={{
@@ -461,10 +472,21 @@ function FormWda() {
                     borderColor="green.500"
                     onClick={handleSubmitWdi}
                     marginTop="10px"
-                    isDisabled={validateInputsWdi()}
+                    isDisabled={validateInputsWdi() || isDuplicateAppName}
                   >
                     Submit
                   </Button>
+                  {isDuplicateAppName ? (
+                    <p
+                      style={{
+                        fontSize: "10px",
+                        color: "red",
+                        marginTop: "5px",
+                      }}
+                    >
+                      Make sure application names are unique
+                    </p>
+                  ) : null}
                   {validateInputsWdi() ? (
                     <p
                       style={{
