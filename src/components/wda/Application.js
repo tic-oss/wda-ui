@@ -127,7 +127,7 @@ function Application({ application, setApplication, id, entity, applicationNames
               defaultValue={application.applicationType}
             >
               <option value="gateway">UI + Gateway</option>
-              <option value="microservices">Microservices</option>
+              <option value="microservice">Microservice</option>
               {/* <option value="monolithic">Monolithic</option> */}
             </Select>
             <FormControl isInvalid={isErrorPackageName}>
