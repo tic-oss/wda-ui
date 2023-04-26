@@ -59,6 +59,7 @@ function FormWda() {
   const [username, setUsername] = useState("");
   const [projectName, setProjectName] = useState("");
   const [applicationNames, setApplicationNames] = useState([]);
+  const [isDuplicateAppName, setIsDuplicateAppName] = useState(false);
 
   useEffect(() => {
     if (party) {
@@ -97,22 +98,36 @@ function FormWda() {
       [communicationCounter]: communicationPreFlightTemplate,
     }));
   };
+  const checkDuplicateAppName = (id, field, value) => {
+    if (field === "applicationName") {
+      const isDuplicate = applicationNames.some(
+        (name, i) => name === value.trim() && i !== id
+      );
+      setIsDuplicateAppName(isDuplicate);
+      setApplicationNames((names) => {
+        const newNames = [...names];
+        newNames[id] = value.trim();
+        return newNames;
+      });
+    }
+  };
   const validateInputsWda = () => {
     let invalidInput = false;
     Object.values(application).forEach((app) => {
       if (
         app.applicationName === "" ||
+        isDuplicateAppName ||
         app.packageName === "" ||
         app.serverPort === ""
       ) {
         invalidInput = true;
       }
     });
-    Object.values(communication).forEach((comm) => {
-      if (comm.clientName === "" || comm.serverName === "") {
-        invalidInput = true;
-      }
-    });
+    // Object.values(communication).forEach((comm) => {
+    //   if (comm.clientName === "" || comm.serverName === "") {
+    //     invalidInput = true;
+    //   }
+    // });
     if (
       invalidInput ||
       deployment.dockerRepositoryName === "" ||
@@ -356,8 +371,8 @@ function FormWda() {
                         id={id}
                         application={application}
                         setApplication={setApplication}
-                        applicationNames={applicationNames}
-                        setApplicationNames={setApplicationNames}
+                        checkDuplicateAppName={checkDuplicateAppName}
+                        isDuplicateAppName={isDuplicateAppName}
                         // entity={entity}
                         // Client
                         // Name
@@ -450,7 +465,7 @@ function FormWda() {
                   >
                     Submit
                   </Button>
-                  {validateInputsWdi ? (
+                  {validateInputsWdi() ? (
                     <p
                       style={{
                         fontSize: "10px",

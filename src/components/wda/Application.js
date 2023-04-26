@@ -14,24 +14,15 @@ import {
 } from "@chakra-ui/react";
 import { WarningIcon } from "@chakra-ui/icons";
 
-function Application({ application, setApplication, id, entity, applicationNames, setApplicationNames }) {
-  const isErrorPackageName = application.packageName === "";
-  const isErrorServerPort = application.serverPort === "";
-  const [isDuplicateAppName, setIsDuplicateAppName] = useState(false);
-
-  const checkDuplicateAppName = (field, value) => {
-    if (field === "applicationName") {
-      const isDuplicate = applicationNames.some((name, i) => name === value.trim() && i !== id);
-      setIsDuplicateAppName(isDuplicate);
-      setApplicationNames((names) => {
-        const newNames = [...names];
-        newNames[id] = value.trim();
-        return newNames;
-      });
-    }
-  };
+function Application({
+  application,
+  setApplication,
+  id,
+  checkDuplicateAppName,
+  isDuplicateAppName,
+}) {
   const handleInputChange = (field, value) => {
-    checkDuplicateAppName(field, value)
+    checkDuplicateAppName(id, field, value);
     setApplication((state) => ({
       ...state,
       [id]: {
@@ -43,7 +34,10 @@ function Application({ application, setApplication, id, entity, applicationNames
   const handleDelete = () => {
     console.log("delApp");
   };
-  const isErrorAppName = isDuplicateAppName || application.applicationName=== "";
+  const isErrorAppName =
+    isDuplicateAppName || application.applicationName === "";
+  const isErrorPackageName = application.packageName === "";
+  const isErrorServerPort = application.serverPort === "";
 
   return (
     <>
@@ -90,23 +84,19 @@ function Application({ application, setApplication, id, entity, applicationNames
                         },
                       }}
                     />
-                    </div>
-                    <Box>
+                  </div>
+                  <Box>
                     {!isErrorAppName ? (
                       <div style={{ marginBottom: "0px" }}></div>
                     ) : (
-                      <FormErrorMessage
-                        fontSize="10px"
-                        marginTop="5px"
-                      >
-                        <WarningIcon marginRight="5px" marginLeft="180px"/>
+                      <FormErrorMessage fontSize="10px" marginTop="5px">
+                        <WarningIcon marginRight="5px" marginLeft="180px" />
                         {isDuplicateAppName
                           ? "Application name already exists"
                           : "Required"}
                       </FormErrorMessage>
                     )}
-                    </Box>
-                  
+                  </Box>
                 </FormControl>
               </FormControl>
             </Box>
