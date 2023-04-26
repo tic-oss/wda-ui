@@ -5,16 +5,16 @@ import {
   AccordionPanel,
   AccordionIcon,
   Box,
-  Input,
   Text,
   FormControl,
   FormLabel,
   CloseButton,
   FormErrorMessage,
+  Select,
 } from "@chakra-ui/react";
 // import { WarningIcon } from "@chakra-ui/icons";
 
-function Communication({ id, communication, setCommunication }) {
+function Communication({ id, communication, setCommunication, application }) {
   // const isErrorClient = communication.clientName === "";
   // const isErrorServer = communication.serverName === "";
 
@@ -46,7 +46,7 @@ function Communication({ id, communication, setCommunication }) {
       </div>
       <AccordionPanel pb={4}>
         <FormControl display="flex" flexDirection="column">
-          <FormControl 
+          <FormControl
           // isInvalid={isErrorClient}
           >
             <div
@@ -58,18 +58,21 @@ function Communication({ id, communication, setCommunication }) {
               <FormLabel width="250px" alignSelf="center">
                 Client App Name
               </FormLabel>
-              <Input
-                placeholder="Client"
+              <Select
                 key="clientName"
                 name="clientName"
                 onChange={({ target }) =>
                   handleInputChange("clientName", target.value)
                 }
-                value={communication.clientName}
-                type="text"
+                // defaultValue={communication.clientName}
                 marginBottom="10px"
-                style={{ border: "1px solid #cfcfcf", boxShadow: "none" }}
-              />
+              >
+                {Object.keys(application).map((id) => (
+                  <option key={id} value={application[id].applicationName}>
+                    {application[id].applicationName}
+                  </option>
+                ))}
+              </Select>
             </div>
             {/* <Box>
               {!isErrorClient ? (
@@ -87,9 +90,9 @@ function Communication({ id, communication, setCommunication }) {
             </Box> */}
           </FormControl>
         </FormControl>
-        {communication.clientName !== "" && (
-          <FormControl display="flex" flexDirection="column">
-          <FormControl 
+        {/* {communication.clientName !== "" && ( */}
+        <FormControl display="flex" flexDirection="column">
+          <FormControl
           // isInvalid={isErrorServer}
           >
             <div
@@ -98,18 +101,24 @@ function Communication({ id, communication, setCommunication }) {
                 flexDirection: "row",
               }}
             >
-              <FormLabel width="250px" alignSelf="center">Server App Name</FormLabel>
-            <Input
-              placeholder="Server"
-              key="serverName"
-              name="serverName"
-              onChange={({ target }) =>
-                handleInputChange("serverName", target.value)
-              }
-              defaultValue={communication.serverName}
-              type="text"
-              style={{ border: "1px solid #cfcfcf", boxShadow: "none" }}
-            />
+              <FormLabel width="250px" alignSelf="center">
+                Server App Name
+              </FormLabel>
+              <Select
+                key="serverName"
+                name="serverName"
+                onChange={({ target }) =>
+                  handleInputChange("serverName", target.value)
+                }
+                // defaultValue={communication.serverName}
+                marginBottom="10px"
+              >
+                {Object.keys(application).map((id) => (
+                  <option key={id} value={application[id].applicationName}>
+                    {application[id].applicationName}
+                  </option>
+                ))}
+              </Select>
             </div>
             {/* <Box>
             {!isErrorServer ? (
@@ -125,9 +134,9 @@ function Communication({ id, communication, setCommunication }) {
               </FormErrorMessage>
             )}
             </Box> */}
-            </FormControl>
           </FormControl>
-        )}
+        </FormControl>
+        {/* )} */}
       </AccordionPanel>
     </AccordionItem>
   );

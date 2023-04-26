@@ -302,16 +302,20 @@ function FormWda() {
               >
                 Application
               </Tab>
-              <Tab
-                fontWeight="normal"
-                _selected={{
-                  fontWeight: "bold",
-                  color: "rgb(49, 130, 206)",
-                  borderBottom: "2px solid rgb(49, 130, 206)",
-                }}
-              >
-                Communication
-              </Tab>
+              {Object.values(application).filter(
+                (app) => app.applicationName !== ""
+              ).length >= 2 && (
+                <Tab
+                  fontWeight="normal"
+                  _selected={{
+                    fontWeight: "bold",
+                    color: "rgb(49, 130, 206)",
+                    borderBottom: "2px solid rgb(49, 130, 206)",
+                  }}
+                >
+                  Communication
+                </Tab>
+              )}
               <Tab
                 fontWeight="normal"
                 _selected={{
@@ -391,31 +395,36 @@ function FormWda() {
                   </Button>
                 </Accordion>
               </TabPanel>
-              <TabPanel>
-                <Accordion allowToggle>
-                  {Object.values(communication).map((communication, id) => {
-                    return (
-                      <Communication
-                        key={id}
-                        id={id}
-                        communication={communication}
-                        setCommunication={setCommunication}
-                      />
-                    );
-                  })}
-                </Accordion>
-                <Button
-                  width="100px"
-                  border="2px"
-                  borderColor="green.500"
-                  mr={4}
-                  leftIcon={<AddIcon />}
-                  onClick={addCommunication}
-                  marginTop="10px"
-                >
-                  Add
-                </Button>
-              </TabPanel>
+              {Object.values(application).filter(
+                (app) => app.applicationName !== ""
+              ).length >= 2 && (
+                <TabPanel>
+                  <Accordion allowToggle>
+                    {Object.values(communication).map((communication, id) => {
+                      return (
+                        <Communication
+                          key={id}
+                          id={id}
+                          application={application}
+                          communication={communication}
+                          setCommunication={setCommunication}
+                        />
+                      );
+                    })}
+                  </Accordion>
+                  <Button
+                    width="100px"
+                    border="2px"
+                    borderColor="green.500"
+                    mr={4}
+                    leftIcon={<AddIcon />}
+                    onClick={addCommunication}
+                    marginTop="10px"
+                  >
+                    Add
+                  </Button>
+                </TabPanel>
+              )}
               <TabPanel>
                 <Deployment
                   application={application}

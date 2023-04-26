@@ -46,6 +46,7 @@ function Deployment({ application, deployment, setDeployment }) {
           <Editable
             key={id}
             defaultValue={JSON.stringify(application[id].applicationName)}
+            isDisabled={true}
           >
             <EditablePreview />
             <EditableInput />
