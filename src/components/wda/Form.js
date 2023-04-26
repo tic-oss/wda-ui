@@ -116,6 +116,7 @@ function FormWda() {
     Object.values(application).forEach((app) => {
       if (
         app.applicationName === "" ||
+        // isDuplicateAppName ||
         app.packageName === "" ||
         app.serverPort === ""
       ) {
