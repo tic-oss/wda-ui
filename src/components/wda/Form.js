@@ -302,9 +302,6 @@ function FormWda() {
               >
                 Application
               </Tab>
-              {Object.values(application).filter(
-                (app) => app.applicationName !== ""
-              ).length >= 2 && (
                 <Tab
                   fontWeight="normal"
                   _selected={{
@@ -315,7 +312,6 @@ function FormWda() {
                 >
                   Communication
                 </Tab>
-              )}
               <Tab
                 fontWeight="normal"
                 _selected={{
@@ -395,9 +391,6 @@ function FormWda() {
                   </Button>
                 </Accordion>
               </TabPanel>
-              {Object.values(application).filter(
-                (app) => app.applicationName !== ""
-              ).length >= 2 && (
                 <TabPanel>
                   <Accordion allowToggle>
                     {Object.values(communication).map((communication, id) => {
@@ -412,6 +405,9 @@ function FormWda() {
                       );
                     })}
                   </Accordion>
+                  {Object.values(application).filter(
+                (app) => app.applicationName !== ""
+              ).length >= 2 && (
                   <Button
                     width="100px"
                     border="2px"
@@ -423,8 +419,8 @@ function FormWda() {
                   >
                     Add
                   </Button>
-                </TabPanel>
               )}
+                </TabPanel>
               <TabPanel>
                 <Deployment
                   application={application}
