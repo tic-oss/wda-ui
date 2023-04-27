@@ -71,9 +71,10 @@ function Communication({ id, communication, setCommunication, application }) {
                     onChange={({ target }) =>
                       handleInputChange("clientName", target.value)
                     }
-                    // defaultValue={communication.clientName}
+                    defaultValue={communication.clientName}
                     marginBottom="10px"
                   >
+                    <option value="">-- Select --</option>
                     {Object.keys(application).map((id) => (
                       <option key={id} value={application[id].applicationName}>
                         {application[id].applicationName}
@@ -117,14 +118,24 @@ function Communication({ id, communication, setCommunication, application }) {
                     onChange={({ target }) =>
                       handleInputChange("serverName", target.value)
                     }
-                    // defaultValue={communication.serverName}
+                    defaultValue={communication.serverName}
                     marginBottom="10px"
                   >
-                    {Object.keys(application).map((id) => (
-                      <option key={id} value={application[id].applicationName}>
-                        {application[id].applicationName}
-                      </option>
-                    ))}
+                    <option value="">-- Select --</option>
+                    {Object.keys(application)
+                      .filter(
+                        (id) =>
+                          application[id].applicationName !==
+                          communication.clientName
+                      )
+                      .map((id) => (
+                        <option
+                          key={id}
+                          value={application[id].applicationName}
+                        >
+                          {application[id].applicationName}
+                        </option>
+                      ))}
                   </Select>
                 </div>
                 {/* <Box>
