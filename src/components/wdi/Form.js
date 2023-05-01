@@ -11,7 +11,6 @@ import {
   Button,
   Heading,
   FormErrorMessage,
-  Spinner,
   Flex,
 } from "@chakra-ui/react";
 import { WarningIcon } from "@chakra-ui/icons";
@@ -372,24 +371,6 @@ function FormWdi(props) {
                 display="flex"
                 flexDirection="column"
               >
-                <Spinner
-                  thickness="8px"
-                  speed="0.9s"
-                  emptyColor="gray.200"
-                  color="#3182CE"
-                  height="250px"
-                  width="250px"
-                />
-                <div
-                  style={{
-                    marginTop: "40px",
-                    color: "#3182CE",
-                    fontWeight: "bolder",
-                    fontSize: "20px",
-                  }}
-                >
-                  Please wait while we generate your project
-                </div>
               </Flex>
             )}
             {validateInputs() ? (
