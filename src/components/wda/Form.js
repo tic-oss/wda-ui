@@ -62,8 +62,9 @@ function FormWda() {
   const [projectName, setProjectName] = useState("");
   const [applicationNames, setApplicationNames] = useState([]);
   const [isDuplicateAppName, setIsDuplicateAppName] = useState(false);
+  const [checkLength, setCheckLength] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
+  
   useEffect(() => {
     if (party) {
       setTimeout(() => {
@@ -147,6 +148,13 @@ function FormWda() {
       return true;
     }
     return false;
+  };
+  const validateInputValue = (field, value) => {
+    if (field === "awsAccountId" && value.length < 12) {
+      setCheckLength(true);
+    } else {
+      setCheckLength(false);
+    }
   };
   const validateInfra = () => {
     if (
@@ -533,6 +541,8 @@ function FormWda() {
                     application={application}
                     wdi={wdi}
                     setWdi={setWdi}
+                    checkLength={checkLength}
+                    validateInputValue={validateInputValue}
                   />
                   <Button
                     width="100px"
@@ -544,7 +554,8 @@ function FormWda() {
                       isDuplicateAppName ||
                       validateApplication() ||
                       validateDeployment() ||
-                      validateInfra()
+                      checkLength ||
+                      validateInfra() 
                     }
                   >
                     Submit
@@ -616,6 +627,17 @@ function FormWda() {
                     >
                       Please ensure all the mandatory fields in Deployment are
                       filled
+                    </p>
+                  ) : null}
+                  {checkLength ? (
+                    <p
+                      style={{
+                        fontSize: "10px",
+                        color: "red",
+                        marginTop: "5px",
+                      }}
+                    >
+                      Please ensure you have entered correct AWS Account ID
                     </p>
                   ) : null}
                   {validateInfra() ? (
