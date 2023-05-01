@@ -11,6 +11,8 @@ import {
   Button,
   Heading,
   FormErrorMessage,
+  Spinner,
+  Flex,
 } from "@chakra-ui/react";
 import { WarningIcon } from "@chakra-ui/icons";
 
@@ -31,6 +33,7 @@ function FormWdi(props) {
   const [monitoring, setMonitoring] = useState("true");
   const [enableECK, setEnableECK] = useState("true");
   const [k8sWebUI, setK8sWebUI] = useState("true");
+  const [isLoading, setIsLoading] = useState(false);
 
   const [checkLength, setCheckLength] = useState(false);
   const validateInputValue = (inputValue) => {
@@ -61,6 +64,7 @@ function FormWdi(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setIsLoading(true);
     fetch(process.env.REACT_APP_API_BASE_URL + "/generate", {
       method: "post",
       headers: {
@@ -94,6 +98,7 @@ function FormWdi(props) {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link); */
+        setIsLoading(false);
         saveAs(blob, `${projectName}.zip`);
       })
       .catch((error) => console.error(error))
@@ -343,7 +348,7 @@ function FormWdi(props) {
         {!generateInfrastructure && !isContainerVisible && !wdi && (
           <>
             <Button
-              onClick={handleSubmit}
+              onClick={handleSubmit || isLoading(true)}
               mt={4}
               border="2px"
               borderColor="green.500"
@@ -353,6 +358,40 @@ function FormWdi(props) {
             >
               Submit
             </Button>
+            {isLoading && (
+              <Flex
+                position="fixed"
+                top="0"
+                left="0"
+                right="0"
+                bottom="0"
+                alignItems="center"
+                justifyContent="center"
+                backgroundColor="rgba(240, 248, 255, 0.5)" // Use RGBA to set opacity
+                zIndex="9999"
+                display="flex"
+                flexDirection="column"
+              >
+                <Spinner
+                  thickness="8px"
+                  speed="0.9s"
+                  emptyColor="gray.200"
+                  color="#3182CE"
+                  height="250px"
+                  width="250px"
+                />
+                <div
+                  style={{
+                    marginTop: "40px",
+                    color: "#3182CE",
+                    fontWeight: "bolder",
+                    fontSize: "20px",
+                  }}
+                >
+                  Please wait while we generate your project
+                </div>
+              </Flex>
+            )}
             {validateInputs() ? (
               <p
                 style={{

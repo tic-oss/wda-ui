@@ -18,6 +18,8 @@ import {
   ModalBody,
   Checkbox,
   CloseButton,
+  Flex,
+  Spinner,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { AddIcon } from "@chakra-ui/icons";
@@ -60,6 +62,7 @@ function FormWda() {
   const [projectName, setProjectName] = useState("");
   const [applicationNames, setApplicationNames] = useState([]);
   const [isDuplicateAppName, setIsDuplicateAppName] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (party) {
@@ -158,6 +161,7 @@ function FormWda() {
   };
   const handleSubmitWda = (e) => {
     e.preventDefault();
+    setIsLoading(true);
     fetch(
       process.env.REACT_APP_API_BASE_URL +
         "/generateJDL?username=" +
@@ -182,6 +186,7 @@ function FormWda() {
     )
       .then((response) => response.blob())
       .then((blob) => {
+        setIsLoading(false);
         saveAs(blob, `${projectName}.zip`); // Edit the name or ask the user for the project Name
       })
       .catch((error) => console.error(error))
@@ -193,6 +198,7 @@ function FormWda() {
 
   const handleSubmitWdi = (e) => {
     e.preventDefault();
+    setIsLoading(true);
     fetch(
       process.env.REACT_APP_API_BASE_URL +
         "/generateJDL?username=" +
@@ -218,6 +224,7 @@ function FormWda() {
     )
       .then((response) => response.blob())
       .then((blob) => {
+        setIsLoading(false);
         saveAs(blob, `${projectName}.zip`);
       })
       .catch((error) => console.error(error))
@@ -307,16 +314,16 @@ function FormWda() {
               >
                 Application
               </Tab>
-                <Tab
-                  fontWeight="normal"
-                  _selected={{
-                    fontWeight: "bold",
-                    color: "rgb(49, 130, 206)",
-                    borderBottom: "2px solid rgb(49, 130, 206)",
-                  }}
-                >
-                  Communication
-                </Tab>
+              <Tab
+                fontWeight="normal"
+                _selected={{
+                  fontWeight: "bold",
+                  color: "rgb(49, 130, 206)",
+                  borderBottom: "2px solid rgb(49, 130, 206)",
+                }}
+              >
+                Communication
+              </Tab>
               <Tab
                 fontWeight="normal"
                 _selected={{
@@ -396,23 +403,23 @@ function FormWda() {
                   </Button>
                 </Accordion>
               </TabPanel>
-                <TabPanel>
-                  <Accordion allowToggle>
-                    {Object.values(communication).map((communication, id) => {
-                      return (
-                        <Communication
-                          key={id}
-                          id={id}
-                          application={application}
-                          communication={communication}
-                          setCommunication={setCommunication}
-                        />
-                      );
-                    })}
-                  </Accordion>
-                  {Object.values(application).filter(
-                (app) => app.applicationName !== ""
-              ).length >= 2 && (
+              <TabPanel>
+                <Accordion allowToggle>
+                  {Object.values(communication).map((communication, id) => {
+                    return (
+                      <Communication
+                        key={id}
+                        id={id}
+                        application={application}
+                        communication={communication}
+                        setCommunication={setCommunication}
+                      />
+                    );
+                  })}
+                </Accordion>
+                {Object.values(application).filter(
+                  (app) => app.applicationName !== ""
+                ).length >= 2 && (
                   <Button
                     width="100px"
                     border="2px"
@@ -424,8 +431,8 @@ function FormWda() {
                   >
                     Add
                   </Button>
-              )}
-                </TabPanel>
+                )}
+              </TabPanel>
               <TabPanel>
                 <Deployment
                   application={application}
@@ -438,7 +445,7 @@ function FormWda() {
                       width="100px"
                       border="2px"
                       borderColor="green.500"
-                      onClick={handleSubmitWda}
+                      onClick={handleSubmitWda || isLoading(true)}
                       marginTop="10px"
                       isDisabled={
                         isDuplicateAppName ||
@@ -448,6 +455,40 @@ function FormWda() {
                     >
                       Submit
                     </Button>
+                    {isLoading && (
+                      <Flex
+                        position="fixed"
+                        top="0"
+                        left="0"
+                        right="0"
+                        bottom="0"
+                        alignItems="center"
+                        justifyContent="center"
+                        backgroundColor="rgba(240, 248, 255, 0.5)" // Use RGBA to set opacity
+                        zIndex="9999"
+                        display="flex"
+                        flexDirection="column"
+                      >
+                        <Spinner
+                          thickness="8px"
+                          speed="0.9s"
+                          emptyColor="gray.200"
+                          color="#3182CE"
+                          height="250px"
+                          width="250px"
+                        />
+                        <div
+                          style={{
+                            marginTop: "40px",
+                            color: "#3182CE",
+                            fontWeight: "bolder",
+                            fontSize: "20px",
+                          }}
+                        >
+                          Please wait while we generate your project
+                        </div>
+                      </Flex>
+                    )}
                     {isDuplicateAppName ? (
                       <p
                         style={{
@@ -497,7 +538,7 @@ function FormWda() {
                     width="100px"
                     border="2px"
                     borderColor="green.500"
-                    onClick={handleSubmitWdi}
+                    onClick={handleSubmitWdi || isLoading(true)}
                     marginTop="10px"
                     isDisabled={
                       isDuplicateAppName ||
@@ -508,6 +549,40 @@ function FormWda() {
                   >
                     Submit
                   </Button>
+                  {isLoading && (
+                    <Flex
+                      position="fixed"
+                      top="0"
+                      left="0"
+                      right="0"
+                      bottom="0"
+                      alignItems="center"
+                      justifyContent="center"
+                      backgroundColor="rgba(240, 248, 255, 0.5)" // Use RGBA to set opacity
+                      zIndex="9999"
+                      display="flex"
+                      flexDirection="column"
+                    >
+                      <Spinner
+                        thickness="8px"
+                        speed="0.9s"
+                        emptyColor="gray.200"
+                        color="#3182CE"
+                        height="250px"
+                        width="250px"
+                      />
+                      <div
+                        style={{
+                          marginTop: "40px",
+                          color: "#3182CE",
+                          fontWeight: "bolder",
+                          fontSize: "20px",
+                        }}
+                      >
+                        Please wait while we generate your project
+                      </div>
+                    </Flex>
+                  )}
                   {isDuplicateAppName ? (
                     <p
                       style={{
