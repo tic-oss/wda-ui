@@ -14,7 +14,6 @@ function Deployment({ application, deployment, setDeployment }) {
   const isErrorNamespace = deployment.kubernetesNamespace === "";
   const isErrorStorage = deployment.kubernetesStorageClassName === "";
   const isErrorIngressDomain = deployment.ingressDomain === "";
-
   const handleInputChange = (field, value) => {
     setDeployment((app) => ({
       ...app,
@@ -51,7 +50,7 @@ function Deployment({ application, deployment, setDeployment }) {
               backgroundColor: "#F5F5F5",
             }}
           >
-            {Object.keys(application).map((name, id) => {
+            {Object.values(application).map((applicationItem, id) => {
               return (
                 <div style={{ display: "flex", flexDirection: "row" }}>
                   <MinusIcon
@@ -61,13 +60,13 @@ function Deployment({ application, deployment, setDeployment }) {
                   />
                   <Text
                     key={id}
-                    value={application[id].applicationName}
+                    value={applicationItem.applicationName}
                     marginTop="5px"
                     marginBottom="5px"
                     marginRight="20px"
                     paddingRight="20px"
                   >
-                    {application[id].applicationName}
+                    {applicationItem.applicationName}
                   </Text>
                 </div>
               );

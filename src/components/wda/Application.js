@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   AccordionItem,
   AccordionButton,
@@ -20,6 +20,7 @@ function Application({
   id,
   checkDuplicateAppName,
   isDuplicateAppName,
+  handleDeleteApplication
 }) {
   const handleKeyPress = (event) => {
     const charCode = event.which ? event.which : event.keyCode;
@@ -44,8 +45,9 @@ function Application({
       },
     }));
   };
+
   const handleDelete = () => {
-    console.log("delApp");
+    handleDeleteApplication(id)
   };
   const isErrorAppName =
     isDuplicateAppName || application.applicationName === "";
@@ -78,7 +80,7 @@ function Application({
                     </FormLabel>
                     <Input
                       placeholder="Application"
-                      key="applicationName"
+                      key={application.applicationName}
                       name="applicationName"
                       onChange={({ target }) =>
                         handleInputChange("applicationName", target.value)
