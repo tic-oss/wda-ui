@@ -31,8 +31,6 @@ function Communication({ id, communication, setCommunication, application,handle
     handleDeleteCommunication(id);
   };
   
-  
-
   return (
     <FormControl>
       {Object.values(application).filter((app) => app.applicationName !== "")
@@ -68,7 +66,6 @@ function Communication({ id, communication, setCommunication, application,handle
                     Client App Name
                   </FormLabel>
                   <Select
-                    key="clientName"
                     name="clientName"
                     onChange={({ target }) =>
                       handleInputChange("clientName", target.value)
@@ -115,7 +112,6 @@ function Communication({ id, communication, setCommunication, application,handle
                     Server App Name
                   </FormLabel>
                   <Select
-                    key="serverName"
                     name="serverName"
                     onChange={({ target }) =>
                       handleInputChange("serverName", target.value)
