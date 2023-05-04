@@ -14,7 +14,13 @@ import {
 } from "@chakra-ui/react";
 import { WarningIcon } from "@chakra-ui/icons";
 
-function Communication({ id, communication, setCommunication, application }) {
+function Communication({
+  id,
+  communication,
+  setCommunication,
+  application,
+  handleDeleteCommunication,
+}) {
   // const isErrorClient = communication.clientName === "";
   // const isErrorServer = communication.serverName === "";
 
@@ -28,7 +34,7 @@ function Communication({ id, communication, setCommunication, application }) {
     }));
   };
   const handleDelete = () => {
-    console.log("delCom");
+    handleDeleteCommunication(id);
   };
 
   return (

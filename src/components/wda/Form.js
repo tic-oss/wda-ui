@@ -103,6 +103,20 @@ function FormWda() {
       [communicationCounter]: communicationPreFlightTemplate,
     }));
   };
+  const handleDeleteApplication = (id) => {
+    setApplication((prevApplication) => {
+      const newApplication = { ...prevApplication };
+      delete newApplication[id];
+      return newApplication;
+    });
+  };
+  const handleDeleteCommunication = (id) => {
+    setCommunication((prevCommunication) => {
+      const newCommunication = { ...prevCommunication };
+      delete newCommunication[id];
+      return newCommunication;
+    });
+  };
   const checkDuplicateAppName = (id, field, value) => {
     if (field === "applicationName") {
       const isDuplicate = applicationNames.some(
@@ -387,12 +401,12 @@ function FormWda() {
               </TabPanel> */}
               <TabPanel>
                 <Accordion allowToggle>
-                  {Object.values(application).map((application, id) => {
+                  {Object.keys(application).map((key) => {
                     return (
                       <Application
-                        key={id}
-                        id={id}
-                        application={application}
+                        key={key}
+                        id={key}
+                        application={application[key]}
                         setApplication={setApplication}
                         checkDuplicateAppName={checkDuplicateAppName}
                         isDuplicateAppName={isDuplicateAppName}
@@ -419,14 +433,15 @@ function FormWda() {
               </TabPanel>
               <TabPanel>
                 <Accordion allowToggle>
-                  {Object.values(communication).map((communication, id) => {
+                  {Object.keys(communication).map((key) => {
                     return (
                       <Communication
-                        key={id}
-                        id={id}
+                        key={key}
+                        id={key}
                         application={application}
-                        communication={communication}
+                        communication={communication[key]}
                         setCommunication={setCommunication}
+                        handleDeleteCommunication={handleDeleteCommunication}
                       />
                     );
                   })}
@@ -561,7 +576,7 @@ function FormWda() {
                       validateApplication() ||
                       validateDeployment() ||
                       checkLength ||
-                      validateInfra() 
+                      validateInfra()
                     }
                   >
                     Submit
