@@ -40,7 +40,10 @@ function Application({
   const handleInputChange = (field, value) => {
     checkDuplicateAppName(id, field, value);
     if (field === "applicationType") {
-      if (value == "gateway" && application.applicationType == "microservice") {
+      if (
+        value === "gateway" &&
+        application.applicationType === "microservice"
+      ) {
         checkAppType(true);
       } else checkAppType(false);
     }
@@ -137,9 +140,9 @@ function Application({
                 handleInputChange("applicationType", target.value)
               }
               marginBottom="10px"
-              defaultValue={application.applicationType}
+              // defaultValue={application.applicationType}
             >
-              {!checkGateway || application.applicationType == "gateway" ? (
+              {!checkGateway || application.applicationType === "gateway" ? (
                 <>
                   <option value="microservice">Microservice</option>
                   <option value="gateway">UI + Gateway</option>
