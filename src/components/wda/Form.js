@@ -220,7 +220,6 @@ function FormWda() {
         window.location.replace("../../");
       });
   };
-
   const handleSubmitWdi = (e) => {
     e.preventDefault();
     setIsLoading(true);

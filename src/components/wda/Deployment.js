@@ -13,7 +13,6 @@ function Deployment({ application, deployment, setDeployment }) {
   const isErrorNamespace = deployment.kubernetesNamespace === "";
   const isErrorStorage = deployment.kubernetesStorageClassName === "";
   const isErrorIngressDomain = deployment.ingressDomain === "";
-
   const handleInputChange = (field, value) => {
     setDeployment((app) => ({
       ...app,

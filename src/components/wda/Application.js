@@ -55,8 +55,9 @@ function Application({
       },
     }));
   };
+
   const handleDelete = () => {
-    handleDeleteApplication(id);
+    handleDeleteApplication(id)
   };
   const isErrorAppName =
     isDuplicateAppName || application.applicationName === "";
