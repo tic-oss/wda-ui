@@ -5,6 +5,7 @@ import ReactFlow, {
   useNodesState,
   useEdgesState,
   Controls,
+  updateEdge
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
@@ -35,8 +36,29 @@ const Designer = () => {
   console.log("Edges",edges)  
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [Isopen,setopen]=useState(false);
+  const edgeUpdateSuccessful = useRef(true);
 
-  const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), []);
+  const onConnect = useCallback((params) => {
+    console.log("Connect ",params)
+    setEdges((eds) => addEdge(params, eds))}
+    , []);
+
+  const onEdgeUpdateStart = useCallback(() => {
+    edgeUpdateSuccessful.current = false;
+  }, []);
+
+  const onEdgeUpdate = useCallback((oldEdge, newConnection) => {
+    edgeUpdateSuccessful.current = true;
+    setEdges((els) => updateEdge(oldEdge, newConnection, els));
+  }, []);
+
+  const onEdgeUpdateEnd = useCallback((_, edge) => {
+    if (!edgeUpdateSuccessful.current) {
+      setEdges((eds) => eds.filter((e) => e.id !== edge.id));
+    }
+
+    edgeUpdateSuccessful.current = true;
+  }, []);
 
   const onDragOver = useCallback((event) => {
     event.preventDefault();
@@ -46,7 +68,7 @@ const Designer = () => {
   const onDrop = useCallback(
     (event) => {
       event.preventDefault();
-
+      console.log(event)
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
       const type = event.dataTransfer.getData('application/reactflow');
 
@@ -146,14 +168,16 @@ const Designer = () => {
             onDragOver={onDragOver}
             onClick={onclick}
             fitView
+            onEdgeUpdate={onEdgeUpdate}
+            onEdgeUpdateStart={onEdgeUpdateStart}
+            onEdgeUpdateEnd={onEdgeUpdateEnd}
           >
             <Controls />
           </ReactFlow>
         </div>
         <Sidebar />
       { Isopen &&  <>
-        <Button onClick={Isopen}>Open Modal</Button>
-  
+    
         <Modal isOpen={Isopen} onClose={setopen}>
           <ModalOverlay />
           <ModalContent>
