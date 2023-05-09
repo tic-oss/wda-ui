@@ -77,13 +77,13 @@ export default ({
           <h2
             style={{
               cursor: "pointer",
-              fontSize: "15px",
+              fontSize: "12px",
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
             }}
           >
-            You can drag these nodes to the pane on the right.
+            You can drag these nodes to the pane on the left.
           </h2>
         </div>
 
@@ -305,7 +305,7 @@ export default ({
             onClick={handleButtonClick}
             mt={4}
             border="2px"
-            borderColor="green.500"
+            borderColor="#3182CE"
             width="100px"
             type="submit"
             isDisabled={

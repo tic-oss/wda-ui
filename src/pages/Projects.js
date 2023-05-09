@@ -16,7 +16,6 @@ import azure from "../../src/assets/Azure.png";
 import aws from "../../src/assets/aws.png";
 
 function Projects() {
-  // const {data,loading,error} = useFetch('/api/projects')
   const history = useHistory();
 
   const [data, setData] = useState([]);
@@ -24,10 +23,8 @@ function Projects() {
 
   const handleClick = (data, column, name) => {
     console.log(data);
-    // const navigate = window.open("/project/" + name, "_blank");
     if (column === "Architecture")
       history.push({
-        // pathname: navigate.focus(),
         pathname: "/projects/" + name,
         state: data,
       });
@@ -38,7 +35,6 @@ function Projects() {
       });
   };
   useEffect(() => {
-    console.log(`Bearer ${keycloak?.token}`, "token");
     if (initialized) {
       fetch(process.env.REACT_APP_API_BASE_URL + "/api/blueprints", {
         method: "get",
@@ -70,7 +66,7 @@ function Projects() {
             {data.map((project, index) => {
               return (
                 <Tr key={index}>
-                  <Td>{index}</Td>
+                  <Td>{index+1}</Td>
                   <Td>
                     <Button
                       colorScheme="teal"

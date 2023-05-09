@@ -264,7 +264,7 @@ const Designer = () => {
   };
 
   const onDrop = useCallback(
-    (event, servicecount, messagecount, cloudcount, Localenvcount, nodes) => {
+    (event, servicecount, messagecount, Localenvcount) => {
       event.preventDefault();
       console.log(event);
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
@@ -469,6 +469,7 @@ const Designer = () => {
       let communicationIndex = 0;
       for (const edgeInfo in NewEdges) {
         const Edge = NewEdges[edgeInfo];
+        if(!Edge.target.startsWith('Database')){
         Edge.data.client = nodes[Edge.source].data.applicationName;
         Edge.data.server = nodes[Edge.target].data.applicationName;
         if (
@@ -478,6 +479,7 @@ const Designer = () => {
         )
           Data["communications"][communicationIndex++] = Edge.data;
       }
+    }
     }
     if (saveMetadata) {
       Data["metadata"] = {
@@ -616,9 +618,7 @@ const Designer = () => {
                 e,
                 ServiceDiscoveryCount,
                 MessageBrokerCount,
-                CloudProviderCount,
                 LocalenvironmentCount,
-                nodes
               )
             }
             onDragOver={onDragOver}

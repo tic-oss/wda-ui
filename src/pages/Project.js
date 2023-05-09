@@ -12,6 +12,7 @@ import CustomLoadNode from "./Customnodes/CustomLoadNode";
 import CustomLocalenvironmentNode from "./Customnodes/CustomLocalenvironmentNode";
 import ProjectModal from "../components/Modal/ProjectModal";
 import DeploymentModal from "../components/Modal/DeploymentModal";
+import ReadOnlyEdgeModal from "../components/Modal/ReadOnlyEdgeModal";
 
 const readOnlyNodeStyle = {
   border: "1px solid #ccc",
@@ -168,13 +169,16 @@ const Project = () => {
 
   const onEdgeClick = (event, element) => {
     console.log(element.data, "data");
+    const EdgeData = element.data
+    if(EdgeData){
     event.preventDefault();
     setEdgeModal(true);
-    if (element.data.type === "synchronous") {
+    if (EdgeData.type === "synchronous") {
       setTypeName("synchronous");
     } else setTypeName("asynchronous");
-    setType(element.data.type);
-    setFramework(element.data.framework);
+    setType(EdgeData.type);
+    setFramework(EdgeData.framework);
+  }
   };
   const handleContainerClose = () => {
     setserviceModal(false) || setEdgeModal(false) || setCloudModal(false);
@@ -210,6 +214,15 @@ const Project = () => {
           </div>
         </ReactFlowProvider>
       </div>
+      {edgeModal && 
+        <ReadOnlyEdgeModal 
+          edgeModal={edgeModal}
+          type={type}
+          typeName={typeName}
+          framework={framework}
+          handleContainerClose={handleContainerClose}
+          />
+      }
       {nodeType === "UI" || nodeType === "Service" ? (
         <ProjectModal
           nodeType={nodeType}
@@ -221,10 +234,6 @@ const Project = () => {
           packageName={packageName}
           serverPort={serverPort}
           withExample={withExample}
-          edgeModal={edgeModal}
-          type={type}
-          typeName={typeName}
-          framework={framework}
         />
       ) : (
         <></>
