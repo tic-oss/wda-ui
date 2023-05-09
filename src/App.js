@@ -8,6 +8,7 @@ import Products from "./pages/Products";
 import DocHome from "./pages/Docs/DocHome";
 // import About from "./pages/About";
 import Contact from "./pages/Contact";
+import Designer from "./pages/Designer";
 
 function App() {
   return (
@@ -34,6 +35,9 @@ function App() {
         </Route> */}
         <Route exact path="/contact">
           <Contact />
+        </Route>
+        <Route exact path="/designer">
+          <Designer />
         </Route>
       </Switch>
       <Footer />
