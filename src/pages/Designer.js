@@ -24,8 +24,20 @@ import Sidebar from './../components/Sidebar';
 
 import "./../App.css"
 
-let id = 2;
-const getId = () => `${id++}`;
+let application_id = 2;
+let database_id=1;
+const getId = (type='') =>{
+      if( type === 'Application')
+        return `Application_${application_id++}`
+      else if ( type === 'Database')
+        return `Database_${database_id++}`
+      else if ( type === 'Authentication')
+        return 'Authentication_1'
+        else if ( type === 'Deployment')
+        return 'Deployment_1'
+      
+    return 'Id'
+}
 
 const Designer = () => {
   const reactFlowWrapper = useRef(null);
@@ -62,7 +74,7 @@ const Designer = () => {
         y: event.clientY - reactFlowBounds.top,
       });
       const newNode = {
-        id: getId(),
+        id: getId(name),
         type,
         position,
         data: { label: name },
@@ -100,7 +112,7 @@ const Designer = () => {
           data: {
             ...node.data,
             Framework:Framework,
-            Name:Name,
+            label:Name,
             PackageName:PackageName,
             ServerPort:ServerPort,
             ApplicationType:ApplicationType
@@ -117,9 +129,9 @@ const Designer = () => {
   useEffect(()=>{
     setNodes([
       {
-            id: '1',
+            id: 'Application_1',
             type: 'input',
-            data: { label: 'APPLICATION',onChange:onChange},
+            data: { label: 'Application',onChange:onChange},
             position: { x: 250, y: 5 },
           },
     ])

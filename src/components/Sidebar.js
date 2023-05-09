@@ -2,9 +2,9 @@ import React from 'react';
 
 export default () => {
   const onDragStart = (event, nodeType,Name) => {
+    event.dataTransfer.setData('Name',Name);;
     event.dataTransfer.setData('application/reactflow', nodeType);
     event.dataTransfer.effectAllowed = 'move';
-    event.dataTransfer.setData('Name',Name);;
   };
 
   return (
