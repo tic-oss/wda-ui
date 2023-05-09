@@ -50,6 +50,7 @@ const Designer = () => {
 
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
       const type = event.dataTransfer.getData('application/reactflow');
+      const name = event.dataTransfer.getData('Name')
 
       // check if the dropped element is valid
       if (typeof type === 'undefined' || !type) {
@@ -64,7 +65,7 @@ const Designer = () => {
         id: getId(),
         type,
         position,
-        data: { label: `${type} node` },
+        data: { label: name },
       };
 
       setNodes((nds) => nds.concat(newNode));
@@ -125,16 +126,6 @@ const Designer = () => {
     
   },[])
 
-
-// const initialNodes = [
-//   {
-//     id: '1',
-//     type: 'input',
-//     onChange:UpdateNodeData,
-//     data: { label: 'input node' },
-//     position: { x: 250, y: 5 },
-//   },
-// ];
 
   return (
     <div className="dndflow">
