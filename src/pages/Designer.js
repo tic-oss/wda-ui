@@ -17,7 +17,8 @@ import {
   ModalBody,
   ModalCloseButton,
   Button,
-  Input
+  Input,
+  Select
 } from '@chakra-ui/react'
 import Sidebar from './../components/Sidebar';
 
@@ -79,9 +80,11 @@ const Designer = () => {
   const onChange = (e) => {
     console.log("object",e.target.dataset.id)
     const Name= document.getElementById("a1").value;
-    const phone= document.getElementById("a2").value;
-    const address= document.getElementById("a3").value;
-    console.log(Name,phone,address)
+    const Framework= document.getElementById("a2").value;
+    const PackageName= document.getElementById("a3").value;
+    const ServerPort= document.getElementById("a4").value;
+    const ApplicationType= document.getElementById("a5").value;
+    console.log(Name,Framework,PackageName,ServerPort,ApplicationType)
     console.log("Nodes",nodes)
     console.log(Isopen)
     setNodes((nds)=>{
@@ -95,9 +98,11 @@ const Designer = () => {
           ...node,
           data: {
             ...node.data,
-            phone:phone,
+            Framework:Framework,
             Name:Name,
-            address:address
+            PackageName:PackageName,
+            ServerPort:ServerPort,
+            ApplicationType:ApplicationType
           }
         }
       }
@@ -113,7 +118,7 @@ const Designer = () => {
       {
             id: '1',
             type: 'input',
-            data: { label: 'input node',onChange:onChange},
+            data: { label: 'APPLICATION',onChange:onChange},
             position: { x: 250, y: 5 },
           },
     ])
@@ -162,8 +167,15 @@ const Designer = () => {
             <ModalBody>
             
             <Input variant='outline' id='a1' placeholder='Name' />
-            <Input variant='outline' id='a2' placeholder='phone' />
-            <Input variant='outline' id='a3' placeholder='address' />
+            <Input variant='outline' id='a2' placeholder='Framework' />
+            <Input variant='outline' id='a3' placeholder='PackageName' />
+            <Input variant='outline' id='a4' placeholder='ServerPort' />
+            <Select variant='outline' id='a5' placeholder='ApplicationType'>
+              <option value="microservice">Microservice</option>
+                  <option value="gateway">UI + Gateway</option>
+                
+            </Select>
+              
             <Button onClick={onChange}>Submit</Button>
             </ModalBody>
             <ModalFooter>
