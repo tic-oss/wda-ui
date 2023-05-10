@@ -18,14 +18,27 @@ import {
   ModalBody,
   ModalCloseButton,
   Button,
-  Input
+  Input,
+  Select
 } from '@chakra-ui/react'
 import Sidebar from './../components/Sidebar';
 
 import "./../App.css"
 
-let id = 2;
-const getId = () => `${id++}`;
+let application_id = 2;
+let database_id=1;
+const getId = (type='') =>{
+      if( type === 'Application')
+        return `Application_${application_id++}`
+      else if ( type === 'Database')
+        return `Database_${database_id++}`
+      else if ( type === 'Authentication')
+        return 'Authentication_1'
+        else if ( type === 'Deployment')
+        return 'Deployment_1'
+      
+    return 'Id'
+}
 
 const Designer = () => {
   const reactFlowWrapper = useRef(null);
@@ -71,6 +84,7 @@ const Designer = () => {
       console.log(event)
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
       const type = event.dataTransfer.getData('application/reactflow');
+      const name = event.dataTransfer.getData('Name')
 
       // check if the dropped element is valid
       if (typeof type === 'undefined' || !type) {
@@ -82,10 +96,10 @@ const Designer = () => {
         y: event.clientY - reactFlowBounds.top,
       });
       const newNode = {
-        id: getId(),
+        id: getId(name),
         type,
         position,
-        data: { label: `${type} node` },
+        data: { label: name },
       };
 
       setNodes((nds) => nds.concat(newNode));
@@ -101,9 +115,11 @@ const Designer = () => {
   const onChange = (e) => {
     console.log("object",e.target.dataset.id)
     const Name= document.getElementById("a1").value;
-    const phone= document.getElementById("a2").value;
-    const address= document.getElementById("a3").value;
-    console.log(Name,phone,address)
+    const Framework= document.getElementById("a2").value;
+    const PackageName= document.getElementById("a3").value;
+    const ServerPort= document.getElementById("a4").value;
+    const ApplicationType= document.getElementById("a5").value;
+    console.log(Name,Framework,PackageName,ServerPort,ApplicationType)
     console.log("Nodes",nodes)
     console.log(Isopen)
     setNodes((nds)=>{
@@ -117,9 +133,11 @@ const Designer = () => {
           ...node,
           data: {
             ...node.data,
-            phone:phone,
-            Name:Name,
-            address:address
+            Framework:Framework,
+            label:Name,
+            PackageName:PackageName,
+            ServerPort:ServerPort,
+            ApplicationType:ApplicationType
           }
         }
       }
@@ -133,25 +151,15 @@ const Designer = () => {
   useEffect(()=>{
     setNodes([
       {
-            id: '1',
+            id: 'Application_1',
             type: 'input',
-            data: { label: 'input node',onChange:onChange},
+            data: { label: 'Application',onChange:onChange},
             position: { x: 250, y: 5 },
           },
     ])
     
   },[])
 
-
-// const initialNodes = [
-//   {
-//     id: '1',
-//     type: 'input',
-//     onChange:UpdateNodeData,
-//     data: { label: 'input node' },
-//     position: { x: 250, y: 5 },
-//   },
-// ];
 
   return (
     <div className="dndflow">
@@ -186,8 +194,15 @@ const Designer = () => {
             <ModalBody>
             
             <Input variant='outline' id='a1' placeholder='Name' />
-            <Input variant='outline' id='a2' placeholder='phone' />
-            <Input variant='outline' id='a3' placeholder='address' />
+            <Input variant='outline' id='a2' placeholder='Framework' />
+            <Input variant='outline' id='a3' placeholder='PackageName' />
+            <Input variant='outline' id='a4' placeholder='ServerPort' />
+            <Select variant='outline' id='a5' placeholder='ApplicationType'>
+              <option value="microservice">Microservice</option>
+                  <option value="gateway">UI + Gateway</option>
+                
+            </Select>
+              
             <Button onClick={onChange}>Submit</Button>
             </ModalBody>
             <ModalFooter>
