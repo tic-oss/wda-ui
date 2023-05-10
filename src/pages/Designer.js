@@ -33,7 +33,7 @@ const getId = (type = "") => {
   if (type === "Service") return `Service_${service_id++}`;
   else if (type === "Database") return `Database_${database_id++}`;
   else if (type === "Authentication") return "Authentication_1";
-  else if (type === "UI") return "UI";
+  else if (type === "UI+Gateway") return "UI";
   return "Id";
 };
 
@@ -58,6 +58,8 @@ const Designer = () => {
   const [MessageBrokerCount, setMessageBrokerCount] = useState(0);
   const [CloudProviderCount, setCloudProviderCount] = useState(0);
   const [LocalenvironmentCount, setLocalenvironmentCount] = useState(0);
+  const [LogManagemntCount, setLogManagementCount] = useState(0);
+  const [AuthProviderCount, setAuthProviderCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   console.log("Nodes", nodes);
 
@@ -67,7 +69,7 @@ const Designer = () => {
     return { ...edges, [edgeId]: { id: edgeId, ...edgeParams } };
   };
 
-  const updateEdge = (oldEdge, newConnection, edges,Nodes) => {
+  const updateEdge = (oldEdge, newConnection, edges, Nodes) => {
     console.log("OldEdge", oldEdge);
     console.log("New Connection", newConnection);
     console.log("Edges", edges);
@@ -80,15 +82,16 @@ const Designer = () => {
       [newEdgeId]: { id: newEdgeId, ...newConnection },
     };
     if (oldEdge.id !== newEdgeId) delete updatedEdges[oldEdge.id];
-    const oldSourceNode = Nodes[oldEdge.source]
-    delete oldSourceNode?.data?.prodDatabaseType
-    setNodes((prev)=>({...prev,[oldSourceNode.id]:oldSourceNode}))
+    const oldSourceNode = Nodes[oldEdge.source];
+    delete oldSourceNode?.data?.prodDatabaseType;
+    setNodes((prev) => ({ ...prev, [oldSourceNode.id]: oldSourceNode }));
     return updatedEdges;
   };
 
   const onNodesChange = useCallback((edges, changes = []) => {
     setNodes((oldNodes) => {
       const updatedNodes = { ...oldNodes };
+      const deletedApplicationNames = []; // Track deleted application names
 
       changes.forEach((change) => {
         switch (change.type) {
@@ -137,24 +140,35 @@ const Designer = () => {
               setServiceDiscoveryCount(0);
             else if (change.id === "cloudProvider") {
               setCloudProviderCount(0);
+            } else if (change.id === "authenticationType") {
+              setAuthProviderCount(0);
             } else if (change.id === "Localenvironment") {
               setLocalenvironmentCount(0);
-            } else if (change.id === "logManagement")
-              updatedNodes.cloudProvider.data["enableECK"] = "false";
-            console.log(change,'Chanfe')
+            } else if (change.id === "logManagement") {
+              setLogManagementCount(0);
+            }
+            console.log(change, "Chanfe");
+            // Remove the deleted node from updatedNodes
             delete updatedNodes[change.id];
-            break;
-
-          case "add":
-            updatedNodes[change.item.id] = change.item;
-            break;
-          case "reset":
-            updatedNodes[change.item.id] = change.item;
-            break;
-          default:
+            // Remove the applicationName from uniqueApplicationNames
+            const deletedNode = oldNodes[change.id];
+            if (
+              deletedNode &&
+              deletedNode.data &&
+              deletedNode.data.applicationName
+            ) {
+              deletedApplicationNames.push(
+                deletedNode.data.applicationName.trim()
+              );
+            }
             break;
         }
       });
+      console.log(deletedApplicationNames)
+      // Remove deleted application names from uniqueApplicationNames
+      setUniqueApplicationNames((prev) =>
+        prev.filter((appName) => !deletedApplicationNames.includes(appName))
+      );
 
       return updatedNodes;
     });
@@ -167,7 +181,7 @@ const Designer = () => {
     setEdges((oldEdges) => {
       const updatedEdges = { ...oldEdges };
       console.log(changes, updatedEdges);
-      let UpdatedNodes = { ...Nodes }
+      let UpdatedNodes = { ...Nodes };
       changes.forEach((change) => {
         switch (change.type) {
           case "add":
@@ -176,13 +190,13 @@ const Designer = () => {
             break;
           case "remove":
             let [sourceId, targetId] = change.id.split("-");
-            if ( targetId.startsWith("Database") ) {
-              UpdatedNodes[targetId].data.isConnected = false
-              if(sourceId.startsWith("Service") || sourceId.startsWith('UI'))
+            if (targetId.startsWith("Database")) {
+              UpdatedNodes[targetId].data.isConnected = false;
+              if (sourceId.startsWith("Service") || sourceId.startsWith("UI"))
                 delete UpdatedNodes[sourceId].data.prodDatabaseType;
               setNodes(UpdatedNodes);
             }
-              delete updatedEdges[change.id];
+            delete updatedEdges[change.id];
             // Handle remove event
             break;
           case "update":
@@ -228,8 +242,8 @@ const Designer = () => {
       )
     ) {
       // Validation of service Node to check if it has database or not
-        setEdges((els) => updateEdge(oldEdge, newConnection, els,Nodes));
-        MergeData(newConnection.source, newConnection.target, Nodes);
+      setEdges((els) => updateEdge(oldEdge, newConnection, els, Nodes));
+      MergeData(newConnection.source, newConnection.target, Nodes);
     }
   }, []);
 
@@ -241,7 +255,7 @@ const Designer = () => {
           // If the edge is removed between Service and Database
           let UpdatedNodes = { ...Nodes };
           delete UpdatedNodes[edge.source].data.prodDatabaseType;
-          UpdatedNodes[edge.target].data.isConnected = false
+          UpdatedNodes[edge.target].data.isConnected = false;
           setNodes(UpdatedNodes);
         }
         delete AllEdges[edge.id];
@@ -271,7 +285,14 @@ const Designer = () => {
   };
 
   const onDrop = useCallback(
-    (event, servicecount, messagecount, Localenvcount) => {
+    (
+      event,
+      servicecount,
+      messagecount,
+      loadcount,
+      authcount,
+      Localenvcount
+    ) => {
       event.preventDefault();
       console.log(event);
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
@@ -314,7 +335,7 @@ const Designer = () => {
       } else if (name.startsWith("Discovery") && servicecount >= 1) {
         console.log("else", servicecount);
         setServiceDiscoveryCount(2);
-      } else if (name.startsWith("Auth")) {
+      } else if (name.startsWith("Auth") && authcount === 0) {
         const authenticationType = name.split("_").splice(1)[0];
         console.log(authenticationType);
         const newNode = {
@@ -325,6 +346,10 @@ const Designer = () => {
           style: { border: "1px solid", padding: "4px 4px" },
         };
         setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
+        setAuthProviderCount(1);
+      } else if (name.startsWith("Auth") && authcount >= 1) {
+        console.log("else", authcount);
+        setAuthProviderCount(2);
       } else if (name.startsWith("MessageBroker") && messagecount === 0) {
         console.log(messagecount);
         const messageBroker = name.split("_").splice(1)[0];
@@ -342,7 +367,7 @@ const Designer = () => {
       } else if (name.startsWith("MessageBroker") && messagecount >= 1) {
         console.log("else", messagecount);
         setMessageBrokerCount(2);
-      } else if (name.startsWith("Load")) {
+      } else if (name.startsWith("Load") && loadcount === 0) {
         const logManagementType = name.split("_").splice(1)[0];
         const newNode = {
           id: "logManagement",
@@ -352,6 +377,10 @@ const Designer = () => {
           style: { border: "1px solid", padding: "4px 4px" },
         };
         setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
+        setLogManagementCount(1);
+      } else if (name.startsWith("Load") && loadcount >= 1) {
+        console.log("else", loadcount);
+        setLogManagementCount(2);
       } else if (name.startsWith("Localenvironment") && Localenvcount === 0) {
         console.log(Localenvcount);
         const Localenvironment = name.split("_").splice(1)[0];
@@ -406,10 +435,10 @@ const Designer = () => {
     }
     setNodes(UpdatedNodes);
     setopen(false);
-  }; 
+  };
 
   useEffect(() => {
-    document.title = 'WDA';
+    document.title = "WDA";
     setNodes({
       UI: {
         id: "UI",
@@ -436,7 +465,10 @@ const Designer = () => {
         let sourceNode = AllNodes[sourceId];
         let targetNode = AllNodes[targetId];
         console.log(sourceNode, targetNode);
-        AllNodes[sourceId].data = { ...sourceNode.data, prodDatabaseType :targetNode.data.prodDatabaseType };
+        AllNodes[sourceId].data = {
+          ...sourceNode.data,
+          prodDatabaseType: targetNode.data.prodDatabaseType,
+        };
         setNodes({ ...AllNodes });
       }
     }
@@ -450,8 +482,8 @@ const Designer = () => {
     let logManagementData = nodes["logManagement"]?.data;
     if (logManagementData && Data?.deployment)
       Data.deployment.enableECK = "true";
-    if(Data.deployment && Service_Discovery_Data?.serviceDiscoveryType)
-      Data.deployment = {...Data.deployment,...Service_Discovery_Data}
+    if (Data.deployment && Service_Discovery_Data?.serviceDiscoveryType)
+      Data.deployment = { ...Data.deployment, ...Service_Discovery_Data };
     for (const key in NewNodes) {
       const Node = NewNodes[key];
       delete Node.data?.color
@@ -475,23 +507,27 @@ const Designer = () => {
         }
       }
     }
-    if (Object.values(NewEdges).some((edge) => edge.data  && JSON.stringify(edge.data) !== "{}")) {
-      console.log("object")
+    if (
+      Object.values(NewEdges).some(
+        (edge) => edge.data && JSON.stringify(edge.data) !== "{}"
+      )
+    ) {
+      console.log("object");
       Data["communications"] = {};
       let communicationIndex = 0;
       for (const edgeInfo in NewEdges) {
         const Edge = NewEdges[edgeInfo];
-        if(!Edge.target.startsWith('Database')){
-        Edge.data.client = nodes[Edge.source].data.applicationName;
-        Edge.data.server = nodes[Edge.target].data.applicationName;
-        if (
-          Edge.data &&
-          Object.keys(Edge.data).length !== 0 &&
-          !Edge.target.startsWith("Database")
-        )
-          Data["communications"][communicationIndex++] = Edge.data;
+        if (!Edge.target.startsWith("Database")) {
+          Edge.data.client = nodes[Edge.source].data.applicationName;
+          Edge.data.server = nodes[Edge.target].data.applicationName;
+          if (
+            Edge.data &&
+            Object.keys(Edge.data).length !== 0 &&
+            !Edge.target.startsWith("Database")
+          )
+            Data["communications"][communicationIndex++] = Edge.data;
+        }
       }
-    }
     }
     if (saveMetadata) {
       Data["metadata"] = {
@@ -590,17 +626,19 @@ const Designer = () => {
     params.markerEnd = { type: MarkerType.ArrowClosed };
     params.type = "straight";
     params.data = {};
-    const targetNode = Nodes[params.target]
+    const targetNode = Nodes[params.target];
 
-    if(targetNode.id.startsWith('Database')){
-      if( !Nodes[params.source]?.data["prodDatabaseType"] && !targetNode.data.isConnected){
-        targetNode.data.isConnected = true
-        setEdges((eds) => addEdge(params, eds,Nodes));
+    if (targetNode.id.startsWith("Database")) {
+      if (
+        !Nodes[params.source]?.data["prodDatabaseType"] &&
+        !targetNode.data.isConnected
+      ) {
+        targetNode.data.isConnected = true;
+        setEdges((eds) => addEdge(params, eds, Nodes));
         MergeData(params.source, params.target, Nodes);
       }
-    }
-    else{
-      setEdges((eds) => addEdge(params, eds,Nodes));
+    } else {
+      setEdges((eds) => addEdge(params, eds, Nodes));
     }
   }, []);
 
@@ -611,7 +649,7 @@ const Designer = () => {
   const [uniqueApplicationNames, setUniqueApplicationNames] = useState([]);
 
   return (
-    <div className="dndflow" style={{overflow:'hidden !important'}}>
+    <div className="dndflow" style={{ overflow: "hidden !important" }}>
       <ReactFlowProvider>
           <div
             className="reactflow-wrapper"
@@ -631,7 +669,9 @@ const Designer = () => {
                 e,
                 ServiceDiscoveryCount,
                 MessageBrokerCount,
-                LocalenvironmentCount,
+                LogManagemntCount,
+                AuthProviderCount,
+                LocalenvironmentCount
               )
             }
             onDragOver={onDragOver}
@@ -705,11 +745,17 @@ const Designer = () => {
         {CloudProviderCount === 2 && (
           <AlertModal isOpen={true} onClose={() => setCloudProviderCount(1)} />
         )}
+        {LogManagemntCount === 2 && (
+          <AlertModal isOpen={true} onClose={() => setLogManagementCount(1)} />
+        )}
         {LocalenvironmentCount === 2 && (
           <AlertModal
             isOpen={true}
             onClose={() => setLocalenvironmentCount(1)}
           />
+        )}
+        {AuthProviderCount === 2 && (
+          <AlertModal isOpen={true} onClose={() => setAuthProviderCount(1)} />
         )}
       </ReactFlowProvider>
     </div>
