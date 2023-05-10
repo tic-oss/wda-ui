@@ -170,7 +170,7 @@ const Designer = () => {
         <Sidebar />
       { Isopen &&  <>
          <Button onClick={() => setIsOpen(true)}>Open Modal</Button>
-      <MyModal isOpen={isOpen} onClose={handleClose} onSubmit={onChange} />
+      <MyModal isOpen={isOpen} onClose={setopen} onSubmit={onChange} />
   
   
       </>
