@@ -18,9 +18,11 @@ import {
   ModalCloseButton,
   Button,
   Input,
-  Select
+  Select,
+  Stack
 } from '@chakra-ui/react'
 import Sidebar from './../components/Sidebar';
+import MyModal from '../components/Modal/MyModal';
 
 import "./../App.css"
 
@@ -56,6 +58,11 @@ const Designer = () => {
     event.dataTransfer.dropEffect = 'move';
   }, []);
 
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleClose = () => setIsOpen(false);
+  const handleSubmit = () => console.log("Submitted");
+
   const onDrop = useCallback(
     (event) => {
       event.preventDefault();
@@ -78,6 +85,7 @@ const Designer = () => {
         type,
         position,
         data: { label: name },
+       style: { border: "1px solid", padding: "4px 4px" },
       };
 
       setNodes((nds) => nds.concat(newNode));
@@ -92,11 +100,11 @@ const Designer = () => {
 
   const onChange = (e) => {
     console.log("object",e.target.dataset.id)
-    const Name= document.getElementById("a1").value;
-    const Framework= document.getElementById("a2").value;
-    const PackageName= document.getElementById("a3").value;
-    const ServerPort= document.getElementById("a4").value;
-    const ApplicationType= document.getElementById("a5").value;
+    const Name= document.getElementById("appname").value;
+    const Framework= document.getElementById("framework").value;
+    const PackageName= document.getElementById("packagename").value;
+    const ServerPort= document.getElementById("serverport").value;
+    const ApplicationType= document.getElementById("apptype").value;
     console.log(Name,Framework,PackageName,ServerPort,ApplicationType)
     console.log("Nodes",nodes)
     console.log(Isopen)
@@ -132,6 +140,7 @@ const Designer = () => {
             id: 'Application_1',
             type: 'input',
             data: { label: 'Application',onChange:onChange},
+           style: { border: "1px solid", padding: "4px 4px" },
             position: { x: 250, y: 5 },
           },
     ])
@@ -160,34 +169,10 @@ const Designer = () => {
         </div>
         <Sidebar />
       { Isopen &&  <>
-        <Button onClick={Isopen}>Open Modal</Button>
+         <Button onClick={() => setIsOpen(true)}>Open Modal</Button>
+      <MyModal isOpen={isOpen} onClose={handleClose} onSubmit={onChange} />
   
-        <Modal isOpen={Isopen} onClose={setopen}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>Modal  {Isopen} </ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
-            
-            <Input variant='outline' id='a1' placeholder='Name' />
-            <Input variant='outline' id='a2' placeholder='Framework' />
-            <Input variant='outline' id='a3' placeholder='PackageName' />
-            <Input variant='outline' id='a4' placeholder='ServerPort' />
-            <Select variant='outline' id='a5' placeholder='ApplicationType'>
-              <option value="microservice">Microservice</option>
-                  <option value="gateway">UI + Gateway</option>
-                
-            </Select>
-              
-            <Button onClick={onChange}>Submit</Button>
-            </ModalBody>
-            <ModalFooter>
-              <Button colorScheme='blue' mr={3} onClick={()=>setopen(false)}>
-                Close
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
+  
       </>
       }
       </ReactFlowProvider>
