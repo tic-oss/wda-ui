@@ -14,11 +14,11 @@ import {
 
 const MyModal = ({ isOpen, onClose, onSubmit }) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered={true}>
+    <Modal isOpen={isOpen} onClose={()=>onClose(false)} isCentered={true}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Modal</ModalHeader>
-        <ModalCloseButton />
+        <ModalCloseButton/>
         <ModalBody>
           <div
             style={{
@@ -66,11 +66,6 @@ const MyModal = ({ isOpen, onClose, onSubmit }) => {
           </div>
           <Button onClick={onSubmit}>Submit</Button>
         </ModalBody>
-        <ModalFooter>
-          {/* <Button colorScheme='blue' mr={3} onClick={onClose}>
-            Close
-          </Button> */}
-        </ModalFooter>
       </ModalContent>
     </Modal>
   );

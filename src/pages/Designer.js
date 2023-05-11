@@ -58,11 +58,6 @@ const Designer = () => {
     event.dataTransfer.dropEffect = 'move';
   }, []);
 
-  const [isOpen, setIsOpen] = useState(false);
-
-  const handleClose = () => setIsOpen(false);
-  const handleSubmit = () => console.log("Submitted");
-
   const onDrop = useCallback(
     (event) => {
       event.preventDefault();
@@ -168,13 +163,7 @@ const Designer = () => {
           </ReactFlow>
         </div>
         <Sidebar />
-      { Isopen &&  <>
-         <Button onClick={() => setIsOpen(true)}>Open Modal</Button>
-      <MyModal isOpen={isOpen} onClose={setopen} onSubmit={onChange} />
-  
-  
-      </>
-      }
+      { Isopen &&  <MyModal isOpen={Isopen} onClose={setopen} onSubmit={onChange} />}
       </ReactFlowProvider>
 
 
