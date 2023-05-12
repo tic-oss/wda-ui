@@ -4,7 +4,7 @@ import db2 from "../assets/sql.png"
 import "./../App.css"
 
 export default () => {
-  const onDragStart = (event, nodeType,Name,data, isConnectable) => {
+  const onDragStart = (event, nodeType,Name) => {
     event.dataTransfer.setData('Name',Name);;
     event.dataTransfer.setData('application/reactflow', nodeType);
     event.dataTransfer.effectAllowed = 'move';
@@ -22,18 +22,13 @@ export default () => {
       <div className="dndnode output" onDragStart={(event) => onDragStart(event, 'default','Authentication')} draggable>
         Authentication
       </div>
-      <div >
-        Database
-      </div>
-      <div>
-       Choose your DB:
-      </div>
-      <div className="selectorNode" onDragStart={(event) => onDragStart(event, 'default',{db1})} draggable> 
-        <img src={db1} alt="pstgrclogo"></img>
+     <h1>Databases</h1>
+      <div className="selectorNode" onDragStart={(event) => onDragStart(event, 'default','Img_postgres')} draggable> 
+        <img  width='140px' src={db1} alt="pstgrclogo"></img>
       </div>
         
-      <div className="selectorNode" onDragStart={(event) => onDragStart(event, 'default','')} draggable>  
-        <img src={db2} alt="pstgrclogo"></img>
+      <div className="selectorNode" onDragStart={(event) => onDragStart(event, 'default','Img_SQL')} draggable>  
+        <img width='140px' src={db2} alt="pstgrclogo"></img>
       </div>
     </aside>
   );
