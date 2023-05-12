@@ -9,19 +9,6 @@ import ReactFlow, {
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  Button,
-  Input,
-  Select,
-  Stack
-} from '@chakra-ui/react'
 import Sidebar from './../components/Sidebar';
 import MyModal from '../components/Modal/MyModal';
 
@@ -113,8 +100,17 @@ const Designer = () => {
   );
 
   const onclick = (e)=>{
-    console.log(e.target.dataset.id)
-    setopen(e.target.dataset.id)
+    const Id= e.target.dataset.id
+    console.log(Id)
+    if(Id){
+      setopen(Id)
+      // let index = nodeMap.get(Id)
+      // let CurrentNode = nodes[index].data
+      // console.log(CurrentNode)
+      // console.log(document.getElementById("appname"))
+      // =CurrentNode.label
+    }
+    
   }
 
   const onChange = (e) => {
@@ -129,36 +125,11 @@ const Designer = () => {
     console.log(Isopen)
     let UpdatedNodes=[...nodes]
     let index = nodeMap.get(Isopen)
-      let CurrentNode = UpdatedNodes[index]
-      console.log(CurrentNode)
-      CurrentNode.data={...CurrentNode.data,Framework:Framework,label:Name,PackageName:PackageName,ServerPort:ServerPort,ApplicationType:ApplicationType}
-      UpdatedNodes[index]=CurrentNode
-      setNodes(UpdatedNodes)
-    // setNodes((nds)=>{
-
-      
-    //   return nds.map((node) => {
-    //     console.log(node.id,Isopen,node.id!==Isopen)
-    //     if (node.id !== Isopen) {
-    //       console.log(node.id,Isopen)
-    //       return node
-    //     }
-    //     return {
-    //       ...node,
-    //       data: {
-    //         ...node.data,
-    //         Framework:Framework,
-    //         label:Name,
-    //         PackageName:PackageName,
-    //         ServerPort:ServerPort,
-    //         ApplicationType:ApplicationType
-    //       }
-    //     }
-    //   }
-    // )
-
-  //  }
-    // )
+    let CurrentNode = UpdatedNodes[index]
+    console.log(CurrentNode)
+    CurrentNode.data={...CurrentNode.data,Framework:Framework,label:Name,PackageName:PackageName,ServerPort:ServerPort,ApplicationType:ApplicationType}
+    UpdatedNodes[index]=CurrentNode
+    setNodes(UpdatedNodes)
     setopen(false)
   }
 
