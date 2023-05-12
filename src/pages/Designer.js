@@ -26,7 +26,8 @@ import Sidebar from './../components/Sidebar';
 import "./../App.css"
 
 let application_id = 2;
-let database_id=1;
+let database_id = 1;
+let totalnodes = 1
 const getId = (type='') =>{
       if( type === 'Application')
         return `Application_${application_id++}`
@@ -34,19 +35,20 @@ const getId = (type='') =>{
         return `Database_${database_id++}`
       else if ( type === 'Authentication')
         return 'Authentication_1'
-        else if ( type === 'Deployment')
+      else if ( type === 'Deployment')
         return 'Deployment_1'
-      
     return 'Id'
 }
 
 const Designer = () => {
   const reactFlowWrapper = useRef(null);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [nodeMap,setNodeMap] = useState(new Map())
   console.log("Nodes",nodes)
   
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   console.log("Edges",edges)  
+  console.log('NodeMap',nodeMap)
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [Isopen,setopen]=useState(false);
   const edgeUpdateSuccessful = useRef(true);
@@ -101,7 +103,7 @@ const Designer = () => {
         position,
         data: { label: name },
       };
-
+      setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
       setNodes((nds) => nds.concat(newNode));
     },
     [reactFlowInstance]
@@ -122,29 +124,38 @@ const Designer = () => {
     console.log(Name,Framework,PackageName,ServerPort,ApplicationType)
     console.log("Nodes",nodes)
     console.log(Isopen)
-    setNodes((nds)=>{
-      return nds.map((node) => {
-        console.log(node.id,Isopen,node.id!==Isopen)
-        if (node.id !== Isopen) {
-          console.log(node.id,Isopen)
-          return node
-        }
-        return {
-          ...node,
-          data: {
-            ...node.data,
-            Framework:Framework,
-            label:Name,
-            PackageName:PackageName,
-            ServerPort:ServerPort,
-            ApplicationType:ApplicationType
-          }
-        }
-      }
-    )
+    let UpdatedNodes=[...nodes]
+    let index = nodeMap.get(Isopen)
+      let CurrentNode = UpdatedNodes[index]
+      console.log(CurrentNode)
+      CurrentNode.data={...CurrentNode.data,Framework:Framework,label:Name,PackageName:PackageName,ServerPort:ServerPort,ApplicationType:ApplicationType}
+      UpdatedNodes[index]=CurrentNode
+      setNodes(UpdatedNodes)
+    // setNodes((nds)=>{
 
-   }
-    )
+      
+    //   return nds.map((node) => {
+    //     console.log(node.id,Isopen,node.id!==Isopen)
+    //     if (node.id !== Isopen) {
+    //       console.log(node.id,Isopen)
+    //       return node
+    //     }
+    //     return {
+    //       ...node,
+    //       data: {
+    //         ...node.data,
+    //         Framework:Framework,
+    //         label:Name,
+    //         PackageName:PackageName,
+    //         ServerPort:ServerPort,
+    //         ApplicationType:ApplicationType
+    //       }
+    //     }
+    //   }
+    // )
+
+  //  }
+    // )
     setopen(false)
   }
 
@@ -157,6 +168,7 @@ const Designer = () => {
             position: { x: 250, y: 5 },
           },
     ])
+    setNodeMap((prev)=>new Map(prev.set('Application_1',0)))
     
   },[])
 
@@ -222,14 +234,4 @@ const Designer = () => {
 };
 
 export default Designer;
-
-
-// const CustomModal = ({Isopen,setopen})=>{
-
-  
-//     return (
-//      <>
-//      </>
-//     )
-//   }
 
