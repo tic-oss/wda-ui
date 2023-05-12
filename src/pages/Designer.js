@@ -5,6 +5,7 @@ import ReactFlow, {
   useNodesState,
   useEdgesState,
   Controls,
+  MiniMap,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
@@ -23,7 +24,7 @@ import {
 } from '@chakra-ui/react'
 import Sidebar from './../components/Sidebar';
 import MyModal from '../components/Modal/MyModal';
-
+import ColorSelectorNode from './../components/ColorSelectorNode';
 import "./../App.css"
 
 let application_id = 2;
@@ -40,6 +41,10 @@ const getId = (type='') =>{
       
     return 'Id'
 }
+const nodeTypes = {
+  selectorNode: ColorSelectorNode,
+};
+
 
 const Designer = () => {
   const reactFlowWrapper = useRef(null);
@@ -57,6 +62,15 @@ const Designer = () => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
   }, []);
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleClose = () => setIsOpen(false);
+  const handleSubmit = () => console.log("Submitted");
+
+  const image = '../assets/pstgrc.jpeg';
+
+  
 
   const onDrop = useCallback(
     (event) => {
@@ -83,7 +97,8 @@ const Designer = () => {
        style: { border: "1px solid", padding: "4px 4px" },
       };
 
-      setNodes((nds) => nds.concat(newNode));
+      setNodes((nds) => nds.concat(newNode)
+     );
     },
     [reactFlowInstance]
   );
@@ -108,12 +123,19 @@ const Designer = () => {
         console.log(node.id,Isopen,node.id!==Isopen)
         if (node.id !== Isopen) {
           console.log(node.id,Isopen)
+        if (node.id !== '2') {
+            return node;
+          }
+
+          
           return node
         }
+        const database = e.target.value;
         return {
           ...node,
           data: {
             ...node.data,
+            database,
             Framework:Framework,
             label:Name,
             PackageName:PackageName,
@@ -138,6 +160,13 @@ const Designer = () => {
            style: { border: "1px solid", padding: "4px 4px" },
             position: { x: 250, y: 5 },
           },
+          // {
+          //   id: '2',
+          //   type: 'selectorNode',
+          //   data: { onChange: onChange, database: image },
+          //   style: { border: '1px solid #777', padding: 10 },
+          //   position: { x: 300, y: 50 },
+          // },
     ])
     
   },[])
@@ -150,6 +179,7 @@ const Designer = () => {
           <ReactFlow
             nodes={nodes}
             edges={edges}
+            nodeTypes={nodeTypes}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
@@ -159,11 +189,28 @@ const Designer = () => {
             onClick={onclick}
             fitView
           >
+            <MiniMap
+        nodeStrokeColor={(n) => {
+          
+          if (n.type === 'selectorNode') return image;
+        
+        }}
+        nodeColor={(n) => {
+          if (n.type === 'selectorNode') return image;
+          return '#fff';
+        }}
+      />
             <Controls />
           </ReactFlow>
         </div>
         <Sidebar />
-      { Isopen &&  <MyModal isOpen={Isopen} onClose={setopen} onSubmit={onChange} />}
+      { Isopen &&  <>
+         <Button onClick={() => setIsOpen(true)}>Open Modal</Button>
+      <MyModal isOpen={isOpen} onClose={setopen} onSubmit={onChange} />
+  
+  
+      </>
+      }
       </ReactFlowProvider>
 
 
