@@ -88,7 +88,7 @@ const Designer = () => {
       const type = event.dataTransfer.getData('application/reactflow');
       const name = event.dataTransfer.getData('Name')
 
-      // check if the dropped element is valid
+    
       if (typeof type === 'undefined' || !type) {
         return;
       }
@@ -133,11 +133,7 @@ const Designer = () => {
     console.log(Id)
     if(Id){
       setopen(Id)
-      // let index = nodeMap.get(Id)
-      // let CurrentNode = nodes[index].data
-      // console.log(CurrentNode)
-      // console.log(document.getElementById("appname"))
-      // =CurrentNode.label
+     
     }
     
   }
@@ -173,13 +169,7 @@ const Designer = () => {
            style: { border: "1px solid", padding: "4px 4px" },
             position: { x: 250, y: 5 },
           },
-          // {
-          //   id: '2',
-          //   type: 'selectorNode',
-          //   data: { onChange: onChange, database: image },
-          //   style: { border: '1px solid #777', padding: 10 },
-          //   position: { x: 300, y: 50 },
-          // },
+         
     ])
     setNodeMap((prev)=>new Map(prev.set('Application_1',0)))
     

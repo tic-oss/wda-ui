@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Modal,
   ModalOverlay,
@@ -13,59 +13,106 @@ import {
 } from "@chakra-ui/react";
 
 const MyModal = ({ isOpen, onClose, onSubmit }) => {
+  const [formData, setFormData] = useState({});
+
+  useEffect(() => {
+    const savedFormData = localStorage.getItem('formData');
+    if (savedFormData) {
+      setFormData(JSON.parse(savedFormData));
+    }
+  }, []);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    localStorage.setItem('formData', JSON.stringify(formData));
+    onSubmit(formData);
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+
   return (
-    <Modal isOpen={isOpen} onClose={()=>onClose(false)} isCentered={true}>
+    <Modal isOpen={isOpen} onClose={() => onClose(false)} isCentered={true}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Modal</ModalHeader>
-        <ModalCloseButton/>
-        <ModalBody>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "Left",
-            }}
-          >
-            <lable>Application name</lable>
-            <Input
-              mb={4}
-              variant="outline"
-              id="appname"
-              placeholder="Name"
-              borderColor={"black"}
-            />
-            <lable>Framework</lable>
-            <Input
-              mb={4}
-              id="framework"
-              borderColor={"black"}
-              placeholder="framework"
-            />
-            <lable>Package Name</lable>
-            <Input
-              mb={4}
-              variant="outline"
-              id="packagename"
-              placeholder="PackageName"
-              borderColor={"black"}
-            />
-            <lable>Server Port</lable>
-            <Input
-              mb={4}
-              variant="outline"
-              id="serverport"
-              placeholder="ServerPort"
-              borderColor={"black"}
-            />
-            <lable>Application Type</lable>
-            <Select mb={4} variant="outline" id="apptype" borderColor={"black"}>
-              <option value="microservice">Microservice</option>
-              <option value="gateway">UI + Gateway</option>
-            </Select>
-          </div>
-          <Button onClick={onSubmit}>Submit</Button>
-        </ModalBody>
+        <ModalCloseButton />
+        <form onSubmit={handleSubmit}>
+          <ModalBody>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "Left",
+              }}
+            >
+              <label>Application name</label>
+              <Input
+                mb={4}
+                variant="outline"
+                id="appname"
+                name="appname"
+                placeholder="Name"
+                borderColor={"black"}
+                value={formData.appname || ""}
+                onChange={handleChange}
+              />
+              <label>Framework</label>
+              <Input
+                mb={4}
+                id="framework"
+                borderColor={"black"}
+                placeholder="framework"
+                name="framework"
+                value={formData.framework || ""}
+                onChange={handleChange}
+              />
+              <label>Package Name</label>
+              <Input
+                mb={4}
+                variant="outline"
+                id="packagename"
+                placeholder="PackageName"
+                borderColor={"black"}
+                name="packagename"
+                value={formData.packagename || ""}
+                onChange={handleChange}
+              />
+              <label>Server Port</label>
+              <Input
+                mb={4}
+                variant="outline"
+                id="serverport"
+                placeholder="ServerPort"
+                borderColor={"black"}
+                name="serverport"
+                value={formData.serverport || ""}
+                onChange={handleChange}
+              />
+              <label>Application Type</label>
+              <Select
+                mb={4}
+                variant="outline"
+                id="apptype"
+                borderColor={"black"}
+                name="apptype"
+                value={formData.apptype || ""}
+                onChange={handleChange}
+              >
+                <option value="microservice">Microservice</option>
+                <option value="gateway">UI + Gateway</option>
+              </Select>
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <Button onClick={onSubmit} type="submit">Submit</Button>
+          </ModalFooter>
+        </form>
       </ModalContent>
     </Modal>
   );

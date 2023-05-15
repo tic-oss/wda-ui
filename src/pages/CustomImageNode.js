@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { Handle, Position } from "reactflow";
 import postgres from "./../assets/pstgrc.jpeg"
-import sql from "./../assets/sql.png"
+import sql from "./../assets/mongo.png"
 
 const handleStyle = { left: 25 };
 
