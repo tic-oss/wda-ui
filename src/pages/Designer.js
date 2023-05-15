@@ -13,7 +13,7 @@ import 'reactflow/dist/style.css';
 
 import Sidebar from './../components/Sidebar';
 import MyModal from '../components/Modal/MyModal';
-import ColorSelectorNode from './../components/ColorSelectorNode';
+import CustomImageNode from "./CustomImageNode"
 import "./../App.css"
 
 let application_id = 2;
@@ -31,7 +31,7 @@ const getId = (type='') =>{
     return 'Id'
 }
 const nodeTypes = {
-  selectorNode: ColorSelectorNode,
+  selectorNode: CustomImageNode,
 };
 
 
@@ -75,10 +75,6 @@ const Designer = () => {
     event.dataTransfer.dropEffect = 'move';
   }, []);
 
-  const [isOpen, setIsOpen] = useState(false);
-
-  const handleClose = () => setIsOpen(false);
-  const handleSubmit = () => console.log("Submitted");
 
   const image = '../assets/pstgrc.jpeg';
 
@@ -101,16 +97,32 @@ const Designer = () => {
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
       });
-      const newNode = {
-        id: getId(name),
-        type,
-        position,
-        data: { label: name },
-       style: { border: "1px solid", padding: "4px 4px" },
-      };
 
-      setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
-      setNodes((nds) => nds.concat(newNode));
+      if(!name.startsWith('Img')){
+        const newNode = {
+          id: getId(name),
+          type,
+          position,
+          data: { label: name },
+         style: { border: "1px solid", padding: "4px 4px" },
+        };
+  
+        setNodes((nds) => nds.concat(newNode))
+      }
+      else{
+        const Database=name.split('_').splice(1)[0]
+        console.log(Database)
+        const newNode = {
+          id: getId('Database'),
+          type:'selectorNode',
+          position,
+          data: { Database: Database },
+         style: { border: "1px solid", padding: "4px 4px" },
+        };
+  
+        setNodes((nds) => nds.concat(newNode))
+      }
+  
 
     },
     [reactFlowInstance]
@@ -194,28 +206,13 @@ const Designer = () => {
             onEdgeUpdateStart={onEdgeUpdateStart}
             onEdgeUpdateEnd={onEdgeUpdateEnd}
           >
-            {/* <MiniMap
-        nodeStrokeColor={(n) => {
-          
-          if (n.type === 'selectorNode') return image;
-        
-        }}
-        nodeColor={(n) => {
-          if (n.type === 'selectorNode') return image;
-          return '#fff';
-        }}
-      /> */}
+
             <Controls />
           </ReactFlow>
         </div>
         <Sidebar />
-      { Isopen &&  <>
-         <Button onClick={() => setIsOpen(true)}>Open Modal</Button>
-      <MyModal isOpen={isOpen} onClose={setopen} onSubmit={onChange} />
-  
-  
-      </>
-      }
+      { Isopen && <MyModal isOpen={Isopen} onClose={setopen} onSubmit={onChange} />
+}
       </ReactFlowProvider>
 
 
