@@ -8,7 +8,7 @@ import ReactFlow, {
 updateEdge
 
 } from 'reactflow';
-import { Button } from '@chakra-ui/core';
+// import { Button } from '@chakra-ui/core';
 import 'reactflow/dist/style.css';
 
 import Sidebar from './../components/Sidebar';
@@ -75,10 +75,6 @@ const Designer = () => {
     event.dataTransfer.dropEffect = 'move';
   }, []);
 
-
-  const image = '../assets/pstgrc.jpeg';
-
-  
 
   const onDrop = useCallback(
     (event) => {
