@@ -5,13 +5,15 @@ import ReactFlow, {
   useNodesState,
   useEdgesState,
   Controls,
-  updateEdge
+updateEdge
+
 } from 'reactflow';
+// import { Button } from '@chakra-ui/core';
 import 'reactflow/dist/style.css';
 
 import Sidebar from './../components/Sidebar';
 import MyModal from '../components/Modal/MyModal';
-
+import CustomImageNode from "./CustomImageNode"
 import "./../App.css"
 
 let application_id = 2;
@@ -28,6 +30,10 @@ const getId = (type='') =>{
         return 'Deployment_1'
     return 'Id'
 }
+const nodeTypes = {
+  selectorNode: CustomImageNode,
+};
+
 
 const Designer = () => {
   const reactFlowWrapper = useRef(null);
@@ -47,27 +53,28 @@ const Designer = () => {
     setEdges((eds) => addEdge(params, eds))}
     , []);
 
-  const onEdgeUpdateStart = useCallback(() => {
-    edgeUpdateSuccessful.current = false;
-  }, []);
-
-  const onEdgeUpdate = useCallback((oldEdge, newConnection) => {
-    edgeUpdateSuccessful.current = true;
-    setEdges((els) => updateEdge(oldEdge, newConnection, els));
-  }, []);
-
-  const onEdgeUpdateEnd = useCallback((_, edge) => {
-    if (!edgeUpdateSuccessful.current) {
-      setEdges((eds) => eds.filter((e) => e.id !== edge.id));
-    }
-
-    edgeUpdateSuccessful.current = true;
-  }, []);
+    const onEdgeUpdateStart = useCallback(() => {
+      edgeUpdateSuccessful.current = false;
+    }, []);
+  
+    const onEdgeUpdate = useCallback((oldEdge, newConnection) => {
+      edgeUpdateSuccessful.current = true;
+      setEdges((els) => updateEdge(oldEdge, newConnection, els));
+    }, []);
+  
+    const onEdgeUpdateEnd = useCallback((_, edge) => {
+      if (!edgeUpdateSuccessful.current) {
+        setEdges((eds) => eds.filter((e) => e.id !== edge.id));
+      }
+  
+      edgeUpdateSuccessful.current = true;
+    }, []);
 
   const onDragOver = useCallback((event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
   }, []);
+
 
   const onDrop = useCallback(
     (event) => {
@@ -77,7 +84,7 @@ const Designer = () => {
       const type = event.dataTransfer.getData('application/reactflow');
       const name = event.dataTransfer.getData('Name')
 
-      // check if the dropped element is valid
+    
       if (typeof type === 'undefined' || !type) {
         return;
       }
@@ -86,15 +93,33 @@ const Designer = () => {
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
       });
-      const newNode = {
-        id: getId(name),
-        type,
-        position,
-        data: { label: name },
-       style: { border: "1px solid", padding: "4px 4px" },
-      };
-      setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
-      setNodes((nds) => nds.concat(newNode));
+
+      if(!name.startsWith('Img')){
+        const newNode = {
+          id: getId(name),
+          type,
+          position,
+          data: { label: name },
+         style: { border: "1px solid", padding: "4px 4px" },
+        };
+        setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
+        setNodes((nds) => nds.concat(newNode))
+      }
+      else{
+        const Database=name.split('_').splice(1)[0]
+        console.log(Database)
+        const newNode = {
+          id: getId('Database'),
+          type:'selectorNode',
+          position,
+          data: { Database: Database },
+         style: { border: "1px solid", padding: "4px 4px" },
+        };
+        setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
+        setNodes((nds) => nds.concat(newNode))
+      }
+  
+
     },
     [reactFlowInstance]
   );
@@ -104,11 +129,7 @@ const Designer = () => {
     console.log(Id)
     if(Id){
       setopen(Id)
-      // let index = nodeMap.get(Id)
-      // let CurrentNode = nodes[index].data
-      // console.log(CurrentNode)
-      // console.log(document.getElementById("appname"))
-      // =CurrentNode.label
+     
     }
     
   }
@@ -123,6 +144,7 @@ const Designer = () => {
     console.log(Name,Framework,PackageName,ServerPort,ApplicationType)
     console.log("Nodes",nodes)
     console.log(Isopen)
+
     let UpdatedNodes=[...nodes]
     let index = nodeMap.get(Isopen)
     let CurrentNode = UpdatedNodes[index]
@@ -130,6 +152,7 @@ const Designer = () => {
     CurrentNode.data={...CurrentNode.data,Framework:Framework,label:Name,PackageName:PackageName,ServerPort:ServerPort,ApplicationType:ApplicationType}
     UpdatedNodes[index]=CurrentNode
     setNodes(UpdatedNodes)
+
     setopen(false)
   }
 
@@ -142,6 +165,7 @@ const Designer = () => {
            style: { border: "1px solid", padding: "4px 4px" },
             position: { x: 250, y: 5 },
           },
+         
     ])
     setNodeMap((prev)=>new Map(prev.set('Application_1',0)))
     
@@ -155,6 +179,7 @@ const Designer = () => {
           <ReactFlow
             nodes={nodes}
             edges={edges}
+            nodeTypes={nodeTypes}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
@@ -167,11 +192,13 @@ const Designer = () => {
             onEdgeUpdateStart={onEdgeUpdateStart}
             onEdgeUpdateEnd={onEdgeUpdateEnd}
           >
+
             <Controls />
           </ReactFlow>
         </div>
         <Sidebar />
-      { Isopen &&  <MyModal isOpen={Isopen} onClose={setopen} onSubmit={onChange} />}
+      { Isopen && <MyModal isOpen={Isopen} onClose={setopen} onSubmit={onChange} />
+}
       </ReactFlowProvider>
 
 
