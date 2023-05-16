@@ -19,8 +19,8 @@ export default () => {
   return (
     <aside>
       <div className="description">You can drag these nodes to the pane on the right.</div>
-      <div className="dndnode output" onDragStart={(event) => onDragStart(event, 'default', 'Application')} draggable>
-        Application
+      <div className="dndnode output" onDragStart={(event) => onDragStart(event,'default', 'Service')} draggable>
+        Service
       </div>
       <div className="dndnode output" onDragStart={(event) => onDragStart(event, 'default', 'Deployment')} draggable>
         Deployment

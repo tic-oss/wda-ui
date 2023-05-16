@@ -16,12 +16,12 @@ import MyModal from '../components/Modal/MyModal';
 import CustomImageNode from "./CustomImageNode"
 import "./../App.css"
 
-let application_id = 2;
+let service_id = 2;
 let database_id = 1;
 let totalnodes = 1
 const getId = (type='') =>{
-      if( type === 'Application')
-        return `Application_${application_id++}`
+      if( type === 'Service')
+        return `Service_${service_id++}`
       else if ( type === 'Database')
         return `Database_${database_id++}`
       else if ( type === 'Authentication')
@@ -144,8 +144,8 @@ const Designer = () => {
     const Framework= document.getElementById("framework").value;
     const PackageName= document.getElementById("packagename").value;
     const ServerPort= document.getElementById("serverport").value;
-    const ApplicationType= document.getElementById("apptype").value;
-    console.log(Name,Framework,PackageName,ServerPort,ApplicationType)
+    
+    console.log(Name,Framework,PackageName,ServerPort)
     console.log("Nodes",nodes)
     console.log(Isopen)
 
@@ -153,7 +153,7 @@ const Designer = () => {
     let index = nodeMap.get(Isopen)
     let CurrentNode = UpdatedNodes[index]
     console.log(CurrentNode)
-    CurrentNode.data={...CurrentNode.data,Framework:Framework,label:Name,PackageName:PackageName,ServerPort:ServerPort,ApplicationType:ApplicationType}
+    CurrentNode.data={...CurrentNode.data,Framework:Framework,label:Name,PackageName:PackageName,ServerPort:ServerPort}
     UpdatedNodes[index]=CurrentNode
     setNodes(UpdatedNodes)
 
@@ -163,15 +163,15 @@ const Designer = () => {
   useEffect(()=>{
     setNodes([
       {
-            id: 'Application_1',
+            id: 'Service_1',
             type: 'input',
-            data: { label: 'Application',onChange:onChange},
+            data: { label: 'UI',onChange:onChange},
            style: { border: "1px solid", padding: "4px 4px" },
             position: { x: 250, y: 5 },
           },
          
     ])
-    setNodeMap((prev)=>new Map(prev.set('Application_1',0)))
+    setNodeMap((prev)=>new Map(prev.set('Service_1',0)))
     
   },[])
 
