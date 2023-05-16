@@ -106,7 +106,7 @@ const Designer = () => {
           data: { label: name },
          style: { border: "1px solid", padding: "4px 4px" },
         };
-  
+        setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
         setNodes((nds) => nds.concat(newNode))
       }
       else{
@@ -119,7 +119,7 @@ const Designer = () => {
           data: { Database: Database },
          style: { border: "1px solid", padding: "4px 4px" },
         };
-  
+        setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
         setNodes((nds) => nds.concat(newNode))
       }
   
@@ -140,6 +140,7 @@ const Designer = () => {
 
   const onChange = (e) => {
     console.log("object",e.target.dataset.id)
+    
     const Name= document.getElementById("appname").value;
     const Framework= document.getElementById("framework").value;
     const PackageName= document.getElementById("packagename").value;
@@ -151,6 +152,7 @@ const Designer = () => {
 
     let UpdatedNodes=[...nodes]
     let index = nodeMap.get(Isopen)
+    console.log(index)
     let CurrentNode = UpdatedNodes[index]
     console.log(CurrentNode)
     CurrentNode.data={...CurrentNode.data,Framework:Framework,label:Name,PackageName:PackageName,ServerPort:ServerPort}
@@ -201,7 +203,7 @@ const Designer = () => {
           </ReactFlow>
         </div>
         <Sidebar />
-      { Isopen && <MyModal isOpen={Isopen} onClose={setopen} onSubmit={onChange} />
+      { Isopen && <MyModal isOpen={Isopen} onClose={setopen} onSubmit={onChange}/>
 }
       </ReactFlowProvider>
 
