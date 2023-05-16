@@ -46,10 +46,10 @@ const Designer = () => {
   console.log('NodeMap',nodeMap)
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [Isopen,setopen]=useState(false);
+  const [CurrentNode,setCurrentNode]= useState({});
   const edgeUpdateSuccessful = useRef(true);
 
   const onConnect = useCallback((params) => {
-    console.log("Connect ",params)
     setEdges((eds) => addEdge(params, eds))}
     , []);
 
@@ -128,31 +128,23 @@ const Designer = () => {
     const Id= e.target.dataset.id
     console.log(Id)
     if(Id){
+      let index = nodeMap.get(Id)
+      let CurrentNode = nodes[index]
+      setCurrentNode(CurrentNode.data)
       setopen(Id)
-     
     }
     
   }
 
-  const onChange = (e) => {
-    console.log("object",e.target.dataset.id)
-    const Name= document.getElementById("appname").value;
-    const Framework= document.getElementById("framework").value;
-    const PackageName= document.getElementById("packagename").value;
-    const ServerPort= document.getElementById("serverport").value;
-    const ApplicationType= document.getElementById("apptype").value;
-    console.log(Name,Framework,PackageName,ServerPort,ApplicationType)
-    console.log("Nodes",nodes)
-    console.log(Isopen)
-
+  const onChange = (Data) => {
+    
     let UpdatedNodes=[...nodes]
     let index = nodeMap.get(Isopen)
     let CurrentNode = UpdatedNodes[index]
     console.log(CurrentNode)
-    CurrentNode.data={...CurrentNode.data,Framework:Framework,label:Name,PackageName:PackageName,ServerPort:ServerPort,ApplicationType:ApplicationType}
+    CurrentNode.data=Data
     UpdatedNodes[index]=CurrentNode
     setNodes(UpdatedNodes)
-
     setopen(false)
   }
 
@@ -160,7 +152,7 @@ const Designer = () => {
     setNodes([
       {
             id: 'Application_1',
-            type: 'input',
+            type: 'default',
             data: { label: 'Application',onChange:onChange},
            style: { border: "1px solid", padding: "4px 4px" },
             position: { x: 250, y: 5 },
@@ -197,7 +189,7 @@ const Designer = () => {
           </ReactFlow>
         </div>
         <Sidebar />
-      { Isopen && <MyModal isOpen={Isopen} onClose={setopen} onSubmit={onChange} />
+      { Isopen && <MyModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />
 }
       </ReactFlowProvider>
 
