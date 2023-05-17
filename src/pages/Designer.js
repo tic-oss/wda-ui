@@ -48,29 +48,29 @@ const Designer = () => {
   console.log('NodeMap',nodeMap)
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [Isopen,setopen]=useState(false);
+  const [CurrentNode,setCurrentNode]= useState({});
   const edgeUpdateSuccessful = useRef(true);
 
   const onConnect = useCallback((params) => {
-    console.log("Connect ",params)
     setEdges((eds) => addEdge(params, eds))}
     , []);
 
-  const onEdgeUpdateStart = useCallback(() => {
-    edgeUpdateSuccessful.current = false;
-  }, []);
-
-  const onEdgeUpdate = useCallback((oldEdge, newConnection) => {
-    edgeUpdateSuccessful.current = true;
-    setEdges((els) => updateEdge(oldEdge, newConnection, els));
-  }, []);
-
-  const onEdgeUpdateEnd = useCallback((_, edge) => {
-    if (!edgeUpdateSuccessful.current) {
-      setEdges((eds) => eds.filter((e) => e.id !== edge.id));
-    }
-
-    edgeUpdateSuccessful.current = true;
-  }, []);
+    const onEdgeUpdateStart = useCallback(() => {
+      edgeUpdateSuccessful.current = false;
+    }, []);
+  
+    const onEdgeUpdate = useCallback((oldEdge, newConnection) => {
+      edgeUpdateSuccessful.current = true;
+      setEdges((els) => updateEdge(oldEdge, newConnection, els));
+    }, []);
+  
+    const onEdgeUpdateEnd = useCallback((_, edge) => {
+      if (!edgeUpdateSuccessful.current) {
+        setEdges((eds) => eds.filter((e) => e.id !== edge.id));
+      }
+  
+      edgeUpdateSuccessful.current = true;
+    }, []);
 
   const onDragOver = useCallback((event) => {
     event.preventDefault();
@@ -130,42 +130,33 @@ const Designer = () => {
     const Id= e.target.dataset.id
     console.log(Id)
     if(Id){
+      let index = nodeMap.get(Id)
+      let CurrentNode = nodes[index]
+      setCurrentNode(CurrentNode.data)
       setopen(Id)
-     
     }
     
   }
 
-  const onChange = (e) => {
-    console.log("object",e.target.dataset.id)
+  const onChange = (Data) => {
     
-    const Name= document.getElementById("appname").value;
-    const Framework= document.getElementById("framework").value;
-    const PackageName= document.getElementById("packagename").value;
-    const ServerPort= document.getElementById("serverport").value;
-    
-    console.log(Name,Framework,PackageName,ServerPort)
-    console.log("Nodes",nodes)
-    console.log(Isopen)
-
     let UpdatedNodes=[...nodes]
     let index = nodeMap.get(Isopen)
     console.log(index)
     let CurrentNode = UpdatedNodes[index]
     console.log(CurrentNode)
-    CurrentNode.data={...CurrentNode.data,Framework:Framework,label:Name,PackageName:PackageName,ServerPort:ServerPort}
+    CurrentNode.data=Data
     UpdatedNodes[index]=CurrentNode
     setNodes(UpdatedNodes)
-
     setopen(false)
   }
 
   useEffect(()=>{
     setNodes([
       {
-            id: 'UI',
-            type: 'input',
-            data: { label: 'UI',onChange:onChange},
+            id: 'Application_1',
+            type: 'default',
+            data: { label: 'Application',onChange:onChange},
            style: { border: "1px solid", padding: "4px 4px" },
             position: { x: 250, y: 5 },
           },
@@ -201,7 +192,7 @@ const Designer = () => {
           </ReactFlow>
         </div>
         <Sidebar />
-      { Isopen && <AppModal isOpen={Isopen} onClose={setopen} onSubmit={onChange}/>
+      { Isopen && <MyModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />
 }
       </ReactFlowProvider>
 
