@@ -13,8 +13,8 @@ import 'reactflow/dist/style.css';
 
 import Sidebar from './../components/Sidebar';
 import AppModal from '../components/Modal/AppModal';
-import AuthModal from '../components/Modal/AuthModal';
-import DeployModal from '../components/Modal/DeployModel';
+// import AuthModal from '../components/Modal/AuthModal';
+// import DeployModal from '../components/Modal/DeployModel';
 import CustomImageNode from "./CustomImageNode"
 import "./../App.css"
 
@@ -154,9 +154,9 @@ const Designer = () => {
   useEffect(()=>{
     setNodes([
       {
-            id: 'Application_1',
+            id: 'UI',
             type: 'default',
-            data: { label: 'Application',onChange:onChange},
+            data: { label: 'UI',onChange:onChange},
            style: { border: "1px solid", padding: "4px 4px" },
             position: { x: 250, y: 5 },
           },
@@ -192,7 +192,7 @@ const Designer = () => {
           </ReactFlow>
         </div>
         <Sidebar />
-      { Isopen && <MyModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />
+      { Isopen && <AppModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />
 }
       </ReactFlowProvider>
 
