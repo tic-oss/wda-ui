@@ -12,7 +12,9 @@ updateEdge
 import 'reactflow/dist/style.css';
 
 import Sidebar from './../components/Sidebar';
-import MyModal from '../components/Modal/MyModal';
+import AppModal from '../components/Modal/AppModal';
+import AuthModal from '../components/Modal/AuthModal';
+import DeployModal from '../components/Modal/DeployModel';
 import CustomImageNode from "./CustomImageNode"
 import "./../App.css"
 
@@ -161,7 +163,7 @@ const Designer = () => {
   useEffect(()=>{
     setNodes([
       {
-            id: 'Service_1',
+            id: 'UI',
             type: 'input',
             data: { label: 'UI',onChange:onChange},
            style: { border: "1px solid", padding: "4px 4px" },
@@ -169,7 +171,7 @@ const Designer = () => {
           },
          
     ])
-    setNodeMap((prev)=>new Map(prev.set('Service_1',0)))
+    setNodeMap((prev)=>new Map(prev.set('UI',0)))
     
   },[])
 
@@ -199,7 +201,7 @@ const Designer = () => {
           </ReactFlow>
         </div>
         <Sidebar />
-      { Isopen && <MyModal isOpen={Isopen} onClose={setopen} onSubmit={onChange}/>
+      { Isopen && <AppModal isOpen={Isopen} onClose={setopen} onSubmit={onChange}/>
 }
       </ReactFlowProvider>
 

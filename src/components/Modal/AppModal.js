@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import {
   Modal,
   ModalOverlay,
@@ -12,14 +12,32 @@ import {
   Button,
 } from "@chakra-ui/react";
 
-const MyModal = ({ isOpen, onClose, onSubmit }) => {
+const AppModal = ({ isOpen, onClose, onSubmit }) => {
+  let frameworkLabel = '';
+  let frameworkOptions = [];
+  if (isOpen && isOpen.includes('Service')) {
+    frameworkLabel = 'Service Framework';
+    frameworkOptions = ['Java', 'Go'];
+  } else if (isOpen && isOpen.includes('UI')) {
+    frameworkLabel = 'UI Framework';
+    frameworkOptions = ['ReactJS', 'NodeJS'];
+  }
+  const [selectedFramework, setSelectedFramework] = useState('');
+
+  const handleFrameworkChange = (event) => {
+    setSelectedFramework(event.target.value);
+  };
+ console.log(frameworkLabel)
+  console.log(isOpen)
   return (
     <Modal isOpen={isOpen} onClose={()=>onClose(false)} isCentered={true}>
+      
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Modal</ModalHeader>
+        <ModalHeader>AppModal</ModalHeader>
         <ModalCloseButton/>
         <ModalBody>
+         
           <div
             style={{
               display: "flex",
@@ -35,13 +53,21 @@ const MyModal = ({ isOpen, onClose, onSubmit }) => {
               placeholder="Name"
               borderColor={"black"}
             />
-            <lable>Framework</lable>
-            <Input
-              mb={4}
-              id="framework"
-              borderColor={"black"}
-              placeholder="framework"
-            />
+           <label>{frameworkLabel}</label>
+      <Select
+        mb={4}
+        id="framework"
+        borderColor={"black"}
+        placeholder="Select Framework"
+        value={selectedFramework}
+        onChange={handleFrameworkChange}
+      >
+        {frameworkOptions.map((option) => (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        ))}
+      </Select>
             <lable>Package Name</lable>
             <Input
               mb={4}
@@ -68,4 +94,4 @@ const MyModal = ({ isOpen, onClose, onSubmit }) => {
   );
 };
 
-export default MyModal;
+export default AppModal;
