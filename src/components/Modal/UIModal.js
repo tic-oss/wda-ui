@@ -11,10 +11,11 @@ import {
   Button,
   FormLabel,
   FormControl
-} from "@chakra-ui/react";
+} from "@chakra-uiData/react";
 
-const MyModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
+const UiDataModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
 
+  
   const type = isOpen?.split('_')[0] || null;
 
   const IntialState ={
@@ -26,10 +27,10 @@ const MyModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
     ...CurrentNode
   }
 
-  const [ApplicationData,setApplicationData] = useState(IntialState)
+  const [UiData,setUiDataData] = useState(IntialState)
 
   const handleData = (column,value)=>{
-    setApplicationData((prev)=>({...prev,[column]:value}))
+    setUiDataData((prev)=>({...prev,[column]:value}))
   }
 
   return (
@@ -54,21 +55,23 @@ const MyModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
                 id="appname"
                 placeholder="Name"
                 borderColor={"black"}
-                value={ApplicationData.label}
+                value={UiData.label}
                 onChange={(e)=>handleData('label',e.target.value)}
               />
             </FormControl>
             <FormControl>
               <FormLabel>Framework</FormLabel>
-              <Input
-                mb={4}
-                id="framework"
+              <Select mb={4} variant="outline" id="framework" 
                 borderColor={"black"}
-                placeholder="framework"
-                value={ApplicationData.Framework}
+                value={UiData.Framework}
                 onChange={(e)=>handleData('Framework',e.target.value)}
-              />
+              >
+                <option value="reactjs">ReactJS</option>
+                <option value="nodejs">NodeJS</option>
+              </Select>
             </FormControl>
+              
+        
             <FormControl>
               <FormLabel>Package Name</FormLabel>
               <Input
@@ -77,7 +80,7 @@ const MyModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
                 id="packagename"
                 placeholder="PackageName"
                 borderColor={"black"}
-                value={ApplicationData.PackageName}
+                value={UiData.PackageName}
                 onChange={(e)=>handleData('PackageName',e.target.value)}
               />
             </FormControl>
@@ -89,7 +92,7 @@ const MyModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
                 id="serverport"
                 placeholder="ServerPort"
                 borderColor={"black"}
-                value={ApplicationData.ServerPort}
+                value={UiData.ServerPort}
                 onChange={(e)=>handleData('ServerPort',e.target.value)}
               />
             </FormControl>
@@ -97,19 +100,19 @@ const MyModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
               <FormLabel>Application Type</FormLabel>
               <Select mb={4} variant="outline" id="apptype" 
                 borderColor={"black"}
-                value={ApplicationData.ApplicationType}
+                value={UiData.ApplicationType}
                 onChange={(e)=>handleData('ApplicationType',e.target.value)}
               >
                 <option value="microservice">Microservice</option>
-                <option value="gateway">UI + Gateway</option>
+                <option value="gateway">UIData + Gateway</option>
               </Select>
             </FormControl>
           </div>
-          <Button onClick={()=>onSubmit(ApplicationData)}>Submit</Button>
+          <Button onClick={()=>onSubmit(UiData)}>Submit</Button>
         </ModalBody>
       </ModalContent>
     </Modal>
   );
 };
 
-export default MyModal;
+export default UiDataModal;

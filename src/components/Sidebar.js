@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import db1 from "../assets/pstgrc.jpeg"
 import db2 from "../assets/mongo.png"
+import eurkea from "../assets/Eureka.png"
 import "./../App.css"
 
 export default () => {
@@ -11,9 +12,14 @@ export default () => {
   };
 
   const [isDatabaseCollapsed, setDatabaseCollapsed] = useState(false);
+  const [isServiceCollapsed, setServiceCollapsed] = useState(false);
 
   const toggleDatabase = () => {
     setDatabaseCollapsed(!isDatabaseCollapsed);
+  };
+
+  const toggleService = () => {
+    setServiceCollapsed(!isServiceCollapsed);
   };
 
   return (
@@ -42,8 +48,23 @@ export default () => {
           <div className="selectorNode" onDragStart={(event) => onDragStart(event, 'default', 'Img_mongo')} draggable>
             <img width='130px' src={db2} alt="mongologo"></img>
           </div>
+      
         </>
       )}
+
+      <h1>
+        <span style={{ cursor: "pointer" }} onClick={toggleService}>
+          Service Discovry {isServiceCollapsed ? <span>&#x25BC;</span> : <span>&#x25B2;</span>}
+        </span>
+      </h1>
+      {!isServiceCollapsed && (
+        <>
+          <div className="selectorNode1" onDragStart={(event) => onDragStart(event, 'default', 'Eureka')} draggable>
+            <img width='130px' src={eurkea} alt="eurekalogo"></img>
+          </div>
+        </>
+      )}
+
     </aside>
   );
 };

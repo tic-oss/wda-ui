@@ -10,81 +10,91 @@ import {
   Input,
   Select,
   Button,
+  FormLabel,
+  FormControl
 } from "@chakra-ui/react";
 
-const DeployModal = ({ isOpen, onClose, onSubmit }) => {
-  let frameworkLabel = '';
-  let frameworkOptions = [];
-  if (isOpen && isOpen.includes('Service')) {
-    frameworkLabel = 'Service Framework';
-    frameworkOptions = ['Java', 'Go'];
-  } else if (isOpen && isOpen.includes('UI')) {
-    frameworkLabel = 'UI Framework';
-    frameworkOptions = ['ReactJS', 'NodeJS'];
-  }
-  const [selectedFramework, setSelectedFramework] = useState('');
+const DeployModal = ({ isOpen, onClose, onSubmit,CurrentNode}) => {
+    const IntialState ={
+        'DeploymentType':'',
+        'KubernetsNamespace':'',
+        'EnableKubernetesDynamicStorage':'',
+        'KubernetesStorageClassName':'',
+        ...CurrentNode
+      }
+      const type = isOpen?.split('_')[0] || null;
+      const [DeploymentData,setDeploymentData] = useState(IntialState)
 
-  const handleFrameworkChange = (event) => {
-    setSelectedFramework(event.target.value);
-  };
- console.log(frameworkLabel)
-  console.log(isOpen)
+      const handleData = (column,value)=>{
+        setDeploymentData((prev)=>({...prev,[column]:value}))
+      }
+
   return (
     <Modal isOpen={isOpen} onClose={()=>onClose(false)} isCentered={true}>
       
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>DeployModal</ModalHeader>
+        <ModalHeader>{type}</ModalHeader>
         <ModalCloseButton/>
         <ModalBody>
-         
-          <div
+        <div
             style={{
               display: "flex",
               flexDirection: "column",
               alignItems: "Left",
             }}
           >
-            <lable>Application name</lable>
-            <Input
-              mb={4}
-              variant="outline"
-              id="appname"
-              placeholder="Name"
-              borderColor={"black"}
-            />
-           <label>{frameworkLabel}</label>
-      <Select
-        mb={4}
-        id="framework"
-        borderColor={"black"}
-        placeholder="Select Framework"
-        value={selectedFramework}
-        onChange={handleFrameworkChange}
-      >
-        {frameworkOptions.map((option) => (
-          <option key={option} value={option}>
-            {option}
-          </option>
-        ))}
-      </Select>
-            <lable>Package Name</lable>
-            <Input
-              mb={4}
-              variant="outline"
-              id="packagename"
-              placeholder="PackageName"
-              borderColor={"black"}
-            />
-            <lable>Server Port</lable>
-            <Input
-              mb={4}
-              variant="outline"
-              id="serverport"
-              placeholder="ServerPort"
-              borderColor={"black"}
-            />
-          </div>
+            <FormControl>
+              <FormLabel>Deployment Type</FormLabel>
+              <Select mb={4} variant="outline" id="deploymenttype" 
+                borderColor={"black"}
+                value={DeploymentData.DeploymentType}
+                onChange={(e)=>handleData('DeploymentType',e.target.value)}
+              >
+                <option value="kubernetes">Kubernetes</option>
+                
+              </Select>
+            </FormControl>
+
+            <FormControl>
+              <FormLabel>Kubernetes Namespace</FormLabel>
+              <Input
+                mb={4}
+                variant="outline"
+                id="kubernetesnamespace"
+                placeholder="Kubernetes Namespace"
+                borderColor={"black"}
+                value={DeploymentData.KubernetsNamespace}
+                onChange={(e)=>handleData('KubernetsNamespace',e.target.value)}
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Enable Kubernetes Dynamic Storage</FormLabel>
+              <Select mb={4} variant="outline" id="enablekubernetesdynamicstorage" 
+                borderColor={"black"}
+                value={DeploymentData.EnableKubernetesDynamicStorage}
+                onChange={(e)=>handleData('EnableKubernetesDynamicStorage',e.target.value)}
+              >
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+                </Select>
+            </FormControl>
+            <FormControl>
+              <FormLabel>Kubernetes Storage Class Name</FormLabel>
+              <Input
+                mb={4}
+                variant="outline"
+                id="kubernetesstorageclassname"
+                placeholder="Kubernetes Storage Class Name"
+                borderColor={"black"}
+                value={DeploymentData.KubernetesStorageClassName}
+                onChange={(e)=>handleData('KubernetesStorageClassName',e.target.value)}
+              />
+            </FormControl>
+
+
+
+             </div>
           <ModalFooter>
             <Button onClick={onSubmit} type="submit">Submit</Button>
           </ModalFooter>

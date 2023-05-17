@@ -12,10 +12,11 @@ updateEdge
 import 'reactflow/dist/style.css';
 
 import Sidebar from './../components/Sidebar';
-import AppModal from '../components/Modal/AppModal';
+import ServiceModal from '../components/Modal/ServiceModal';
 // import AuthModal from '../components/Modal/AuthModal';
-// import DeployModal from '../components/Modal/DeployModel';
+import DeployModal from '../components/Modal/DeployModal';
 import CustomImageNode from "./CustomImageNode"
+import CustomServiceNode from "./CustomServiceNode"
 import "./../App.css"
 
 let service_id = 2;
@@ -34,6 +35,7 @@ const getId = (type='') =>{
 }
 const nodeTypes = {
   selectorNode: CustomImageNode,
+  selectorNode1: CustomServiceNode,
 };
 
 
@@ -166,7 +168,8 @@ const Designer = () => {
     
   },[])
 
-
+  
+    
   return (
     <div className="dndflow">
       <ReactFlowProvider>
@@ -192,7 +195,8 @@ const Designer = () => {
           </ReactFlow>
         </div>
         <Sidebar />
-      { Isopen && <AppModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />
+      
+      {Isopen && <ServiceModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />
 }
       </ReactFlowProvider>
 
