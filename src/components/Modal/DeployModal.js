@@ -16,13 +16,14 @@ import {
 
 const DeployModal = ({ isOpen, onClose, onSubmit,CurrentNode}) => {
     const IntialState ={
-        'DeploymentType':'',
+        'label':'Deployment',
+        'DeploymentType':'kubernetes',
         'KubernetsNamespace':'',
-        'EnableKubernetesDynamicStorage':'',
+        'EnableKubernetesDynamicStorage':'yes',
         'KubernetesStorageClassName':'',
         ...CurrentNode
       }
-      const type = isOpen?.split('_')[0] || null;
+
       const [DeploymentData,setDeploymentData] = useState(IntialState)
 
       const handleData = (column,value)=>{
@@ -34,7 +35,7 @@ const DeployModal = ({ isOpen, onClose, onSubmit,CurrentNode}) => {
       
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>{type}</ModalHeader>
+        <ModalHeader>Deployment</ModalHeader>
         <ModalCloseButton/>
         <ModalBody>
         <div
@@ -96,7 +97,7 @@ const DeployModal = ({ isOpen, onClose, onSubmit,CurrentNode}) => {
 
              </div>
           <ModalFooter>
-            <Button onClick={onSubmit} type="submit">Submit</Button>
+            <Button onClick={()=>onSubmit(DeploymentData)} type="submit">Submit</Button>
           </ModalFooter>
         </ModalBody>
       </ModalContent>

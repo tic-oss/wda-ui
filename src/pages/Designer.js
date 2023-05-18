@@ -13,10 +13,14 @@ import 'reactflow/dist/style.css';
 
 import Sidebar from './../components/Sidebar';
 import ServiceModal from '../components/Modal/ServiceModal';
-// import AuthModal from '../components/Modal/AuthModal';
+import UiDataModal from '../components/Modal/UIModal';
 import DeployModal from '../components/Modal/DeployModal';
-import CustomImageNode from "./CustomImageNode"
-import CustomServiceNode from "./CustomServiceNode"
+import CustomImageNode from "./Customnodes/CustomImageNode"
+import CustomServiceNode from "./Customnodes/CustomServiceNode"
+import CustomIngressNode from "./Customnodes/CustomIngressNode"
+import CustomAuthNode from "./Customnodes/CustomAuthNode"
+import CustomMessageBrokerNode from "./Customnodes/CustomMessageBrokerNode"
+
 import AlertModal from '../components/Modal/AlertModal';
 import "./../App.css"
 import { Button } from '@chakra-ui/react';
@@ -38,6 +42,9 @@ const getId = (type='') =>{
 const nodeTypes = {
   selectorNode: CustomImageNode,
   selectorNode1: CustomServiceNode,
+  selectorNode2: CustomIngressNode,
+  selectorNode3: CustomAuthNode,
+  selectorNode4: CustomMessageBrokerNode
 };
 
 
@@ -142,6 +149,84 @@ const Designer = () => {
       else if(name.startsWith('Discovery') && servicecount>=1){
         console.log("else",servicecount)
         setServiceDiscoveryCount(2)
+      }
+      else if(name.startsWith('Ingress')){
+        const Ingress_Type=name.split('_').splice(1)[0]
+        console.log(Ingress_Type)
+        const newNode = {
+          id: 'Ingress_Type',
+          type:'selectorNode2',
+          position,
+          data: { Ingress_Type: Ingress_Type },
+         style: { border: "1px solid", padding: "4px 4px" },
+        };
+        setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
+        setNodes((nds) => nds.concat(newNode))
+      }
+      else if(name.startsWith('Auth')){
+        const Auth_Type=name.split('_').splice(1)[0]
+        console.log(Auth_Type)
+        const newNode = {
+          id: 'Auth_Type',
+          type:'selectorNode3',
+          position,
+          data: { Auth_Type: Auth_Type },
+         style: { border: "1px solid", padding: "4px 4px" },
+        };
+        setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
+        setNodes((nds) => nds.concat(newNode))
+      }
+      else if(name.startsWith('MessageBroker')){
+        const Message_Broker=name.split('_').splice(1)[0]
+        console.log(Message_Broker)
+        const newNode = {
+          id: 'Message_Broker',
+          type:'selectorNode4',
+          position,
+          data: { Message_Broker: Message_Broker },
+         style: { border: "1px solid", padding: "4px 4px" },
+        };
+        setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
+        setNodes((nds) => nds.concat(newNode))
+      }
+      else if(name.startsWith('Ingress')){
+        const Ingress_Type=name.split('_').splice(1)[0]
+        console.log(Ingress_Type)
+        const newNode = {
+          id: 'Ingress_Type',
+          type:'selectorNode2',
+          position,
+          data: { Ingress_Type: Ingress_Type },
+         style: { border: "1px solid", padding: "4px 4px" },
+        };
+        setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
+        setNodes((nds) => nds.concat(newNode))
+      }
+      else if(name.startsWith('Auth')){
+        const Auth_Type=name.split('_').splice(1)[0]
+        console.log(Auth_Type)
+        const newNode = {
+          id: 'Auth_Type',
+          type:'selectorNode3',
+          position,
+          data: { Auth_Type: Auth_Type },
+         style: { border: "1px solid", padding: "4px 4px" },
+        };
+        setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
+        setNodes((nds) => nds.concat(newNode))
+      }
+      else if(name.startsWith('MessageBroker')){
+        const Message_Broker=name.split('_').splice(1)[0]
+        console.log(Message_Broker)
+        const newNode = {
+          id: 'Message_Broker',
+          type:'selectorNode4',
+          position,
+          data: { Message_Broker: Message_Broker },
+         style: { border: "1px solid", padding: "4px 4px" },
+        };
+        setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
+        setNodes((nds) => nds.concat(newNode))
       }
       else {
         const newNode = {
@@ -261,8 +346,15 @@ const Designer = () => {
         </div>
         <Sidebar />
       
-      {Isopen && <ServiceModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
-      {ServiceDiscoveryCount==2 && <AlertModal isOpen={true} onClose={()=>setServiceDiscoveryCount(1)} name={nodes[nodeMap.get('Service_Discovery')]?.data?.ServiceDiscoveryCount}/>}
+        {
+      nodeType==='Service' && Isopen && <ServiceModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />
+      }
+      {
+          nodeType==='Deployment' && Isopen && <DeployModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />
+      }
+      {
+          nodeType==='UI' && Isopen && <UiDataModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />
+      }
       {/* <Button onClick={()=>onsubmit()}>Submit</Button> */}
       </ReactFlowProvider>
 

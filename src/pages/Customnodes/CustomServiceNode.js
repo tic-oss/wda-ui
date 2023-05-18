@@ -1,6 +1,6 @@
 import { Handle, Position } from "reactflow";
-import eureka from "./../assets/Eureka.jpg"
-import consol from "./../assets/consol.png"
+import eureka from "../../assets/Eureka.jpg"
+import consol from "../../assets/consol.png"
 
 const handleStyle = { left: 25 };
 

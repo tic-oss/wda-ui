@@ -1,13 +1,13 @@
-import { useCallback } from "react";
 import { Handle, Position } from "reactflow";
-import postgres from "./../assets/pstgrc.jpeg"
-import sql from "./../assets/mongo.png"
+import istio from "../../assets/istio.png"
+import consol from "../../assets/consol.png"
+
 
 const handleStyle = { left: 25 };
 
-function CustomImageNode({ data, isConnectable }) {
-  console.log(data)
+function CustomIngressNode({ data, isConnectable }) {
 
+  const Ingress_Type= data.Ingress_Type
 
   return (
     <div>
@@ -17,7 +17,10 @@ function CustomImageNode({ data, isConnectable }) {
         isConnectable={isConnectable}
       />
       <div>
-      <img width='50px' src={data.Database=='postgres'?postgres:sql}/>
+       
+          <img width='50px' name={Ingress_Type} src={istio} /> 
+         
+        
       </div>
       <Handle
         type="source"
@@ -29,4 +32,4 @@ function CustomImageNode({ data, isConnectable }) {
   );
 }
 
-export default CustomImageNode;
+export default CustomIngressNode;
