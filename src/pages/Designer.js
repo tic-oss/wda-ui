@@ -5,7 +5,8 @@ import ReactFlow, {
   useNodesState,
   useEdgesState,
   Controls,
-updateEdge
+updateEdge,
+MarkerType
 
 } from 'reactflow';
 import 'reactflow/dist/style.css';
@@ -21,8 +22,9 @@ import CustomAuthNode from "./Customnodes/CustomAuthNode"
 import CustomMessageBrokerNode from "./Customnodes/CustomMessageBrokerNode"
 
 import "./../App.css"
+import { Button } from '@chakra-ui/react';
 
-let service_id = 2;
+let service_id = 1;
 let database_id = 1;
 let totalnodes = 1
 const getId = (type='') =>{
@@ -59,10 +61,6 @@ const Designer = () => {
   const [Isopen,setopen]=useState(false);
   const [CurrentNode,setCurrentNode]= useState({});
   const edgeUpdateSuccessful = useRef(true);
-
-  const onConnect = useCallback((params) => {
-    setEdges((eds) => addEdge(params, eds))}
-    , []);
 
     const onEdgeUpdateStart = useCallback(() => {
       edgeUpdateSuccessful.current = false;
@@ -229,8 +227,52 @@ const Designer = () => {
     setNodeMap((prev)=>new Map(prev.set('UI',0)))
     
   },[])
+  const MergeData = (sourceId,targetId,Nodes,NodeMap) =>{
 
-  
+    const sourceType = sourceId.split('_')[0]
+    const targetType = targetId.split('_')[0]
+    
+    console.log(sourceType, targetType,NodeMap)
+    
+    if(sourceType !== targetId){
+      if(sourceType === 'Service' && targetType === 'Database'){
+          console.log("source  target",nodeMap)
+          let sourceindex = NodeMap.get(sourceId)
+          let targetindex = NodeMap.get(targetId)
+          console.log('Index.',sourceindex,targetindex)
+          let AllNodes=[...Nodes]
+          let sourceNode = AllNodes[sourceindex]
+          let targetNode = AllNodes[targetindex]
+          console.log('Nodes',sourceNode,targetNode)
+          AllNodes[sourceindex].data={...sourceNode.data,...targetNode.data}
+          setNodes([...AllNodes])
+        }
+    }
+  }
+  const onsubmit = () =>{
+
+    let NewNodes = [...nodes]
+    let Service_Discovery_index = nodeMap.get('Service_Discovery')
+    let Service_Discovery_Data= nodes[Service_Discovery_index].data
+    for(let i=0;i<NewNodes.length;i++){
+      const Node = NewNodes[i];
+      if(Node.id.startsWith('Service')|| Node.id === 'UI'){
+        Node.data={...Node.data,...Service_Discovery_Data}
+      }
+    }
+    setNodes(NewNodes)
+
+  } 
+
+  const onEdgeClick = (e,edge) =>{
+    console.log(e,edge)
+  }
+  const onConnect = useCallback((params,Nodes,nodesMap) => {
+    params.markerEnd= {type: MarkerType.ArrowClosed}
+    setEdges((eds) => addEdge(params, eds))
+    MergeData(params.source,params.target,Nodes,nodesMap)
+  }
+    , []);
     
   return (
     <div className="dndflow">
@@ -242,7 +284,7 @@ const Designer = () => {
             nodeTypes={nodeTypes}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
-            onConnect={onConnect}
+            onConnect={(params)=>onConnect(params,nodes,nodeMap)}
             onInit={setReactFlowInstance}
             onDrop={onDrop}
             onDragOver={onDragOver}
@@ -251,6 +293,7 @@ const Designer = () => {
             onEdgeUpdate={onEdgeUpdate}
             onEdgeUpdateStart={onEdgeUpdateStart}
             onEdgeUpdateEnd={onEdgeUpdateEnd}
+            onEdgeClick={onEdgeClick}
           >
 
             <Controls />
@@ -258,7 +301,7 @@ const Designer = () => {
         </div>
         <Sidebar />
       
-      {
+        {
       nodeType==='Service' && Isopen && <ServiceModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />
       }
       {
@@ -267,6 +310,7 @@ const Designer = () => {
       {
           nodeType==='UI' && Isopen && <UiDataModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />
       }
+      {/* <Button onClick={()=>onsubmit()}>Submit</Button> */}
       </ReactFlowProvider>
 
 
