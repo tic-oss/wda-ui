@@ -18,8 +18,9 @@ import DeployModal from '../components/Modal/DeployModal';
 import CustomImageNode from "./CustomImageNode"
 import CustomServiceNode from "./CustomServiceNode"
 import "./../App.css"
+import { Button } from '@chakra-ui/react';
 
-let service_id = 2;
+let service_id = 1;
 let database_id = 1;
 let totalnodes = 1
 const getId = (type='') =>{
@@ -180,7 +181,7 @@ const Designer = () => {
     setNodeMap((prev)=>new Map(prev.set('UI',0)))
     
   },[])
-  function MergeData(sourceId,targetId,Nodes,NodeMap){
+  const MergeData = (sourceId,targetId,Nodes,NodeMap) =>{
 
     const sourceType = sourceId.split('_')[0]
     const targetType = targetId.split('_')[0]
@@ -202,10 +203,25 @@ const Designer = () => {
         }
     }
   }
+  const onsubmit = () =>{
 
+    let NewNodes = [...nodes]
+    let Service_Discovery_index = nodeMap.get('Service_Discovery')
+    let Service_Discovery_Data= nodes[Service_Discovery_index].data
+    for(let i=0;i<NewNodes.length;i++){
+      const Node = NewNodes[i];
+      if(Node.id.startsWith('Service')|| Node.id === 'UI'){
+        Node.data={...Node.data,...Service_Discovery_Data}
+      }
+    }
+    setNodes(NewNodes)
+
+  } 
+
+  const onEdgeClick = (e,edge) =>{
+    console.log(e,edge)
+  }
   const onConnect = useCallback((params,Nodes,nodesMap) => {
-    console.log('params',params,)
-    console.log('NodeMap',nodeMap,nodes)
     params.markerEnd= {type: MarkerType.ArrowClosed}
     setEdges((eds) => addEdge(params, eds))
     MergeData(params.source,params.target,Nodes,nodesMap)
@@ -231,6 +247,7 @@ const Designer = () => {
             onEdgeUpdate={onEdgeUpdate}
             onEdgeUpdateStart={onEdgeUpdateStart}
             onEdgeUpdateEnd={onEdgeUpdateEnd}
+            onEdgeClick={onEdgeClick}
           >
 
             <Controls />
@@ -238,8 +255,9 @@ const Designer = () => {
         </div>
         <Sidebar />
       
-      {Isopen && <ServiceModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />
-}
+      {Isopen && <ServiceModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
+
+      {/* <Button onClick={()=>onsubmit()}>Submit</Button> */}
       </ReactFlowProvider>
 
 

@@ -16,7 +16,7 @@ import {
 const ServiceModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
  const IntialState ={
     'label':'',
-    'Framework':'',
+    'Framework':'java',
     'PackageName':'',
     'ServerPort':'',
     'ApplicationType':'microservice',
