@@ -17,6 +17,7 @@ import ServiceModal from '../components/Modal/ServiceModal';
 import DeployModal from '../components/Modal/DeployModal';
 import CustomImageNode from "./CustomImageNode"
 import CustomServiceNode from "./CustomServiceNode"
+import AlertModal from '../components/Modal/AlertModal';
 import "./../App.css"
 import { Button } from '@chakra-ui/react';
 
@@ -45,6 +46,7 @@ const Designer = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [nodeMap,setNodeMap] = useState(new Map())
   const [nodeType,setNodeType] = useState(null)
+  const [ServiceDiscoveryCount,setServiceDiscoveryCount] = useState(0)
   console.log("Nodes",nodes)
   
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
@@ -93,7 +95,7 @@ const Designer = () => {
   }
 
   const onDrop = useCallback(
-    (event) => {
+    (event,servicecount) => {
       event.preventDefault();
       console.log(event)
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
@@ -123,9 +125,9 @@ const Designer = () => {
         setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
         setNodes((nds) => nds.concat(newNode))
       }
-      else if(name.startsWith('Discovery')){
+      else if(name.startsWith('Discovery') && servicecount==0){
+        console.log(servicecount)
         const Service_Discovery=name.split('_').splice(1)[0]
-        console.log(Service_Discovery)
         const newNode = {
           id: 'Service_Discovery',
           type:'selectorNode1',
@@ -135,6 +137,11 @@ const Designer = () => {
         };
         setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
         setNodes((nds) => nds.concat(newNode))
+        setServiceDiscoveryCount(1)
+      }
+      else if(name.startsWith('Discovery') && servicecount>=1){
+        console.log("else",servicecount)
+        setServiceDiscoveryCount(2)
       }
       else {
         const newNode = {
@@ -227,7 +234,6 @@ const Designer = () => {
     MergeData(params.source,params.target,Nodes,nodesMap)
   }
     , []);
-    
   return (
     <div className="dndflow">
       <ReactFlowProvider>
@@ -240,7 +246,7 @@ const Designer = () => {
             onEdgesChange={onEdgesChange}
             onConnect={(params)=>onConnect(params,nodes,nodeMap)}
             onInit={setReactFlowInstance}
-            onDrop={onDrop}
+            onDrop={(e)=>onDrop(e,ServiceDiscoveryCount)}
             onDragOver={onDragOver}
             onNodeClick={onclick}
             fitView
@@ -256,7 +262,7 @@ const Designer = () => {
         <Sidebar />
       
       {Isopen && <ServiceModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
-
+      {ServiceDiscoveryCount==2 && <AlertModal isOpen={true} onClose={()=>setServiceDiscoveryCount(1)} name={nodes[nodeMap.get('Service_Discovery')]?.data?.ServiceDiscoveryCount}/>}
       {/* <Button onClick={()=>onsubmit()}>Submit</Button> */}
       </ReactFlowProvider>
 
