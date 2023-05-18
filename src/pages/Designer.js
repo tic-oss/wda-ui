@@ -5,7 +5,8 @@ import ReactFlow, {
   useNodesState,
   useEdgesState,
   Controls,
-updateEdge
+updateEdge,
+MarkerType
 
 } from 'reactflow';
 import 'reactflow/dist/style.css';
@@ -52,10 +53,6 @@ const Designer = () => {
   const [Isopen,setopen]=useState(false);
   const [CurrentNode,setCurrentNode]= useState({});
   const edgeUpdateSuccessful = useRef(true);
-
-  const onConnect = useCallback((params) => {
-    setEdges((eds) => addEdge(params, eds))}
-    , []);
 
     const onEdgeUpdateStart = useCallback(() => {
       edgeUpdateSuccessful.current = false;
@@ -183,8 +180,37 @@ const Designer = () => {
     setNodeMap((prev)=>new Map(prev.set('UI',0)))
     
   },[])
+  function MergeData(sourceId,targetId,Nodes,NodeMap){
 
-  
+    const sourceType = sourceId.split('_')[0]
+    const targetType = targetId.split('_')[0]
+    
+    console.log(sourceType, targetType,NodeMap)
+    
+    if(sourceType !== targetId){
+      if(sourceType === 'Service' && targetType === 'Database'){
+          console.log("source  target",nodeMap)
+          let sourceindex = NodeMap.get(sourceId)
+          let targetindex = NodeMap.get(targetId)
+          console.log('Index.',sourceindex,targetindex)
+          let AllNodes=[...Nodes]
+          let sourceNode = AllNodes[sourceindex]
+          let targetNode = AllNodes[targetindex]
+          console.log('Nodes',sourceNode,targetNode)
+          AllNodes[sourceindex].data={...sourceNode.data,...targetNode.data}
+          setNodes([...AllNodes])
+        }
+    }
+  }
+
+  const onConnect = useCallback((params,Nodes,nodesMap) => {
+    console.log('params',params,)
+    console.log('NodeMap',nodeMap,nodes)
+    params.markerEnd= {type: MarkerType.ArrowClosed}
+    setEdges((eds) => addEdge(params, eds))
+    MergeData(params.source,params.target,Nodes,nodesMap)
+  }
+    , []);
     
   return (
     <div className="dndflow">
@@ -196,7 +222,7 @@ const Designer = () => {
             nodeTypes={nodeTypes}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
-            onConnect={onConnect}
+            onConnect={(params)=>onConnect(params,nodes,nodeMap)}
             onInit={setReactFlowInstance}
             onDrop={onDrop}
             onDragOver={onDragOver}
