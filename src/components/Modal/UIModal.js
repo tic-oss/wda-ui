@@ -11,7 +11,7 @@ import {
   Button,
   FormLabel,
   FormControl
-} from "@chakra-uiData/react";
+} from "@chakra-ui/react";
 
 const UiDataModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
 
@@ -96,17 +96,7 @@ const UiDataModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
                 onChange={(e)=>handleData('ServerPort',e.target.value)}
               />
             </FormControl>
-            <FormControl>
-              <FormLabel>Application Type</FormLabel>
-              <Select mb={4} variant="outline" id="apptype" 
-                borderColor={"black"}
-                value={UiData.ApplicationType}
-                onChange={(e)=>handleData('ApplicationType',e.target.value)}
-              >
-                <option value="microservice">Microservice</option>
-                <option value="gateway">UIData + Gateway</option>
-              </Select>
-            </FormControl>
+            
           </div>
           <Button onClick={()=>onSubmit(UiData)}>Submit</Button>
         </ModalBody>
