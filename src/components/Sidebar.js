@@ -7,6 +7,7 @@ import istio from "../assets/istio.png"
 import kafka from "../assets/kafka.png"
 import pulsar from "../assets/pulsar.png"
 import rabbitmq from "../assets/rabbitmq.png"
+import consol from "../assets/consol.png"
 import "./../App.css"
 
 export default () => {
@@ -87,9 +88,9 @@ export default () => {
           <div className="selectorNode1" onDragStart={(event) => onDragStart(event, 'default', 'Discovery_Eureka')} draggable>
             <img width='120px' src={eurkea} alt="eurekalogo"></img>
           </div>
-          {/* <div className="selectorNode1" onDragStart={(event) => onDragStart(event, 'default', 'Discovery_Consol')} draggable>
+          <div className="selectorNode1" onDragStart={(event) => onDragStart(event, 'default', 'Discovery_Consol')} draggable>
             <img width='120px' src={consol} alt="consollogo"></img>
-          </div> */}
+          </div>
         </>
       )}
       <h1>
