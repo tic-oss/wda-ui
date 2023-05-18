@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import db1 from "../assets/pstgrc.jpeg"
 import db2 from "../assets/mongo.png"
-import eurkea from "../assets/Eureka.png"
+import eurkea from "../assets/Eureka.jpg"
+import consol from "../assets/consol.png"
 import "./../App.css"
 
 export default () => {
@@ -34,18 +35,16 @@ export default () => {
       <div className="dndnode output" onDragStart={(event) => onDragStart(event, 'default', 'Authentication')} draggable>
         Authentication
       </div>
-      <h1>
-        <span style={{ cursor: "pointer" }} onClick={toggleDatabase}>
+      <h1 style={{ cursor: "pointer",fontSize:'15px' }} onClick={toggleDatabase}>
           Databases {isDatabaseCollapsed ? <span>&#x25BC;</span> : <span>&#x25B2;</span>}
-        </span>
       </h1>
       {!isDatabaseCollapsed && (
         <>
-          <div className="selectorNode" onDragStart={(event) => onDragStart(event, 'default', 'Img_postgres')} draggable>
-            <img width='130px' src={db1} alt="pstgrclogo"></img>
+          <div className="selectorNode" onDragStart={(event) => onDragStart(event, 'default', 'Database_postgres')} draggable>
+            <img width='130px' src={db1} alt="postgreslogo"></img>
           </div>
 
-          <div className="selectorNode" onDragStart={(event) => onDragStart(event, 'default', 'Img_mongo')} draggable>
+          <div className="selectorNode" onDragStart={(event) => onDragStart(event, 'default', 'Database_mongo')} draggable>
             <img width='130px' src={db2} alt="mongologo"></img>
           </div>
       
@@ -53,14 +52,17 @@ export default () => {
       )}
 
       <h1>
-        <span style={{ cursor: "pointer" }} onClick={toggleService}>
-          Service Discovry {isServiceCollapsed ? <span>&#x25BC;</span> : <span>&#x25B2;</span>}
+        <span style={{ cursor: "pointer",fontSize:'15px' }} onClick={toggleService}>
+          Service Discovery {isServiceCollapsed ? <span>&#x25BC;</span> : <span>&#x25B2;</span>}
         </span>
       </h1>
       {!isServiceCollapsed && (
         <>
-          <div className="selectorNode1" onDragStart={(event) => onDragStart(event, 'default', 'Eureka')} draggable>
+          <div className="selectorNode1" onDragStart={(event) => onDragStart(event, 'default', 'Discovery_Eureka')} draggable>
             <img width='130px' src={eurkea} alt="eurekalogo"></img>
+          </div>
+          <div className="selectorNode1" onDragStart={(event) => onDragStart(event, 'default', 'Discovery_Consol')} draggable>
+            <img width='130px' src={consol} alt="consollogo"></img>
           </div>
         </>
       )}

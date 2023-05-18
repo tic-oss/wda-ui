@@ -1,12 +1,12 @@
-import { useCallback } from "react";
 import { Handle, Position } from "reactflow";
-import eureka from "./../assets/Eureka.png"
+import eureka from "./../assets/Eureka.jpg"
+import consol from "./../assets/consol.png"
 
 const handleStyle = { left: 25 };
 
-function CustomServiceNode({isConnectable }) {
-  //console.log(data)
+function CustomServiceNode({ data, isConnectable }) {
 
+  const Service_Discovery= data.Service_Discovery
 
   return (
     <div>
@@ -16,7 +16,10 @@ function CustomServiceNode({isConnectable }) {
         isConnectable={isConnectable}
       />
       <div>
-      <img width='50px' src={eureka}/>
+        {Service_Discovery === 'Eureka' ?
+          <img width='50px' name={Service_Discovery} src={eureka} /> :
+          <img width='50px' name={Service_Discovery} src={consol} />
+        }
       </div>
       <Handle
         type="source"

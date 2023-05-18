@@ -8,7 +8,6 @@ import ReactFlow, {
 updateEdge
 
 } from 'reactflow';
-// import { Button } from '@chakra-ui/core';
 import 'reactflow/dist/style.css';
 
 import Sidebar from './../components/Sidebar';
@@ -43,6 +42,7 @@ const Designer = () => {
   const reactFlowWrapper = useRef(null);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [nodeMap,setNodeMap] = useState(new Map())
+  const [nodeType,setNodeType] = useState(null)
   console.log("Nodes",nodes)
   
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
@@ -79,6 +79,20 @@ const Designer = () => {
     event.dataTransfer.dropEffect = 'move';
   }, []);
 
+  const onclick = (e)=>{
+    console.log(e)
+    const Id= e.target.dataset.id || e.target.name
+    console.log(Id)
+    if(Id){
+      const type=Id.split('_')[0]
+      setNodeType(type)
+      let index = nodeMap.get(Id)
+      let CurrentNode = nodes[index]
+      setCurrentNode(CurrentNode?.data)
+      setopen(Id)
+    }
+    
+  }
 
   const onDrop = useCallback(
     (event) => {
@@ -98,18 +112,7 @@ const Designer = () => {
         y: event.clientY - reactFlowBounds.top,
       });
 
-      if(!name.startsWith('Img')){
-        const newNode = {
-          id: getId(name),
-          type,
-          position,
-          data: { label: name },
-         style: { border: "1px solid", padding: "4px 4px" },
-        };
-        setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
-        setNodes((nds) => nds.concat(newNode))
-      }
-      else{
+      if(name.startsWith('Database')){
         const Database=name.split('_').splice(1)[0]
         console.log(Database)
         const newNode = {
@@ -122,23 +125,36 @@ const Designer = () => {
         setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
         setNodes((nds) => nds.concat(newNode))
       }
+      else if(name.startsWith('Discovery')){
+        const Service_Discovery=name.split('_').splice(1)[0]
+        console.log(Service_Discovery)
+        const newNode = {
+          id: 'Service_Discovery',
+          type:'selectorNode1',
+          position,
+          data: { Service_Discovery: Service_Discovery },
+         style: { border: "1px solid", padding: "4px 4px" },
+        };
+        setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
+        setNodes((nds) => nds.concat(newNode))
+      }
+      else {
+        const newNode = {
+          id: getId(name),
+          type,
+          position,
+          data: { label: name },
+         style: { border: "1px solid", padding: "4px 4px" },
+        };
+        setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
+        setNodes((nds) => nds.concat(newNode))
+      }
+      
   
 
     },
     [reactFlowInstance]
   );
-
-  const onclick = (e)=>{
-    const Id= e.target.dataset.id
-    console.log(Id)
-    if(Id){
-      let index = nodeMap.get(Id)
-      let CurrentNode = nodes[index]
-      setCurrentNode(CurrentNode.data)
-      setopen(Id)
-    }
-    
-  }
 
   const onChange = (Data) => {
     
@@ -184,7 +200,7 @@ const Designer = () => {
             onInit={setReactFlowInstance}
             onDrop={onDrop}
             onDragOver={onDragOver}
-            onClick={onclick}
+            onNodeClick={onclick}
             fitView
             onEdgeUpdate={onEdgeUpdate}
             onEdgeUpdateStart={onEdgeUpdateStart}
