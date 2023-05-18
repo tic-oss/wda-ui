@@ -22,7 +22,6 @@ const ServiceModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
     'ApplicationType':'microservice',
     ...CurrentNode
   }
-  const type = isOpen?.split('_')[0] || null;
   const [ApplicationData,setApplicationData] = useState(IntialState)
 
   const handleData = (column,value)=>{
@@ -33,7 +32,7 @@ const ServiceModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
     <Modal isOpen={isOpen} onClose={() => onClose(false)} isCentered={true}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>{type}</ModalHeader>
+        <ModalHeader>Service</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <div

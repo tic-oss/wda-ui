@@ -15,12 +15,9 @@ import {
 
 const UiDataModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
 
-  
-  const type = isOpen?.split('_')[0] || null;
-
   const IntialState ={
     'label':'',
-    'Framework':'',
+    'Framework':'reactjs',
     'PackageName':'',
     'ServerPort':'',
     'ApplicationType':'microservice',
@@ -37,7 +34,7 @@ const UiDataModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
     <Modal isOpen={isOpen} onClose={() => onClose(false)} isCentered={true}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>{type}</ModalHeader>
+        <ModalHeader>UI</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <div
