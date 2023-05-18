@@ -16,9 +16,10 @@ function CustomServiceNode({ data, isConnectable }) {
         isConnectable={isConnectable}
       />
       <div>
-       
-          <img width='50px' name={Service_Discovery} src={eureka} /> 
-        
+        {Service_Discovery === 'Eureka' ?
+          <img width='50px' name={Service_Discovery} src={eureka} /> :
+          <img width='50px' name={Service_Discovery} src={consol} />
+        }
       </div>
       <Handle
         type="source"
