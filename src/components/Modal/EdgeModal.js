@@ -14,25 +14,22 @@ import {
   FormControl
 } from "@chakra-ui/react";
 
-const EdgeModal = ({ isOpen, onClose, onSubmit,CurrentNode}) => {
+const EdgeModal = ({ isOpen, onClose}) => {
     const IntialState ={
         'EdgeType':'',
-        
-        ...CurrentNode
-      }
-      const type = isOpen?.split('_')[0] || null;
+    }
       const [EdgeData,setEdgeData] = useState(IntialState)
 
-      const handleData = (column,value)=>{
-        setEdgeData((prev)=>({...prev,[column]:value}))
-      }
+      // const handleData = (column,value)=>{
+      //   setEdgeData((prev)=>({...prev,[column]:value}))
+      // }
 
   return (
     <Modal isOpen={isOpen} onClose={()=>onClose(false)} isCentered={true}>
       
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>{type}</ModalHeader>
+        <ModalHeader>Edge</ModalHeader>
         <ModalCloseButton/>
         <ModalBody>
         <div
@@ -47,17 +44,12 @@ const EdgeModal = ({ isOpen, onClose, onSubmit,CurrentNode}) => {
               <Input mb={4} variant="outline" id="edgetype" 
                 borderColor={"black"}
                 value={EdgeData.EdgeType}
-                onChange={(e)=>handleData('EdgeType',e.target.value)}
               >  
               </Input>
             </FormControl>
-
-           
-
-
              </div>
           <ModalFooter>
-            <Button onClick={onSubmit} type="submit">Submit</Button>
+            <Button  type="submit" onClick={()=>onClose(false)}>Submit</Button>
           </ModalFooter>
         </ModalBody>
       </ModalContent>

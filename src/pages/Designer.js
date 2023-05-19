@@ -37,6 +37,8 @@ const getId = (type='') =>{
         return 'Authentication_1'
       else if ( type === 'Deployment')
         return 'Deployment_1'
+      else if( type === 'UI')
+        return 'UI'
     return 'Id'
 }
 const nodeTypes = {
@@ -195,8 +197,6 @@ const Designer = () => {
         setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
         setNodes((nds) => nds.concat(newNode))
       }
-      
-  
 
     },
     [reactFlowInstance]
@@ -268,6 +268,7 @@ const Designer = () => {
 
   const onEdgeClick = (e,edge) =>{
     console.log(e,edge)
+    setEdgeopen(true)
   }
   const onConnect = useCallback((params,Nodes,nodesMap) => {
     params.markerEnd= {type: MarkerType.ArrowClosed}
@@ -313,7 +314,7 @@ const Designer = () => {
           nodeType==='UI' && Isopen && <UiDataModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />
       }
       {
-      IsEdgeopen && <EdgeModal isOpen={IsEdgeopen} onClose={setopen} onSubmit={onEdgeClick} />}
+      IsEdgeopen && <EdgeModal isOpen={IsEdgeopen} onClose={setEdgeopen} />}
       {/* <Button onClick={()=>onsubmit()}>Submit</Button> */}
       </ReactFlowProvider>
 
