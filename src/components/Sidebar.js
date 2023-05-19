@@ -44,8 +44,13 @@ export default () => {
 
   return (
     <aside>
-      <div className="description">
+       <div className="description">
         <h2 style={{ cursor: "pointer",fontSize:'20px' }}>You can drag these nodes to the pane on the right.</h2></div>
+      <div className="dndnode output" onDragStart={(event) => onDragStart(event,'default', 'UI')} draggable>
+        UI+Gateway
+      </div>
+     
+       
       <div className="dndnode output" onDragStart={(event) => onDragStart(event,'default', 'Service')} draggable>
         Service
       </div>
