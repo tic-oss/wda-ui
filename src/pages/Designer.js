@@ -202,32 +202,6 @@ const Designer = () => {
         setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
         setNodes((nds) => nds.concat(newNode))
       }
-      else if(name.startsWith('Auth')){
-        const Auth_Type=name.split('_').splice(1)[0]
-        console.log(Auth_Type)
-        const newNode = {
-          id: 'Auth_Type',
-          type:'selectorNode3',
-          position,
-          data: { Auth_Type: Auth_Type },
-         style: { border: "1px solid", padding: "4px 4px" },
-        };
-        setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
-        setNodes((nds) => nds.concat(newNode))
-      }
-      else if(name.startsWith('MessageBroker')){
-        const Message_Broker=name.split('_').splice(1)[0]
-        console.log(Message_Broker)
-        const newNode = {
-          id: 'Message_Broker',
-          type:'selectorNode4',
-          position,
-          data: { Message_Broker: Message_Broker },
-         style: { border: "1px solid", padding: "4px 4px" },
-        };
-        setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
-        setNodes((nds) => nds.concat(newNode))
-      }
       else {
         const newNode = {
           id: getId(name),
