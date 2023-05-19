@@ -282,14 +282,12 @@ const Designer = () => {
     
     if(sourceType !== targetId){
       if(sourceType === 'Service' && targetType === 'Database'){
-          console.log("source  target",nodeMap)
           let sourceindex = NodeMap.get(sourceId)
           let targetindex = NodeMap.get(targetId)
           console.log('Index.',sourceindex,targetindex)
           let AllNodes=[...Nodes]
           let sourceNode = AllNodes[sourceindex]
           let targetNode = AllNodes[targetindex]
-          console.log('Nodes',sourceNode,targetNode)
           AllNodes[sourceindex].data={...sourceNode.data,...targetNode.data}
           setNodes([...AllNodes])
         }
@@ -315,6 +313,7 @@ const Designer = () => {
   }
   const onConnect = useCallback((params,Nodes,nodesMap) => {
     params.markerEnd= {type: MarkerType.ArrowClosed}
+    params.type='straight'
     setEdges((eds) => addEdge(params, eds))
     MergeData(params.source,params.target,Nodes,nodesMap)
   }
