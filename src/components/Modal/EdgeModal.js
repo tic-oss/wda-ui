@@ -20,9 +20,9 @@ const EdgeModal = ({ isOpen, onClose}) => {
     }
       const [EdgeData,setEdgeData] = useState(IntialState)
 
-      // const handleData = (column,value)=>{
-      //   setEdgeData((prev)=>({...prev,[column]:value}))
-      // }
+      const handleData = (column,value)=>{
+        setEdgeData((prev)=>({...prev,[column]:value}))
+      }
 
   return (
     <Modal isOpen={isOpen} onClose={()=>onClose(false)} isCentered={true}>
@@ -40,12 +40,16 @@ const EdgeModal = ({ isOpen, onClose}) => {
             }}
           >
             <FormControl>
-              <FormLabel>Edge Type</FormLabel>
-              <Input mb={4} variant="outline" id="edgetype" 
+              <FormLabel></FormLabel>
+              <Input
+                mb={4}
+                variant="outline"
+                id="appname"
+                placeholder="Name"
                 borderColor={"black"}
-                value={EdgeData.EdgeType}
-              >  
-              </Input>
+                value={ApplicationData.label}
+                onChange={(e)=>handleData('label',e.target.value)}
+              />
             </FormControl>
              </div>
           <ModalFooter>
