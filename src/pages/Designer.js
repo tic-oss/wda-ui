@@ -190,19 +190,20 @@ const Designer = () => {
         setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
         setNodes((nds) => nds.concat(newNode))
       }
-      else if(name.startsWith('Ingress')){
-        const Ingress_Type=name.split('_').splice(1)[0]
-        console.log(Ingress_Type)
+      else if(name.startsWith('Cloud')){
+        const Cloud_Provider=name.split('_').splice(1)[0]
+        console.log(Cloud_Provider)
         const newNode = {
-          id: 'Ingress_Type',
-          type:'selectorNode2',
+          id: 'Cloud_Provider',
+          type:'selectorNode5',
           position,
-          data: { Ingress_Type: Ingress_Type },
+          data: { Cloud_Provider: Cloud_Provider },
          style: { border: "1px solid", padding: "4px 4px" },
         };
         setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
         setNodes((nds) => nds.concat(newNode))
       }
+    
       else {
         const newNode = {
           id: getId(name),
@@ -324,7 +325,10 @@ const Designer = () => {
       
         { nodeType==='Service' && Isopen && <ServiceModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
       
-        { nodeType==='Deployment' && Isopen && <DeployModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
+        {/* { nodeType==='Deployment' && Isopen && <DeployModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />} */}
+
+        { nodeType==='Azure' && Isopen && <DeployModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
+        { nodeType==='AWS' && Isopen && <DeployModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
       
         { nodeType==='UI' && Isopen && <UiDataModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
 
