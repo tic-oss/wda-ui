@@ -7,6 +7,8 @@ import istio from "../assets/istio.png"
 import kafka from "../assets/kafka.png"
 import pulsar from "../assets/pulsar.png"
 import rabbitmq from "../assets/rabbitmq.png"
+import azure from "../assets/Azure.png"
+import aws from "../assets/aws.png"
 import "./../App.css"
 
 export default () => {
