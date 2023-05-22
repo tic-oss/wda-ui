@@ -13,23 +13,23 @@ function CustomMessageBrokerNode({ data, isConnectable }) {
 
   return (
     <div>
-      <Handle
+      {/* <Handle
         type="target"
         position={Position.Top}
         isConnectable={isConnectable}
-      />
+      /> */}
       <div>
       {Message_Broker === 'Kafka' ? (
             <img width='50px' name={Message_Broker} src={kafka} />) : 
             Message_Broker === 'Pulsar' ? (<img width='50px' name={Message_Broker} src={pulsar} />) : 
             (<img width='50px' name={Message_Broker} src={rabbitmq} />)}    
       </div>
-      <Handle
+      {/* <Handle
         type="source"
         position={Position.Bottom}
         style={handleStyle}
         isConnectable={isConnectable}
-      />
+      /> */}
     </div>
   );
 }

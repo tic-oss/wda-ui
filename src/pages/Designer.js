@@ -20,6 +20,7 @@ import CustomServiceNode from "./Customnodes/CustomServiceNode"
 import CustomIngressNode from "./Customnodes/CustomIngressNode"
 import CustomAuthNode from "./Customnodes/CustomAuthNode"
 import CustomMessageBrokerNode from "./Customnodes/CustomMessageBrokerNode"
+import CustomCloudNode from "./Customnodes/CustomCloudNode"
 
 import "./../App.css"
 import { Button } from '@chakra-ui/react';
@@ -35,8 +36,8 @@ const getId = (type='') =>{
         return `Database_${database_id++}`
       else if ( type === 'Authentication')
         return 'Authentication_1'
-      else if ( type === 'Deployment')
-        return 'Deployment_1'
+      // else if ( type === 'Deployment')
+      //   return 'Deployment_1'
       else if( type === 'UI')
         return 'UI'
     return 'Id'
@@ -46,7 +47,9 @@ const nodeTypes = {
   selectorNode1: CustomServiceNode,
   selectorNode2: CustomIngressNode,
   selectorNode3: CustomAuthNode,
-  selectorNode4: CustomMessageBrokerNode
+  selectorNode4: CustomMessageBrokerNode,
+  selectorNode4: CustomMessageBrokerNode,
+  selectorNode5: CustomCloudNode
 };
 
 
@@ -181,6 +184,19 @@ const Designer = () => {
           type:'selectorNode4',
           position,
           data: { Message_Broker: Message_Broker },
+         style: { border: "1px solid", padding: "4px 4px" },
+        };
+        setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
+        setNodes((nds) => nds.concat(newNode))
+      }
+      else if(name.startsWith('Cloud')){
+        const Cloud_Provider=name.split('_').splice(1)[0]
+        console.log(Cloud_Provider)
+        const newNode = {
+          id: 'Cloud_Provider',
+          type:'selectorNode5',
+          position,
+          data: { Cloud_Provider: Cloud_Provider },
          style: { border: "1px solid", padding: "4px 4px" },
         };
         setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
