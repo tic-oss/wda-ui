@@ -20,6 +20,7 @@ import CustomServiceNode from "./Customnodes/CustomServiceNode"
 import CustomIngressNode from "./Customnodes/CustomIngressNode"
 import CustomAuthNode from "./Customnodes/CustomAuthNode"
 import CustomMessageBrokerNode from "./Customnodes/CustomMessageBrokerNode"
+import CustomCloudNode from "./Customnodes/CustomCloudNode"
 
 import "./../App.css"
 import { Button } from '@chakra-ui/react';
@@ -35,8 +36,8 @@ const getId = (type='') =>{
         return `Database_${database_id++}`
       else if ( type === 'Authentication')
         return 'Authentication_1'
-      else if ( type === 'Deployment')
-        return 'Deployment_1'
+      // else if ( type === 'Deployment')
+      //   return 'Deployment_1'
       else if( type === 'UI')
         return 'UI'
     return 'Id'
@@ -46,7 +47,9 @@ const nodeTypes = {
   selectorNode1: CustomServiceNode,
   selectorNode2: CustomIngressNode,
   selectorNode3: CustomAuthNode,
-  selectorNode4: CustomMessageBrokerNode
+  selectorNode4: CustomMessageBrokerNode,
+  selectorNode4: CustomMessageBrokerNode,
+  selectorNode5: CustomCloudNode
 };
 
 
@@ -96,7 +99,12 @@ const Designer = () => {
     if(Id){
       const type=Id.split('_')[0]
       setNodeType(type)
-      let index = nodeMap.get(Id)
+      let index;
+      if(type=='AWS' || type ==='Azure'){
+        index=nodeMap.get('Cloud_Provider')
+      }
+      else
+       index = nodeMap.get(Id)
       let CurrentNode = nodes[index]
       setCurrentNode(CurrentNode?.data)
       setopen(Id)
@@ -105,7 +113,7 @@ const Designer = () => {
   }
 
   const onDrop = useCallback(
-    (event,servicecount) => {
+    (event) => {
       event.preventDefault();
       console.log(event)
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
@@ -187,19 +195,20 @@ const Designer = () => {
         setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
         setNodes((nds) => nds.concat(newNode))
       }
-      else if(name.startsWith('Ingress')){
-        const Ingress_Type=name.split('_').splice(1)[0]
-        console.log(Ingress_Type)
+      else if(name.startsWith('Cloud')){
+        const Cloud_Provider=name.split('_').splice(1)[0]
+        console.log(Cloud_Provider)
         const newNode = {
-          id: 'Ingress_Type',
-          type:'selectorNode2',
+          id: 'Cloud_Provider',
+          type:'selectorNode5',
           position,
-          data: { Ingress_Type: Ingress_Type },
+          data: { Cloud_Provider: Cloud_Provider },
          style: { border: "1px solid", padding: "4px 4px" },
         };
         setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
         setNodes((nds) => nds.concat(newNode))
       }
+    
       else {
         const newNode = {
           id: getId(name),
@@ -219,13 +228,22 @@ const Designer = () => {
   );
 
   const onChange = (Data) => {
-    
+    console.log(Data,Isopen)
     let UpdatedNodes=[...nodes]
-    let index = nodeMap.get(Isopen)
+    let index;
+    let CurrentNode;
+    if(Isopen==='AWS' || Isopen ==='Azure'){
+      index=nodeMap.get('Cloud_Provider')
+     CurrentNode = UpdatedNodes[index]
+    }
+    else{
+    index = nodeMap.get(Isopen)
     console.log(index)
-    let CurrentNode = UpdatedNodes[index]
+     CurrentNode = UpdatedNodes[index]
+    }
     console.log(CurrentNode)
     CurrentNode.data=Data
+    console.log(CurrentNode)
     UpdatedNodes[index]=CurrentNode
     setNodes(UpdatedNodes)
     setopen(false)
@@ -324,7 +342,9 @@ const Designer = () => {
       
         { nodeType==='Service' && Isopen && <ServiceModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
       
-        { nodeType==='Deployment' && Isopen && <DeployModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
+        {/* { nodeType==='Deployment' && Isopen && <DeployModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />} */}
+
+        { nodeType==='Azure' || 'AWS' && Isopen && <DeployModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
       
         { nodeType==='UI' && Isopen && <UiDataModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
 

@@ -15,14 +15,19 @@ import {
 } from "@chakra-ui/react";
 
 const DeployModal = ({ isOpen, onClose, onSubmit,CurrentNode}) => {
+  console.log(CurrentNode,isOpen)
     const IntialState ={
-        'label':'Deployment',
+        'Cloud_Provider':isOpen,
         'DeploymentType':'kubernetes',
         'KubernetsNamespace':'',
         'EnableKubernetesDynamicStorage':'yes',
         'KubernetesStorageClassName':'',
+        'AzureAccountId':'',
+        'AWSAccountId':'',
+        'IngressType':'istio',
         ...CurrentNode
       }
+     
 
       const [DeploymentData,setDeploymentData] = useState(IntialState)
 
@@ -45,6 +50,31 @@ const DeployModal = ({ isOpen, onClose, onSubmit,CurrentNode}) => {
               alignItems: "Left",
             }}
           >
+             {CurrentNode === 'Azure' && (
+        <div>
+          <FormControl>
+              <FormLabel>Azure Account ID</FormLabel>
+              <Input mb={4} variant="outline" id="azureaccount" 
+                borderColor={"black"}
+                value={DeploymentData.AzureAccountID}
+              >  
+              </Input>
+            </FormControl>
+        </div>
+      )}
+
+      {CurrentNode === 'AWS' && (
+        <div>
+         <FormControl>
+              <FormLabel>Azure Account ID</FormLabel>
+              <Input mb={4} variant="outline" id="awsaccount" 
+                borderColor={"black"}
+                value={DeploymentData.AWSAccountID}
+              >  
+              </Input>
+            </FormControl>
+        </div>
+      )}
             <FormControl>
               <FormLabel>Deployment Type</FormLabel>
               <Select mb={4} variant="outline" id="deploymenttype" 
@@ -58,7 +88,7 @@ const DeployModal = ({ isOpen, onClose, onSubmit,CurrentNode}) => {
             </FormControl>
 
             <FormControl>
-              <FormLabel>Kubernetes Namespace</FormLabel>
+              <FormLabel>Namespace</FormLabel>
               <Input
                 mb={4}
                 variant="outline"
@@ -70,7 +100,7 @@ const DeployModal = ({ isOpen, onClose, onSubmit,CurrentNode}) => {
               />
             </FormControl>
             <FormControl>
-              <FormLabel>Enable Kubernetes Dynamic Storage</FormLabel>
+              <FormLabel>Enable Dynamic Storage</FormLabel>
               <Select mb={4} variant="outline" id="enablekubernetesdynamicstorage" 
                 borderColor={"black"}
                 value={DeploymentData.EnableKubernetesDynamicStorage}
@@ -81,7 +111,7 @@ const DeployModal = ({ isOpen, onClose, onSubmit,CurrentNode}) => {
                 </Select>
             </FormControl>
             <FormControl>
-              <FormLabel>Kubernetes Storage Class Name</FormLabel>
+              <FormLabel>Storage Class Name</FormLabel>
               <Input
                 mb={4}
                 variant="outline"
@@ -91,6 +121,17 @@ const DeployModal = ({ isOpen, onClose, onSubmit,CurrentNode}) => {
                 value={DeploymentData.KubernetesStorageClassName}
                 onChange={(e)=>handleData('KubernetesStorageClassName',e.target.value)}
               />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Ingress Type</FormLabel>
+              <Select mb={4} variant="outline" id="ingresstype" 
+                borderColor={"black"}
+                value={DeploymentData.IngressType}
+                onChange={(e)=>handleData('IngressType',e.target.value)}
+              >
+                <option value="istio">Istio</option>
+              
+                </Select>
             </FormControl>
 
 

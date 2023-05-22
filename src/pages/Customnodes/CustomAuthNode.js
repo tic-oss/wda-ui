@@ -11,23 +11,23 @@ function CustomAuthNode({ data, isConnectable }) {
 
   return (
     <div>
-      <Handle
+      {/* <Handle
         type="target"
         position={Position.Top}
         isConnectable={isConnectable}
-      />
+      /> */}
       <div>
        
           <img width='70px' name={Auth_Type} src={keycloak} /> 
          
         
       </div>
-      <Handle
+      {/* <Handle
         type="source"
         position={Position.Bottom}
         style={handleStyle}
         isConnectable={isConnectable}
-      />
+      /> */}
     </div>
   );
 }

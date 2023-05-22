@@ -1,32 +1,31 @@
 import { Handle, Position } from "reactflow";
-import eureka from "../../assets/Eureka.jpg"
-import consol from "../../assets/consol.png"
-
+import azure from "../../assets/Azure.png"
+import aws from "../../assets/aws.png"
 const handleStyle = { left: 25 };
 
 function CustomServiceNode({ data, isConnectable }) {
 
-  const Service_Discovery= data.Service_Discovery
+  const Cloud_Provider= data.Cloud_Provider
 
   return (
     <div>
-      {/* <Handle
+      <Handle
         type="target"
         position={Position.Top}
         isConnectable={isConnectable}
-      /> */}
+      />
       <div>
-        {Service_Discovery === 'Eureka' ?
-          <img width='50px' name={Service_Discovery} src={eureka} /> :
-          <img width='50px' name={Service_Discovery} src={consol} />
+        {Cloud_Provider === 'Azure' ?
+          <img width='50px' name={Cloud_Provider} src={azure} /> :
+          <img width='50px' name={Cloud_Provider} src={aws} />
         }
       </div>
-      {/* <Handle
+      <Handle
         type="source"
         position={Position.Bottom}
         style={handleStyle}
         isConnectable={isConnectable}
-      /> */}
+      />
     </div>
   );
 }
