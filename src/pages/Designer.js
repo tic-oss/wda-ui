@@ -55,6 +55,7 @@ const Designer = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [nodeMap,setNodeMap] = useState(new Map())
   const [nodeType,setNodeType] = useState(null)
+  const [ServiceDiscoveryCount,setServiceDiscoveryCount] = useState(0)
   console.log("Nodes",nodes)
   
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
@@ -104,7 +105,7 @@ const Designer = () => {
   }
 
   const onDrop = useCallback(
-    (event) => {
+    (event,servicecount) => {
       event.preventDefault();
       console.log(event)
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
@@ -186,6 +187,19 @@ const Designer = () => {
         setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
         setNodes((nds) => nds.concat(newNode))
       }
+      else if(name.startsWith('Ingress')){
+        const Ingress_Type=name.split('_').splice(1)[0]
+        console.log(Ingress_Type)
+        const newNode = {
+          id: 'Ingress_Type',
+          type:'selectorNode2',
+          position,
+          data: { Ingress_Type: Ingress_Type },
+         style: { border: "1px solid", padding: "4px 4px" },
+        };
+        setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
+        setNodes((nds) => nds.concat(newNode))
+      }
       else {
         const newNode = {
           id: getId(name),
@@ -197,6 +211,8 @@ const Designer = () => {
         setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
         setNodes((nds) => nds.concat(newNode))
       }
+      
+  
 
     },
     [reactFlowInstance]
@@ -238,14 +254,12 @@ const Designer = () => {
     
     if(sourceType !== targetId){
       if(sourceType === 'Service' && targetType === 'Database'){
-          console.log("source  target",nodeMap)
           let sourceindex = NodeMap.get(sourceId)
           let targetindex = NodeMap.get(targetId)
           console.log('Index.',sourceindex,targetindex)
           let AllNodes=[...Nodes]
           let sourceNode = AllNodes[sourceindex]
           let targetNode = AllNodes[targetindex]
-          console.log('Nodes',sourceNode,targetNode)
           AllNodes[sourceindex].data={...sourceNode.data,...targetNode.data}
           setNodes([...AllNodes])
         }
@@ -272,11 +286,12 @@ const Designer = () => {
   }
   const onConnect = useCallback((params,Nodes,nodesMap) => {
     params.markerEnd= {type: MarkerType.ArrowClosed}
+    params.type='straight'
     setEdges((eds) => addEdge(params, eds))
     MergeData(params.source,params.target,Nodes,nodesMap)
   }
     , []);
-    
+
   return (
     <div className="dndflow">
       <ReactFlowProvider>
@@ -304,18 +319,15 @@ const Designer = () => {
         </div>
         <Sidebar />
       
-        {
-      nodeType==='Service' && Isopen && <ServiceModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />
-      }
-      {
-          nodeType==='Deployment' && Isopen && <DeployModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />
-      }
-      {
-          nodeType==='UI' && Isopen && <UiDataModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />
-      }
-      {
-      IsEdgeopen && <EdgeModal isOpen={IsEdgeopen} onClose={setEdgeopen} />}
-      {/* <Button onClick={()=>onsubmit()}>Submit</Button> */}
+        { nodeType==='Service' && Isopen && <ServiceModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
+      
+        { nodeType==='Deployment' && Isopen && <DeployModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
+      
+        { nodeType==='UI' && Isopen && <UiDataModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
+
+        { IsEdgeopen && <EdgeModal isOpen={IsEdgeopen} onClose={setEdgeopen} />}
+
+        {/* <Button onClick={()=>onsubmit()}>Submit</Button> */}
       </ReactFlowProvider>
 
 
