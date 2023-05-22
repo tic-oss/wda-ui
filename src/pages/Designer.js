@@ -281,8 +281,11 @@ const Designer = () => {
   } 
 
   const onEdgeClick = (e,edge) =>{
+    const sourceType = edge.source.split('_')[0]
+    const targetType = edge.target.split('_')[0]
     console.log(e,edge)
-    setEdgeopen(true)
+    if(sourceType=='Service' && sourceType === targetType )
+      setEdgeopen(true)
   }
   const onConnect = useCallback((params,Nodes,nodesMap) => {
     params.markerEnd= {type: MarkerType.ArrowClosed}
