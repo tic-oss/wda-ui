@@ -15,15 +15,16 @@ import {
 } from "@chakra-ui/react";
 
 const DeployModal = ({ isOpen, onClose, onSubmit,CurrentNode}) => {
+  console.log(CurrentNode,isOpen)
     const IntialState ={
-        'label':'Deployment',
+        'Cloud_Provider':isOpen,
         'DeploymentType':'kubernetes',
         'KubernetsNamespace':'',
         'EnableKubernetesDynamicStorage':'yes',
         'KubernetesStorageClassName':'',
         'AzureAccountId':'',
         'AWSAccountId':'',
-        'IngressType':'',
+        'IngressType':'istio',
         ...CurrentNode
       }
      
