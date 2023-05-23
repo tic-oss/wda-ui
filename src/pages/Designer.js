@@ -58,7 +58,7 @@ const Designer = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [nodeMap,setNodeMap] = useState(new Map())
   const [nodeType,setNodeType] = useState(null)
-  const [ServiceDiscoveryCount,setServiceDiscoveryCount] = useState(0)
+
   console.log("Nodes",nodes)
   
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
@@ -302,12 +302,17 @@ const Designer = () => {
     const sourceType = edge.source.split('_')[0]
     const targetType = edge.target.split('_')[0]
     console.log(e,edge)
-    if(sourceType=='Service' && sourceType === targetType )
+    if(sourceType=='UI' && targetType.includes('Service') )
       setEdgeopen(true)
-  }
+      else if(sourceType=='Service' && targetType.includes('Service') )
+      setEdgeopen(true)
+  }  
+  
+  
   const onConnect = useCallback((params,Nodes,nodesMap) => {
     params.markerEnd= {type: MarkerType.ArrowClosed}
     params.type='straight'
+    params.data={}
     setEdges((eds) => addEdge(params, eds))
     MergeData(params.source,params.target,Nodes,nodesMap)
   }
@@ -344,7 +349,8 @@ const Designer = () => {
       
         {/* { nodeType==='Deployment' && Isopen && <DeployModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />} */}
 
-        { nodeType==='Azure' || 'AWS' && Isopen && <DeployModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
+        { nodeType==='Azure'  && Isopen && <DeployModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
+        { nodeType==='AWS'  && Isopen && <DeployModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
       
         { nodeType==='UI' && Isopen && <UiDataModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
 

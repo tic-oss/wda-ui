@@ -28,7 +28,7 @@ const DeployModal = ({ isOpen, onClose, onSubmit,CurrentNode}) => {
         ...CurrentNode
       }
      
-
+console.log(isOpen)
       const [DeploymentData,setDeploymentData] = useState(IntialState)
 
       const handleData = (column,value)=>{
@@ -50,7 +50,7 @@ const DeployModal = ({ isOpen, onClose, onSubmit,CurrentNode}) => {
               alignItems: "Left",
             }}
           >
-             {CurrentNode === 'Azure' && (
+             {isOpen === 'Azure' && (
         <div>
           <FormControl>
               <FormLabel>Azure Account ID</FormLabel>
@@ -63,7 +63,7 @@ const DeployModal = ({ isOpen, onClose, onSubmit,CurrentNode}) => {
         </div>
       )}
 
-      {CurrentNode === 'AWS' && (
+      {isOpen === 'AWS' && (
         <div>
          <FormControl>
               <FormLabel>Azure Account ID</FormLabel>

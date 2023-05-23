@@ -51,14 +51,14 @@ const EdgeModal = ({ isOpen, onClose}) => {
               alignItems: "Left",
             }}
           >
-            <FormControl>
+            {/* <FormControl>
               <FormLabel>Edge Type</FormLabel>
               <Input mb={4} variant="outline" id="edgetype" 
                 borderColor={"black"}
                 value={EdgeData.EdgeType}
               >  
               </Input>
-            </FormControl>
+            </FormControl> */}
             <FormControl>
   <FormLabel>Communication</FormLabel>
   <Select

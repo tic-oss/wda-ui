@@ -18,40 +18,15 @@ export default () => {
     event.dataTransfer.effectAllowed = 'move';
   };
 
-  const [isDatabaseCollapsed, setDatabaseCollapsed] = useState(true);
-  const [isServiceCollapsed, setServiceCollapsed] = useState(true);
-  const [isIngressCollapsed, setIngressCollapsed] = useState(true);
-  const [isAuthCollapsed, setAuthCollapsed] = useState(true);
-  const [isMessageBrokerCollapsed, setMessageBrokerCollapsed] = useState(true);
-  const [isCloudCollapsed, setCloudCollapsed] = useState(true);
+ const [selectedOption, setSelectedOption] = useState(null);
 
-  const toggleDatabase = () => {
-    setDatabaseCollapsed(!isDatabaseCollapsed);
+  const toggleOption = (option) => {
+    setSelectedOption((prevOption) => (prevOption === option ? null : option));
   };
-
-  const toggleService = () => {
-    setServiceCollapsed(!isServiceCollapsed);
-  };
-
-  const toggleIngress = () => {
-    setIngressCollapsed(!isIngressCollapsed);
-  };
-  const toggleAuth = () => {
-    setAuthCollapsed(!isAuthCollapsed);
-  };
-
-  const toggleMessageBroker = () => {
-    setMessageBrokerCollapsed(!isMessageBrokerCollapsed);
-  };
-
-  const toggleCloud = () => {
-    setCloudCollapsed(!isCloudCollapsed);
-  };
-
   return (
     <aside>
        <div className="description">
-        <h2 style={{ cursor: "pointer",fontSize:'20px' }}>You can drag these nodes to the pane on the right.</h2></div>
+        <h2 style={{cursor: "pointer", fontSize: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between'  }}>You can drag these nodes to the pane on the right.</h2></div>
       <div className="dndnode output" onDragStart={(event) => onDragStart(event,'default', 'UI')} draggable>
         UI+Gateway
       </div>
@@ -63,20 +38,20 @@ export default () => {
       {/* <div className="dndnode output" onDragStart={(event) => onDragStart(event, 'default', 'Deployment')} draggable>
         Deployment
       </div> */}
-      <h1 style={{ cursor: "pointer",fontSize:'20px' }} onClick={toggleAuth}>
-          Authentication {isAuthCollapsed ? <span>&#x25BC;</span> : <span>&#x25B2;</span>}
+      <h1 style={{cursor: "pointer", fontSize: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between'  }} onClick={() => toggleOption('Authentication')}>
+          Authentication {selectedOption === 'Authentication' ? <span>&#x25B2;</span> : <span>&#x25BC;</span>}
       </h1>
-      {!isAuthCollapsed && (
+      {selectedOption === 'Authentication' && (
         <>
           <div className="selectorNode3" onDragStart={(event) => onDragStart(event, 'default', 'Auth_keycloak')} draggable>
             <img width='145px' src={keycloak} alt="keycloaklogo"></img>
           </div>      
         </>
       )}
-      <h1 style={{ cursor: "pointer",fontSize:'20px' }} onClick={toggleDatabase}>
-          Databases {isDatabaseCollapsed ? <span>&#x25BC;</span> : <span>&#x25B2;</span>}
+      <h1 style={{cursor: "pointer", fontSize: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between'  }} onClick={() => toggleOption('Databases')}>
+          Databases {selectedOption === 'Databases' ? <span>&#x25B2;</span> : <span>&#x25BC;</span>}
       </h1>
-      {!isDatabaseCollapsed && (
+      {selectedOption === 'Databases' && (
         <>
           <div className="selectorNode" onDragStart={(event) => onDragStart(event, 'default', 'Database_postgres')} draggable>
             <img width='120px' src={db1} alt="postgreslogo"></img>
@@ -90,11 +65,11 @@ export default () => {
       )}
 
       <h1>
-        <span style={{ cursor: "pointer",fontSize:'20px' }} onClick={toggleService}>
-          Service Discovery {isServiceCollapsed ? <span>&#x25BC;</span> : <span>&#x25B2;</span>}
+        <span style={{cursor: "pointer", fontSize: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' ,display: 'flex', alignItems: 'center' }} onClick={() => toggleOption('serviceDiscovery')}>
+          Service Discovery {selectedOption === 'serviceDiscovery'? <span>&#x25B2;</span> : <span>&#x25BC;</span>}
         </span>
       </h1>
-      {!isServiceCollapsed && (
+      {selectedOption === 'serviceDiscovery' && (
         <>
           <div className="selectorNode1" onDragStart={(event) => onDragStart(event, 'default', 'Discovery_Eureka')} draggable>
             <img width='120px' src={eurkea} alt="eurekalogo"></img>
@@ -116,43 +91,43 @@ export default () => {
       )} */}
 
       
-      <h1>
-        <span style={{ cursor: "pointer",fontSize:'20px' }} onClick={toggleMessageBroker}>
-         Message Broker{isMessageBrokerCollapsed ? <span>&#x25BC;</span> : <span>&#x25B2;</span>}
-        </span>
-      </h1>
-      {!isMessageBrokerCollapsed && (
-        <>
-          <div className="selectorNode4" onDragStart={(event) => onDragStart(event, 'default', 'MessageBroker_RabbitMQ')} draggable>
-            <img width='120px' src={rabbitmq} alt="rabbitmqlogo"></img>
-          </div>
+<h1>
+  <span style={{ cursor: "pointer", fontSize: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between'  }} onClick={() => toggleOption('messageBroker')}>
+    Message Broker {selectedOption === 'messageBroker' ? <span>&#x25B2;</span> : <span>&#x25BC;</span>}
+  </span>
+</h1>
+{selectedOption === 'messageBroker' && (
+  <>
+    <div className="selectorNode4" onDragStart={(event) => onDragStart(event, 'default', 'MessageBroker_RabbitMQ')} draggable>
+      <img width='120px' src={rabbitmq} alt="rabbitmqlogo" />
+    </div>
 
-          <div className="selectorNode4" onDragStart={(event) => onDragStart(event, 'default', 'MessageBroker_Kafka')} draggable>
-            <img width='120px' src={kafka} alt="kafkalogo"></img>
-          </div>
+    <div className="selectorNode4" onDragStart={(event) => onDragStart(event, 'default', 'MessageBroker_Kafka')} draggable>
+      <img width='120px' src={kafka} alt="kafkalogo" />
+    </div>
 
-          <div className="selectorNode4" onDragStart={(event) => onDragStart(event, 'default', 'MessageBroker_Pulsar')} draggable>
-            <img width='120px' src={pulsar} alt="pulsarlogo"></img>
-          </div>
-         
-        </>
-        )}
+    <div className="selectorNode4" onDragStart={(event) => onDragStart(event, 'default', 'MessageBroker_Pulsar')} draggable>
+      <img width='120px' src={pulsar} alt="pulsarlogo" />
+    </div>
+  </>
+)}
 
 <h1>
-        <span style={{ cursor: "pointer",fontSize:'20px' }} onClick={toggleCloud}>
-         Cloud Provider{isCloudCollapsed ? <span>&#x25BC;</span> : <span>&#x25B2;</span>}
-        </span>
-      </h1>
-      {!isCloudCollapsed && (
-        <>
-          <div className="selectorNode5" onDragStart={(event) => onDragStart(event, 'default', 'Cloud_Azure')} draggable>
-            <img width='120px' src={azure} alt="rabbitmqlogo"></img>
-          </div>
+  <span style={{ cursor: "pointer", fontSize: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }} onClick={() => toggleOption('cloudProvider')}>
+    Cloud Provider {selectedOption === 'cloudProvider' ? <span>&#x25B2;</span> : <span>&#x25BC;</span>}
+  </span>
+</h1>
+{selectedOption === 'cloudProvider' && (
+  <>
+    <div className="selectorNode5" onDragStart={(event) => onDragStart(event, 'default', 'Cloud_Azure')} draggable>
+      <img width='120px' src={azure} alt="azurelogo" />
+    </div>
 
-          <div className="selectorNode5" onDragStart={(event) => onDragStart(event, 'default', 'Cloud_AWS')} draggable>
-            <img width='120px' src={aws} alt="kafkalogo"></img>
-          </div>
-        </> )}
+    <div className="selectorNode5" onDragStart={(event) => onDragStart(event, 'default', 'Cloud_AWS')} draggable>
+      <img width='120px' src={aws} alt="awslogo" />
+    </div>
+  </>
+)}
 
     </aside>
   );
