@@ -302,9 +302,7 @@ const Designer = () => {
     const sourceType = edge.source.split('_')[0]
     const targetType = edge.target.split('_')[0]
     console.log(e,edge)
-    if(sourceType=='UI' && targetType.includes('Service') )
-      setEdgeopen(true)
-      else if(sourceType=='Service' && targetType.includes('Service') )
+    if(sourceType ==='UI' && targetType === 'Service' || sourceType=='Service' && targetType==='Service')
       setEdgeopen(true)
   }  
   
