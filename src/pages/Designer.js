@@ -58,6 +58,11 @@ const Designer = () => {
   // const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [nodes,setNodes] = useState({})
 
+  // const [nodeMap,setNodeMap] = useState(new Map())
+  const [nodeType,setNodeType] = useState(null)
+
+  console.log("Nodes",nodes)
+
   const onNodesChange = useCallback((changes= []) => {
     setNodes((oldNodes) => {
       const updatedNodes = { ...oldNodes };
@@ -113,10 +118,6 @@ const Designer = () => {
     });
   }, []);
 
-  // const [nodeMap,setNodeMap] = useState(new Map())
-  const [nodeType,setNodeType] = useState(null)
-
-  console.log("Nodes",nodes)
   
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   console.log("Edges",edges)  
@@ -382,7 +383,6 @@ const Designer = () => {
             onEdgeUpdateEnd={onEdgeUpdateEnd}
             onEdgeClick={onEdgeClick}
           >
-
             <Controls />
           </ReactFlow>
         </div>
