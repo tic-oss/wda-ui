@@ -14,25 +14,19 @@ import {
   FormControl
 } from "@chakra-ui/react";
 
-const EdgeModal = ({ isOpen, onClose }) => {
+const EdgeModal = ({ isOpen, CurrentEdge,onClose, handleEdgeData }) => {
+  console.log(CurrentEdge,'edgeeeeee')
   const IntialState = {
-    'EdgeType': '',
+    'communicationType': 'asynchronous',
+    'protocol':'rest',
+    'selectedBroker':'rabbitmq',
+    ...CurrentEdge
   }
   const [EdgeData, setEdgeData] = useState(IntialState)
 
-  // const handleData = (column,value)=>{
-  //   setEdgeData((prev)=>({...prev,[column]:value}))
-  // }
-  const [communicationType, setCommunicationType] = useState('asynchronous');
-  const [selectedBroker, setSelectedBroker] = useState('rabbitmq');
-
-  const handleCommunicationChange = (value) => {
-    setCommunicationType(value);
-  };
-
-  const handleBrokerChange = (value) => {
-    setSelectedBroker(value);
-  };
+  const handleData = (column,value)=>{
+    setEdgeData((prev)=>({...prev,[column]:value}))
+  }
 
 
 
@@ -58,15 +52,15 @@ const EdgeModal = ({ isOpen, onClose }) => {
                 variant="outline"
                 id="framework"
                 borderColor={"black"}
-                value={EdgeData.Communication}
-                onChange={(e) => handleCommunicationChange(e.target.value)}
+                value={EdgeData.communicationType}
+                onChange={(e)=>handleData('communicationType',e.target.value)}
               >
                 <option value="asynchronous">Asynchronous</option>
                 <option value="synchronous">Synchronous</option>
               </Select>
             </FormControl>
 
-            {communicationType === 'synchronous' ? (
+            {EdgeData.communicationType === 'synchronous' ? (
               <FormControl>
                 <FormLabel>Protocol</FormLabel>
                 <Select
@@ -74,13 +68,13 @@ const EdgeModal = ({ isOpen, onClose }) => {
                   variant="outline"
                   id="framework"
                   borderColor={"black"}
-                  value={communicationType}
-                  onChange={(e) => handleCommunicationChange(e.target.value)}
+                  value={EdgeData.protocol}
+                  onChange={(e)=>handleData('protocol',e.target.value)}
                 >
                   <option value="rest">REST</option>
                 </Select>
               </FormControl>
-            ) : communicationType === 'asynchronous' ? (
+            ) : EdgeData.communicationType === 'asynchronous' ? (
               <FormControl>
                 <FormLabel>Message Broker</FormLabel>
                 <Select
@@ -88,8 +82,8 @@ const EdgeModal = ({ isOpen, onClose }) => {
                   variant="outline"
                   id="framework"
                   borderColor={"black"}
-                  value={selectedBroker}
-                  onChange={(e) => handleBrokerChange(e.target.value)}
+                  value={EdgeData.selectedBroker}
+                  onChange={(e)=>handleData('selectedBroker',e.target.value)}
                 >
                   <option value="rabbitmq">Rabbit MQ</option>
                   <option value="kafka">Kafka</option>
@@ -101,7 +95,7 @@ const EdgeModal = ({ isOpen, onClose }) => {
 
           </div>
           <ModalFooter>
-            <Button type="submit" onClick={() => onClose(false)}>Submit</Button>
+            <Button type="submit" onClick={()=>handleEdgeData(EdgeData)}>Submit</Button>
           </ModalFooter>
         </ModalBody>
       </ModalContent>

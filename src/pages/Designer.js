@@ -1,11 +1,11 @@
 import React, { useState, useRef, useCallback,useEffect } from 'react';
 import ReactFlow, {
   ReactFlowProvider,
-  addEdge,
+  // addEdge,
   useNodesState,
   useEdgesState,
   Controls,
-updateEdge,
+// updateEdge,
 MarkerType
 
 } from 'reactflow';
@@ -63,6 +63,25 @@ const Designer = () => {
 
   console.log("Nodes",nodes)
 
+
+  const addEdge = (edgeParams,edges)=>{
+    const edgeId= `${edgeParams.source}-${edgeParams.target}`
+    return {...edges,[edgeId]:{id:edgeId,...edgeParams}}
+  }
+
+  const updateEdge= (oldEdge, newConnection, edges)=>{
+
+    console.log('OldEdge',oldEdge)
+    console.log('New Connection',newConnection)
+    console.log('Edges',edges)
+    let newEdgeId = newConnection.source+'-'+newConnection.target
+
+    let updatedEdges ={...edges,[newEdgeId]:{id:newEdgeId,...newConnection}}
+    delete updatedEdges[oldEdge.id]
+    
+    return updatedEdges;
+  }
+
   const onNodesChange = useCallback((changes= []) => {
     setNodes((oldNodes) => {
       const updatedNodes = { ...oldNodes };
@@ -119,13 +138,49 @@ const Designer = () => {
   }, []);
 
   
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  // const [edges, setEdges, onEdgesChange] = useEdgesState({});
+  const [edges, setEdges] = useState({})
   console.log("Edges",edges)  
+
+  const onEdgesChange = useCallback((changes = []) => {
+    setEdges((oldEdges) => {
+      const updatedEdges = { ...oldEdges };
+      console.log(changes,updatedEdges)
+      changes.forEach((change) => {
+        switch (change.type) {
+          case 'add':
+            console.log('Addddddddddd')
+            // Handle add event
+            break;
+          case 'remove':
+            delete updatedEdges[change.id]
+            // Handle remove event
+            break;
+          case 'update':
+            console.log('Updateeeeeeeeeeeeee')
+            // Handle update event
+            break;
+          case 'select':
+              updatedEdges[change.id] = {
+                ...updatedEdges[change.id],
+                selected: change.selected,
+              };
+              break;
+          default:
+            break;
+        }
+      });
+  
+      return updatedEdges;
+    });
+  }, []);
+
   // console.log('NodeMap',nodeMap)
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [Isopen,setopen]=useState(false);
   const [IsEdgeopen,setEdgeopen]=useState(false);
   const [CurrentNode,setCurrentNode]= useState({});
+  const [CurrentEdge,setCurrentEdge]= useState({});
   const edgeUpdateSuccessful = useRef(true);
 
     const onEdgeUpdateStart = useCallback(() => {
@@ -139,7 +194,11 @@ const Designer = () => {
   
     const onEdgeUpdateEnd = useCallback((_, edge) => {
       if (!edgeUpdateSuccessful.current) {
-        setEdges((eds) => eds.filter((e) => e.id !== edge.id));
+        setEdges((edges) => {
+          let AllEdges={...edges}
+          delete AllEdges[edge.id]
+          return AllEdges
+        });
       }
   
       edgeUpdateSuccessful.current = true;
@@ -348,9 +407,28 @@ const Designer = () => {
     const sourceType = edge.source.split('_')[0]
     const targetType = edge.target.split('_')[0]
     console.log(e,edge)
-    if(sourceType ==='UI' && targetType === 'Service' || sourceType=='Service' && targetType==='Service')
-      setEdgeopen(true)
-  }  
+    if(sourceType ==='UI' && targetType === 'Service' || sourceType=='Service' && targetType==='Service'){
+      setEdgeopen(edge.id)
+      setCurrentEdge(edges[edge.id].data)
+    }
+
+  }
+  
+  const handleEdgeData = (Data)=>{
+    console.log(Data,IsEdgeopen)
+    let UpdatedEdges={...edges}
+    if(Data.communicationType=='synchronous'){
+      delete Data?.selectedBroker
+      delete UpdatedEdges[IsEdgeopen]?.data?.selectedBroker
+    }
+    else{
+      delete Data.protocol
+      delete UpdatedEdges[IsEdgeopen]?.data?.protocol
+    }
+    UpdatedEdges[IsEdgeopen].data={...UpdatedEdges[IsEdgeopen].data,...Data}
+    setEdges(UpdatedEdges)
+    setEdgeopen(false)
+  }
   
   
   const onConnect = useCallback((params,Nodes) => {
@@ -368,7 +446,7 @@ const Designer = () => {
         <div className="reactflow-wrapper" ref={reactFlowWrapper}>
           <ReactFlow
             nodes={Object.values(nodes)}
-            edges={edges}
+            edges={Object.values(edges)}
             nodeTypes={nodeTypes}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
@@ -397,7 +475,7 @@ const Designer = () => {
       
         { nodeType==='UI' && Isopen && <UiDataModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
 
-        { IsEdgeopen && <EdgeModal isOpen={IsEdgeopen} onClose={setEdgeopen} />}
+        { IsEdgeopen && <EdgeModal isOpen={IsEdgeopen} CurrentEdge={CurrentEdge} onClose={setEdgeopen} handleEdgeData={handleEdgeData}/>}
 
         {/* <Button onClick={()=>onsubmit()}>Submit</Button> */}
       </ReactFlowProvider>
