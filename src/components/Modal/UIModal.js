@@ -16,7 +16,7 @@ import {
 const UiDataModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
 
   const IntialState ={
-    'label':'',
+    'label':'UI',
     'Framework':'reactjs',
     'PackageName':'',
     'ServerPort':'',

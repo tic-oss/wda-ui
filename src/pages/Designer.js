@@ -55,15 +55,72 @@ const nodeTypes = {
 
 const Designer = () => {
   const reactFlowWrapper = useRef(null);
-  const [nodes, setNodes, onNodesChange] = useNodesState([]);
-  const [nodeMap,setNodeMap] = useState(new Map())
+  // const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [nodes,setNodes] = useState({})
+
+  const onNodesChange = useCallback((changes= []) => {
+    setNodes((oldNodes) => {
+      const updatedNodes = { ...oldNodes };
+
+      changes.forEach((change) => {
+        switch (change.type) {
+          case 'dimensions':
+            updatedNodes[change.id] = {
+              ...updatedNodes[change.id],
+              position: {
+                ...updatedNodes[change.id].position,
+                ...change.dimensions,
+              },
+            };
+            break;
+          case 'position':
+            updatedNodes[change.id] = {
+              ...updatedNodes[change.id],
+              position: {
+                ...updatedNodes[change.id].position,
+                ...change.position,
+              },
+              positionAbsolute: {
+                x: 0,
+                y: 0,
+                ...updatedNodes[change.id].positionAbsolute,
+                ...change.positionAbsolute,
+              },
+              dragging: change.dragging,
+            };
+            break;
+          case 'select':
+            updatedNodes[change.id] = {
+              ...updatedNodes[change.id],
+              selected: change.selected,
+            };
+            break;
+          case 'remove': // Delete Functionality  
+            delete updatedNodes[change.id];
+            break;
+          case 'add':
+            updatedNodes[change.item.id] = change.item;
+            break;
+          case 'reset':
+            updatedNodes[change.item.id] = change.item;
+            break;
+          default:
+            break;
+        }
+      });
+
+      return updatedNodes;
+    });
+  }, []);
+
+  // const [nodeMap,setNodeMap] = useState(new Map())
   const [nodeType,setNodeType] = useState(null)
 
   console.log("Nodes",nodes)
   
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   console.log("Edges",edges)  
-  console.log('NodeMap',nodeMap)
+  // console.log('NodeMap',nodeMap)
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [Isopen,setopen]=useState(false);
   const [IsEdgeopen,setEdgeopen]=useState(false);
@@ -101,12 +158,10 @@ const Designer = () => {
       setNodeType(type)
       let index;
       if(type=='AWS' || type ==='Azure'){
-        index=nodeMap.get('Cloud_Provider')
+        setCurrentNode(nodes['Cloud_Provider'].data)
       }
       else
-       index = nodeMap.get(Id)
-      let CurrentNode = nodes[index]
-      setCurrentNode(CurrentNode?.data)
+      setCurrentNode(nodes[Id].data)
       setopen(Id)
     }
     
@@ -140,8 +195,8 @@ const Designer = () => {
           data: { Database: Database },
          style: { border: "1px solid", padding: "4px 4px" },
         };
-        setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
-        setNodes((nds) => nds.concat(newNode))
+        // setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
+        setNodes((nds) => ({...nds,[newNode.id]:newNode}))
       }
       else if(name.startsWith('Discovery')){
         const Service_Discovery=name.split('_').splice(1)[0]
@@ -153,8 +208,8 @@ const Designer = () => {
           data: { Service_Discovery: Service_Discovery },
          style: { border: "1px solid", padding: "4px 4px" },
         };
-        setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
-        setNodes((nds) => nds.concat(newNode))
+        // setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
+        setNodes((nds) => ({...nds,[newNode.id]:newNode}))
       }
       else if(name.startsWith('Ingress')){
         const Ingress_Type=name.split('_').splice(1)[0]
@@ -166,8 +221,8 @@ const Designer = () => {
           data: { Ingress_Type: Ingress_Type },
          style: { border: "1px solid", padding: "4px 4px" },
         };
-        setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
-        setNodes((nds) => nds.concat(newNode))
+        // setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
+        setNodes((nds) => ({...nds,[newNode.id]:newNode}))
       }
       else if(name.startsWith('Auth')){
         const Auth_Type=name.split('_').splice(1)[0]
@@ -179,8 +234,8 @@ const Designer = () => {
           data: { Auth_Type: Auth_Type },
          style: { border: "1px solid", padding: "4px 4px" },
         };
-        setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
-        setNodes((nds) => nds.concat(newNode))
+        // setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
+        setNodes((nds) => ({...nds,[newNode.id]:newNode}))
       }
       else if(name.startsWith('MessageBroker')){
         const Message_Broker=name.split('_').splice(1)[0]
@@ -192,8 +247,8 @@ const Designer = () => {
           data: { Message_Broker: Message_Broker },
          style: { border: "1px solid", padding: "4px 4px" },
         };
-        setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
-        setNodes((nds) => nds.concat(newNode))
+        // setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
+        setNodes((nds) => ({...nds,[newNode.id]:newNode}))
       }
       else if(name.startsWith('Cloud')){
         const Cloud_Provider=name.split('_').splice(1)[0]
@@ -205,8 +260,8 @@ const Designer = () => {
           data: { Cloud_Provider: Cloud_Provider },
          style: { border: "1px solid", padding: "4px 4px" },
         };
-        setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
-        setNodes((nds) => nds.concat(newNode))
+        // setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
+        setNodes((nds) => ({...nds,[newNode.id]:newNode}))
       }
     
       else {
@@ -217,8 +272,8 @@ const Designer = () => {
           data: { label: name },
          style: { border: "1px solid", padding: "4px 4px" },
         };
-        setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
-        setNodes((nds) => nds.concat(newNode))
+        // setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
+        setNodes((nds) => ({...nds,[newNode.id]:newNode}))
       }
       
   
@@ -229,28 +284,20 @@ const Designer = () => {
 
   const onChange = (Data) => {
     console.log(Data,Isopen)
-    let UpdatedNodes=[...nodes]
-    let index;
+    let UpdatedNodes={...nodes}
     let CurrentNode;
     if(Isopen==='AWS' || Isopen ==='Azure'){
-      index=nodeMap.get('Cloud_Provider')
-     CurrentNode = UpdatedNodes[index]
+     UpdatedNodes['Cloud_Provider'].data={...UpdatedNodes['Cloud_Provider'].data,...Data}
     }
     else{
-    index = nodeMap.get(Isopen)
-    console.log(index)
-     CurrentNode = UpdatedNodes[index]
+      UpdatedNodes[Isopen].data={...UpdatedNodes[Isopen].data,...Data}
     }
-    console.log(CurrentNode)
-    CurrentNode.data=Data
-    console.log(CurrentNode)
-    UpdatedNodes[index]=CurrentNode
     setNodes(UpdatedNodes)
     setopen(false)
   }
 
   useEffect(()=>{
-    setNodes([
+    setNodes({'UI':
       {
             id: 'UI',
             type: 'default',
@@ -259,35 +306,33 @@ const Designer = () => {
             position: { x: 250, y: 5 },
           },
          
-    ])
-    setNodeMap((prev)=>new Map(prev.set('UI',0)))
+        })
+    // setNodeMap((prev)=>new Map(prev.set('UI',0)))
     
   },[])
-  const MergeData = (sourceId,targetId,Nodes,NodeMap) =>{
+  const MergeData = (sourceId,targetId,Nodes) =>{
 
     const sourceType = sourceId.split('_')[0]
     const targetType = targetId.split('_')[0]
     
-    console.log(sourceType, targetType,NodeMap)
+    console.log(sourceType, targetType)
     
-    if(sourceType !== targetId){
+    if(sourceType !== targetType){
       if(sourceType === 'Service' && targetType === 'Database'){
-          let sourceindex = NodeMap.get(sourceId)
-          let targetindex = NodeMap.get(targetId)
-          console.log('Index.',sourceindex,targetindex)
-          let AllNodes=[...Nodes]
-          let sourceNode = AllNodes[sourceindex]
-          let targetNode = AllNodes[targetindex]
-          AllNodes[sourceindex].data={...sourceNode.data,...targetNode.data}
-          setNodes([...AllNodes])
+          let AllNodes={...Nodes}
+          let sourceNode = AllNodes[sourceId]
+          let targetNode = AllNodes[targetId]
+          console.log(sourceNode,targetNode)
+          AllNodes[sourceId].data={...sourceNode.data,...targetNode.data}
+          setNodes({...AllNodes})
         }
     }
   }
   const onsubmit = () =>{
 
     let NewNodes = [...nodes]
-    let Service_Discovery_index = nodeMap.get('Service_Discovery')
-    let Service_Discovery_Data= nodes[Service_Discovery_index].data
+    // let Service_Discovery_index = nodeMap.get('Service_Discovery')
+    let Service_Discovery_Data= nodes['Service_Discovery_index'].data
     for(let i=0;i<NewNodes.length;i++){
       const Node = NewNodes[i];
       if(Node.id.startsWith('Service')|| Node.id === 'UI'){
@@ -307,12 +352,12 @@ const Designer = () => {
   }  
   
   
-  const onConnect = useCallback((params,Nodes,nodesMap) => {
+  const onConnect = useCallback((params,Nodes) => {
     params.markerEnd= {type: MarkerType.ArrowClosed}
     params.type='straight'
     params.data={}
     setEdges((eds) => addEdge(params, eds))
-    MergeData(params.source,params.target,Nodes,nodesMap)
+    MergeData(params.source,params.target,Nodes)
   }
     , []);
 
@@ -321,12 +366,12 @@ const Designer = () => {
       <ReactFlowProvider>
         <div className="reactflow-wrapper" ref={reactFlowWrapper}>
           <ReactFlow
-            nodes={nodes}
+            nodes={Object.values(nodes)}
             edges={edges}
             nodeTypes={nodeTypes}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
-            onConnect={(params)=>onConnect(params,nodes,nodeMap)}
+            onConnect={(params)=>onConnect(params,nodes)}
             onInit={setReactFlowInstance}
             onDrop={onDrop}
             onDragOver={onDragOver}
