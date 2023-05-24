@@ -22,8 +22,9 @@ const DeployModal = ({ isOpen, onClose, onSubmit,CurrentNode}) => {
         'KubernetsNamespace':'',
         'EnableKubernetesDynamicStorage':'yes',
         'KubernetesStorageClassName':'',
-        'AzureAccountId':'',
-        'AWSAccountId':'',
+        'AzureAccount':'',
+        'AWSAccountID':'',
+        'AWSRegion':'',
         'IngressType':'istio',
         ...CurrentNode
       }
@@ -56,7 +57,8 @@ console.log(isOpen)
               <FormLabel>Azure Account ID</FormLabel>
               <Input mb={4} variant="outline" id="azureaccount" 
                 borderColor={"black"}
-                value={DeploymentData.AzureAccountID}
+                value={DeploymentData.AzureAccount}
+                onChange={(e)=>handleData('AzureAccount',e.target.value)}
               >  
               </Input>
             </FormControl>
@@ -66,10 +68,20 @@ console.log(isOpen)
       {isOpen === 'AWS' && (
         <div>
          <FormControl>
-              <FormLabel>Azure Account ID</FormLabel>
-              <Input mb={4} variant="outline" id="awsaccount" 
+              <FormLabel>AWS Account ID</FormLabel>
+              <Input mb={4} variant="outline" id="awsaccountid" 
                 borderColor={"black"}
                 value={DeploymentData.AWSAccountID}
+                onChange={(e)=>handleData('AWSAccountID',e.target.value)}
+              >  
+              </Input>
+            </FormControl>
+            <FormControl>
+              <FormLabel>AWS Region</FormLabel>
+              <Input mb={4} variant="outline" id="awsaccount" 
+                borderColor={"black"}
+                value={DeploymentData.AWSRegion}
+                onChange={(e)=>handleData('AWSRegion',e.target.value)}
               >  
               </Input>
             </FormControl>
@@ -138,7 +150,11 @@ console.log(isOpen)
 
              </div>
           <ModalFooter>
-            <Button onClick={()=>onSubmit(DeploymentData)} type="submit">Submit</Button>
+          <Button onClick={() => onSubmit(DeploymentData)}  type="submit"style={{ display: 'block', margin: '0 auto' }}>
+           Submit
+          </Button>
+
+
           </ModalFooter>
         </ModalBody>
       </ModalContent>

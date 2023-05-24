@@ -20,7 +20,7 @@ const UiDataModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
     'Framework':'reactjs',
     'PackageName':'',
     'ServerPort':'',
-    'ApplicationType':'microservice',
+    'ApplicationType':'UI+Gateway',
     ...CurrentNode
   }
 
@@ -95,7 +95,7 @@ const UiDataModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
             </FormControl>
             
           </div>
-          <Button onClick={()=>onSubmit(UiData)}>Submit</Button>
+          <Button onClick={()=>onSubmit(UiData)}style={{ display: 'block', margin: '0 auto' }}>Submit</Button>
         </ModalBody>
       </ModalContent>
     </Modal>

@@ -93,7 +93,7 @@ const ServiceModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
               />
             </FormControl>
           </div>
-          <Button onClick={()=>onSubmit(ApplicationData)}>Submit</Button>
+          <Button onClick={()=>onSubmit(ApplicationData)}style={{ display: 'block', margin: '0 auto' }}>Submit</Button>
         </ModalBody>
       </ModalContent>
     </Modal>

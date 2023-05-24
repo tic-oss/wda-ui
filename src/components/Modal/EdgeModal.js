@@ -95,7 +95,7 @@ const EdgeModal = ({ isOpen, CurrentEdge,onClose, handleEdgeData }) => {
 
           </div>
           <ModalFooter>
-            <Button type="submit" onClick={()=>handleEdgeData(EdgeData)}>Submit</Button>
+            <Button type="submit" onClick={()=>handleEdgeData(EdgeData)}style={{ display: 'block', margin: '0 auto' }}>Submit</Button>
           </ModalFooter>
         </ModalBody>
       </ModalContent>
