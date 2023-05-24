@@ -218,8 +218,7 @@ const Designer = () => {
       setNodeType(type)
       let index;
       if(type=='AWS' || type ==='Azure'){
-        setCurrentNode(nodes['cloudProvider'].data)
-      }
+        setCurrentNode(nodes['cloudProvider'].data)     }
       else
       setCurrentNode(nodes[Id].data)
       setopen(Id)
