@@ -1,7 +1,7 @@
 import { Handle, Position } from "reactflow";
 import { FaTrash } from "react-icons/fa";
 
-function CustomUI({ data, isConnectable, onNodesChange }) {
+function CustomUI({ isOpen, data, isConnectable, onNodesChange }) {
   return (
     <div>
       <Handle
@@ -26,7 +26,8 @@ function CustomUI({ data, isConnectable, onNodesChange }) {
             fontWeight: "bolder",
             color: "grey",
           }}
-          onClick={() => onNodesChange([{ type: 'remove', id: 'nodeId' }])}
+          name="UI"
+          onClick={() => onNodesChange([{ type: 'remove', id: 'UI' }])}
         >
           <FaTrash />
         </div>

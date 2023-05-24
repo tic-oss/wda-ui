@@ -26,7 +26,8 @@ function CustomService({ id, data, isConnectable, onNodesChange }) {
             fontWeight: "bolder",
             color: "grey",
           }}
-          onClick={() => onNodesChange([{ type: 'remove', id: 'id' }])}
+          name="Service"
+          onClick={() => onNodesChange([{ type: 'remove', id: 'Service' }])}
         >
           <FaTrash/>
         </div>
