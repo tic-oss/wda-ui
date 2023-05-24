@@ -248,7 +248,7 @@ const Designer = () => {
         const prodDatabaseType=name.split('_').splice(1)[0]
         console.log(prodDatabaseType)
         const newNode = {
-          id: getId('prodDatabaseType'),
+          id: getId('Database'),
           type:'selectorNode',
           position,
           data: { prodDatabaseType: prodDatabaseType },
@@ -468,9 +468,8 @@ const Designer = () => {
       
         { nodeType==='Service' && Isopen && <ServiceModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
       
-        {/* { nodeType==='Deployment' && Isopen && <DeployModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />} */}
-
         { nodeType==='Azure'  && Isopen && <DeployModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
+        
         { nodeType==='AWS'  && Isopen && <DeployModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
       
         { nodeType==='UI' && Isopen && <UiDataModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
