@@ -17,15 +17,15 @@ import {
 const DeployModal = ({ isOpen, onClose, onSubmit,CurrentNode}) => {
   console.log(CurrentNode,isOpen)
     const IntialState ={
-        'Cloud_Provider':isOpen,
-        'DeploymentType':'kubernetes',
-        'KubernetsNamespace':'',
-        'EnableKubernetesDynamicStorage':'yes',
-        'KubernetesStorageClassName':'',
+        'cloudProvider':isOpen,
+        'deploymentType':'kubernetes',
+        'kubernetesNamespace':'',
+        'kubernetesUseDynamicStorage':'yes',
+        'kubernetesStorageClassName':'',
         'AzureAccount':'',
-        'AWSAccountID':'',
-        'AWSRegion':'',
-        'IngressType':'istio',
+        'awsAccountId':'',
+        'awsRegion':'',
+        'ingress':'istio',
         ...CurrentNode
       }
      
@@ -69,19 +69,19 @@ console.log(isOpen)
         <div>
          <FormControl>
               <FormLabel>AWS Account ID</FormLabel>
-              <Input mb={4} variant="outline" id="awsaccountid" 
+              <Input mb={4} variant="outline" id="awsAccountId" 
                 borderColor={"black"}
-                value={DeploymentData.AWSAccountID}
-                onChange={(e)=>handleData('AWSAccountID',e.target.value)}
+                value={DeploymentData.awsAccountId}
+                onChange={(e)=>handleData('awsAccountId',e.target.value)}
               >  
               </Input>
             </FormControl>
             <FormControl>
               <FormLabel>AWS Region</FormLabel>
-              <Input mb={4} variant="outline" id="awsaccount" 
+              <Input mb={4} variant="outline" id="awsRegion" 
                 borderColor={"black"}
-                value={DeploymentData.AWSRegion}
-                onChange={(e)=>handleData('AWSRegion',e.target.value)}
+                value={DeploymentData.awsRegion}
+                onChange={(e)=>handleData('awsRegion',e.target.value)}
               >  
               </Input>
             </FormControl>
@@ -89,10 +89,10 @@ console.log(isOpen)
       )}
             <FormControl>
               <FormLabel>Deployment Type</FormLabel>
-              <Select mb={4} variant="outline" id="deploymenttype" 
+              <Select mb={4} variant="outline" id="deploymentType" 
                 borderColor={"black"}
-                value={DeploymentData.DeploymentType}
-                onChange={(e)=>handleData('DeploymentType',e.target.value)}
+                value={DeploymentData.deploymentType}
+                onChange={(e)=>handleData('deploymentType',e.target.value)}
               >
                 <option value="kubernetes">Kubernetes</option>
                 
@@ -107,16 +107,16 @@ console.log(isOpen)
                 id="kubernetesnamespace"
                 placeholder="Kubernetes Namespace"
                 borderColor={"black"}
-                value={DeploymentData.KubernetsNamespace}
-                onChange={(e)=>handleData('KubernetsNamespace',e.target.value)}
+                value={DeploymentData.kubernetesNamespace}
+                onChange={(e)=>handleData('kubernetesNamespace',e.target.value)}
               />
             </FormControl>
             <FormControl>
               <FormLabel>Enable Dynamic Storage</FormLabel>
-              <Select mb={4} variant="outline" id="enablekubernetesdynamicstorage" 
+              <Select mb={4} variant="outline" id="kubernetesUseDynamicStorage" 
                 borderColor={"black"}
-                value={DeploymentData.EnableKubernetesDynamicStorage}
-                onChange={(e)=>handleData('EnableKubernetesDynamicStorage',e.target.value)}
+                value={DeploymentData.kubernetesUseDynamicStorage}
+                onChange={(e)=>handleData('kubernetesUseDynamicStorage',e.target.value)}
               >
                 <option value="yes">Yes</option>
                 <option value="no">No</option>
@@ -127,19 +127,19 @@ console.log(isOpen)
               <Input
                 mb={4}
                 variant="outline"
-                id="kubernetesstorageclassname"
+                id="kubernetesStorageClassName"
                 placeholder="Kubernetes Storage Class Name"
                 borderColor={"black"}
-                value={DeploymentData.KubernetesStorageClassName}
-                onChange={(e)=>handleData('KubernetesStorageClassName',e.target.value)}
+                value={DeploymentData.kubernetesStorageClassName}
+                onChange={(e)=>handleData('kubernetesStorageClassName',e.target.value)}
               />
             </FormControl>
             <FormControl>
               <FormLabel>Ingress Type</FormLabel>
-              <Select mb={4} variant="outline" id="ingresstype" 
+              <Select mb={4} variant="outline" id="ingress" 
                 borderColor={"black"}
-                value={DeploymentData.IngressType}
-                onChange={(e)=>handleData('IngressType',e.target.value)}
+                value={DeploymentData.ingress}
+                onChange={(e)=>handleData('ingress',e.target.value)}
               >
                 <option value="istio">Istio</option>
               

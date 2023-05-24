@@ -218,7 +218,7 @@ const Designer = () => {
       setNodeType(type)
       let index;
       if(type=='AWS' || type ==='Azure'){
-        setCurrentNode(nodes['Cloud_Provider'].data)
+        setCurrentNode(nodes['cloudProvider'].data)
       }
       else
       setCurrentNode(nodes[Id].data)
@@ -246,78 +246,78 @@ const Designer = () => {
       });
 
       if(name.startsWith('Database')){
-        const Database=name.split('_').splice(1)[0]
-        console.log(Database)
+        const prodDatabaseType=name.split('_').splice(1)[0]
+        console.log(prodDatabaseType)
         const newNode = {
-          id: getId('Database'),
+          id: getId('prodDatabaseType'),
           type:'selectorNode',
           position,
-          data: { Database: Database },
+          data: { prodDatabaseType: prodDatabaseType },
          style: { border: "1px solid", padding: "4px 4px" },
         };
         // setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
         setNodes((nds) => ({...nds,[newNode.id]:newNode}))
       }
       else if(name.startsWith('Discovery')){
-        const Service_Discovery=name.split('_').splice(1)[0]
-        console.log(Service_Discovery)
+        const ServiceDiscoveryType=name.split('_').splice(1)[0]
+        console.log(ServiceDiscoveryType)
         const newNode = {
-          id: 'Service_Discovery',
+          id: 'ServiceDiscoveryType',
           type:'selectorNode1',
           position,
-          data: { Service_Discovery: Service_Discovery },
+          data: { ServiceDiscoveryType: ServiceDiscoveryType },
          style: { border: "1px solid", padding: "4px 4px" },
         };
         // setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
         setNodes((nds) => ({...nds,[newNode.id]:newNode}))
       }
-      else if(name.startsWith('Ingress')){
-        const Ingress_Type=name.split('_').splice(1)[0]
-        console.log(Ingress_Type)
-        const newNode = {
-          id: 'Ingress_Type',
-          type:'selectorNode2',
-          position,
-          data: { Ingress_Type: Ingress_Type },
-         style: { border: "1px solid", padding: "4px 4px" },
-        };
-        // setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
-        setNodes((nds) => ({...nds,[newNode.id]:newNode}))
-      }
+      // else if(name.startsWith('Ingress')){
+      //   const Ingress_Type=name.split('_').splice(1)[0]
+      //   console.log(Ingress_Type)
+      //   const newNode = {
+      //     id: 'Ingress_Type',
+      //     type:'selectorNode2',
+      //     position,
+      //     data: { Ingress_Type: Ingress_Type },
+      //    style: { border: "1px solid", padding: "4px 4px" },
+      //   };
+      //   // setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
+      //   setNodes((nds) => ({...nds,[newNode.id]:newNode}))
+      // }
       else if(name.startsWith('Auth')){
-        const Auth_Type=name.split('_').splice(1)[0]
-        console.log(Auth_Type)
+        const authenticationType=name.split('_').splice(1)[0]
+        console.log(authenticationType)
         const newNode = {
-          id: 'Auth_Type',
+          id: 'authenticationType',
           type:'selectorNode3',
           position,
-          data: { Auth_Type: Auth_Type },
+          data: { authenticationType: authenticationType },
          style: { border: "1px solid", padding: "4px 4px" },
         };
         // setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
         setNodes((nds) => ({...nds,[newNode.id]:newNode}))
       }
       else if(name.startsWith('MessageBroker')){
-        const Message_Broker=name.split('_').splice(1)[0]
-        console.log(Message_Broker)
+        const messageBroker=name.split('_').splice(1)[0]
+        console.log(messageBroker)
         const newNode = {
-          id: 'Message_Broker',
+          id: 'messageBroker',
           type:'selectorNode4',
           position,
-          data: { Message_Broker: Message_Broker },
+          data: { messageBroker: messageBroker },
          style: { border: "1px solid", padding: "4px 4px" },
         };
         // setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
         setNodes((nds) => ({...nds,[newNode.id]:newNode}))
       }
       else if(name.startsWith('Cloud')){
-        const Cloud_Provider=name.split('_').splice(1)[0]
-        console.log(Cloud_Provider)
+        const cloudProvider=name.split('_').splice(1)[0]
+        console.log(cloudProvider)
         const newNode = {
-          id: 'Cloud_Provider',
+          id: 'cloudProvider',
           type:'selectorNode5',
           position,
-          data: { Cloud_Provider: Cloud_Provider },
+          data: { cloudProvider: cloudProvider },
          style: { border: "1px solid", padding: "4px 4px" },
         };
         // setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
@@ -347,7 +347,7 @@ const Designer = () => {
     let UpdatedNodes={...nodes}
     let CurrentNode;
     if(Isopen==='AWS' || Isopen ==='Azure'){
-     UpdatedNodes['Cloud_Provider'].data={...UpdatedNodes['Cloud_Provider'].data,...Data}
+     UpdatedNodes['cloudProvider'].data={...UpdatedNodes['cloudProvider'].data,...Data}
     }
     else{
       UpdatedNodes[Isopen].data={...UpdatedNodes[Isopen].data,...Data}

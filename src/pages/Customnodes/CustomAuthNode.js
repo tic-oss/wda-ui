@@ -7,7 +7,7 @@ const handleStyle = { left: 25 };
 
 function CustomAuthNode({ data, isConnectable }) {
 
-  const Auth_Type= data.Auth_Type
+  const authenticationType= data.authenticationType
 
   return (
     <div>
@@ -18,7 +18,7 @@ function CustomAuthNode({ data, isConnectable }) {
       /> */}
       <div>
        
-          <img width='70px' name={Auth_Type} src={keycloak} /> 
+          <img width='70px' name={authenticationType} src={keycloak} /> 
          
         
       </div>

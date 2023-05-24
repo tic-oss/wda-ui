@@ -16,11 +16,11 @@ import {
 const UiDataModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
 
   const IntialState ={
-    'label':'UI',
-    'Framework':'reactjs',
-    'PackageName':'',
-    'ServerPort':'',
-    'ApplicationType':'UI+Gateway',
+    'applicationName':'UI',
+    'clientFramework':'reactjs',
+    'packageName':'',
+    'serverPort':'',
+    'ApplicationType':'gateway',
     ...CurrentNode
   }
 
@@ -52,16 +52,16 @@ const UiDataModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
                 id="appname"
                 placeholder="Name"
                 borderColor={"black"}
-                value={UiData.label}
-                onChange={(e)=>handleData('label',e.target.value)}
+                value={UiData.applicationName}
+                onChange={(e)=>handleData('applicationName',e.target.value)}
               />
             </FormControl>
             <FormControl>
-              <FormLabel>Framework</FormLabel>
-              <Select mb={4} variant="outline" id="framework" 
+              <FormLabel>clientFramework</FormLabel>
+              <Select mb={4} variant="outline" id="clientFramework" 
                 borderColor={"black"}
-                value={UiData.Framework}
-                onChange={(e)=>handleData('Framework',e.target.value)}
+                value={UiData.clientFramework}
+                onChange={(e)=>handleData('clientFramework',e.target.value)}
               >
                 <option value="reactjs">ReactJS</option>
                 <option value="nodejs">NodeJS</option>
@@ -74,11 +74,11 @@ const UiDataModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
               <Input
                 mb={4}
                 variant="outline"
-                id="packagename"
-                placeholder="PackageName"
+                id="packageName"
+                placeholder="packageName"
                 borderColor={"black"}
-                value={UiData.PackageName}
-                onChange={(e)=>handleData('PackageName',e.target.value)}
+                value={UiData.packageName}
+                onChange={(e)=>handleData('packageName',e.target.value)}
               />
             </FormControl>
             <FormControl>
@@ -86,11 +86,11 @@ const UiDataModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
               <Input
                 mb={4}
                 variant="outline"
-                id="serverport"
-                placeholder="ServerPort"
+                id="serverPort"
+                placeholder="serverPort"
                 borderColor={"black"}
-                value={UiData.ServerPort}
-                onChange={(e)=>handleData('ServerPort',e.target.value)}
+                value={UiData.serverPort}
+                onChange={(e)=>handleData('serverPort',e.target.value)}
               />
             </FormControl>
             

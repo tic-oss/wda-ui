@@ -15,11 +15,11 @@ import {
 
 const ServiceModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
  const IntialState ={
-    'label':'',
-    'Framework':'java',
-    'PackageName':'',
-    'ServerPort':'',
-    'ApplicationType':'microservice',
+    'applicationName':'',
+    'applicationFramework':'java',
+    'packageName':'',
+    'serverPort':'',
+    'applicationType':'microservice',
     ...CurrentNode
   }
   const [ApplicationData,setApplicationData] = useState(IntialState)
@@ -50,17 +50,17 @@ const ServiceModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
                 id="appname"
                 placeholder="Name"
                 borderColor={"black"}
-                value={ApplicationData.label}
-                onChange={(e)=>handleData('label',e.target.value)}
+                value={ApplicationData.applicationName}
+                onChange={(e)=>handleData('applicationName',e.target.value)}
               />
             </FormControl>
             
        <FormControl>
-              <FormLabel>Framework</FormLabel>
-              <Select mb={4} variant="outline" id="framework" 
+              <FormLabel>applicationFramework</FormLabel>
+              <Select mb={4} variant="outline" id="applicationFramework" 
                 borderColor={"black"}
-                value={ApplicationData.Framework}
-                onChange={(e)=>handleData('Framework',e.target.value)}
+                value={ApplicationData.applicationFramework}
+                onChange={(e)=>handleData('applicationFramework',e.target.value)}
               >
                 <option value="java">Java</option>
                 <option value="go">Go</option>
@@ -73,11 +73,11 @@ const ServiceModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
               <Input
                 mb={4}
                 variant="outline"
-                id="packagename"
-                placeholder="PackageName"
+                id="packageName"
+                placeholder="packageName"
                 borderColor={"black"}
-                value={ApplicationData.PackageName}
-                onChange={(e)=>handleData('PackageName',e.target.value)}
+                value={ApplicationData.packageName}
+                onChange={(e)=>handleData('packageName',e.target.value)}
               />
             </FormControl>
             <FormControl>
@@ -88,8 +88,8 @@ const ServiceModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
                 id="serverport"
                 placeholder="ServerPort"
                 borderColor={"black"}
-                value={ApplicationData.ServerPort}
-                onChange={(e)=>handleData('ServerPort',e.target.value)}
+                value={ApplicationData.serverPort}
+                onChange={(e)=>handleData('serverPort',e.target.value)}
               />
             </FormControl>
           </div>

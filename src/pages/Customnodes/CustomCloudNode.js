@@ -5,7 +5,7 @@ const handleStyle = { left: 25 };
 
 function CustomServiceNode({ data, isConnectable }) {
 
-  const Cloud_Provider= data.Cloud_Provider
+  const cloudProvider= data.cloudProvider
 
   return (
     <div>
@@ -15,9 +15,9 @@ function CustomServiceNode({ data, isConnectable }) {
         isConnectable={isConnectable}
       />
       <div>
-        {Cloud_Provider === 'Azure' ?
-          <img width='50px' name={Cloud_Provider} src={azure} /> :
-          <img width='50px' name={Cloud_Provider} src={aws} />
+        {cloudProvider === 'Azure' ?
+          <img width='50px' name={cloudProvider} src={azure} /> :
+          <img width='50px' name={cloudProvider} src={aws} />
         }
       </div>
       <Handle
