@@ -21,6 +21,8 @@ import CustomIngressNode from "./Customnodes/CustomIngressNode"
 import CustomAuthNode from "./Customnodes/CustomAuthNode"
 import CustomMessageBrokerNode from "./Customnodes/CustomMessageBrokerNode"
 import CustomCloudNode from "./Customnodes/CustomCloudNode"
+import CustomUI from "./Customnodes/CustomUI"
+import CustomService from "./Customnodes/CustomService"
 
 import "./../App.css"
 import { Button } from '@chakra-ui/react';
@@ -49,7 +51,9 @@ const nodeTypes = {
   selectorNode3: CustomAuthNode,
   selectorNode4: CustomMessageBrokerNode,
   selectorNode4: CustomMessageBrokerNode,
-  selectorNode5: CustomCloudNode
+  selectorNode5: CustomCloudNode,
+  selectorUI: CustomUI,
+  selectorService: CustomService
 };
 
 
@@ -245,7 +249,29 @@ const Designer = () => {
         y: event.clientY - reactFlowBounds.top,
       });
 
-      if(name.startsWith('Database')){
+      if(name === "UI"){
+        const newNode = {
+          id: getId('UI'),
+          type:'selectorUI',
+          position,
+          data: { UI: name, onChange: onChange },
+         style: { border: "1px solid", padding: "4px 4px" },
+        };
+        // setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
+        setNodes((nds) => ({...nds,[newNode.id]:newNode}))
+      }
+      else if(name === "Service"){
+        const newNode = {
+          id: getId('Service'),
+          type:'selectorService',
+          position,
+          data: { Service: name, onChange: onChange },
+         style: { border: "1px solid", padding: "4px 4px" },
+        };
+        // setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
+        setNodes((nds) => ({...nds,[newNode.id]:newNode}))
+      }
+      else if(name.startsWith('Database')){
         const Database=name.split('_').splice(1)[0]
         console.log(Database)
         const newNode = {
