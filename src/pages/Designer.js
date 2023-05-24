@@ -6,8 +6,8 @@ import ReactFlow, {
   useEdgesState,
   Controls,
 // updateEdge,
-MarkerType
-
+MarkerType,
+MiniMap
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
@@ -443,7 +443,7 @@ const Designer = () => {
   return (
     <div className="dndflow">
       <ReactFlowProvider>
-        <div className="reactflow-wrapper" ref={reactFlowWrapper}>
+        <div className="reactflow-wrapper" ref={reactFlowWrapper} style={{width:'100%', height:'90%'}}>
           <ReactFlow
             nodes={Object.values(nodes)}
             edges={Object.values(edges)}
@@ -462,6 +462,7 @@ const Designer = () => {
             onEdgeClick={onEdgeClick}
           >
             <Controls />
+            <MiniMap />
           </ReactFlow>
         </div>
         <Sidebar />
