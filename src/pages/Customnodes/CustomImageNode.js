@@ -19,12 +19,6 @@ function CustomImageNode({ data, isConnectable }) {
       <div>
       <img width='60px' src={data.prodDatabaseType=='postgres'?postgres:sql}/>
       </div>
-      {/* <Handle
-        type="source"
-        position={Position.Bottom}
-        style={handleStyle}
-        isConnectable={isConnectable}
-      /> */}
     </div>
   );
 }

@@ -8,25 +8,10 @@ function CustomServiceNode({ data, isConnectable }) {
   const serviceDiscoveryType= data.serviceDiscoveryType
 
   return (
-    <div>
-      {/* <Handle
-        type="target"
-        position={Position.Top}
-        isConnectable={isConnectable}
-      /> */}
+    
       <div>
-      
           <img width='60px' name={serviceDiscoveryType} src={eureka} /> 
-          
-        
       </div>
-      {/* <Handle
-        type="source"
-        position={Position.Bottom}
-        style={handleStyle}
-        isConnectable={isConnectable}
-      /> */}
-    </div>
   );
 }
 

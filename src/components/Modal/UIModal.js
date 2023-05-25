@@ -17,6 +17,7 @@ const UiDataModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
 
   const IntialState ={
     'label':'UI',
+    'applicationName': 'UI', 
     'clientFramework':'reactjs',
     'packageName':'',
     'serverPort':'',
@@ -24,10 +25,7 @@ const UiDataModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
     'applicationType':'gateway',
     ...CurrentNode
   }
-  const [UiData, setUiDataData] = useState({
-    ...IntialState,
-    applicationName: '', 
-  });
+  const [UiData, setUiDataData] = useState(IntialState);
 
   const handleData = (column, value) => {
     if (column === 'label') {

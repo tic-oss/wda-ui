@@ -36,9 +36,6 @@ export default () => {
       <div className="dndnode output" onDragStart={(event) => onDragStart(event, 'default', 'Service')} draggable>
         Service
       </div>
-      {/* <div className="dndnode output" onDragStart={(event) => onDragStart(event, 'default', 'Deployment')} draggable>
-        Deployment
-      </div> */}
       <h1 style={{ cursor: "pointer", fontSize: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }} onClick={() => toggleOption('Authentication')}>
         Authentication {selectedOption === 'Authentication' ? <span>&#x25B2;</span> : <span>&#x25BC;</span>}
       </h1>
@@ -77,21 +74,6 @@ export default () => {
           </div>
         </>
       )}
-      {/* <h1>
-        <span style={{ cursor: "pointer",fontSize:'20px' }} onClick={toggleIngress}>
-         Ingress Type {isIngressCollapsed ? <span>&#x25BC;</span> : <span>&#x25B2;</span>}
-        </span>
-      </h1>
-      {!isIngressCollapsed && (
-        <>
-          <div className="selectorNode2" onDragStart={(event) => onDragStart(event, 'default', 'Ingress_Istio')} draggable>
-            <img width='120px' src={istio} alt="istiologo"></img>
-          </div>
-         
-        </>
-      )} */}
-
-
       <h1>
         <span style={{ cursor: "pointer", fontSize: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }} onClick={() => toggleOption('messageBroker')}>
           Message Broker {selectedOption === 'messageBroker' ? <span>&#x25B2;</span> : <span>&#x25BC;</span>}

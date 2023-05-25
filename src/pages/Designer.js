@@ -272,19 +272,7 @@ const Designer = () => {
         // setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
         setNodes((nds) => ({...nds,[newNode.id]:newNode}))
       }
-      // else if(name.startsWith('Ingress')){
-      //   const Ingress_Type=name.split('_').splice(1)[0]
-      //   console.log(Ingress_Type)
-      //   const newNode = {
-      //     id: 'Ingress_Type',
-      //     type:'selectorNode2',
-      //     position,
-      //     data: { Ingress_Type: Ingress_Type },
-      //    style: { border: "1px solid", padding: "4px 4px" },
-      //   };
-      //   // setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
-      //   setNodes((nds) => ({...nds,[newNode.id]:newNode}))
-      // }
+
       else if(name.startsWith('Auth')){
         const authenticationType=name.split('_').splice(1)[0]
         console.log(authenticationType)
@@ -374,7 +362,7 @@ const Designer = () => {
       {
             id: 'UI',
             type: 'default',
-            data: { label: 'UI',onChange:onChange},
+            data: { label: 'UI'},
            style: { border: "1px solid #8c8d8f", padding: "4px 4px" },
             position: { x: 250, y: 5 },
           },

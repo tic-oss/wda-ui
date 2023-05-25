@@ -15,17 +15,15 @@ import {
 
 const ServiceModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
  const IntialState ={
-    'label':'',
+    'label':'Service',
+    'applicationName':'Service',
     'applicationFramework':'java',
     'packageName':'',
     'serverPort':'',
     'applicationType':'microservice',
     ...CurrentNode
   }
-  const [ApplicationData, setApplicationData] = useState({
-    ...IntialState,
-    applicationName: '', 
-  });
+  const [ApplicationData, setApplicationData] = useState(IntialState);
 
   const handleData = (column, value) => {
     if (column === 'label') {
