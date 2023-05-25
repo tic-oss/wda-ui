@@ -17,9 +17,9 @@ import {
 const EdgeModal = ({ isOpen, CurrentEdge,onClose, handleEdgeData }) => {
   console.log(CurrentEdge,'edgeeeeee')
   const IntialState = {
-    'communicationType': 'asynchronous',
-    'protocol':'rest',
-    'selectedBroker':'rabbitmq',
+    'type': 'asynchronous',
+    'framework':'rest',
+    'framework':'rabbitmq',
     ...CurrentEdge
   }
   const [EdgeData, setEdgeData] = useState(IntialState)
@@ -35,7 +35,7 @@ const EdgeModal = ({ isOpen, CurrentEdge,onClose, handleEdgeData }) => {
 
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Edge</ModalHeader>
+        <ModalHeader>Communication</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <div
@@ -46,44 +46,44 @@ const EdgeModal = ({ isOpen, CurrentEdge,onClose, handleEdgeData }) => {
             }}
           >
             <FormControl>
-              <FormLabel>Communication</FormLabel>
+              <FormLabel>Type</FormLabel>
               <Select
                 mb={4}
                 variant="outline"
                 id="framework"
                 borderColor={"black"}
-                value={EdgeData.communicationType}
-                onChange={(e)=>handleData('communicationType',e.target.value)}
+                value={EdgeData.type}
+                onChange={(e)=>handleData('type',e.target.value)}
               >
                 <option value="asynchronous">Asynchronous</option>
                 <option value="synchronous">Synchronous</option>
               </Select>
             </FormControl>
 
-            {EdgeData.communicationType === 'synchronous' ? (
+            {EdgeData.type === 'synchronous' ? (
               <FormControl>
-                <FormLabel>Protocol</FormLabel>
+                <FormLabel>Framework</FormLabel>
                 <Select
                   mb={4}
                   variant="outline"
                   id="framework"
                   borderColor={"black"}
-                  value={EdgeData.protocol}
-                  onChange={(e)=>handleData('protocol',e.target.value)}
+                  value={EdgeData.framework}
+                  onChange={(e)=>handleData('framework',e.target.value)}
                 >
                   <option value="rest">REST</option>
                 </Select>
               </FormControl>
-            ) : EdgeData.communicationType === 'asynchronous' ? (
+            ) : EdgeData.type === 'asynchronous' ? (
               <FormControl>
-                <FormLabel>Message Broker</FormLabel>
+                <FormLabel>Framework</FormLabel>
                 <Select
                   mb={4}
                   variant="outline"
                   id="framework"
                   borderColor={"black"}
-                  value={EdgeData.selectedBroker}
-                  onChange={(e)=>handleData('selectedBroker',e.target.value)}
+                  value={EdgeData.framework}
+                  onChange={(e)=>handleData('framework',e.target.value)}
                 >
                   <option value="rabbitmq">Rabbit MQ</option>
                   <option value="kafka">Kafka</option>

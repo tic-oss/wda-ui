@@ -12,7 +12,7 @@ function CustomLoadNode({ data}) {
       
       <div>
       
-          <img width='70px' name={logManagementType} src={eck} /> 
+          <img width='60px' name={logManagementType} src={eck} /> 
           
         
       </div>

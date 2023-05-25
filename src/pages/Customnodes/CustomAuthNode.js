@@ -18,7 +18,7 @@ function CustomAuthNode({ data, isConnectable }) {
       /> */}
       <div>
        
-          <img width='70px' name={authenticationType} src={keycloak} /> 
+          <img width='60px' name={authenticationType} src={keycloak} /> 
          
         
       </div>

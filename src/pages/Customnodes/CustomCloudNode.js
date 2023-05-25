@@ -16,8 +16,8 @@ function CustomServiceNode({ data, isConnectable }) {
       />
       <div>
         {cloudProvider === 'Azure' ?
-          <img width='50px' name={cloudProvider} src={azure} /> :
-          <img width='50px' name={cloudProvider} src={aws} />
+          <img width='60px' name={cloudProvider} src={azure} /> :
+          <img width='60px' name={cloudProvider} src={aws} />
         }
       </div>
       <Handle

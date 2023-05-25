@@ -20,9 +20,9 @@ function CustomMessageBrokerNode({ data, isConnectable }) {
       /> */}
       <div>
       {messageBroker === 'Kafka' ? (
-            <img width='50px' name={messageBroker} src={kafka} />) : 
-            messageBroker === 'Pulsar' ? (<img width='50px' name={messageBroker} src={pulsar} />) : 
-            (<img width='50px' name={messageBroker} src={rabbitmq} />)}    
+            <img width='60px' name={messageBroker} src={kafka} />) : 
+            messageBroker === 'Pulsar' ? (<img width='60px' name={messageBroker} src={pulsar} />) : 
+            (<img width='60px' name={messageBroker} src={rabbitmq} />)}    
       </div>
       {/* <Handle
         type="source"

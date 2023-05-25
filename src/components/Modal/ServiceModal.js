@@ -22,12 +22,26 @@ const ServiceModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
     'applicationType':'microservice',
     ...CurrentNode
   }
-  const [ApplicationData,setApplicationData] = useState(IntialState)
+  const [ApplicationData, setApplicationData] = useState({
+    ...IntialState,
+    applicationName: '', 
+  });
 
-  const handleData = (column,value)=>{
-    setApplicationData((prev)=>({...prev,[column]:value}))
-  }
-
+  const handleData = (column, value) => {
+    if (column === 'label') {
+      setApplicationData((prev) => ({
+        ...prev,
+        [column]: value,
+        applicationName: value, 
+      }));
+    } else {
+      setApplicationData((prev) => ({
+        ...prev,
+        [column]: value,
+      }));
+    }
+  };
+  
   return (
     <Modal isOpen={isOpen} onClose={() => onClose(false)} isCentered={true}>
       <ModalOverlay />
@@ -54,7 +68,7 @@ const ServiceModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
                 onChange={(e)=>handleData('label',e.target.value)}
               />
             </FormControl>
-            
+            {/* <p>AN: {ApplicationData.AN}</p> */}
        <FormControl>
               <FormLabel>applicationFramework</FormLabel>
               <Select mb={4} variant="outline" id="applicationFramework" 

@@ -24,12 +24,25 @@ const UiDataModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
     'applicationType':'gateway',
     ...CurrentNode
   }
+  const [UiData, setUiDataData] = useState({
+    ...IntialState,
+    applicationName: '', 
+  });
 
-  const [UiData,setUiDataData] = useState(IntialState)
-
-  const handleData = (column,value)=>{
-    setUiDataData((prev)=>({...prev,[column]:value}))
-  }
+  const handleData = (column, value) => {
+    if (column === 'label') {
+      setUiDataData((prev) => ({
+        ...prev,
+        [column]: value,
+        applicationName: value, 
+      }));
+    } else {
+      setUiDataData((prev) => ({
+        ...prev,
+        [column]: value,
+      }));
+    }
+  };
 
   return (
     <Modal isOpen={isOpen} onClose={() => onClose(false)} isCentered={true}>

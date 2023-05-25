@@ -16,7 +16,7 @@ function CustomServiceNode({ data, isConnectable }) {
       /> */}
       <div>
       
-          <img width='50px' name={serviceDiscoveryType} src={eureka} /> 
+          <img width='60px' name={serviceDiscoveryType} src={eureka} /> 
           
         
       </div>
