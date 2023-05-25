@@ -389,14 +389,20 @@ const Designer = () => {
   }
   const onsubmit = () =>{
 
-    let NewNodes = [...nodes]
+    let NewNodes = {...nodes}
     // let Service_Discovery_index = nodeMap.get('Service_Discovery')
-    let Service_Discovery_Data= nodes['Service_Discovery_index'].data
-    for(let i=0;i<NewNodes.length;i++){
-      const Node = NewNodes[i];
+    let Service_Discovery_Data= nodes['Service_Discovery'].data
+    // for(let i=0;i<NewNodes.length;i++){
+    //   const Node = NewNodes[i];
+    //   if(Node.id.startsWith('Service')|| Node.id === 'UI'){
+    //     Node.data={...Node.data,...Service_Discovery_Data}
+    //   }
+    // }
+    for(const key in NewNodes){
+      const Node = NewNodes[key]
       if(Node.id.startsWith('Service')|| Node.id === 'UI'){
-        Node.data={...Node.data,...Service_Discovery_Data}
-      }
+            Node.data={...Node.data,...Service_Discovery_Data}
+          }
     }
     setNodes(NewNodes)
 
