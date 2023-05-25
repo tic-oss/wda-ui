@@ -375,7 +375,7 @@ const Designer = () => {
             id: 'UI',
             type: 'default',
             data: { label: 'UI',onChange:onChange},
-           style: { border: "1px solid", padding: "4px 4px" },
+           style: { border: "1px solid #8c8d8f", padding: "4px 4px" },
             position: { x: 250, y: 5 },
           },
          
@@ -441,7 +441,7 @@ const Designer = () => {
       delete UpdatedEdges[IsEdgeopen]?.data?.selectedBroker
     }
     else{
-      delete Data.protocol
+      delete Data?.protocol
       delete UpdatedEdges[IsEdgeopen]?.data?.protocol
     }
     UpdatedEdges[IsEdgeopen].data={...UpdatedEdges[IsEdgeopen].data,...Data}
@@ -480,9 +480,10 @@ const Designer = () => {
             onEdgeUpdateStart={onEdgeUpdateStart}
             onEdgeUpdateEnd={onEdgeUpdateEnd}
             onEdgeClick={onEdgeClick}
+            nodesFocusable={true}
           >
             <Controls />
-            <MiniMap />
+            <MiniMap style={{backgroundColor:'#faa805'}}/>
           </ReactFlow>
         </div>
         <Sidebar />
