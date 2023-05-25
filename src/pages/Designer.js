@@ -473,7 +473,8 @@ const Designer = () => {
             onInit={setReactFlowInstance}
             onDrop={onDrop}
             onDragOver={onDragOver}
-            onNodeClick={onclick}
+            onNodeDoubleClick={onclick}
+            deleteKeyCode={["Backspace","Delete"]}
             fitView
             onEdgeUpdate={onEdgeUpdate}
             onEdgeUpdateStart={onEdgeUpdateStart}
