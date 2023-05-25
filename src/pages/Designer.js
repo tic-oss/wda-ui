@@ -360,7 +360,7 @@ const Designer = () => {
     setNodes({'UI':
       {
             id: 'UI',
-            type: 'selectorUI',
+            type: 'default',
             data: { label: 'UI',onChange:onChange},
            style: { border: "1px solid", padding: "4px 4px" },
             position: { x: 250, y: 5 },
