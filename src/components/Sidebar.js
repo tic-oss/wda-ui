@@ -11,8 +11,11 @@ import azure from "../assets/Azure.png"
 import aws from "../assets/aws.png"
 import "./../App.css"
 
-export default () => {
+export default ({ isUINodeEnabled, setIsUINodeEnabled }) => {
   const onDragStart = (event, nodeType, Name) => {
+    if(Name === 'UI'){
+      setIsUINodeEnabled(true)
+    }
     event.dataTransfer.setData('Name', Name);
     event.dataTransfer.setData('application/reactflow', nodeType);
     event.dataTransfer.effectAllowed = 'move';
@@ -27,10 +30,15 @@ export default () => {
     <aside>
       <div className="description">
         <h2 style={{ cursor: "pointer", fontSize: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>You can drag these nodes to the pane on the right.</h2></div>
-      <div className="dndnode output" onDragStart={(event) => onDragStart(event, 'default', 'UI')} draggable>
+      
+      <div 
+        className={`dndnode output ${isUINodeEnabled ? 'disabled' : ''}`}
+        onDragStart={(event) => onDragStart(event, 'default', 'UI')}
+        draggable={!isUINodeEnabled}
+        style={{backgroundColor: isUINodeEnabled ? '#CFCFCF': '',cursor: isUINodeEnabled ? 'not-allowed' : ''}}
+      >
         UI+Gateway
       </div>
-
 
       <div className="dndnode output" onDragStart={(event) => onDragStart(event, 'default', 'Service')} draggable>
         Service

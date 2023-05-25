@@ -182,6 +182,7 @@ const Designer = () => {
   const [CurrentNode,setCurrentNode]= useState({});
   const [CurrentEdge,setCurrentEdge]= useState({});
   const edgeUpdateSuccessful = useRef(true);
+  const [isUINodeEnabled, setIsUINodeEnabled] = useState(true);
 
     const onEdgeUpdateStart = useCallback(() => {
       edgeUpdateSuccessful.current = false;
@@ -368,8 +369,8 @@ const Designer = () => {
          
         })
     // setNodeMap((prev)=>new Map(prev.set('UI',0)))
-    
   },[])
+
   const MergeData = (sourceId,targetId,Nodes) =>{
 
     const sourceType = sourceId.split('_')[0]
@@ -460,19 +461,25 @@ const Designer = () => {
             onInit={setReactFlowInstance}
             onDrop={onDrop}
             onDragOver={onDragOver}
-            onNodeClick={onclick}
+            onNodeDoubleClick={onclick}
             fitView
             onEdgeUpdate={onEdgeUpdate}
             onEdgeUpdateStart={onEdgeUpdateStart}
             onEdgeUpdateEnd={onEdgeUpdateEnd}
             onEdgeClick={onEdgeClick}
+            deleteKeyCode={"Delete"}
+            onKeyDown={(event) => {
+              if (event.code === 46 || event.code === 'Delete') {
+                setIsUINodeEnabled(false);
+              }
+            }}
           >
             <Controls />
             <MiniMap />
           </ReactFlow>
         </div>
-        <Sidebar />
-      
+        <Sidebar isUINodeEnabled={isUINodeEnabled} setIsUINodeEnabled={setIsUINodeEnabled} />
+
         { nodeType==='Service' && Isopen && <ServiceModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
       
         {/* { nodeType==='Deployment' && Isopen && <DeployModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />} */}
