@@ -9,6 +9,7 @@ import pulsar from "../assets/pulsar.png"
 import rabbitmq from "../assets/rabbitmq.png"
 import azure from "../assets/Azure.png"
 import aws from "../assets/aws.png"
+import eck from "../assets/eck.png"
 import "./../App.css"
 
 export default () => {
@@ -125,6 +126,18 @@ export default () => {
 
           <div className="selectorNode5" onDragStart={(event) => onDragStart(event, 'default', 'Cloud_AWS')} draggable>
             <img width='120px' src={aws} alt="awslogo" />
+          </div>
+        </>
+      )}
+       <h1>
+        <span style={{ cursor: "pointer", fontSize: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }} onClick={() => toggleOption('loadManagement')}>
+          Load Management {selectedOption === 'loadManagement' ? <span>&#x25B2;</span> : <span>&#x25BC;</span>}
+        </span>
+      </h1>
+      {selectedOption === 'loadManagement' && (
+        <>
+          <div className="selectorNode6" onDragStart={(event) => onDragStart(event, 'default', 'Load_eck')} draggable>
+            <img width='120px' src={eck} alt="ecklogo" />
           </div>
         </>
       )}

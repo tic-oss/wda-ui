@@ -21,6 +21,7 @@ import CustomIngressNode from "./Customnodes/CustomIngressNode"
 import CustomAuthNode from "./Customnodes/CustomAuthNode"
 import CustomMessageBrokerNode from "./Customnodes/CustomMessageBrokerNode"
 import CustomCloudNode from "./Customnodes/CustomCloudNode"
+import CustomLoadNode from "./Customnodes/CustomLoadNode"
 
 import "./../App.css"
 import { Button } from '@chakra-ui/react';
@@ -49,7 +50,8 @@ const nodeTypes = {
   selectorNode3: CustomAuthNode,
   selectorNode4: CustomMessageBrokerNode,
   selectorNode4: CustomMessageBrokerNode,
-  selectorNode5: CustomCloudNode
+  selectorNode5: CustomCloudNode,
+  selectorNode6: CustomLoadNode
 };
 
 
@@ -322,7 +324,19 @@ const Designer = () => {
         // setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
         setNodes((nds) => ({...nds,[newNode.id]:newNode}))
       }
-    
+      else if(name.startsWith('Load')){
+        const logManagementType=name.split('_').splice(1)[0]
+        console.log(logManagementType)
+        const newNode = {
+          id: 'logManagementType',
+          type:'selectorNode6',
+          position,
+          data: { logManagementType: logManagementType },
+         style: { border: "1px solid", padding: "4px 4px" },
+        };
+        // setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
+        setNodes((nds) => ({...nds,[newNode.id]:newNode}))
+      }
       else {
         const newNode = {
           id: getId(name),

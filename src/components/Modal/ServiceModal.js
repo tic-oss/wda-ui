@@ -10,12 +10,12 @@ import {
   Select,
   Button,
   FormLabel,
-  FormControl
+  FormControl,
 } from "@chakra-ui/react";
 
 const ServiceModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
  const IntialState ={
-    'applicationName':'',
+    'label':'',
     'applicationFramework':'java',
     'packageName':'',
     'serverPort':'',
@@ -47,11 +47,11 @@ const ServiceModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
               <Input
                 mb={4}
                 variant="outline"
-                id="appname"
+                id="applicationName"
                 placeholder="Name"
                 borderColor={"black"}
                 value={ApplicationData.applicationName}
-                onChange={(e)=>handleData('applicationName',e.target.value)}
+                onChange={(e)=>handleData('label',e.target.value)}
               />
             </FormControl>
             
@@ -73,7 +73,7 @@ const ServiceModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
               <Input
                 mb={4}
                 variant="outline"
-                id="packageName"
+                id="packagename"
                 placeholder="packageName"
                 borderColor={"black"}
                 value={ApplicationData.packageName}

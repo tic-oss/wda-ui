@@ -16,11 +16,12 @@ import {
 const UiDataModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
 
   const IntialState ={
-    'applicationName':'UI',
+    'label':'UI',
     'clientFramework':'reactjs',
     'packageName':'',
     'serverPort':'',
-    'ApplicationType':'gateway',
+    'withExample':'',
+    'applicationType':'gateway',
     ...CurrentNode
   }
 
@@ -49,11 +50,11 @@ const UiDataModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
               <Input
                 mb={4}
                 variant="outline"
-                id="appname"
+                id="applicationName"
                 placeholder="Name"
                 borderColor={"black"}
                 value={UiData.applicationName}
-                onChange={(e)=>handleData('applicationName',e.target.value)}
+                onChange={(e)=>handleData('label',e.target.value)}
               />
             </FormControl>
             <FormControl>
@@ -64,7 +65,8 @@ const UiDataModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
                 onChange={(e)=>handleData('clientFramework',e.target.value)}
               >
                 <option value="reactjs">ReactJS</option>
-                <option value="nodejs">NodeJS</option>
+                <option value="angular">Angular</option>
+                <option value="vue">Vue</option>
               </Select>
             </FormControl>
               
@@ -92,6 +94,18 @@ const UiDataModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
                 value={UiData.serverPort}
                 onChange={(e)=>handleData('serverPort',e.target.value)}
               />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Want to have an Example</FormLabel>
+              <Select mb={4} variant="outline" id="withExample" 
+                borderColor={"black"}
+                value={UiData.withExample}
+                onChange={(e)=>handleData('withExample',e.target.value)}
+              >
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+                
+              </Select>
             </FormControl>
             
           </div>
