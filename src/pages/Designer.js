@@ -119,8 +119,14 @@ const Designer = () => {
               selected: change.selected,
             };
             break;
-          case 'remove': // Delete Functionality  
+          case 'remove': // Delete Functionality
+          if(change.id !== 'UI'){
+            setIsUINodeEnabled(true);
             delete updatedNodes[change.id];
+          }  
+          else {
+            delete updatedNodes[change.id];
+          }
             break;
           case 'add':
             updatedNodes[change.item.id] = change.item;
