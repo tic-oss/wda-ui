@@ -121,8 +121,14 @@ const Designer = () => {
               selected: change.selected,
             };
             break;
-          case 'remove': // Delete Functionality  
+          case 'remove': // Delete Functionality
+          if(change.id !== 'UI'){
+            setIsUINodeEnabled(true);
             delete updatedNodes[change.id];
+          }  
+          else {
+            delete updatedNodes[change.id];
+          }
             break;
           case 'add':
             updatedNodes[change.item.id] = change.item;
@@ -184,6 +190,7 @@ const Designer = () => {
   const [CurrentNode,setCurrentNode]= useState({});
   const [CurrentEdge,setCurrentEdge]= useState({});
   const edgeUpdateSuccessful = useRef(true);
+  const [isUINodeEnabled, setIsUINodeEnabled] = useState(true);
 
     const onEdgeUpdateStart = useCallback(() => {
       edgeUpdateSuccessful.current = false;
@@ -369,8 +376,8 @@ const Designer = () => {
          
         })
     // setNodeMap((prev)=>new Map(prev.set('UI',0)))
-    
   },[])
+
   const MergeData = (sourceId,targetId,Nodes) =>{
 
     const sourceType = sourceId.split('_')[0]
@@ -468,14 +475,19 @@ const Designer = () => {
             onEdgeUpdateStart={onEdgeUpdateStart}
             onEdgeUpdateEnd={onEdgeUpdateEnd}
             onEdgeClick={onEdgeClick}
+            onKeyDown={(event) => {
+              if (event.code === 'Delete' || event.code === 'Backspace') {
+                setIsUINodeEnabled(false);
+              }
+            }}
             nodesFocusable={true}
           >
             <Controls />
             <MiniMap style={{backgroundColor:'#faa805'}}/>
           </ReactFlow>
         </div>
-        <Sidebar />
-      
+        <Sidebar isUINodeEnabled={isUINodeEnabled} setIsUINodeEnabled={setIsUINodeEnabled} />
+
         { nodeType==='Service' && Isopen && <ServiceModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
       
         { nodeType==='Azure'  && Isopen && <DeployModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
