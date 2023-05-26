@@ -1,13 +1,9 @@
 import React, { useState, useRef, useCallback,useEffect } from 'react';
 import ReactFlow, {
   ReactFlowProvider,
-  // addEdge,
-  useNodesState,
-  useEdgesState,
   Controls,
-// updateEdge,
-MarkerType,
-MiniMap
+  MarkerType,
+  MiniMap
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
@@ -49,7 +45,6 @@ const nodeTypes = {
   selectorNode2: CustomIngressNode,
   selectorNode3: CustomAuthNode,
   selectorNode4: CustomMessageBrokerNode,
-  selectorNode4: CustomMessageBrokerNode,
   selectorNode5: CustomCloudNode,
   selectorNode6: CustomLoadNode
 };
@@ -57,16 +52,13 @@ const nodeTypes = {
 
 const Designer = () => {
   const reactFlowWrapper = useRef(null);
-  // const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [nodes,setNodes] = useState({})
-
-  // const [nodeMap,setNodeMap] = useState(new Map())
   const [nodeType,setNodeType] = useState(null)
 
   console.log("Nodes",nodes)
 
-
   const addEdge = (edgeParams,edges)=>{
+    console.log(edgeParams,'edgeee')
     const edgeId= `${edgeParams.source}-${edgeParams.target}`
     return {...edges,[edgeId]:{id:edgeId,...edgeParams}}
   }
@@ -122,13 +114,9 @@ const Designer = () => {
             };
             break;
           case 'remove': // Delete Functionality
-          if(change.id !== 'UI'){
+          if(change.id !== 'UI')
             setIsUINodeEnabled(true);
             delete updatedNodes[change.id];
-          }  
-          else {
-            delete updatedNodes[change.id];
-          }
             break;
           case 'add':
             updatedNodes[change.item.id] = change.item;
@@ -146,7 +134,6 @@ const Designer = () => {
   }, []);
 
   
-  // const [edges, setEdges, onEdgesChange] = useEdgesState({});
   const [edges, setEdges] = useState({})
   console.log("Edges",edges)  
 
@@ -183,7 +170,6 @@ const Designer = () => {
     });
   }, []);
 
-  // console.log('NodeMap',nodeMap)
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [Isopen,setopen]=useState(false);
   const [IsEdgeopen,setEdgeopen]=useState(false);
@@ -225,7 +211,6 @@ const Designer = () => {
     if(Id){
       const type=Id.split('_')[0]
       setNodeType(type)
-      let index;
       if(type=='AWS' || type ==='Azure'){
         setCurrentNode(nodes['cloudProvider'].data)     }
       else
@@ -243,7 +228,6 @@ const Designer = () => {
       const type = event.dataTransfer.getData('application/reactflow');
       const name = event.dataTransfer.getData('Name')
 
-    
       if (typeof type === 'undefined' || !type) {
         return;
       }
@@ -263,7 +247,6 @@ const Designer = () => {
           data: { prodDatabaseType: prodDatabaseType },
          style: { border: "1px solid", padding: "4px 4px" },
         };
-        // setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
         setNodes((nds) => ({...nds,[newNode.id]:newNode}))
       }
       else if(name.startsWith('Discovery')){
@@ -276,7 +259,6 @@ const Designer = () => {
           data: { ServiceDiscoveryType: ServiceDiscoveryType },
          style: { border: "1px solid", padding: "4px 4px" },
         };
-        // setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
         setNodes((nds) => ({...nds,[newNode.id]:newNode}))
       }
 
@@ -290,7 +272,6 @@ const Designer = () => {
           data: { authenticationType: authenticationType },
          style: { border: "1px solid", padding: "4px 4px" },
         };
-        // setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
         setNodes((nds) => ({...nds,[newNode.id]:newNode}))
       }
       else if(name.startsWith('MessageBroker')){
@@ -303,7 +284,6 @@ const Designer = () => {
           data: { messageBroker: messageBroker },
          style: { border: "1px solid", padding: "4px 4px" },
         };
-        // setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
         setNodes((nds) => ({...nds,[newNode.id]:newNode}))
       }
       else if(name.startsWith('Cloud')){
@@ -316,20 +296,17 @@ const Designer = () => {
           data: { cloudProvider: cloudProvider },
          style: { border: "1px solid", padding: "4px 4px" },
         };
-        // setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
         setNodes((nds) => ({...nds,[newNode.id]:newNode}))
       }
       else if(name.startsWith('Load')){
         const logManagementType=name.split('_').splice(1)[0]
-        console.log(logManagementType)
         const newNode = {
-          id: 'logManagementType',
+          id: 'logManagement',
           type:'selectorNode6',
           position,
           data: { logManagementType: logManagementType },
          style: { border: "1px solid", padding: "4px 4px" },
         };
-        // setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
         setNodes((nds) => ({...nds,[newNode.id]:newNode}))
       }
       else {
@@ -340,7 +317,6 @@ const Designer = () => {
           data: { label: name },
          style: { border: "1px solid", padding: "4px 4px" },
         };
-        // setNodeMap((prev)=>new Map(prev.set(newNode.id,totalnodes++)))
         setNodes((nds) => ({...nds,[newNode.id]:newNode}))
       }
       
@@ -351,7 +327,6 @@ const Designer = () => {
   );
 
   const onChange = (Data) => {
-    console.log(Data,Isopen)
     let UpdatedNodes={...nodes}
     let CurrentNode;
     if(Isopen==='AWS' || Isopen ==='Azure'){
@@ -375,7 +350,6 @@ const Designer = () => {
           },
          
         })
-    // setNodeMap((prev)=>new Map(prev.set('UI',0)))
   },[])
 
   const MergeData = (sourceId,targetId,Nodes) =>{
@@ -399,29 +373,20 @@ const Designer = () => {
   const onsubmit = () =>{
 
     let NewNodes = {...nodes}
-    // let Service_Discovery_index = nodeMap.get('Service_Discovery')
     let Service_Discovery_Data= nodes['Service_Discovery'].data
-    // for(let i=0;i<NewNodes.length;i++){
-    //   const Node = NewNodes[i];
-    //   if(Node.id.startsWith('Service')|| Node.id === 'UI'){
-    //     Node.data={...Node.data,...Service_Discovery_Data}
-    //   }
-    // }
     for(const key in NewNodes){
       const Node = NewNodes[key]
-      if(Node.id.startsWith('Service')|| Node.id === 'UI'){
+      if(Node.id.startsWith('Service')|| Node.id === 'UI')
             Node.data={...Node.data,...Service_Discovery_Data}
-          }
     }
     setNodes(NewNodes)
-
   } 
 
   const onEdgeClick = (e,edge) =>{
     const sourceType = edge.source.split('_')[0]
     const targetType = edge.target.split('_')[0]
     console.log(e,edge)
-    if(sourceType ==='UI' && targetType === 'Service' || sourceType=='Service' && targetType==='Service'){
+    if( (sourceType ==='UI' && targetType === 'Service') || (sourceType=='Service' && targetType==='Service')){
       setEdgeopen(edge.id)
       setCurrentEdge(edges[edge.id].data)
     }
@@ -431,7 +396,7 @@ const Designer = () => {
   const handleEdgeData = (Data)=>{
     console.log(Data,IsEdgeopen)
     let UpdatedEdges={...edges}
-    if(Data.communicationType=='synchronous'){
+    if(Data.communicationType === 'synchronous'){
       delete Data?.selectedBroker
       delete UpdatedEdges[IsEdgeopen]?.data?.selectedBroker
     }
@@ -439,7 +404,7 @@ const Designer = () => {
       delete Data?.protocol
       delete UpdatedEdges[IsEdgeopen]?.data?.protocol
     }
-    UpdatedEdges[IsEdgeopen].data={...UpdatedEdges[IsEdgeopen].data,...Data}
+    UpdatedEdges[IsEdgeopen].data={'client':UpdatedEdges[IsEdgeopen].source,'server':UpdatedEdges[IsEdgeopen].target,...UpdatedEdges[IsEdgeopen].data,...Data}
     setEdges(UpdatedEdges)
     setEdgeopen(false)
   }
@@ -488,13 +453,13 @@ const Designer = () => {
         </div>
         <Sidebar isUINodeEnabled={isUINodeEnabled} setIsUINodeEnabled={setIsUINodeEnabled} />
 
-        { nodeType==='Service' && Isopen && <ServiceModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
+        { nodeType === 'Service' && Isopen && <ServiceModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
       
-        { nodeType==='Azure'  && Isopen && <DeployModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
+        { nodeType === 'Azure'  && Isopen && <DeployModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
         
-        { nodeType==='AWS'  && Isopen && <DeployModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
+        { nodeType === 'AWS'  && Isopen && <DeployModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
       
-        { nodeType==='UI' && Isopen && <UiDataModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
+        { nodeType === 'UI' && Isopen && <UiDataModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
 
         { IsEdgeopen && <EdgeModal isOpen={IsEdgeopen} CurrentEdge={CurrentEdge} onClose={setEdgeopen} handleEdgeData={handleEdgeData}/>}
 

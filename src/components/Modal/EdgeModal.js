@@ -18,7 +18,6 @@ const EdgeModal = ({ isOpen, CurrentEdge,onClose, handleEdgeData }) => {
   console.log(CurrentEdge,'edgeeeeee')
   const IntialState = {
     'type': 'asynchronous',
-    'framework':'rest',
     'framework':'rabbitmq',
     ...CurrentEdge
   }
