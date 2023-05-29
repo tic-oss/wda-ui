@@ -30,7 +30,7 @@ export default ({ isUINodeEnabled, setIsUINodeEnabled }) => {
   return (
     <aside>
       <div className="description">
-        <h2 style={{ cursor: "pointer", fontSize: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>You can drag these nodes to the pane on the right.</h2></div>
+        <h2 style={{ cursor: "pointer", fontSize: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>You can drag these nodes to the pane on the right.</h2></div>
       
       <div 
         className={`dndnode output ${isUINodeEnabled ? 'disabled' : ''}`}
@@ -121,7 +121,7 @@ export default ({ isUINodeEnabled, setIsUINodeEnabled }) => {
       )}
        <h1>
         <span style={{ cursor: "pointer", fontSize: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }} onClick={() => toggleOption('loadManagement')}>
-          Load Management {selectedOption === 'loadManagement' ? <span>&#x25B2;</span> : <span>&#x25BC;</span>}
+          Log Management {selectedOption === 'loadManagement' ? <span>&#x25B2;</span> : <span>&#x25BC;</span>}
         </span>
       </h1>
       {selectedOption === 'loadManagement' && (
