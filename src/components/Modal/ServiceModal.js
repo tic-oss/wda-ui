@@ -74,6 +74,7 @@ const ServiceModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
                 value={ApplicationData.applicationFramework}
                 onChange={(e)=>handleData('applicationFramework',e.target.value)}
               >
+                <option value="" disabled>Select an option</option>
                 <option value="java">Java</option>
                 <option value="go">Go</option>
               </Select>
