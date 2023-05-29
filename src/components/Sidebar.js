@@ -29,6 +29,7 @@ export default ({ isUINodeEnabled, setIsUINodeEnabled }) => {
   };
   return (
     <aside>
+      
       <div className="description">
         <h2 style={{ cursor: "pointer", fontSize: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>You can drag these nodes to the pane on the right.</h2></div>
       
