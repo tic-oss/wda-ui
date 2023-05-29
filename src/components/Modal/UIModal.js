@@ -76,7 +76,7 @@ const UiDataModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
                 onChange={(e)=>handleData('clientFramework',e.target.value)}
               >
                 <option value="" disabled>Select an option</option>
-                <option value="reactjs">ReactJS</option>
+                <option value="react">React</option>
                 <option value="angular">Angular</option>
                 <option value="vue">Vue</option>
               </Select>

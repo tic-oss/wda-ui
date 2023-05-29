@@ -250,13 +250,13 @@ const Designer = () => {
         setNodes((nds) => ({...nds,[newNode.id]:newNode}))
       }
       else if(name.startsWith('Discovery')){
-        const ServiceDiscoveryType=name.split('_').splice(1)[0]
-        console.log(ServiceDiscoveryType)
+        const serviceDiscoveryType=name.split('_').splice(1)[0]
+        console.log(serviceDiscoveryType)
         const newNode = {
-          id: 'ServiceDiscoveryType',
+          id: 'serviceDiscoveryType',
           type:'selectorNode1',
           position,
-          data: { ServiceDiscoveryType: ServiceDiscoveryType },
+          data: { serviceDiscoveryType: serviceDiscoveryType },
          style: { border: "1px solid", padding: "4px 4px" },
         };
         setNodes((nds) => ({...nds,[newNode.id]:newNode}))
