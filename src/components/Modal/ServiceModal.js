@@ -11,12 +11,14 @@ import {
   Button,
   FormLabel,
   FormControl,
+  Alert, 
+  AlertIcon
 } from "@chakra-ui/react";
 
-const ServiceModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
+const ServiceModal = ({ isOpen, onClose, onSubmit,CurrentNode, duplicateError, handleAppData}) => {
  const IntialState ={
     'label':'Service',
-    'applicationName':'Service',
+    'applicationName':'',
     'applicationFramework':'java',
     'packageName':'',
     'serverPort':'',
@@ -24,8 +26,8 @@ const ServiceModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
     ...CurrentNode
   }
   const [ApplicationData, setApplicationData] = useState(IntialState);
-
   const handleData = (column, value) => {
+    handleAppData(column,value)
     if (column === 'label') {
       setApplicationData((prev) => ({
         ...prev,
@@ -39,7 +41,6 @@ const ServiceModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
       }));
     }
   };
-  
   return (
     <Modal isOpen={isOpen} onClose={() => onClose(false)} isCentered={true}>
       <ModalOverlay />
@@ -61,11 +62,17 @@ const ServiceModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
                 variant="outline"
                 id="applicationName"
                 placeholder="Name"
-                borderColor={"black"}
+                borderColor={duplicateError ? 'red' : 'black'}
                 value={ApplicationData.applicationName}
                 onChange={(e)=>handleData('label',e.target.value)}
               />
             </FormControl>
+            {duplicateError && (
+              <Alert status="error" mb={2}>
+                <AlertIcon />
+                Application name already exists. Please choose a unique name.
+              </Alert>
+            )}
             {/* <p>AN: {ApplicationData.AN}</p> */}
        <FormControl>
               <FormLabel>applicationFramework</FormLabel>

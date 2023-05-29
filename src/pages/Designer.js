@@ -419,6 +419,22 @@ const Designer = () => {
   }
     , []);
 
+    const [uniqueApplicationNames, setUniqueApplicationNames] = useState([]);
+  const [duplicateApplicationNameError, setDuplicateApplicationNameError] = useState(false);
+
+  const handleAppData = (fieldName, value) => {
+    if (fieldName === 'label') {
+      const isDuplicateName = uniqueApplicationNames.includes(value);
+
+    if (isDuplicateName && value !== "") {
+      setDuplicateApplicationNameError(true);
+      } else {
+        setDuplicateApplicationNameError(false);
+        setUniqueApplicationNames([...uniqueApplicationNames, value]);
+      }
+    }
+  };
+  
   return (
     <div className="dndflow">
       <ReactFlowProvider>
@@ -453,7 +469,7 @@ const Designer = () => {
         </div>
         <Sidebar isUINodeEnabled={isUINodeEnabled} setIsUINodeEnabled={setIsUINodeEnabled} />
 
-        { nodeType === 'Service' && Isopen && <ServiceModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
+        { nodeType === 'Service' && Isopen && <ServiceModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} duplicateError={duplicateApplicationNameError} handleAppData={handleAppData}/>}
       
         { nodeType === 'Azure'  && Isopen && <DeployModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
         
