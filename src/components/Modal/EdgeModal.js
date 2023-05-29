@@ -17,9 +17,8 @@ import {
 const EdgeModal = ({ isOpen, CurrentEdge,onClose, handleEdgeData }) => {
   console.log(CurrentEdge,'edgeeeeee')
   const IntialState = {
-    'communicationType': 'asynchronous',
-    'protocol':'rest',
-    'selectedBroker':'rabbitmq',
+    'type': 'asynchronous',
+    'framework':'rabbitmq',
     ...CurrentEdge
   }
   const [EdgeData, setEdgeData] = useState(IntialState)
