@@ -396,13 +396,13 @@ const Designer = () => {
   const handleEdgeData = (Data)=>{
     console.log(Data,IsEdgeopen)
     let UpdatedEdges={...edges}
-    if(Data.communicationType === 'synchronous'){
-      delete Data?.selectedBroker
-      delete UpdatedEdges[IsEdgeopen]?.data?.selectedBroker
+    if(Data.type === 'synchronous'){
+      UpdatedEdges[IsEdgeopen].markerEnd = { color:'black',type: MarkerType.ArrowClosed}
+      UpdatedEdges[IsEdgeopen].style={stroke:'black'}
     }
     else{
-      delete Data?.protocol
-      delete UpdatedEdges[IsEdgeopen]?.data?.protocol
+      UpdatedEdges[IsEdgeopen].markerEnd = { color:'#e2e8f0',type: MarkerType.ArrowClosed}
+      UpdatedEdges[IsEdgeopen].style={stroke:'#e2e8f0'}
     }
     UpdatedEdges[IsEdgeopen].data={'client':UpdatedEdges[IsEdgeopen].source,'server':UpdatedEdges[IsEdgeopen].target,...UpdatedEdges[IsEdgeopen].data,...Data}
     setEdges(UpdatedEdges)
@@ -440,11 +440,6 @@ const Designer = () => {
             onEdgeUpdateStart={onEdgeUpdateStart}
             onEdgeUpdateEnd={onEdgeUpdateEnd}
             onEdgeClick={onEdgeClick}
-            onKeyDown={(event) => {
-              if (event.code === 'Delete' || event.code === 'Backspace') {
-                setIsUINodeEnabled(false);
-              }
-            }}
             nodesFocusable={true}
           >
             <Controls />
@@ -462,8 +457,7 @@ const Designer = () => {
         { nodeType === 'UI' && Isopen && <UiDataModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
 
         { IsEdgeopen && <EdgeModal isOpen={IsEdgeopen} CurrentEdge={CurrentEdge} onClose={setEdgeopen} handleEdgeData={handleEdgeData}/>}
-
-        {/* <Button onClick={()=>onsubmit()}>Submit</Button> */}
+        
       </ReactFlowProvider>
 
 
