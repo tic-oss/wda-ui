@@ -320,8 +320,6 @@ const Designer = () => {
         setNodes((nds) => ({...nds,[newNode.id]:newNode}))
       }
       
-  
-
     },
     [reactFlowInstance]
   );
@@ -333,6 +331,7 @@ const Designer = () => {
      UpdatedNodes['cloudProvider'].data={...UpdatedNodes['cloudProvider'].data,...Data}
     }
     else{
+      setUniqueApplicationNames((prev)=>[...prev,Data.applicationName])
       UpdatedNodes[Isopen].data={...UpdatedNodes[Isopen].data,...Data}
     }
     setNodes(UpdatedNodes)
@@ -419,6 +418,10 @@ const Designer = () => {
   }
     , []);
 
+  const [uniqueApplicationNames, setUniqueApplicationNames] = useState([]);
+
+
+  
   return (
     <div className="dndflow">
       <ReactFlowProvider>
@@ -448,7 +451,7 @@ const Designer = () => {
         </div>
         <Sidebar isUINodeEnabled={isUINodeEnabled} setIsUINodeEnabled={setIsUINodeEnabled} />
 
-        { nodeType === 'Service' && Isopen && <ServiceModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
+        { nodeType === 'Service' && Isopen && <ServiceModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} uniqueApplicationNames={uniqueApplicationNames}/>}
       
         { nodeType === 'Azure'  && Isopen && <DeployModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
         
