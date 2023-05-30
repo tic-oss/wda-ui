@@ -75,6 +75,7 @@ const UiDataModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
                 value={UiData.clientFramework}
                 onChange={(e)=>handleData('clientFramework',e.target.value)}
               >
+                <option value="" disabled>Select an option</option>
                 <option value="reactjs">ReactJS</option>
                 <option value="angular">Angular</option>
                 <option value="vue">Vue</option>
@@ -113,6 +114,7 @@ const UiDataModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
                 value={UiData.withExample}
                 onChange={(e)=>handleData('withExample',e.target.value)}
               >
+                <option value="" disabled>Select an option</option>
                 <option value="true">Yes</option>
                 <option value="false">No</option>
                 

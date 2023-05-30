@@ -118,6 +118,7 @@ console.log(isOpen)
                 value={DeploymentData.kubernetesUseDynamicStorage}
                 onChange={(e)=>handleData('kubernetesUseDynamicStorage',e.target.value)}
               >
+                <option value="" disabled>Select an option</option>
                 <option value="yes">Yes</option>
                 <option value="no">No</option>
                 </Select>

@@ -7,31 +7,39 @@ import {
   ModalCloseButton,
   ModalBody,
   ModalFooter,
-  Input,
   Select,
   Button,
   FormLabel,
   FormControl
 } from "@chakra-ui/react";
 
-const EdgeModal = ({ isOpen, CurrentEdge,onClose, handleEdgeData }) => {
-  console.log(CurrentEdge,'edgeeeeee')
-  const IntialState = {
-    'type': 'asynchronous',
-    'framework':'rabbitmq',
+const EdgeModal = ({ isOpen, CurrentEdge, onClose, handleEdgeData }) => {
+  console.log(CurrentEdge, 'edgeeeeee');
+  const initialState = {
+    type: "",
+    framework: "",
     ...CurrentEdge
-  }
-  const [EdgeData, setEdgeData] = useState(IntialState)
+  };
+  const [edgeData, setEdgeData] = useState(initialState);
 
-  const handleData = (column,value)=>{
-    setEdgeData((prev)=>({...prev,[column]:value}))
-  }
-
-
+  const handleData = (column, value) => {
+   
+    if (column === "type") {
+      setEdgeData((prev) => ({
+        ...prev,
+        [column]: value,
+        framework: ""
+      }));
+    } else {
+      setEdgeData((prev) => ({
+        ...prev,
+        [column]: value
+      }));
+    }
+  };
 
   return (
     <Modal isOpen={isOpen} onClose={() => onClose(false)} isCentered={true}>
-
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Communication</ModalHeader>
@@ -41,7 +49,7 @@ const EdgeModal = ({ isOpen, CurrentEdge,onClose, handleEdgeData }) => {
             style={{
               display: "flex",
               flexDirection: "column",
-              alignItems: "Left",
+              alignItems: "left",
             }}
           >
             <FormControl>
@@ -49,17 +57,18 @@ const EdgeModal = ({ isOpen, CurrentEdge,onClose, handleEdgeData }) => {
               <Select
                 mb={4}
                 variant="outline"
-                id="framework"
+                id="type"
                 borderColor={"black"}
-                value={EdgeData.type}
-                onChange={(e)=>handleData('type',e.target.value)}
+                value={edgeData.type}
+                onChange={(e) => handleData("type", e.target.value)}
               >
+                <option value="" disabled>Select an option</option>
                 <option value="asynchronous">Asynchronous</option>
                 <option value="synchronous">Synchronous</option>
               </Select>
             </FormControl>
 
-            {EdgeData.type === 'synchronous' ? (
+            {edgeData.type === "synchronous" && (
               <FormControl>
                 <FormLabel>Framework</FormLabel>
                 <Select
@@ -67,13 +76,16 @@ const EdgeModal = ({ isOpen, CurrentEdge,onClose, handleEdgeData }) => {
                   variant="outline"
                   id="framework"
                   borderColor={"black"}
-                  value={EdgeData.framework}
-                  onChange={(e)=>handleData('framework',e.target.value)}
+                  value={edgeData.framework}
+                  onChange={(e) => handleData("framework", e.target.value)}
                 >
+                  <option value="" disabled>Select an option</option>
                   <option value="rest">REST</option>
                 </Select>
               </FormControl>
-            ) : EdgeData.type === 'asynchronous' ? (
+            )}
+
+            {edgeData.type === "asynchronous" && (
               <FormControl>
                 <FormLabel>Framework</FormLabel>
                 <Select
@@ -81,22 +93,21 @@ const EdgeModal = ({ isOpen, CurrentEdge,onClose, handleEdgeData }) => {
                   variant="outline"
                   id="framework"
                   borderColor={"black"}
-                  value={EdgeData.framework}
-                  onChange={(e)=>handleData('framework',e.target.value)}
+                  value={edgeData.framework}
+                  onChange={(e) => handleData("framework", e.target.value)}
                 >
+                   <option value="" disabled>Select an option</option>
                   <option value="rabbitmq">Rabbit MQ</option>
                   <option value="kafka">Kafka</option>
                   <option value="pulsar">Pulsar</option>
                 </Select>
               </FormControl>
-            ) : null}
-
-
+            )}
           </div>
-          <ModalFooter>
-            <Button type="submit" onClick={()=>handleEdgeData(EdgeData)}style={{ display: 'block', margin: '0 auto' }}>Submit</Button>
-          </ModalFooter>
         </ModalBody>
+        <ModalFooter>
+          <Button onClick={() => handleEdgeData(edgeData)}>Submit</Button>
+        </ModalFooter>
       </ModalContent>
     </Modal>
   );
