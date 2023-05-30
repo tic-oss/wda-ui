@@ -320,8 +320,6 @@ const Designer = () => {
         setNodes((nds) => ({...nds,[newNode.id]:newNode}))
       }
       
-  
-
     },
     [reactFlowInstance]
   );
@@ -333,6 +331,7 @@ const Designer = () => {
      UpdatedNodes['cloudProvider'].data={...UpdatedNodes['cloudProvider'].data,...Data}
     }
     else{
+      setUniqueApplicationNames((prev)=>[...prev,Data.applicationName])
       UpdatedNodes[Isopen].data={...UpdatedNodes[Isopen].data,...Data}
     }
     setNodes(UpdatedNodes)
@@ -419,21 +418,9 @@ const Designer = () => {
   }
     , []);
 
-    const [uniqueApplicationNames, setUniqueApplicationNames] = useState([]);
-  const [duplicateApplicationNameError, setDuplicateApplicationNameError] = useState(false);
+  const [uniqueApplicationNames, setUniqueApplicationNames] = useState([]);
 
-  const handleAppData = (fieldName, value) => {
-    if (fieldName === 'label') {
-      const isDuplicateName = uniqueApplicationNames.includes(value);
 
-    if (isDuplicateName && value !== "") {
-      setDuplicateApplicationNameError(true);
-      } else {
-        setDuplicateApplicationNameError(false);
-        setUniqueApplicationNames([...uniqueApplicationNames, value]);
-      }
-    }
-  };
   
   return (
     <div className="dndflow">
@@ -469,7 +456,7 @@ const Designer = () => {
         </div>
         <Sidebar isUINodeEnabled={isUINodeEnabled} setIsUINodeEnabled={setIsUINodeEnabled} />
 
-        { nodeType === 'Service' && Isopen && <ServiceModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} duplicateError={duplicateApplicationNameError} handleAppData={handleAppData}/>}
+        { nodeType === 'Service' && Isopen && <ServiceModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} uniqueApplicationNames={uniqueApplicationNames}/>}
       
         { nodeType === 'Azure'  && Isopen && <DeployModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
         

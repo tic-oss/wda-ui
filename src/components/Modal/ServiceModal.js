@@ -15,7 +15,7 @@ import {
   AlertIcon
 } from "@chakra-ui/react";
 
-const ServiceModal = ({ isOpen, onClose, onSubmit,CurrentNode, duplicateError, handleAppData}) => {
+const ServiceModal = ({ isOpen, onClose, onSubmit,CurrentNode, uniqueApplicationNames}) => {
  const IntialState ={
     'label':'Service',
     'applicationName':'',
@@ -26,9 +26,24 @@ const ServiceModal = ({ isOpen, onClose, onSubmit,CurrentNode, duplicateError, h
     ...CurrentNode
   }
   const [ApplicationData, setApplicationData] = useState(IntialState);
+  const [duplicateApplicationNameError, setDuplicateApplicationNameError] = useState(false);
+
+  const ValidateName = (value) =>{
+
+    const isDuplicateName = uniqueApplicationNames.includes(value);
+
+    if (isDuplicateName && value !== "") {
+      setDuplicateApplicationNameError(true);
+      return false;
+      } else {
+        setDuplicateApplicationNameError(false);
+        return true;
+      }
+    }
+
   const handleData = (column, value) => {
-    handleAppData(column,value)
     if (column === 'label') {
+      ValidateName(value)
       setApplicationData((prev) => ({
         ...prev,
         [column]: value,
@@ -62,12 +77,12 @@ const ServiceModal = ({ isOpen, onClose, onSubmit,CurrentNode, duplicateError, h
                 variant="outline"
                 id="applicationName"
                 placeholder="Name"
-                borderColor={duplicateError ? 'red' : 'black'}
+                borderColor={duplicateApplicationNameError ? 'red' : 'black'}
                 value={ApplicationData.applicationName}
                 onChange={(e)=>handleData('label',e.target.value)}
               />
             </FormControl>
-            {duplicateError && (
+            {duplicateApplicationNameError && (
               <Alert status="error" mb={2}>
                 <AlertIcon />
                 Application name already exists. Please choose a unique name.
@@ -113,7 +128,7 @@ const ServiceModal = ({ isOpen, onClose, onSubmit,CurrentNode, duplicateError, h
               />
             </FormControl>
           </div>
-          <Button onClick={()=>onSubmit(ApplicationData)}style={{ display: 'block', margin: '0 auto' }}>Submit</Button>
+          <Button onClick={()=> !duplicateApplicationNameError && onSubmit(ApplicationData)}style={{ display: 'block', margin: '0 auto' }}>Submit</Button>
         </ModalBody>
       </ModalContent>
     </Modal>
