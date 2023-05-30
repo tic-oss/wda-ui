@@ -18,7 +18,7 @@ const AlertModal = ({ isOpen, onClose ,name }) => {
     <Modal isOpen={isOpen} onClose={onClose} isCentered={true}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Already you have chosen a {name} service discovery.</ModalHeader>
+        <ModalHeader>You have already slected one from this category,please delete the first one if you wish to change your choice.</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <div

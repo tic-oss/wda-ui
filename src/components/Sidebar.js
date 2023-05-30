@@ -17,7 +17,7 @@ import {
   Button
 } from "@chakra-ui/react";
 
-export default ({ isUINodeEnabled, setIsUINodeEnabled }) => {
+export default ({ isUINodeEnabled, setIsUINodeEnabled, onSubmit }) => {
   const onDragStart = (event, nodeType, Name) => {
     if(Name === 'UI'){
       setIsUINodeEnabled(true)
@@ -43,10 +43,11 @@ export default ({ isUINodeEnabled, setIsUINodeEnabled }) => {
       const handleData = (column,value)=>{
         setprjData((prev)=>({...prev,[column]:value}))
       }
-      const handleSubmit = () => {
+      // const handleSubmit = () => {
        
-        console.log(prjData); 
-      };
+      //   console.log(prjData); 
+
+      // };
   return (
     <aside>
       <FormLabel fontWeight="bold">Project Name</FormLabel>
@@ -160,7 +161,7 @@ export default ({ isUINodeEnabled, setIsUINodeEnabled }) => {
         </>
       )}
       <div>
-       <Button  onClick={handleSubmit} type="submit"style={{ display: 'block', margin: '0 auto' }}>
+       <Button  onClick={() => onSubmit(prjData)} type="submit"style={{ display: 'block', margin: '0 auto' }}>
            Submit
           </Button>
       </div>
