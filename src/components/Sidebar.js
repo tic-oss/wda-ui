@@ -38,14 +38,14 @@ export default ({ isUINodeEnabled, setIsUINodeEnabled, onSubmit }) => {
     }
      
 
-      const [prjData,setprjData] = useState(IntialState)
+      const [projectData,setprojectData] = useState(IntialState)
 
       const handleData = (column,value)=>{
-        setprjData((prev)=>({...prev,[column]:value}))
+        setprojectData((prev)=>({...prev,[column]:value}))
       }
       // const handleSubmit = () => {
        
-      //   console.log(prjData); 
+      //   console.log(projectData); 
 
       // };
   return (
@@ -53,7 +53,7 @@ export default ({ isUINodeEnabled, setIsUINodeEnabled, onSubmit }) => {
       <FormLabel fontWeight="bold">Project Name</FormLabel>
               <Input mb={4} variant="outline" id="projectName" 
                 borderColor={"black"}
-                value={prjData.projectName}
+                value={projectData.projectName}
                 onChange={(e)=>handleData('projectName',e.target.value)}
               >  
               </Input>
@@ -161,7 +161,7 @@ export default ({ isUINodeEnabled, setIsUINodeEnabled, onSubmit }) => {
         </>
       )}
       <div>
-       <Button  onClick={() => onSubmit(prjData)} type="submit"style={{ display: 'block', margin: '0 auto' }}>
+       <Button  onClick={() => onSubmit(projectData)} type="submit"style={{ display: 'block', margin: '0 auto' }}>
            Submit
           </Button>
       </div>

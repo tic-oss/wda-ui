@@ -469,6 +469,9 @@ const Designer = () => {
             onKeyDown={(event) => {
               if (event.code === 'Delete' || event.code === 'Backspace') {
                 setIsUINodeEnabled(false);
+                setServiceDiscoveryCount(0)
+                setMessageBrokerCount(0)
+                setCloudProviderCount(0)
               }
             }}
             nodesFocusable={true}
