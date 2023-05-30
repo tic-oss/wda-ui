@@ -448,7 +448,7 @@ const Designer = () => {
             nodesFocusable={true}
           >
             <Controls />
-            <MiniMap style={{backgroundColor:'#faa805'}}/>
+            <MiniMap style={{backgroundColor:'#3182CE'}}/>
           </ReactFlow>
         </div>
         <Sidebar isUINodeEnabled={isUINodeEnabled} setIsUINodeEnabled={setIsUINodeEnabled} />

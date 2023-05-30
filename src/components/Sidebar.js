@@ -11,6 +11,11 @@ import azure from "../assets/Azure.png"
 import aws from "../assets/aws.png"
 import eck from "../assets/eck.png"
 import "./../App.css"
+import {
+  Input,
+  FormLabel,
+  Button
+} from "@chakra-ui/react";
 
 export default ({ isUINodeEnabled, setIsUINodeEnabled }) => {
   const onDragStart = (event, nodeType, Name) => {
@@ -27,11 +32,33 @@ export default ({ isUINodeEnabled, setIsUINodeEnabled }) => {
   const toggleOption = (option) => {
     setSelectedOption((prevOption) => (prevOption === option ? null : option));
   };
+   const IntialState ={
+        'projectName':'',
+        
+    }
+     
+
+      const [prjData,setprjData] = useState(IntialState)
+
+      const handleData = (column,value)=>{
+        setprjData((prev)=>({...prev,[column]:value}))
+      }
+      const handleSubmit = () => {
+       
+        console.log(prjData); 
+      };
   return (
     <aside>
+      <FormLabel fontWeight="bold">Project Name</FormLabel>
+              <Input mb={4} variant="outline" id="projectName" 
+                borderColor={"black"}
+                value={prjData.projectName}
+                onChange={(e)=>handleData('projectName',e.target.value)}
+              >  
+              </Input>
       
       <div className="description">
-        <h2 style={{ cursor: "pointer", fontSize: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>You can drag these nodes to the pane on the right.</h2></div>
+        <h2 style={{ cursor: "pointer", fontSize: '15px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>You can drag these nodes to the pane on the right.</h2></div>
       
       <div 
         className={`dndnode output ${isUINodeEnabled ? 'disabled' : ''}`}
@@ -132,6 +159,11 @@ export default ({ isUINodeEnabled, setIsUINodeEnabled }) => {
           </div>
         </>
       )}
+      <div>
+       <Button  onClick={handleSubmit} type="submit"style={{ display: 'block', margin: '0 auto' }}>
+           Submit
+          </Button>
+      </div>
 
     </aside>
   );
