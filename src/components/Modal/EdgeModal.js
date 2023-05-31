@@ -40,6 +40,14 @@ const EdgeModal = ({ isOpen, CurrentEdge, onClose, handleEdgeData, isMessageBrok
     }
   };
 
+  function handleSubmit(edgeData) {
+    if (edgeData.type === 'asynchronous') {
+      handleEdgeData(edgeData)
+    } else if (edgeData.type === 'synchronous') {
+      isMessageBroker && handleEdgeData(edgeData)
+    }
+  }
+  
   return (
     <Modal isOpen={isOpen} onClose={() => onClose(false)} isCentered={true}>
       <ModalOverlay />
@@ -114,7 +122,7 @@ const EdgeModal = ({ isOpen, CurrentEdge, onClose, handleEdgeData, isMessageBrok
           </div>
         </ModalBody>
         <ModalFooter>
-          <Button onClick={() => handleEdgeData(edgeData)}>Submit</Button>
+          <Button onClick={() => handleSubmit(edgeData)}>Submit</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

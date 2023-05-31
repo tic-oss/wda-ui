@@ -77,7 +77,7 @@ const Designer = () => {
     return updatedEdges;
   }
 
-  const onNodesChange = useCallback((changes= []) => {
+  const onNodesChange = useCallback((edges,changes= []) => {
     setNodes((oldNodes) => {
       const updatedNodes = { ...oldNodes };
 
@@ -115,8 +115,10 @@ const Designer = () => {
             };
             break;
           case 'remove': // Delete Functionality
-            if(change.id === 'messageBroker')
+            if(change.id === 'messageBroker'){
               setIsMessageBroker(false)
+              onCheckEdge(edges)
+            }
             else if(change.id !== 'UI')
               setIsUINodeEnabled(true);
             delete updatedNodes[change.id];
@@ -400,6 +402,18 @@ const Designer = () => {
     }
     setNodes(NewNodes)
   } 
+  const onCheckEdge = (edges) =>{
+    let NewEdges = {...edges}
+    for(const key in NewEdges){
+      const Edge = NewEdges[key]
+      if(Edge.id.startsWith('UI')){
+        if(Edge.data.type === "synchronous" && Edge.data.framework === "rest"){
+          delete Edge.data.type;
+          delete Edge.data.framework
+        }
+      }
+    }
+  } 
 
   const onEdgeClick = (e,edge) =>{
     const sourceType = edge.source.split('_')[0]
@@ -453,7 +467,7 @@ const Designer = () => {
             nodes={Object.values(nodes)}
             edges={Object.values(edges)}
             nodeTypes={nodeTypes}
-            onNodesChange={onNodesChange}
+            onNodesChange={(changes)=>onNodesChange(edges,changes)}
             onEdgesChange={(changes)=>onEdgesChange(nodes,changes)}
             onConnect={(params)=>onConnect(params,nodes)}
             onInit={setReactFlowInstance}
