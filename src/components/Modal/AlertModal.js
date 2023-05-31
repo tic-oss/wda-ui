@@ -17,8 +17,8 @@ const AlertModal = ({ isOpen, onClose ,name }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered={true}>
       <ModalOverlay />
-      <ModalContent backgroundColor="#ADD8E6">
-        <ModalHeader>You have already slected one from this category,please delete the first one if you wish to change your choice.</ModalHeader>
+      <ModalContent backgroundColor="#A7C7E7">
+        <ModalHeader>You have already slected one from this category, Please delete the first one if you wish to change your choice.</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <div

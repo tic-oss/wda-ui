@@ -120,8 +120,16 @@ const Designer = () => {
           case 'remove': // Delete Functionality
           if(change.id !== 'UI')
             setIsUINodeEnabled(true);
+          if(change.id==='serviceDiscoveryType')
+            setServiceDiscoveryCount(0)
+          if(change.id==='messageBroker')
+            setMessageBrokerCount(0)
+          if(change.id==='cloudProvider')
+            setCloudProviderCount(0)
             delete updatedNodes[change.id];
+          
             break;
+
           case 'add':
             updatedNodes[change.item.id] = change.item;
             break;
@@ -469,9 +477,6 @@ const Designer = () => {
             onKeyDown={(event) => {
               if (event.code === 'Delete' || event.code === 'Backspace') {
                 setIsUINodeEnabled(false);
-                setServiceDiscoveryCount(0)
-                setMessageBrokerCount(0)
-                setCloudProviderCount(0)
               }
             }}
             nodesFocusable={true}
