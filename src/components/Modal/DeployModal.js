@@ -11,7 +11,9 @@ import {
   Select,
   Button,
   FormLabel,
-  FormControl
+  FormControl,
+  Alert,
+  AlertIcon
 } from "@chakra-ui/react";
 
 const DeployModal = ({ isOpen, onClose, onSubmit,CurrentNode}) => {
@@ -28,11 +30,20 @@ const DeployModal = ({ isOpen, onClose, onSubmit,CurrentNode}) => {
         'ingress':'istio',
         ...CurrentNode
       }
-     
+      const handleKeyPress = (event) => {
+        const charCode = event.which ? event.which : event.keyCode;
+        if ((charCode >= 48 && charCode <= 57) || charCode === 8) {
+          return true;
+        } else {
+          event.preventDefault();
+          return false;
+        }
+      };
 console.log(isOpen)
       const [DeploymentData,setDeploymentData] = useState(IntialState)
 
       const handleData = (column,value)=>{
+        // validateInputValue(field, value);
         setDeploymentData((prev)=>({...prev,[column]:value}))
       }
 
@@ -69,13 +80,24 @@ console.log(isOpen)
         <div>
          <FormControl>
               <FormLabel>AWS Account ID</FormLabel>
-              <Input mb={4} variant="outline" id="awsAccountId" 
+              <Input mb={4} variant="outline"  
+              type="text"
+              placeholder="123456789"
+              id="awsAccountId" 
+              onKeyPress={handleKeyPress}
+              maxLength="12"
                 borderColor={"black"}
                 value={DeploymentData.awsAccountId}
                 onChange={(e)=>handleData('awsAccountId',e.target.value)}
               >  
               </Input>
             </FormControl>
+            {DeploymentData.awsAccountId && DeploymentData.awsAccountId.length!=12 && (
+              <Alert status="error" height="12px" fontSize="12px" borderRadius="3px" mb={2}>
+                <AlertIcon style={{width:"14px" ,height:"14px"}}/>
+                Input value must be at least 12 digits
+              </Alert>
+            )}
             <FormControl>
               <FormLabel>AWS Region</FormLabel>
               <Input mb={4} variant="outline" id="awsRegion" 

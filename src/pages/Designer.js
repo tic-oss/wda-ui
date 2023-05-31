@@ -114,8 +114,10 @@ const Designer = () => {
             };
             break;
           case 'remove': // Delete Functionality
-          if(change.id !== 'UI')
-            setIsUINodeEnabled(true);
+            if(change.id === 'messageBroker')
+              setIsMessageBroker(false)
+            else if(change.id !== 'UI')
+              setIsUINodeEnabled(true);
             delete updatedNodes[change.id];
             break;
           case 'add':
@@ -177,6 +179,7 @@ const Designer = () => {
   const [CurrentEdge,setCurrentEdge]= useState({});
   const edgeUpdateSuccessful = useRef(true);
   const [isUINodeEnabled, setIsUINodeEnabled] = useState(true);
+  const [isMessageBroker, setIsMessageBroker] = useState(false);
 
     const onEdgeUpdateStart = useCallback(() => {
       edgeUpdateSuccessful.current = false;
@@ -285,6 +288,7 @@ const Designer = () => {
          style: { border: "1px solid", padding: "4px 4px" },
         };
         setNodes((nds) => ({...nds,[newNode.id]:newNode}))
+        setIsMessageBroker(true);
       }
       else if(name.startsWith('Cloud')){
         const cloudProvider=name.split('_').splice(1)[0]
@@ -459,7 +463,7 @@ const Designer = () => {
       
         { nodeType === 'UI' && Isopen && <UiDataModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
 
-        { IsEdgeopen && <EdgeModal isOpen={IsEdgeopen} CurrentEdge={CurrentEdge} onClose={setEdgeopen} handleEdgeData={handleEdgeData}/>}
+        { IsEdgeopen && <EdgeModal isOpen={IsEdgeopen} CurrentEdge={CurrentEdge} onClose={setEdgeopen} handleEdgeData={handleEdgeData} isMessageBroker={isMessageBroker} />}
         
       </ReactFlowProvider>
 

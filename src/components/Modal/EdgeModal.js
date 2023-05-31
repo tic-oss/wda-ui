@@ -10,10 +10,12 @@ import {
   Select,
   Button,
   FormLabel,
-  FormControl
+  FormControl,
+  Alert,
+  AlertIcon
 } from "@chakra-ui/react";
 
-const EdgeModal = ({ isOpen, CurrentEdge, onClose, handleEdgeData }) => {
+const EdgeModal = ({ isOpen, CurrentEdge, onClose, handleEdgeData, isMessageBroker }) => {
   console.log(CurrentEdge, 'edgeeeeee');
   const initialState = {
     type: "",
@@ -83,6 +85,12 @@ const EdgeModal = ({ isOpen, CurrentEdge, onClose, handleEdgeData }) => {
                   <option value="rest">REST</option>
                 </Select>
               </FormControl>
+            )}
+            {edgeData.type === "synchronous" && edgeData.framework === "rest" && !isMessageBroker && (
+              <Alert status="error" height="12px" fontSize="12px" borderRadius="3px" mb={2}>
+                <AlertIcon style={{width:"14px" ,height:"14px"}}/>
+                Please select a message broker to save
+              </Alert>
             )}
 
             {edgeData.type === "asynchronous" && (
