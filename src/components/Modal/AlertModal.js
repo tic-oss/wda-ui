@@ -17,7 +17,7 @@ const AlertModal = ({ isOpen, onClose ,name }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered={true}>
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent backgroundColor="#ADD8E6">
         <ModalHeader>You have already slected one from this category,please delete the first one if you wish to change your choice.</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
@@ -26,6 +26,7 @@ const AlertModal = ({ isOpen, onClose ,name }) => {
               display: "flex",
               flexDirection: "column",
               alignItems: "Left",
+              backgroundColor:'#3182CE'
             }}
           >
             
