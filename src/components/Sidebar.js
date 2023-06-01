@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import db1 from "../assets/pstgrc.jpeg"
 import db2 from "../assets/mongo.png"
-import eurkea from "../assets/Eureka.jpg"
+import eurkea from "../assets/eureka.jpg"
 import keycloak from "../assets/keycloak.png"
 import istio from "../assets/istio.png"
 import kafka from "../assets/kafka.png"
@@ -11,8 +11,13 @@ import azure from "../assets/Azure.png"
 import aws from "../assets/aws.png"
 import eck from "../assets/eck.png"
 import "./../App.css"
+import {
+  Input,
+  FormLabel,
+  Button
+} from "@chakra-ui/react";
 
-export default ({ isUINodeEnabled, setIsUINodeEnabled }) => {
+export default ({ isUINodeEnabled, setIsUINodeEnabled, onSubmit }) => {
   const onDragStart = (event, nodeType, Name) => {
     if(Name === 'UI'){
       setIsUINodeEnabled(true)
@@ -27,10 +32,30 @@ export default ({ isUINodeEnabled, setIsUINodeEnabled }) => {
   const toggleOption = (option) => {
     setSelectedOption((prevOption) => (prevOption === option ? null : option));
   };
+   const IntialState ={
+        'projectName':'',
+        
+    }
+     
+
+      const [projectData,setprojectData] = useState(IntialState)
+
+      const handleData = (column,value)=>{
+        setprojectData((prev)=>({...prev,[column]:value}))
+      }
+
   return (
     <aside>
+      <FormLabel fontWeight="bold">Project Name</FormLabel>
+              <Input mb={4} variant="outline" id="projectName" 
+                borderColor={"black"}
+                value={projectData.projectName}
+                onChange={(e)=>handleData('projectName',e.target.value)}
+              >  
+              </Input>
+      
       <div className="description">
-        <h2 style={{ cursor: "pointer", fontSize: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>You can drag these nodes to the pane on the right.</h2></div>
+        <h2 style={{ cursor: "pointer", fontSize: '15px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>You can drag these nodes to the pane on the right.</h2></div>
       
       <div 
         className={`dndnode output ${isUINodeEnabled ? 'disabled' : ''}`}
@@ -121,7 +146,7 @@ export default ({ isUINodeEnabled, setIsUINodeEnabled }) => {
       )}
        <h1>
         <span style={{ cursor: "pointer", fontSize: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }} onClick={() => toggleOption('loadManagement')}>
-          Load Management {selectedOption === 'loadManagement' ? <span>&#x25B2;</span> : <span>&#x25BC;</span>}
+          Log Management {selectedOption === 'loadManagement' ? <span>&#x25B2;</span> : <span>&#x25BC;</span>}
         </span>
       </h1>
       {selectedOption === 'loadManagement' && (
@@ -131,6 +156,11 @@ export default ({ isUINodeEnabled, setIsUINodeEnabled }) => {
           </div>
         </>
       )}
+      <div>
+       <Button  onClick={() => onSubmit(projectData)} type="submit"style={{ display: 'block', margin: '0 auto' }}>
+           Submit
+          </Button>
+      </div>
 
     </aside>
   );

@@ -8,24 +8,11 @@ function CustomServiceNode({ data, isConnectable }) {
   const cloudProvider= data.cloudProvider
 
   return (
-    <div>
-      <Handle
-        type="target"
-        position={Position.Top}
-        isConnectable={isConnectable}
-      />
       <div>
         {cloudProvider === 'Azure' ?
           <img width='60px' name={cloudProvider} src={azure} /> :
           <img width='60px' name={cloudProvider} src={aws} />
         }
-      </div>
-      <Handle
-        type="source"
-        position={Position.Bottom}
-        style={handleStyle}
-        isConnectable={isConnectable}
-      />
     </div>
   );
 }
