@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import db1 from "../assets/pstgrc.jpeg"
 import db2 from "../assets/mongo.png"
-import eurkea from "../assets/Eureka.jpg"
+import eurkea from "../assets/eureka.jpg"
 import keycloak from "../assets/keycloak.png"
 import istio from "../assets/istio.png"
 import kafka from "../assets/kafka.png"
@@ -43,11 +43,7 @@ export default ({ isUINodeEnabled, setIsUINodeEnabled, onSubmit }) => {
       const handleData = (column,value)=>{
         setprojectData((prev)=>({...prev,[column]:value}))
       }
-      // const handleSubmit = () => {
-       
-      //   console.log(projectData); 
 
-      // };
   return (
     <aside>
       <FormLabel fontWeight="bold">Project Name</FormLabel>
