@@ -5,12 +5,7 @@ import {
   ModalContent,
   ModalHeader,
   ModalCloseButton,
-  ModalBody,
-  Input,
-  Select,
-  Button,
-  FormLabel,
-  FormControl
+  ModalBody
 } from "@chakra-ui/react";
 
 const AlertModal = ({ isOpen, onClose ,name }) => {

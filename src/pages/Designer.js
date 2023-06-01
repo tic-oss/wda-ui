@@ -34,8 +34,6 @@ const getId = (type='') =>{
         return `Database_${database_id++}`
       else if ( type === 'Authentication')
         return 'Authentication_1'
-      // else if ( type === 'Deployment')
-      //   return 'Deployment_1'
       else if( type === 'UI')
         return 'UI'
     return 'Id'
@@ -73,9 +71,12 @@ const Designer = () => {
     console.log('New Connection',newConnection)
     console.log('Edges',edges)
     let newEdgeId = newConnection.source+'-'+newConnection.target
-
+    newConnection.markerEnd= {type: MarkerType.ArrowClosed}
+    newConnection.type='straight'
+    newConnection.data={}
     let updatedEdges ={...edges,[newEdgeId]:{id:newEdgeId,...newConnection}}
-    delete updatedEdges[oldEdge.id]
+    if(oldEdge.id != newEdgeId)
+      delete updatedEdges[oldEdge.id]
     
     return updatedEdges;
   }
@@ -149,7 +150,7 @@ const Designer = () => {
   const [edges, setEdges] = useState({})
   console.log("Edges",edges)  
 
-  const onEdgesChange = useCallback((changes = []) => {
+  const onEdgesChange = useCallback((Nodes,changes = []) => {
     setEdges((oldEdges) => {
       const updatedEdges = { ...oldEdges };
       console.log(changes,updatedEdges)
@@ -160,6 +161,12 @@ const Designer = () => {
             // Handle add event
             break;
           case 'remove':
+            let [sourceId,targetId] = change.id.split('-')
+            if(targetId.startsWith('Database') && sourceId.startsWith('Service')){
+              let UpdatedNodes = {...Nodes}
+              delete UpdatedNodes[sourceId].data.prodDatabaseType
+              setNodes(UpdatedNodes)
+            }
             delete updatedEdges[change.id]
             // Handle remove event
             break;
@@ -194,15 +201,25 @@ const Designer = () => {
       edgeUpdateSuccessful.current = false;
     }, []);
   
-    const onEdgeUpdate = useCallback((oldEdge, newConnection) => {
+    const onEdgeUpdate = useCallback((Nodes,oldEdge, newConnection) => {
       edgeUpdateSuccessful.current = true;
-      setEdges((els) => updateEdge(oldEdge, newConnection, els));
+      console.log(oldEdge,newConnection,Nodes)
+        if(! (newConnection.target.startsWith('Database') && Nodes[newConnection.source]?.data['prodDatabaseType'])){ // Validation of service Node to check if it has database or not
+          setEdges((els) => updateEdge(oldEdge, newConnection, els));
+          MergeData(newConnection.source,newConnection.target,Nodes)
+        }
+
     }, []);
   
-    const onEdgeUpdateEnd = useCallback((_, edge) => {
+    const onEdgeUpdateEnd = useCallback((Nodes, edge) => {
       if (!edgeUpdateSuccessful.current) {
         setEdges((edges) => {
           let AllEdges={...edges}
+          if(edge.target.startsWith('Database')){  // If the edge is removed between Service and Database
+            let UpdatedNodes = {...Nodes}
+            delete UpdatedNodes[edge.source].data.prodDatabaseType
+            setNodes(UpdatedNodes)
+          }
           delete AllEdges[edge.id]
           return AllEdges
         });
@@ -353,19 +370,17 @@ const Designer = () => {
         setNodes((nds) => ({...nds,[newNode.id]:newNode}))
       }
       
-  
-
     },
     [reactFlowInstance]
   );
 
   const onChange = (Data) => {
     let UpdatedNodes={...nodes}
-    let CurrentNode;
     if(Isopen==='AWS' || Isopen ==='Azure'){
      UpdatedNodes['cloudProvider'].data={...UpdatedNodes['cloudProvider'].data,...Data}
     }
     else{
+      setUniqueApplicationNames((prev)=>[...prev,Data.applicationName])
       UpdatedNodes[Isopen].data={...UpdatedNodes[Isopen].data,...Data}
     }
     setNodes(UpdatedNodes)
@@ -377,7 +392,7 @@ const Designer = () => {
       {
             id: 'UI',
             type: 'default',
-            data: { label: 'UI'},
+            data: { label: 'UI+Gateway'},
            style: { border: "1px solid #8c8d8f", padding: "4px 4px" },
             position: { x: 250, y: 5 },
           },
@@ -393,7 +408,7 @@ const Designer = () => {
     console.log(sourceType, targetType)
     
     if(sourceType !== targetType){
-      if(sourceType === 'Service' && targetType === 'Database'){
+      if( (sourceType === 'Service' && targetType === 'Database') || (sourceType === 'UI' && targetType === 'Database') ){
           let AllNodes={...Nodes}
           let sourceNode = AllNodes[sourceId]
           let targetNode = AllNodes[targetId]
@@ -420,7 +435,7 @@ const Designer = () => {
     const sourceType = edge.source.split('_')[0]
     const targetType = edge.target.split('_')[0]
     console.log(e,edge)
-    if( (sourceType ==='UI' && targetType === 'Service') || (sourceType=='Service' && targetType==='Service')){
+    if( (sourceType === 'UI' && targetType === 'Service') || (sourceType === 'Service' && targetType === 'Service')){
       setEdgeopen(edge.id)
       setCurrentEdge(edges[edge.id].data)
     }
@@ -430,13 +445,13 @@ const Designer = () => {
   const handleEdgeData = (Data)=>{
     console.log(Data,IsEdgeopen)
     let UpdatedEdges={...edges}
-    if(Data.communicationType === 'synchronous'){
-      delete Data?.selectedBroker
-      delete UpdatedEdges[IsEdgeopen]?.data?.selectedBroker
+    if(Data.type === 'synchronous'){
+      UpdatedEdges[IsEdgeopen].markerEnd = { color:'black',type: MarkerType.ArrowClosed}
+      UpdatedEdges[IsEdgeopen].style={stroke:'black'}
     }
     else{
-      delete Data?.protocol
-      delete UpdatedEdges[IsEdgeopen]?.data?.protocol
+      UpdatedEdges[IsEdgeopen].markerEnd = { color:'#e2e8f0',type: MarkerType.ArrowClosed}
+      UpdatedEdges[IsEdgeopen].style={stroke:'#e2e8f0'}
     }
     UpdatedEdges[IsEdgeopen].data={'client':UpdatedEdges[IsEdgeopen].source,'server':UpdatedEdges[IsEdgeopen].target,...UpdatedEdges[IsEdgeopen].data,...Data}
     setEdges(UpdatedEdges)
@@ -448,11 +463,18 @@ const Designer = () => {
     params.markerEnd= {type: MarkerType.ArrowClosed}
     params.type='straight'
     params.data={}
-    setEdges((eds) => addEdge(params, eds))
-    MergeData(params.source,params.target,Nodes)
+
+    if(! (params.target.startsWith('Database') && Nodes[params.source]?.data['prodDatabaseType'])){ // Validation of service Node to check if it has database or not
+      setEdges((eds) => addEdge(params, eds))
+      MergeData(params.source,params.target,Nodes)
+    }
   }
     , []);
 
+  const [uniqueApplicationNames, setUniqueApplicationNames] = useState([]);
+
+
+  
   return (
     <div className="dndflow">
       <ReactFlowProvider>
@@ -462,7 +484,7 @@ const Designer = () => {
             edges={Object.values(edges)}
             nodeTypes={nodeTypes}
             onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
+            onEdgesChange={(changes)=>onEdgesChange(nodes,changes)}
             onConnect={(params)=>onConnect(params,nodes)}
             onInit={setReactFlowInstance}
             onDrop={(e)=>onDrop(e,ServiceDiscoveryCount,MessageBrokerCount,CloudProviderCount)}
@@ -470,15 +492,10 @@ const Designer = () => {
             onNodeDoubleClick={onclick}
             deleteKeyCode={["Backspace","Delete"]}
             fitView
-            onEdgeUpdate={onEdgeUpdate}
+            onEdgeUpdate={(oldEdge,newConnection)=>onEdgeUpdate(nodes,oldEdge,newConnection)}
             onEdgeUpdateStart={onEdgeUpdateStart}
-            onEdgeUpdateEnd={onEdgeUpdateEnd}
-            onEdgeClick={onEdgeClick}
-            onKeyDown={(event) => {
-              if (event.code === 'Delete' || event.code === 'Backspace') {
-                setIsUINodeEnabled(false);
-              }
-            }}
+            onEdgeUpdateEnd={(_,edge)=>onEdgeUpdateEnd(nodes,edge)}
+            onEdgeDoubleClick={onEdgeClick}
             nodesFocusable={true}
           >
             <Controls />
@@ -487,7 +504,7 @@ const Designer = () => {
         </div>
         <Sidebar isUINodeEnabled={isUINodeEnabled} setIsUINodeEnabled={setIsUINodeEnabled} onSubmit={onsubmit} />
 
-        { nodeType === 'Service' && Isopen && <ServiceModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
+        { nodeType === 'Service' && Isopen && <ServiceModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} uniqueApplicationNames={uniqueApplicationNames}/>}
       
         { nodeType === 'Azure'  && Isopen && <DeployModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
         
