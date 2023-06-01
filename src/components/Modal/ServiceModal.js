@@ -11,12 +11,14 @@ import {
   Button,
   FormLabel,
   FormControl,
+  Alert, 
+  AlertIcon
 } from "@chakra-ui/react";
 
-const ServiceModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
+const ServiceModal = ({ isOpen, onClose, onSubmit,CurrentNode, uniqueApplicationNames}) => {
  const IntialState ={
     'label':'Service',
-    'applicationName':'Service',
+    'applicationName':'',
     'applicationFramework':'java',
     'packageName':'',
     'serverPort':'',
@@ -24,9 +26,24 @@ const ServiceModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
     ...CurrentNode
   }
   const [ApplicationData, setApplicationData] = useState(IntialState);
+  const [duplicateApplicationNameError, setDuplicateApplicationNameError] = useState(false);
+
+  const ValidateName = (value) =>{
+
+    const isDuplicateName = uniqueApplicationNames.includes(value);
+
+    if (isDuplicateName && value !== "") {
+      setDuplicateApplicationNameError(true);
+      return false;
+      } else {
+        setDuplicateApplicationNameError(false);
+        return true;
+      }
+    }
 
   const handleData = (column, value) => {
     if (column === 'label') {
+      ValidateName(value)
       setApplicationData((prev) => ({
         ...prev,
         [column]: value,
@@ -45,7 +62,6 @@ const ServiceModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
       setApplicationData((prev) => ({ ...prev, [column]: value }));
     }
   };
-  
   return (
     <Modal isOpen={isOpen} onClose={() => onClose(false)} isCentered={true}>
       <ModalOverlay />
@@ -67,11 +83,17 @@ const ServiceModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
                 variant="outline"
                 id="applicationName"
                 placeholder="Name"
-                borderColor={"black"}
+                borderColor={duplicateApplicationNameError ? 'red' : 'black'}
                 value={ApplicationData.applicationName}
                 onChange={(e)=>handleData('label',e.target.value)}
               />
             </FormControl>
+            {duplicateApplicationNameError && (
+              <Alert status="error" mb={2}>
+                <AlertIcon />
+                Application name already exists. Please choose a unique name.
+              </Alert>
+            )}
             {/* <p>AN: {ApplicationData.AN}</p> */}
        <FormControl>
               <FormLabel>applicationFramework</FormLabel>
@@ -113,7 +135,7 @@ const ServiceModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
               />
             </FormControl>
           </div>
-          <Button onClick={()=>onSubmit(ApplicationData)}style={{ display: 'block', margin: '0 auto' }}>Submit</Button>
+          <Button onClick={()=> !duplicateApplicationNameError && onSubmit(ApplicationData)}style={{ display: 'block', margin: '0 auto' }}>Submit</Button>
         </ModalBody>
       </ModalContent>
     </Modal>
