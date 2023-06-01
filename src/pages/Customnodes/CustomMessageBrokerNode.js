@@ -9,14 +9,27 @@ const handleStyle = { left: 25 };
 function CustomMessageBrokerNode({ data, isConnectable }) {
 
   const messageBroker = data.messageBroker
-
+  console.log(messageBroker)
 
   return (
     <div>
+      {/* <Handle
+        type="target"
+        position={Position.Top}
+        isConnectable={isConnectable}
+      /> */}
+      <div>
       {messageBroker === 'Kafka' ? (
-            <img width='60px' name={messageBroker} src={kafka} />) : 
-            messageBroker === 'Pulsar' ? (<img width='60px' name={messageBroker} src={pulsar} />) : 
-            (<img width='60px' name={messageBroker} src={rabbitmq} />)}    
+            <img width='50px' name={messageBroker} src={kafka} />) : 
+            messageBroker === 'Pulsar' ? (<img width='50px' name={messageBroker} src={pulsar} />) : 
+            (<img width='50px' name={messageBroker} src={rabbitmq} />)}    
+      </div>
+      {/* <Handle
+        type="source"
+        position={Position.Bottom}
+        style={handleStyle}
+        isConnectable={isConnectable}
+      /> */}
     </div>
   );
 }

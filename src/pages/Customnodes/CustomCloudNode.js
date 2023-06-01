@@ -9,23 +9,23 @@ function CustomServiceNode({ data, isConnectable }) {
 
   return (
     <div>
-      <Handle
+      {/* <Handle
         type="target"
         position={Position.Top}
         isConnectable={isConnectable}
-      />
+      /> */}
       <div>
         {cloudProvider === 'Azure' ?
           <img width='60px' name={cloudProvider} src={azure} /> :
           <img width='60px' name={cloudProvider} src={aws} />
         }
       </div>
-      <Handle
+      {/* <Handle
         type="source"
         position={Position.Bottom}
         style={handleStyle}
         isConnectable={isConnectable}
-      />
+      /> */}
     </div>
   );
 }

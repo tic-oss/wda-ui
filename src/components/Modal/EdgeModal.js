@@ -98,8 +98,8 @@ const EdgeModal = ({ isOpen, CurrentEdge, onClose, handleEdgeData }) => {
                 >
                    <option value="" disabled>Select an option</option>
                   <option value="rabbitmq">Rabbit MQ</option>
-                  <option value="kafka">Kafka</option>
-                  <option value="pulsar">Pulsar</option>
+                  {/* <option value="kafka">Kafka</option>
+                  <option value="pulsar">Pulsar</option> */}
                 </Select>
               </FormControl>
             )}

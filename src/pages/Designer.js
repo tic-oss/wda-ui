@@ -18,6 +18,7 @@ import CustomAuthNode from "./Customnodes/CustomAuthNode"
 import CustomMessageBrokerNode from "./Customnodes/CustomMessageBrokerNode"
 import CustomCloudNode from "./Customnodes/CustomCloudNode"
 import CustomLoadNode from "./Customnodes/CustomLoadNode"
+import AlertModal from '../components/Modal/AlertModal';
 
 import "./../App.css"
 import { Button } from '@chakra-ui/react';
@@ -52,6 +53,9 @@ const Designer = () => {
   const reactFlowWrapper = useRef(null);
   const [nodes,setNodes] = useState({})
   const [nodeType,setNodeType] = useState(null)
+  const [ServiceDiscoveryCount,setServiceDiscoveryCount] = useState(0)
+  const [MessageBrokerCount,setMessageBrokerCount] = useState(0)
+  const [CloudProviderCount,setCloudProviderCount] = useState(0)
 
   console.log("Nodes",nodes)
 
@@ -114,11 +118,19 @@ const Designer = () => {
               selected: change.selected,
             };
             break;
-          case 'remove': // Delete Functionality  
-          if(change.id === 'UI')
-            setIsUINodeEnabled(false);
+          case 'remove': // Delete Functionality
+          if(change.id !== 'UI')
+            setIsUINodeEnabled(true);
+          if(change.id==='serviceDiscoveryType')
+            setServiceDiscoveryCount(0)
+          if(change.id==='messageBroker')
+            setMessageBrokerCount(0)
+          if(change.id==='cloudProvider')
+            setCloudProviderCount(0)
             delete updatedNodes[change.id];
+          
             break;
+
           case 'add':
             updatedNodes[change.item.id] = change.item;
             break;
@@ -238,7 +250,7 @@ const Designer = () => {
   }
 
   const onDrop = useCallback(
-    (event) => {
+    (event,servicecount,messagecount,cloudcount) => {
       event.preventDefault();
       console.log(event)
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
@@ -266,18 +278,24 @@ const Designer = () => {
         };
         setNodes((nds) => ({...nds,[newNode.id]:newNode}))
       }
-      else if(name.startsWith('Discovery')){
-        const ServiceDiscoveryType=name.split('_').splice(1)[0]
-        console.log(ServiceDiscoveryType)
+      else if(name.startsWith('Discovery') && servicecount==0){
+        console.log(servicecount)
+        const serviceDiscoveryType=name.split('_').splice(1)[0]
+        console.log(serviceDiscoveryType)
         const newNode = {
-          id: 'ServiceDiscoveryType',
+          id: 'serviceDiscoveryType',
           type:'selectorNode1',
           position,
-          data: { ServiceDiscoveryType: ServiceDiscoveryType },
+          data: { serviceDiscoveryType: serviceDiscoveryType },
          style: { border: "1px solid", padding: "4px 4px" },
         };
         setNodes((nds) => ({...nds,[newNode.id]:newNode}))
-      }
+        setServiceDiscoveryCount(1)
+          
+    }
+    else if(name.startsWith('Discovery') && servicecount>=1){
+      console.log("else",servicecount)
+      setServiceDiscoveryCount(2)}
 
       else if(name.startsWith('Auth')){
         const authenticationType=name.split('_').splice(1)[0]
@@ -291,7 +309,8 @@ const Designer = () => {
         };
         setNodes((nds) => ({...nds,[newNode.id]:newNode}))
       }
-      else if(name.startsWith('MessageBroker')){
+      else if(name.startsWith('MessageBroker')&& messagecount==0){
+        console.log(messagecount)
         const messageBroker=name.split('_').splice(1)[0]
         console.log(messageBroker)
         const newNode = {
@@ -302,8 +321,15 @@ const Designer = () => {
          style: { border: "1px solid", padding: "4px 4px" },
         };
         setNodes((nds) => ({...nds,[newNode.id]:newNode}))
+        setMessageBrokerCount(1)
       }
-      else if(name.startsWith('Cloud')){
+      else if(name.startsWith('MessageBroker') && messagecount>=1)
+      {
+        console.log("else",messagecount)
+        setMessageBrokerCount(2)
+      }
+      else if(name.startsWith('Cloud')&& cloudcount==0){
+        console.log(cloudcount)
         const cloudProvider=name.split('_').splice(1)[0]
         console.log(cloudProvider)
         const newNode = {
@@ -314,6 +340,12 @@ const Designer = () => {
          style: { border: "1px solid", padding: "4px 4px" },
         };
         setNodes((nds) => ({...nds,[newNode.id]:newNode}))
+        setCloudProviderCount(1)
+      }
+      else if(name.startsWith('Cloud') && cloudcount>=1)
+      {
+        console.log("else",cloudcount)
+        setCloudProviderCount(2)
       }
       else if(name.startsWith('Load')){
         const logManagementType=name.split('_').splice(1)[0]
@@ -327,11 +359,12 @@ const Designer = () => {
         setNodes((nds) => ({...nds,[newNode.id]:newNode}))
       }
       else {
+        
         const newNode = {
           id: getId(name),
           type,
           position,
-          data: { label: name },
+          data: { label: name},
          style: { border: "1px solid", padding: "4px 4px" },
         };
         setNodes((nds) => ({...nds,[newNode.id]:newNode}))
@@ -385,15 +418,16 @@ const Designer = () => {
         }
     }
   }
-  const onsubmit = () =>{
+  const onsubmit = (Data) =>{
 
     let NewNodes = {...nodes}
-    let Service_Discovery_Data= nodes['Service_Discovery'].data
+    let Service_Discovery_Data= nodes['serviceDiscoveryType'].data
     for(const key in NewNodes){
       const Node = NewNodes[key]
       if(Node.id.startsWith('Service')|| Node.id === 'UI')
             Node.data={...Node.data,...Service_Discovery_Data}
     }
+    console.log(Data)
     setNodes(NewNodes)
   } 
 
@@ -453,7 +487,7 @@ const Designer = () => {
             onEdgesChange={(changes)=>onEdgesChange(nodes,changes)}
             onConnect={(params)=>onConnect(params,nodes)}
             onInit={setReactFlowInstance}
-            onDrop={onDrop}
+            onDrop={(e)=>onDrop(e,ServiceDiscoveryCount,MessageBrokerCount,CloudProviderCount)}
             onDragOver={onDragOver}
             onNodeDoubleClick={onclick}
             deleteKeyCode={["Backspace","Delete"]}
@@ -465,10 +499,10 @@ const Designer = () => {
             nodesFocusable={true}
           >
             <Controls />
-            <MiniMap style={{backgroundColor:'#faa805'}}/>
+            <MiniMap style={{backgroundColor:'#3182CE'}}/>
           </ReactFlow>
         </div>
-        <Sidebar isUINodeEnabled={isUINodeEnabled} setIsUINodeEnabled={setIsUINodeEnabled} />
+        <Sidebar isUINodeEnabled={isUINodeEnabled} setIsUINodeEnabled={setIsUINodeEnabled} onSubmit={onsubmit} />
 
         { nodeType === 'Service' && Isopen && <ServiceModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} uniqueApplicationNames={uniqueApplicationNames}/>}
       
@@ -479,7 +513,14 @@ const Designer = () => {
         { nodeType === 'UI' && Isopen && <UiDataModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
 
         { IsEdgeopen && <EdgeModal isOpen={IsEdgeopen} CurrentEdge={CurrentEdge} onClose={setEdgeopen} handleEdgeData={handleEdgeData}/>}
+
+        {ServiceDiscoveryCount==2 && <AlertModal isOpen={true} onClose={()=>setServiceDiscoveryCount(1)} />}
         
+        {MessageBrokerCount==2 && <AlertModal isOpen={true} onClose={()=>setMessageBrokerCount(1)} />}
+
+        {CloudProviderCount==2 && <AlertModal isOpen={true} onClose={()=>setCloudProviderCount(1)} />}
+
+        {/* <Button onClick={()=>onsubmit()}>Submit</Button> */}
       </ReactFlowProvider>
 
 
