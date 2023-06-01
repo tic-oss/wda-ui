@@ -46,7 +46,15 @@ console.log(isOpen)
         // validateInputValue(field, value);
         setDeploymentData((prev)=>({...prev,[column]:value}))
       }
-
+    const [checkLength, setCheckLength] = useState(false)
+    const validateInputValue = () => {
+      if (DeploymentData.awsAccountId.length<12) {
+        setCheckLength(true);
+      }
+    };
+      function handleSubmit(DeploymentData) {
+        validateInputValue && checkLength && onSubmit(DeploymentData)
+      }
   return (
     <Modal isOpen={isOpen} onClose={()=>onClose(false)} isCentered={true}>
       
@@ -173,7 +181,7 @@ console.log(isOpen)
 
              </div>
           <ModalFooter>
-          <Button onClick={() => onSubmit(DeploymentData)}  type="submit"style={{ display: 'block', margin: '0 auto' }}>
+          <Button onClick={() =>  handleSubmit(DeploymentData)}  type="submit"style={{ display: 'block', margin: '0 auto' }}>
            Submit
           </Button>
 
