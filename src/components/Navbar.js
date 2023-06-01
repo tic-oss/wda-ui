@@ -125,6 +125,15 @@ export default function Header({ children }) {
               Contact
             </Text>
           </Link>
+          <Link to="/login" onClick={() => handleAction("login")}>
+            <Text
+              fontSize="md"
+              color={color}
+              fontWeight={action === "login" ? "bold" : ""}
+            >
+              Login
+            </Text>
+          </Link>
         </HStack>
         <Box display={{ base: "block", md: "none" }}>
           <Button variant="ghost" colorScheme="blue" size="sm">
