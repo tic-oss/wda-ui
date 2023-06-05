@@ -81,7 +81,7 @@ const Designer = () => {
     return updatedEdges;
   }
 
-  const onNodesChange = useCallback((changes= []) => {
+  const onNodesChange = useCallback((edges,changes= []) => {
     setNodes((oldNodes) => {
       const updatedNodes = { ...oldNodes };
 
@@ -119,13 +119,16 @@ const Designer = () => {
             };
             break;
           case 'remove': // Delete Functionality
-          if(change.id !== 'UI')
-            setIsUINodeEnabled(true);
-          if(change.id==='serviceDiscoveryType')
+            if(change.id === 'messageBroker'){
+              setIsMessageBroker(false)
+              onCheckEdge(edges)
+              setMessageBrokerCount(0)
+            }
+            else if(change.id === 'UI')
+              setIsUINodeEnabled(false);
+          else if(change.id==='serviceDiscoveryType')
             setServiceDiscoveryCount(0)
-          if(change.id==='messageBroker')
-            setMessageBrokerCount(0)
-          if(change.id==='cloudProvider')
+          else if(change.id==='cloudProvider')
             setCloudProviderCount(0)
             delete updatedNodes[change.id];
           
@@ -196,6 +199,7 @@ const Designer = () => {
   const [CurrentEdge,setCurrentEdge]= useState({});
   const edgeUpdateSuccessful = useRef(true);
   const [isUINodeEnabled, setIsUINodeEnabled] = useState(true);
+  const [isMessageBroker, setIsMessageBroker] = useState(false);
 
     const onEdgeUpdateStart = useCallback(() => {
       edgeUpdateSuccessful.current = false;
@@ -321,6 +325,7 @@ const Designer = () => {
          style: { border: "1px solid", padding: "4px 4px" },
         };
         setNodes((nds) => ({...nds,[newNode.id]:newNode}))
+        setIsMessageBroker(true);
         setMessageBrokerCount(1)
       }
       else if(name.startsWith('MessageBroker') && messagecount>=1)
@@ -430,6 +435,18 @@ const Designer = () => {
     console.log(Data)
     setNodes(NewNodes)
   } 
+  const onCheckEdge = (edges) =>{
+    let NewEdges = {...edges}
+    for(const key in NewEdges){
+      const Edge = NewEdges[key]
+      if(Edge.id.startsWith('UI')){
+        if(Edge.data.type === "synchronous" && Edge.data.framework === "rest"){
+          delete Edge.data.type;
+          delete Edge.data.framework
+        }
+      }
+    }
+  } 
 
   const onEdgeClick = (e,edge) =>{
     const sourceType = edge.source.split('_')[0]
@@ -483,7 +500,7 @@ const Designer = () => {
             nodes={Object.values(nodes)}
             edges={Object.values(edges)}
             nodeTypes={nodeTypes}
-            onNodesChange={onNodesChange}
+            onNodesChange={(changes)=>onNodesChange(edges,changes)}
             onEdgesChange={(changes)=>onEdgesChange(nodes,changes)}
             onConnect={(params)=>onConnect(params,nodes)}
             onInit={setReactFlowInstance}
@@ -512,7 +529,7 @@ const Designer = () => {
       
         { nodeType === 'UI' && Isopen && <UiDataModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} />}
 
-        { IsEdgeopen && <EdgeModal isOpen={IsEdgeopen} CurrentEdge={CurrentEdge} onClose={setEdgeopen} handleEdgeData={handleEdgeData}/>}
+        { IsEdgeopen && <EdgeModal isOpen={IsEdgeopen} CurrentEdge={CurrentEdge} onClose={setEdgeopen} handleEdgeData={handleEdgeData} isMessageBroker={isMessageBroker} />}
 
         {ServiceDiscoveryCount==2 && <AlertModal isOpen={true} onClose={()=>setServiceDiscoveryCount(1)} />}
         
