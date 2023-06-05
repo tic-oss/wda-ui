@@ -24,7 +24,6 @@ const DeployModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
     kubernetesStorageClassName: "",
     azureRegion: "",
     acrRegistry: "",
-    resourcegroupname: "",
     awsAccountId: "",
     clusterName: "",
     awsRegion: "",
@@ -32,6 +31,8 @@ const DeployModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
     monitoring: "",
     ingressDomain: "",
     k8sWebUI: "",
+    subscriptionid:"",
+    tenantid:"",
 
     ...CurrentNode,
   };
@@ -78,19 +79,6 @@ const DeployModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
                   ></Input>
                 </FormControl>
                 <FormControl>
-                  <FormLabel>Resource Group Name</FormLabel>
-                  <Input
-                    mb={4}
-                    variant="outline"
-                    id="resourcegroupname"
-                    borderColor={"black"}
-                    value={DeploymentData.resourcegroupname}
-                    onChange={(e) =>
-                      handleData("resourcegroupname", e.target.value)
-                    }
-                  ></Input>
-                </FormControl>
-                <FormControl>
                   <FormLabel>Azure Region</FormLabel>
                   <Select
                     mb={4}
@@ -105,6 +93,32 @@ const DeployModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
                     </option>
                     <option value="canadacentral">Canada Central</option>
                   </Select>
+                </FormControl>
+                <FormControl>
+                  <FormLabel>Subscription ID</FormLabel>
+                  <Input
+                    mb={4}
+                    variant="outline"
+                    id="subscriptionid"
+                    borderColor={"black"}
+                    value={DeploymentData.subscriptionid}
+                    onChange={(e) =>
+                      handleData("subscriptionid", e.target.value)
+                    }
+                  ></Input>
+                </FormControl>
+                <FormControl>
+                  <FormLabel>Tenant ID</FormLabel>
+                  <Input
+                    mb={4}
+                    variant="outline"
+                    id="tenantid"
+                    borderColor={"black"}
+                    value={DeploymentData.tenantid}
+                    onChange={(e) =>
+                      handleData("tenantid", e.target.value)
+                    }
+                  ></Input>
                 </FormControl>
               </div>
             )}
@@ -179,6 +193,20 @@ const DeployModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
                     onChange={(e) => handleData("clusterName", e.target.value)}
                   ></Input>
                 </FormControl>
+                <FormControl>
+                  <FormLabel>Namespace</FormLabel>
+                  <Input
+                    mb={4}
+                    variant="outline"
+                    id="kubernetesnamespace"
+                    placeholder="Kubernetes Namespace"
+                    borderColor={"black"}
+                    value={DeploymentData.kubernetesNamespace}
+                    onChange={(e) =>
+                      handleData("kubernetesNamespace", e.target.value)
+                    }
+                  />
+                </FormControl>
 
                 <FormControl>
                   <FormLabel>Enable Dynamic Storage</FormLabel>
@@ -218,21 +246,6 @@ const DeployModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
                     />
                   </FormControl>
                 )}
-
-                <FormControl>
-                  <FormLabel>Namespace</FormLabel>
-                  <Input
-                    mb={4}
-                    variant="outline"
-                    id="kubernetesnamespace"
-                    placeholder="Kubernetes Namespace"
-                    borderColor={"black"}
-                    value={DeploymentData.kubernetesNamespace}
-                    onChange={(e) =>
-                      handleData("kubernetesNamespace", e.target.value)
-                    }
-                  />
-                </FormControl>
                 <FormControl>
                   <FormLabel>Ingress Type</FormLabel>
                   <Select
