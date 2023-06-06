@@ -11,45 +11,53 @@ import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import Designer from "./pages/Designer";
+import React from "react";
+import { BrowserRouter } from "react-router-dom";
+import { ReactKeycloakProvider } from "@react-keycloak/web";
+import keycloak from "./Keycloak";
 
 function App() {
   return (
-    <Router className="flex h-screen">
-      <Navbar />
-      <Switch>
-        <Route exact path="/wda">
-          <FormWda />
-        </Route>
-        <Route exact path="/wdi">
-          <FormWdi />
-        </Route>
-        <Route exact path="/">
-          <Home />
-        </Route>
-        <Route exact path="/products">
-          <Products />
-        </Route>
-        <Route exact path="/docs">
-          <DocHome />
-        </Route>
-        {/* <Route exact path="/about">
+    <ReactKeycloakProvider authClient={keycloak}>
+      <BrowserRouter>
+        <Router className="flex h-screen">
+          <Navbar />
+          <Switch>
+            <Route exact path="/wda">
+              <FormWda />
+            </Route>
+            <Route exact path="/wdi">
+              <FormWdi />
+            </Route>
+            <Route exact path="/">
+              <Home />
+            </Route>
+            <Route exact path="/products">
+              <Products />
+            </Route>
+            <Route exact path="/docs">
+              <DocHome />
+            </Route>
+            {/* <Route exact path="/about">
           <About />
         </Route> */}
-        <Route exact path="/contact">
-          <Contact />
-        </Route>
-        <Route exact path="/login">
-          <Login />
-        </Route>
-        <Route exact path="/signup">
-          <SignUp />
-        </Route>
-        <Route exact path="/designer">
-          <Designer />
-        </Route>
-      </Switch>
-      <Footer />
-    </Router>
+            <Route exact path="/contact">
+              <Contact />
+            </Route>
+            <Route exact path="/login">
+              <Login />
+            </Route>
+            <Route exact path="/signup">
+              <SignUp />
+            </Route>
+            <Route exact path="/designer">
+              <Designer />
+            </Route>
+          </Switch>
+          <Footer />
+        </Router>
+      </BrowserRouter>
+    </ReactKeycloakProvider>
   );
 }
 
