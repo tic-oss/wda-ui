@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import logo from "../assets/TIC.png";
 import { useKeycloak } from "@react-keycloak/web";
+import { useHistory } from "react-router-dom";
 
 export default function Header({ children }) {
   const color = "#ffffff";
@@ -27,6 +28,14 @@ export default function Header({ children }) {
   const handleClose = () => {
     setIsOpen(false);
   };
+  const Logout = () => {
+    const { keycloak } = useKeycloak();
+    const history = useHistory();
+  
+    const handleLogout = () => {
+      keycloak.logout();
+      history.push("/"); // Redirect to the home page
+    };}
 
   return (
     <Box bg={bg} py={4} px={6} shadow="md">
@@ -112,6 +121,14 @@ export default function Header({ children }) {
               >
                 WDI
               </MenuItem>
+              <MenuItem
+                backgroundColor={bg}
+                as={Link}
+                to="/designer"
+                onClick={() => handleClose()}
+              >
+                Designer
+              </MenuItem>
             </MenuList>
           </Menu>
           {/* <Link to="/about" onClick={() => handleAction("about")}>
@@ -138,9 +155,10 @@ export default function Header({ children }) {
             </Text>
           )}
 
-          {!!keycloak.authenticated && (
+          {keycloak.authenticated && (
             <Text fontSize="md" color={color} onClick={() => keycloak.logout()}>
-              Logout ({keycloak.tokenParsed.preferred_username})
+              Logout 
+              ({keycloak.tokenParsed.preferred_username})
             </Text>
           )}
         </HStack>

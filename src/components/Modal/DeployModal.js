@@ -12,11 +12,8 @@ import {
   Button,
   FormLabel,
   FormControl,
-<<<<<<< HEAD
   Alert,
   AlertIcon
-=======
->>>>>>> 9bb91e5fba715e9fca5faa3da38cd89288b5c459
 } from "@chakra-ui/react";
 
 const DeployModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
@@ -39,7 +36,6 @@ const DeployModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
     subscriptionid:"",
     tenantid:"",
 
-<<<<<<< HEAD
         ...CurrentNode
       }
       const handleKeyPress = (event) => {
@@ -65,20 +61,9 @@ console.log(isOpen)
       }
     };
       function handleSubmit(DeploymentData) {
-        validateInputValue && checkLength && onSubmit(DeploymentData)
+        // validateInputValue && checkLength && 
+        onSubmit(DeploymentData)
       }
-=======
-    ...CurrentNode,
-  };
-
-  console.log(isOpen);
-  const [DeploymentData, setDeploymentData] = useState(IntialState);
-
-  const handleData = (column, value) => {
-    setDeploymentData((prev) => ({ ...prev, [column]: value }));
-  };
-
->>>>>>> 9bb91e5fba715e9fca5faa3da38cd89288b5c459
   return (
     <Modal isOpen={isOpen} onClose={() => onClose(false)} isCentered={true}>
       <ModalOverlay />
@@ -158,7 +143,6 @@ console.log(isOpen)
               </div>
             )}
 
-<<<<<<< HEAD
       {isOpen === 'AWS' && (
         <div>
          <FormControl>
@@ -195,46 +179,6 @@ console.log(isOpen)
             </FormControl>
         </div>
       )}
-=======
-            {isOpen === "AWS" && (
-              <div>
-                <FormControl>
-                  <FormLabel>AWS Account ID</FormLabel>
-                  <Input
-                    mb={4}
-                    variant="outline"
-                    id="awsAccountId"
-                    borderColor={"black"}
-                    value={DeploymentData.awsAccountId}
-                    onChange={(e) =>
-                      handleData("awsAccountId", e.target.value)
-                    }
-                  ></Input>
-                </FormControl>
-                <FormControl>
-                  <FormLabel>AWS Region</FormLabel>
-                  <Select
-                    mb={4}
-                    variant="outline"
-                    id="awsRegion"
-                    borderColor={"black"}
-                    value={DeploymentData.awsRegion}
-                    onChange={(e) =>
-                      handleData("awsRegion", e.target.value)
-                    }
-                  >
-                    <option value="us-east-2">US East (Ohio)</option>
-                    <option value="us-east-1">
-                      US East (N. Virginia)
-                    </option>
-                    <option value="ap-south-1">
-                      Asia Pacific (Mumbai)
-                    </option>
-                  </Select>
-                </FormControl>
-              </div>
-            )}
->>>>>>> 9bb91e5fba715e9fca5faa3da38cd89288b5c459
             <FormControl>
               <FormLabel>Deployment Type</FormLabel>
               <Select
@@ -389,21 +333,11 @@ console.log(isOpen)
             )}
           </div>
           <ModalFooter>
-<<<<<<< HEAD
           <Button onClick={() =>  handleSubmit(DeploymentData)}  type="submit"style={{ display: 'block', margin: '0 auto' }}>
            Submit
           </Button>
 
 
-=======
-            <Button
-              onClick={() => onSubmit(DeploymentData)}
-              type="submit"
-              style={{ display: "block", margin: "0 auto" }}
-            >
-              Submit
-            </Button>
->>>>>>> 9bb91e5fba715e9fca5faa3da38cd89288b5c459
           </ModalFooter>
         </ModalBody>
       </ModalContent>

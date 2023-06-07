@@ -1,8 +1,5 @@
 import eck from "../../assets/eck.png"
 
-
-// const handleStyle = { left: 25 };
-
 function CustomLoadNode({ data}) {
 
   const logManagementType= data.logManagementType

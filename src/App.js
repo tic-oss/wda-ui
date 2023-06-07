@@ -15,6 +15,7 @@ import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import { ReactKeycloakProvider } from "@react-keycloak/web";
 import keycloak from "./Keycloak";
+import PrivateRoute from "./helpers/PrivateRoute";
 
 function App() {
   return (
@@ -24,17 +25,29 @@ function App() {
           <Navbar />
           <Switch>
             <Route exact path="/wda">
+            {/* <PrivateRoute> */}
               <FormWda />
+              {/* </PrivateRoute> */}
             </Route>
             <Route exact path="/wdi">
+            <PrivateRoute>
               <FormWdi />
+              </PrivateRoute>
             </Route>
             <Route exact path="/">
               <Home />
             </Route>
+           
             <Route exact path="/products">
-              <Products />
+           
+                <Products />
+            
             </Route>
+            <Route exact path="/designer">
+            <PrivateRoute>
+            <Designer />
+            </PrivateRoute>
+           </Route>
             <Route exact path="/docs">
               <DocHome />
             </Route>
@@ -49,10 +62,7 @@ function App() {
             </Route>
             <Route exact path="/signup">
               <SignUp />
-            </Route>
-            <Route exact path="/designer">
-              <Designer />
-            </Route>
+            </Route>      
           </Switch>
           <Footer />
         </Router>
