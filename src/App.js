@@ -25,9 +25,9 @@ function App() {
           <Navbar />
           <Switch>
             <Route exact path="/wda">
-            {/* <PrivateRoute> */}
+            <PrivateRoute>
               <FormWda />
-              {/* </PrivateRoute> */}
+              </PrivateRoute>
             </Route>
             <Route exact path="/wdi">
             <PrivateRoute>
