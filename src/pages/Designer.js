@@ -445,21 +445,30 @@ const Designer = () => {
             Node.data={...Node.data,...Service_Discovery_Data}
     }
     Data['services']={}
-    let index=0
+    let serviceIndex = 0
     for(const nodeInfo in NewNodes){
       const Node = NewNodes[nodeInfo]
       if(Node.data){
       if(Node.id.startsWith('Service')|| Node.id === 'UI'){
-        Data['services'][index++]= Node.data
+        Data['services'][serviceIndex++]= Node.data
       }
       }
     }
     Data['communication']={}
-    index=0
+    let communicationIndex = 0
     for(const edgeInfo in NewEdges){
       const Edge = NewEdges[edgeInfo]
       if(Edge.data)
-      Data['communication'][index++] = Edge.data
+      Data['communication'][communicationIndex++] = Edge.data
+    }
+    Data['deployment']={}
+    for(const cloudInfo in NewNodes){
+      const Cloud = NewNodes[cloudInfo]
+      if(Cloud.data){
+        if(Cloud.id === 'cloudProvider'){
+          Data['deployment'] = Cloud.data
+        }
+      }
     }
     console.log(Data)
     setNodes(NewNodes)
