@@ -17,7 +17,7 @@ import {
   Button
 } from "@chakra-ui/react";
 
-export default ({ isUINodeEnabled, setIsUINodeEnabled, onSubmit }) => {
+export default ({ isUINodeEnabled, setIsUINodeEnabled, onSubmit, Service_Discovery_Data }) => {
   const onDragStart = (event, nodeType, Name) => {
     if(Name === 'UI'){
       setIsUINodeEnabled(true)
@@ -32,21 +32,23 @@ export default ({ isUINodeEnabled, setIsUINodeEnabled, onSubmit }) => {
   const toggleOption = (option) => {
     setSelectedOption((prevOption) => (prevOption === option ? null : option));
   };
-   const IntialState ={
+   const IntialState = {
         'projectName':'',
     }
-    
+     
   const [projectData,setprojectData] = useState(IntialState)
+  const [isEmpty, setIsEmpty] = useState(false)
 
   const handleData = (column,value)=>{
+    setIsEmpty(value === '')
     setprojectData((prev)=>({...prev,[column]:value}))
   }
 
   return (
-    <aside>
+    <aside style={{ position: 'relative', overflow: 'hidden', height:'88vh' }}>
       <FormLabel fontWeight="bold">Project Name</FormLabel>
               <Input mb={4} variant="outline" id="projectName" 
-                borderColor={"black"}
+                borderColor={"#CFCFCF"}
                 value={projectData.projectName}
                 onChange={(e)=>handleData('projectName',e.target.value)}
               >  
@@ -154,11 +156,46 @@ export default ({ isUINodeEnabled, setIsUINodeEnabled, onSubmit }) => {
           </div>
         </>
       )}
-      <div>
-       <Button  onClick={() => onSubmit(projectData)} type="submit"style={{ display: 'block', margin: '0 auto' }}>
-           Submit
+      <div style={{ position: 'absolute', marginTop:'auto', marginBottom: "10px", bottom: '0'}}>
+       {/* <div style={{ display:'flex', justifyContent:'center'}}> */}
+        <Button   onClick={() => onSubmit(projectData)}
+        mt={4}
+        border="2px"
+        borderColor="green.500"
+        width="100px" 
+        type="submit"
+        isDisabled={!Service_Discovery_Data || (isEmpty || projectData.projectName === '')}
+        >
+          Submit
           </Button>
-      </div>
+          {/* </div> */}
+          {isEmpty || projectData.projectName === ''? (
+            <p
+            style={{
+              fontSize: "10px",
+              color: "red",
+                  paddingBottom: "5px",
+                  marginTop: "5px",
+                }}
+                >
+                Please enter Project Name
+              </p>
+            ) : (
+              <p style={{ marginBottom: "5px" }}></p>
+              )}
+          {!Service_Discovery_Data ? (
+            <p
+            style={{
+              fontSize: "10px",
+              color: "red",
+            }}
+            >
+                Please select Service Discovery type
+              </p>
+            ) : (
+              <p style={{ marginBottom: "5px" }}></p>
+              )}
+              </div>
 
     </aside>
   );
