@@ -141,6 +141,7 @@ const DeployModal = ({ isOpen, onClose, onSubmit,CurrentNode}) => {
                 value={DeploymentData.awsRegion}
                 onChange={(e)=>handleData('awsRegion',e.target.value)}
               >
+                <option value="" disabled>Select an option</option>
                 <option value="us-east-2">US East (Ohio)</option>
                 <option value="us-east-1">US East (N. Virginia)</option>
                 <option value="ap-south-1">Asia Pacific (Mumbai)</option>
