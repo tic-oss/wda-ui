@@ -1,15 +1,13 @@
 import { Handle, Position } from "reactflow";
-import kafka from "../../assets/kafka.png"
-import pulsar from "../../assets/pulsar.png"
-import rabbitmq from "../../assets/rabbitmq.png"
-
+import kafka from "../../assets/kafka.png";
+import pulsar from "../../assets/pulsar.png";
+import rabbitmq from "../../assets/rabbitmq.png";
 
 const handleStyle = { left: 25 };
 
 function CustomMessageBrokerNode({ data, isConnectable }) {
-
-  const messageBroker = data.messageBroker
-  console.log(messageBroker)
+  const messageBroker = data.messageBroker;
+  console.log(messageBroker);
 
   return (
     <div>
@@ -19,10 +17,13 @@ function CustomMessageBrokerNode({ data, isConnectable }) {
         isConnectable={isConnectable}
       /> */}
       <div>
-      {messageBroker === 'Kafka' ? (
-            <img width='50px' name={messageBroker} src={kafka} />) : 
-            messageBroker === 'Pulsar' ? (<img width='50px' name={messageBroker} src={pulsar} />) : 
-            (<img width='50px' name={messageBroker} src={rabbitmq} />)}    
+        {messageBroker === "Kafka" ? (
+          <img width="50px" name={messageBroker} src={kafka} />
+        ) : messageBroker === "Pulsar" ? (
+          <img width="50px" name={messageBroker} src={pulsar} />
+        ) : (
+          <img width="50px" name={messageBroker} src={rabbitmq} />
+        )}
       </div>
       {/* <Handle
         type="source"
