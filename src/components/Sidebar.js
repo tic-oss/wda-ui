@@ -34,15 +34,13 @@ export default ({ isUINodeEnabled, setIsUINodeEnabled, onSubmit }) => {
   };
    const IntialState ={
         'projectName':'',
-        
     }
-     
+    
+  const [projectData,setprojectData] = useState(IntialState)
 
-      const [projectData,setprojectData] = useState(IntialState)
-
-      const handleData = (column,value)=>{
-        setprojectData((prev)=>({...prev,[column]:value}))
-      }
+  const handleData = (column,value)=>{
+    setprojectData((prev)=>({...prev,[column]:value}))
+  }
 
   return (
     <aside>

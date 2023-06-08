@@ -424,7 +424,7 @@ const Designer = () => {
     }
   }
   const onsubmit = (Data) =>{
-
+    console.log(Data.projectName,'Name')
     let NewNodes = {...nodes}
     let Service_Discovery_Data= nodes['serviceDiscoveryType'].data
     for(const key in NewNodes){

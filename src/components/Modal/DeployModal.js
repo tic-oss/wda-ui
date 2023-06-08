@@ -46,22 +46,23 @@ const DeployModal = ({ isOpen, onClose, onSubmit,CurrentNode}) => {
           return false;
         }
       };
-console.log(isOpen)
       const [DeploymentData,setDeploymentData] = useState(IntialState)
 
       const handleData = (column,value)=>{
-        // validateInputValue(field, value);
+        validateInputValue( value);
         setDeploymentData((prev)=>({...prev,[column]:value}))
       }
     const [checkLength, setCheckLength] = useState(false)
-    const validateInputValue = () => {
-      if (DeploymentData.awsAccountId.length<12) {
+    const validateInputValue = (value) => {
+      if (value.length<12) {
         setCheckLength(true);
       }
+      else
+      setCheckLength(false)
     };
-      function handleSubmit(DeploymentData) {
-        validateInputValue && checkLength && onSubmit(DeploymentData)
-      }
+    function handleSubmit(DeploymentData) {
+      !checkLength && onSubmit(DeploymentData)
+    }
   return (
     <Modal isOpen={isOpen} onClose={()=>onClose(false)} isCentered={true}>
       
