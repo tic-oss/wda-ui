@@ -18,6 +18,7 @@ export default ({
   setIsUINodeEnabled,
   onSubmit,
   Service_Discovery_Data,
+  authenticationData,
 }) => {
   const onDragStart = (event, nodeType, Name) => {
     if (Name === "UI") {
@@ -272,7 +273,7 @@ export default ({
           <div
             className="selectorNode5"
             onDragStart={(event) =>
-              onDragStart(event, "default", "Cloud_Azure")
+              onDragStart(event, "default", "Cloud_azure")
             }
             draggable
           >
@@ -281,7 +282,7 @@ export default ({
 
           <div
             className="selectorNode5"
-            onDragStart={(event) => onDragStart(event, "default", "Cloud_AWS")}
+            onDragStart={(event) => onDragStart(event, "default", "Cloud_aws")}
             draggable
           >
             <img width="120px" src={aws} alt="awslogo" />
@@ -335,7 +336,10 @@ export default ({
           width="100px"
           type="submit"
           isDisabled={
-            !Service_Discovery_Data || isEmpty || projectData.projectName === ""
+            !Service_Discovery_Data ||
+            // !authenticationData ||
+            isEmpty ||
+            projectData.projectName === ""
           }
         >
           Submit
@@ -346,11 +350,24 @@ export default ({
             style={{
               fontSize: "10px",
               color: "red",
-              paddingBottom: "5px",
+              // paddingBottom: "5px",
               marginTop: "5px",
             }}
           >
             Please enter Project Name
+          </p>
+        ) : (
+          <p style={{ marginBottom: "5px" }}></p>
+        )}
+        {!authenticationData ? (
+          <p
+            style={{
+              fontSize: "10px",
+              color: "red",
+              marginTop: "5px",
+            }}
+          >
+            Please select Authentication type
           </p>
         ) : (
           <p style={{ marginBottom: "5px" }}></p>
@@ -360,12 +377,14 @@ export default ({
             style={{
               fontSize: "10px",
               color: "red",
+              marginTop: "5px",
             }}
           >
             Please select Service Discovery type
           </p>
         ) : (
-          <p style={{ marginBottom: "5px" }}></p>
+          <></>
+          // <p style={{ marginBottom: "5px" }}></p>
         )}
       </div>
     </aside>

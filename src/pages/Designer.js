@@ -246,7 +246,7 @@ const Designer = () => {
     if (Id) {
       const type = Id.split("_")[0];
       setNodeType(type);
-      if (type == "AWS" || type === "Azure") {
+      if (type == "aws" || type === "azure") {
         setCurrentNode(nodes["cloudProvider"].data);
       } else setCurrentNode(nodes[Id].data);
       setopen(Id);
@@ -370,7 +370,7 @@ const Designer = () => {
 
   const onChange = (Data) => {
     let UpdatedNodes = { ...nodes };
-    if (Isopen === "AWS" || Isopen === "Azure") {
+    if (Isopen === "aws" || Isopen === "azure") {
       UpdatedNodes["cloudProvider"].data = {
         ...UpdatedNodes["cloudProvider"].data,
         ...Data,
@@ -606,6 +606,7 @@ const Designer = () => {
           isUINodeEnabled={isUINodeEnabled}
           setIsUINodeEnabled={setIsUINodeEnabled}
           Service_Discovery_Data={nodes["serviceDiscoveryType"]?.data}
+          authenticationData={nodes["authenticationType"]?.data}
           onSubmit={onsubmit}
         />
 
@@ -619,7 +620,7 @@ const Designer = () => {
           />
         )}
 
-        {nodeType === "Azure" && Isopen && (
+        {nodeType === "azure" && Isopen && (
           <DeployModal
             isOpen={Isopen}
             CurrentNode={CurrentNode}
@@ -628,7 +629,7 @@ const Designer = () => {
           />
         )}
 
-        {nodeType === "AWS" && Isopen && (
+        {nodeType === "aws" && Isopen && (
           <DeployModal
             isOpen={Isopen}
             CurrentNode={CurrentNode}

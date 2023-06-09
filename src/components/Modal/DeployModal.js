@@ -21,12 +21,12 @@ const DeployModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
   const IntialState = {
     cloudProvider: isOpen,
     deploymentType: "",
-    ...(isOpen === "Azure"
+    ...(isOpen === "azure"
       ? { azureRegion: "", acrRegistry: "", resourcegroupname: "" }
       : {}),
-    ...(isOpen === "AWS" ? { awsAccountId: "", awsRegion: "us-east-2" } : {}),
+    ...(isOpen === "aws" ? { awsAccountId: "", awsRegion: "us-east-2" } : {}),
     clusterName: "",
-    kubernetesUseDynamicStorage: "yes",
+    kubernetesUseDynamicStorage: "true",
     kubernetesStorageClassName: "",
     kubernetesNamespace: "",
     ingressType: "istio",
@@ -59,9 +59,9 @@ const DeployModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
     } else setCheckLength(false);
   };
   function handleSubmit(DeploymentData) {
-    if (isOpen === "AWS") {
+    if (isOpen === "aws") {
       !checkLength && onSubmit(DeploymentData);
-    } else if (isOpen === "Azure") {
+    } else if (isOpen === "azure") {
       onSubmit(DeploymentData);
     }
   }
@@ -80,7 +80,7 @@ const DeployModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
               alignItems: "Left",
             }}
           >
-            {isOpen === "Azure" && (
+            {isOpen === "azure" && (
               <div>
                 <FormControl>
                   <FormLabel>Azure Registry</FormLabel>
@@ -125,7 +125,7 @@ const DeployModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
               </div>
             )}
 
-            {isOpen === "AWS" && (
+            {isOpen === "aws" && (
               <div>
                 <FormControl>
                   <FormLabel>AWS Account ID</FormLabel>
@@ -218,11 +218,11 @@ const DeployModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
                     <option value="" disabled>
                       Select an option
                     </option>
-                    <option value="yes">Yes</option>
-                    <option value="no">No</option>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
                   </Select>
                 </FormControl>
-                {DeploymentData.kubernetesUseDynamicStorage === "yes" && (
+                {DeploymentData.kubernetesUseDynamicStorage === "true" && (
                   <FormControl>
                     <FormLabel>Storage Class Name</FormLabel>
                     <Input
@@ -312,8 +312,8 @@ const DeployModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
                 <option value="" disabled>
                   Select an option
                 </option>
-                <option value="yes">Yes</option>
-                <option value="no">No</option>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
               </Select>
             </FormControl>
           </div>
