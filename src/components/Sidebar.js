@@ -74,7 +74,7 @@ export default ({ isUINodeEnabled, setIsUINodeEnabled, onSubmit, Service_Discove
       </h1>
       {selectedOption === 'Authentication' && (
         <>
-          <div className="selectorNode3" onDragStart={(event) => onDragStart(event, 'default', 'Auth_keycloak')} draggable>
+          <div className="selectorNode3" onDragStart={(event) => onDragStart(event, 'default', 'Auth_oauth2')} draggable>
             <img width='145px' src={keycloak} alt="keycloaklogo"></img>
           </div>
         </>
@@ -84,7 +84,7 @@ export default ({ isUINodeEnabled, setIsUINodeEnabled, onSubmit, Service_Discove
       </h1>
       {selectedOption === 'Databases' && (
         <>
-          <div className="selectorNode" onDragStart={(event) => onDragStart(event, 'default', 'Database_postgres')} draggable>
+          <div className="selectorNode" onDragStart={(event) => onDragStart(event, 'default', 'Database_postgresql')} draggable>
             <img width='120px' src={db1} alt="postgreslogo"></img>
           </div>
 
@@ -102,7 +102,7 @@ export default ({ isUINodeEnabled, setIsUINodeEnabled, onSubmit, Service_Discove
       </h1>
       {selectedOption === 'serviceDiscovery' && (
         <>
-          <div className="selectorNode1" onDragStart={(event) => onDragStart(event, 'default', 'Discovery_Eureka')} draggable>
+          <div className="selectorNode1" onDragStart={(event) => onDragStart(event, 'default', 'Discovery_eureka')} draggable>
             <img width='120px' src={eurkea} alt="eurekalogo"></img>
           </div>
         </>

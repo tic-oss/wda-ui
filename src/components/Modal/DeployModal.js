@@ -24,7 +24,7 @@ const DeployModal = ({ isOpen, onClose, onSubmit,CurrentNode}) => {
         ...(isOpen === 'Azure' ?{'azureRegion':'', 'acrRegistry':'', 'resourcegroupname':''} : {}),
         ...(isOpen === 'AWS' ? { 'awsAccountId':'', 'awsRegion':'us-east-2'} : {}),
         'clusterName':'', 
-        'kubernetesUseDynamicStorage':'',
+        'kubernetesUseDynamicStorage':'yes',
         'kubernetesStorageClassName':'',
          'kubernetesNamespace':'',
         'ingress':'istio',
@@ -49,6 +49,7 @@ const DeployModal = ({ isOpen, onClose, onSubmit,CurrentNode}) => {
         if(column === 'awsAccountId' ) validateInputValue(value);
         setDeploymentData((prev)=>({...prev,[column]:value}))
       }
+
     const [checkLength, setCheckLength] = useState(false)
     const validateInputValue = (value) => {
       if (value.length<12) {

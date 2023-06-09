@@ -429,11 +429,13 @@ const Designer = () => {
 
     const NewNodes = {...nodes}
     const NewEdges = {...edges}
-    let Service_Discovery_Data= nodes['serviceDiscoveryType'].data
+    let Service_Discovery_Data= nodes['serviceDiscoveryType']?.data
+    let authenticationData = nodes['authenticationType']?.data
+    let logManagementData = nodes['logManagement']?.data
     for(const key in NewNodes){
       const Node = NewNodes[key]
       if(Node.id.startsWith('Service')|| Node.id === 'UI')
-            Node.data={...Node.data,...Service_Discovery_Data}
+            Node.data={...Node.data,...Service_Discovery_Data,...authenticationData,...logManagementData}
     }
     if (Object.values(NewNodes).some(node => node.data)) {
     Data['services']={}
@@ -448,12 +450,12 @@ const Designer = () => {
     }
   }
     if (Object.values(NewEdges).some(edge => edge.data)) {
-    Data['communication']={}
+    Data['communications']={}
     let communicationIndex = 0
     for(const edgeInfo in NewEdges){
       const Edge = NewEdges[edgeInfo]
-      if(Edge.data)
-      Data['communication'][communicationIndex++] = Edge.data
+      if(Edge.data && Object.keys(Edge.data).length !== 0)
+      Data['communications'][communicationIndex++] = Edge.data
     }
   }
   if (Object.values(NewNodes).some(node => node.data)) {

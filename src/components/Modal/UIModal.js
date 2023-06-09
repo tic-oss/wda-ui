@@ -18,7 +18,7 @@ const UiDataModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
   const IntialState ={
     'label':'UI',
     'applicationName': 'UI', 
-    'clientFramework':'reactjs',
+    'clientFramework':'react',
     'packageName':'',
     'serverPort':'',
     'withExample':'',
@@ -69,7 +69,7 @@ const UiDataModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
               />
             </FormControl>
             <FormControl>
-              <FormLabel>clientFramework</FormLabel>
+              <FormLabel>Client Framework</FormLabel>
               <Select mb={4} variant="outline" id="clientFramework" 
                 borderColor={"black"}
                 value={UiData.clientFramework}
