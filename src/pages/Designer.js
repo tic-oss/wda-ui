@@ -472,7 +472,7 @@ const Designer = () => {
     console.log(Data);
     setNodes(NewNodes);
 
-    fetch(process.env.REACT_APP_API_BASE_URL + "/generate", {
+    fetch(process.env.REACT_APP_API_BASE_URL + "/api/generate", {
       method: "post",
       headers: {
         "Content-Type": "application/json",
