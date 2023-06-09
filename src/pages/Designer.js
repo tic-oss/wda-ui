@@ -8,6 +8,7 @@ import ReactFlow, {
 import 'reactflow/dist/style.css';
 
 import Sidebar from './../components/Sidebar';
+import { saveAs } from "file-saver";
 import ServiceModal from '../components/Modal/ServiceModal';
 import UiDataModal from '../components/Modal/UIModal';
 import DeployModal from '../components/Modal/DeployModal';
@@ -423,17 +424,78 @@ const Designer = () => {
         }
     }
   }
+
   const onsubmit = (Data) =>{
-    console.log(Data.projectName,'Name')
-    let NewNodes = {...nodes}
+
+    const NewNodes = {...nodes}
+    const NewEdges = {...edges}
     let Service_Discovery_Data= nodes['serviceDiscoveryType'].data
     for(const key in NewNodes){
       const Node = NewNodes[key]
       if(Node.id.startsWith('Service')|| Node.id === 'UI')
             Node.data={...Node.data,...Service_Discovery_Data}
     }
+    if (Object.values(NewNodes).some(node => node.data)) {
+    Data['services']={}
+    let serviceIndex = 0
+    for(const nodeInfo in NewNodes){
+      const Node = NewNodes[nodeInfo]
+      if(Node.data){
+      if(Node.id.startsWith('Service')|| Node.id === 'UI'){
+        Data['services'][serviceIndex++]= Node.data
+      }
+      }
+    }
+  }
+    if (Object.values(NewEdges).some(edge => edge.data)) {
+    Data['communication']={}
+    let communicationIndex = 0
+    for(const edgeInfo in NewEdges){
+      const Edge = NewEdges[edgeInfo]
+      if(Edge.data)
+      Data['communication'][communicationIndex++] = Edge.data
+    }
+  }
+  if (Object.values(NewNodes).some(node => node.data)) {
+    Data['deployment']={}
+    let hasField = false;
+    for(const cloudInfo in NewNodes){
+      const Cloud = NewNodes[cloudInfo]
+      if(Cloud.data){
+        if(Cloud.id === 'cloudProvider'){
+          Data['deployment'] = Cloud.data;
+          hasField = true;
+        }
+      }
+    }
+    if (!hasField) {
+      delete Data['deployment'];
+    }
+  }
     console.log(Data)
     setNodes(NewNodes)
+
+    fetch(
+      process.env.REACT_APP_API_BASE_URL +
+        "/generate",
+      {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(
+          Data
+        ),
+      }
+    )
+      .then((response) => response.blob())
+      .then((blob) => {
+        saveAs(blob, `${Data.projectName}.zip`); // Edit the name or ask the user for the project Name
+      })
+      .catch((error) => console.error(error))
+      .finally(() => {
+        // window.location.replace("../../");
+      });
   } 
   const onCheckEdge = (edges) =>{
     let NewEdges = {...edges}
@@ -519,7 +581,9 @@ const Designer = () => {
             <MiniMap style={{backgroundColor:'#3182CE'}}/>
           </ReactFlow>
         </div>
-        <Sidebar isUINodeEnabled={isUINodeEnabled} setIsUINodeEnabled={setIsUINodeEnabled} onSubmit={onsubmit} />
+        <Sidebar isUINodeEnabled={isUINodeEnabled} setIsUINodeEnabled={setIsUINodeEnabled} 
+        Service_Discovery_Data={nodes['serviceDiscoveryType']?.data}
+        onSubmit={onsubmit} />
 
         { nodeType === 'Service' && Isopen && <ServiceModal isOpen={Isopen} CurrentNode ={CurrentNode} onClose={setopen} onSubmit={onChange} uniqueApplicationNames={uniqueApplicationNames}/>}
       

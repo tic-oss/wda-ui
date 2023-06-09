@@ -21,15 +21,12 @@ const DeployModal = ({ isOpen, onClose, onSubmit,CurrentNode}) => {
     const IntialState ={
         'cloudProvider':isOpen,
         'deploymentType':'',
-        'kubernetesNamespace':'',
+        ...(isOpen === 'Azure' ?{'azureRegion':'', 'acrRegistry':'', 'resourcegroupname':''} : {}),
+        ...(isOpen === 'AWS' ? { 'awsAccountId':'', 'awsRegion':'us-east-2'} : {}),
+        'clusterName':'', 
         'kubernetesUseDynamicStorage':'',
         'kubernetesStorageClassName':'',
-        'azureRegion':'',
-        'acrRegistry':'',
-        'resourcegroupname':'',
-        'awsAccountId':'',
-        'clusterName':'',
-        'awsRegion':'',
+         'kubernetesNamespace':'',
         'ingress':'istio',
         'monitoring':'',
         'ingressDomain':'',
@@ -49,7 +46,7 @@ const DeployModal = ({ isOpen, onClose, onSubmit,CurrentNode}) => {
       const [DeploymentData,setDeploymentData] = useState(IntialState)
 
       const handleData = (column,value)=>{
-        validateInputValue( value);
+        if(column === 'awsAccountId' ) validateInputValue(value);
         setDeploymentData((prev)=>({...prev,[column]:value}))
       }
     const [checkLength, setCheckLength] = useState(false)
@@ -61,8 +58,13 @@ const DeployModal = ({ isOpen, onClose, onSubmit,CurrentNode}) => {
       setCheckLength(false)
     };
     function handleSubmit(DeploymentData) {
-      !checkLength && onSubmit(DeploymentData)
+      if (isOpen === 'AWS'){
+        !checkLength && onSubmit(DeploymentData);
+      } else if (isOpen === 'Azure') {
+        onSubmit(DeploymentData);
+      }
     }
+
   return (
     <Modal isOpen={isOpen} onClose={()=>onClose(false)} isCentered={true}>
       
