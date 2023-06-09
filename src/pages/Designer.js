@@ -424,15 +424,6 @@ const Designer = () => {
         }
     }
   }
-  const [party, setParty] = useState(false);
-
-  useEffect(() => {
-    if (party) {
-      setTimeout(() => {
-        setParty(false);
-      }, 5000);
-    }
-  }, [party]);
 
   const onsubmit = (Data) =>{
 
@@ -444,6 +435,7 @@ const Designer = () => {
       if(Node.id.startsWith('Service')|| Node.id === 'UI')
             Node.data={...Node.data,...Service_Discovery_Data}
     }
+    if (Object.values(NewNodes).some(node => node.data)) {
     Data['services']={}
     let serviceIndex = 0
     for(const nodeInfo in NewNodes){
@@ -454,6 +446,8 @@ const Designer = () => {
       }
       }
     }
+  }
+    if (Object.values(NewEdges).some(edge => edge.data)) {
     Data['communication']={}
     let communicationIndex = 0
     for(const edgeInfo in NewEdges){
@@ -461,15 +455,23 @@ const Designer = () => {
       if(Edge.data)
       Data['communication'][communicationIndex++] = Edge.data
     }
+  }
+  if (Object.values(NewNodes).some(node => node.data)) {
     Data['deployment']={}
+    let hasField = false;
     for(const cloudInfo in NewNodes){
       const Cloud = NewNodes[cloudInfo]
       if(Cloud.data){
         if(Cloud.id === 'cloudProvider'){
-          Data['deployment'] = Cloud.data
+          Data['deployment'] = Cloud.data;
+          hasField = true;
         }
       }
     }
+    if (!hasField) {
+      delete Data['deployment'];
+    }
+  }
     console.log(Data)
     setNodes(NewNodes)
 
@@ -481,9 +483,9 @@ const Designer = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
+        body: JSON.stringify(
           Data
-        }),
+        ),
       }
     )
       .then((response) => response.blob())
@@ -492,8 +494,7 @@ const Designer = () => {
       })
       .catch((error) => console.error(error))
       .finally(() => {
-        setTimeout(() => setParty(true));
-        window.location.replace("../../");
+        // window.location.replace("../../");
       });
   } 
   const onCheckEdge = (edges) =>{
