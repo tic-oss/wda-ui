@@ -278,9 +278,12 @@ const Designer = () => {
           id: getId('Database'),
           type:'selectorNode',
           position,
-          data: { prodDatabaseType: prodDatabaseType },
+          data: { prodDatabaseType : prodDatabaseType },
          style: { border: "1px solid", padding: "4px 4px" },
         };
+        if(prodDatabaseType === 'postgresql'){
+          newNode.data['databaseType']='sql'
+        }
         setNodes((nds) => ({...nds,[newNode.id]:newNode}))
       }
       else if(name.startsWith('Discovery') && servicecount==0){
@@ -429,11 +432,13 @@ const Designer = () => {
 
     const NewNodes = {...nodes}
     const NewEdges = {...edges}
-    let Service_Discovery_Data= nodes['serviceDiscoveryType'].data
+    let Service_Discovery_Data= nodes['serviceDiscoveryType']?.data
+    let authenticationData = nodes['authenticationType']?.data
+    let logManagementData = nodes['logManagement']?.data
     for(const key in NewNodes){
       const Node = NewNodes[key]
       if(Node.id.startsWith('Service')|| Node.id === 'UI')
-            Node.data={...Node.data,...Service_Discovery_Data}
+            Node.data={...Node.data,...Service_Discovery_Data,...authenticationData,...logManagementData}
     }
     if (Object.values(NewNodes).some(node => node.data)) {
     Data['services']={}
@@ -448,12 +453,12 @@ const Designer = () => {
     }
   }
     if (Object.values(NewEdges).some(edge => edge.data)) {
-    Data['communication']={}
+    Data['communications']={}
     let communicationIndex = 0
     for(const edgeInfo in NewEdges){
       const Edge = NewEdges[edgeInfo]
-      if(Edge.data)
-      Data['communication'][communicationIndex++] = Edge.data
+      if(Edge.data && Object.keys(Edge.data).length !== 0)
+      Data['communications'][communicationIndex++] = Edge.data
     }
   }
   if (Object.values(NewNodes).some(node => node.data)) {
@@ -532,7 +537,7 @@ const Designer = () => {
       UpdatedEdges[IsEdgeopen].markerEnd = { color:'#e2e8f0',type: MarkerType.ArrowClosed}
       UpdatedEdges[IsEdgeopen].style={stroke:'#e2e8f0'}
     }
-    UpdatedEdges[IsEdgeopen].data={'client':UpdatedEdges[IsEdgeopen].source,'server':UpdatedEdges[IsEdgeopen].target,...UpdatedEdges[IsEdgeopen].data,...Data}
+    UpdatedEdges[IsEdgeopen].data={'clientName':UpdatedEdges[IsEdgeopen].source,'serverName':UpdatedEdges[IsEdgeopen].target,...UpdatedEdges[IsEdgeopen].data,...Data}
     setEdges(UpdatedEdges)
     setEdgeopen(false)
   }

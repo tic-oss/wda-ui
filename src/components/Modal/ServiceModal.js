@@ -96,7 +96,7 @@ const ServiceModal = ({ isOpen, onClose, onSubmit,CurrentNode, uniqueApplication
             )}
             {/* <p>AN: {ApplicationData.AN}</p> */}
        <FormControl>
-              <FormLabel>applicationFramework</FormLabel>
+              <FormLabel>Application Framework</FormLabel>
               <Select mb={4} variant="outline" id="applicationFramework" 
                 borderColor={"black"}
                 value={ApplicationData.applicationFramework}

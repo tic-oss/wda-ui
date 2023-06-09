@@ -123,7 +123,6 @@ function Application({
           <FormControl>
             <FormLabel>Application Type</FormLabel>
             <Select
-              key={application.applicationType}
               name="applicationType"
               onChange={({ target }) =>
                 handleInputChange("applicationType", target.value)
