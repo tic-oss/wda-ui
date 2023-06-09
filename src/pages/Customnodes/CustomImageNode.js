@@ -1,13 +1,12 @@
 import { useCallback } from "react";
 import { Handle, Position } from "reactflow";
-import postgres from "../../assets/pstgrc.jpeg"
-import sql from "../../assets/mongo.png"
+import postgres from "../../assets/pstgrc.jpeg";
+import sql from "../../assets/mongo.png";
 
 const handleStyle = { left: 25 };
 
 function CustomImageNode({ data, isConnectable }) {
-  console.log(data)
-
+  console.log(data);
 
   return (
     <div>
@@ -17,7 +16,10 @@ function CustomImageNode({ data, isConnectable }) {
         isConnectable={isConnectable}
       />
       <div>
-      <img width='60px' src={data.prodDatabaseType=='postgresql'?postgres:sql}/>
+        <img
+          width="60px"
+          src={data.prodDatabaseType == "postgresql" ? postgres : sql}
+        />
       </div>
     </div>
   );
