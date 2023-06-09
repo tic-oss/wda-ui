@@ -278,9 +278,12 @@ const Designer = () => {
           id: getId('Database'),
           type:'selectorNode',
           position,
-          data: { prodDatabaseType: prodDatabaseType },
+          data: { prodDatabaseType : prodDatabaseType },
          style: { border: "1px solid", padding: "4px 4px" },
         };
+        if(prodDatabaseType === 'postgresql'){
+          newNode.data['databaseType']='sql'
+        }
         setNodes((nds) => ({...nds,[newNode.id]:newNode}))
       }
       else if(name.startsWith('Discovery') && servicecount==0){
@@ -534,7 +537,7 @@ const Designer = () => {
       UpdatedEdges[IsEdgeopen].markerEnd = { color:'#e2e8f0',type: MarkerType.ArrowClosed}
       UpdatedEdges[IsEdgeopen].style={stroke:'#e2e8f0'}
     }
-    UpdatedEdges[IsEdgeopen].data={'client':UpdatedEdges[IsEdgeopen].source,'server':UpdatedEdges[IsEdgeopen].target,...UpdatedEdges[IsEdgeopen].data,...Data}
+    UpdatedEdges[IsEdgeopen].data={'clientName':UpdatedEdges[IsEdgeopen].source,'serverName':UpdatedEdges[IsEdgeopen].target,...UpdatedEdges[IsEdgeopen].data,...Data}
     setEdges(UpdatedEdges)
     setEdgeopen(false)
   }
