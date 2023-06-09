@@ -46,7 +46,7 @@ const DeployModal = ({ isOpen, onClose, onSubmit,CurrentNode}) => {
       const [DeploymentData,setDeploymentData] = useState(IntialState)
 
       const handleData = (column,value)=>{
-        validateInputValue( value);
+        validateInputValue(value);
         setDeploymentData((prev)=>({...prev,[column]:value}))
       }
     const [checkLength, setCheckLength] = useState(false)
@@ -58,8 +58,15 @@ const DeployModal = ({ isOpen, onClose, onSubmit,CurrentNode}) => {
       setCheckLength(false)
     };
     function handleSubmit(DeploymentData) {
-      !checkLength && onSubmit(DeploymentData)
+      if (isOpen === 'AWS'){
+        if(!checkLength) {
+          onSubmit(DeploymentData);
+        }
+      } else if (isOpen === 'Azure') {
+        onSubmit(DeploymentData);
+      }
     }
+
   return (
     <Modal isOpen={isOpen} onClose={()=>onClose(false)} isCentered={true}>
       
