@@ -22,7 +22,7 @@ const DeployModal = ({ isOpen, onClose, onSubmit,CurrentNode}) => {
         'cloudProvider':isOpen,
         'deploymentType':'',
         ...(isOpen === 'Azure' ?{'azureRegion':'', 'acrRegistry':'', 'resourcegroupname':''} : {}),
-        ...(isOpen === 'AWS' ? { 'awsAccountId':'', 'awsRegion':''} : {}),
+        ...(isOpen === 'AWS' ? { 'awsAccountId':'', 'awsRegion':'us-east-2'} : {}),
         'clusterName':'', 
         'kubernetesUseDynamicStorage':'',
         'kubernetesStorageClassName':'',
@@ -46,7 +46,7 @@ const DeployModal = ({ isOpen, onClose, onSubmit,CurrentNode}) => {
       const [DeploymentData,setDeploymentData] = useState(IntialState)
 
       const handleData = (column,value)=>{
-        validateInputValue(value);
+        if(column === 'awsAccountId' ) validateInputValue(value);
         setDeploymentData((prev)=>({...prev,[column]:value}))
       }
     const [checkLength, setCheckLength] = useState(false)
@@ -59,9 +59,7 @@ const DeployModal = ({ isOpen, onClose, onSubmit,CurrentNode}) => {
     };
     function handleSubmit(DeploymentData) {
       if (isOpen === 'AWS'){
-        if(!checkLength) {
-          onSubmit(DeploymentData);
-        }
+        !checkLength && onSubmit(DeploymentData);
       } else if (isOpen === 'Azure') {
         onSubmit(DeploymentData);
       }
@@ -145,7 +143,6 @@ const DeployModal = ({ isOpen, onClose, onSubmit,CurrentNode}) => {
                 value={DeploymentData.awsRegion}
                 onChange={(e)=>handleData('awsRegion',e.target.value)}
               >
-                <option value="" disabled>Select an option</option>
                 <option value="us-east-2">US East (Ohio)</option>
                 <option value="us-east-1">US East (N. Virginia)</option>
                 <option value="ap-south-1">Asia Pacific (Mumbai)</option>
