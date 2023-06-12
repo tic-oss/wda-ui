@@ -52,6 +52,7 @@ const Designer = () => {
   const [ServiceDiscoveryCount, setServiceDiscoveryCount] = useState(0);
   const [MessageBrokerCount, setMessageBrokerCount] = useState(0);
   const [CloudProviderCount, setCloudProviderCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   console.log("Nodes", nodes);
 
@@ -123,9 +124,11 @@ const Designer = () => {
             } else if (change.id === "UI") setIsUINodeEnabled(false);
             else if (change.id === "serviceDiscoveryType")
               setServiceDiscoveryCount(0);
-            else if (change.id === "cloudProvider") setCloudProviderCount(0);
+            else if (change.id === "cloudProvider") {
+              setCloudProviderCount(0);
+            } else if (change.id === "logManagement")
+              updatedNodes.cloudProvider.data["enableECK"] = "false";
             delete updatedNodes[change.id];
-
             break;
 
           case "add":
@@ -246,7 +249,7 @@ const Designer = () => {
     if (Id) {
       const type = Id.split("_")[0];
       setNodeType(type);
-      if (type == "AWS" || type === "Azure") {
+      if (type == "aws" || type === "azure") {
         setCurrentNode(nodes["cloudProvider"].data);
       } else setCurrentNode(nodes[Id].data);
       setopen(Id);
@@ -254,7 +257,7 @@ const Designer = () => {
   };
 
   const onDrop = useCallback(
-    (event, servicecount, messagecount, cloudcount) => {
+    (event, servicecount, messagecount, cloudcount, nodes) => {
       event.preventDefault();
       console.log(event);
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
@@ -280,9 +283,9 @@ const Designer = () => {
           data: { prodDatabaseType: prodDatabaseType },
           style: { border: "1px solid", padding: "4px 4px" },
         };
-        if (prodDatabaseType === "postgresql") {
-          newNode.data["databaseType"] = "sql";
-        }
+        // if (prodDatabaseType === "postgresql") {
+        //   newNode.data["databaseType"] = "sql";
+        // }
         setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
       } else if (name.startsWith("Discovery") && servicecount == 0) {
         console.log(servicecount);
@@ -336,7 +339,7 @@ const Designer = () => {
           id: "cloudProvider",
           type: "selectorNode5",
           position,
-          data: { cloudProvider: cloudProvider },
+          data: { cloudProvider: cloudProvider, enableECK: "false" },
           style: { border: "1px solid", padding: "4px 4px" },
         };
         setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
@@ -353,7 +356,12 @@ const Designer = () => {
           data: { logManagementType: logManagementType },
           style: { border: "1px solid", padding: "4px 4px" },
         };
-        setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
+        let Nodes = { ...nodes };
+        if ("cloudProvider" in Nodes) {
+          Nodes["cloudProvider"].data["enableECK"] = "true";
+        }
+        Nodes[newNode.id] = newNode;
+        setNodes(Nodes);
       } else {
         const newNode = {
           id: getId(name),
@@ -370,7 +378,7 @@ const Designer = () => {
 
   const onChange = (Data) => {
     let UpdatedNodes = { ...nodes };
-    if (Isopen === "AWS" || Isopen === "Azure") {
+    if (Isopen === "aws" || Isopen === "azure") {
       UpdatedNodes["cloudProvider"].data = {
         ...UpdatedNodes["cloudProvider"].data,
         ...Data,
@@ -457,10 +465,17 @@ const Designer = () => {
       Data["deployment"] = {};
       let hasField = false;
       for (const cloudInfo in NewNodes) {
+        console.log(cloudInfo,"cloudInfooo")
         const Cloud = NewNodes[cloudInfo];
         if (Cloud.data) {
+        console.log(Cloud.data,"cloCloud.dataudInfooo")
+
           if (Cloud.id === "cloudProvider") {
-            Data["deployment"] = Cloud.data;
+            console.log(Cloud.data,"kkkkkkkkkkkkkk")
+            Data["deployment"] = {
+              ...Cloud.data,
+              ...Service_Discovery_Data,
+            };
             hasField = true;
           }
         }
@@ -472,6 +487,7 @@ const Designer = () => {
     console.log(Data);
     setNodes(NewNodes);
 
+    setIsLoading(true);
     fetch(process.env.REACT_APP_API_BASE_URL + "/api/generate", {
       method: "post",
       headers: {
@@ -481,11 +497,12 @@ const Designer = () => {
     })
       .then((response) => response.blob())
       .then((blob) => {
+        setIsLoading(false);
         saveAs(blob, `${Data.projectName}.zip`); // Edit the name or ask the user for the project Name
       })
       .catch((error) => console.error(error))
       .finally(() => {
-        // window.location.replace("../../");
+        window.location.replace("../../");
       });
   };
   const onCheckEdge = (edges) => {
@@ -583,7 +600,8 @@ const Designer = () => {
                 e,
                 ServiceDiscoveryCount,
                 MessageBrokerCount,
-                CloudProviderCount
+                CloudProviderCount,
+                nodes
               )
             }
             onDragOver={onDragOver}
@@ -606,7 +624,9 @@ const Designer = () => {
           isUINodeEnabled={isUINodeEnabled}
           setIsUINodeEnabled={setIsUINodeEnabled}
           Service_Discovery_Data={nodes["serviceDiscoveryType"]?.data}
+          authenticationData={nodes["authenticationType"]?.data}
           onSubmit={onsubmit}
+          isLoading={isLoading}
         />
 
         {nodeType === "Service" && Isopen && (
@@ -619,7 +639,7 @@ const Designer = () => {
           />
         )}
 
-        {nodeType === "Azure" && Isopen && (
+        {nodeType === "azure" && Isopen && (
           <DeployModal
             isOpen={Isopen}
             CurrentNode={CurrentNode}
@@ -628,7 +648,7 @@ const Designer = () => {
           />
         )}
 
-        {nodeType === "AWS" && Isopen && (
+        {nodeType === "aws" && Isopen && (
           <DeployModal
             isOpen={Isopen}
             CurrentNode={CurrentNode}
