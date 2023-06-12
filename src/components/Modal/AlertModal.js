@@ -5,15 +5,15 @@ import {
   ModalContent,
   ModalHeader,
   ModalCloseButton,
-  ModalBody
+  ModalBody,
 } from "@chakra-ui/react";
 
-const AlertModal = ({ isOpen, onClose ,name }) => {
+const AlertModal = ({ isOpen, onClose, name }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered={true}>
       <ModalOverlay />
-      <ModalContent backgroundColor="#A7C7E7" >
-        <ModalHeader style={{fontSize:"14px"}}>You have already selected one from this category, Please delete the first one if you wish to change your choice.</ModalHeader>
+      <ModalContent backgroundColor="#A7C7E7">
+        <ModalHeader>You have already slected one from this category, Please delete the first one if you wish to change your choice.</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <div
@@ -21,11 +21,9 @@ const AlertModal = ({ isOpen, onClose ,name }) => {
               display: "flex",
               flexDirection: "column",
               alignItems: "Left",
-              backgroundColor:'#3182CE'
+              backgroundColor: "#3182CE",
             }}
-          >
-            
-            </div>
+          ></div>
         </ModalBody>
       </ModalContent>
     </Modal>
