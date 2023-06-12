@@ -524,7 +524,7 @@ const Designer = () => {
     if (Data.framework === 'rest') {
       UpdatedEdges[IsEdgeopen].label = 'Rest'; // Set label as 'REST' for the edge
     } else {
-      UpdatedEdges[IsEdgeopen].label = 'Rabbitmq'; // Set image as the label
+      UpdatedEdges[IsEdgeopen].label = <img src={rabbitmqImage} alt="RabbitMQ" />; // Set image as the label
     }
   
     if (Data.type === 'synchronous') {

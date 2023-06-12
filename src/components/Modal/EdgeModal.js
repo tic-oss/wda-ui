@@ -118,22 +118,6 @@ const EdgeModal = ({
                 </Alert>
               )}
 
-            {edgeData.type === "synchronous" &&
-              edgeData.framework === "rest" &&
-              !isMessageBroker && (
-                <Alert
-                  status="error"
-                  height="12px"
-                  fontSize="12px"
-                  borderRadius="3px"
-                  mb={2}
-                >
-                  <AlertIcon style={{ width: "14px", height: "14px" }} />
-                  Please select a message broker to save
-                </Alert>
-              )}
-
-
             {edgeData.type === "asynchronous" && (
               <FormControl>
                 <FormLabel>Framework</FormLabel>
