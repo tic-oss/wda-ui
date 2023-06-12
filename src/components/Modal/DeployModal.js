@@ -72,6 +72,7 @@ console.log(isOpen)
          style={{
           maxHeight: "calc(100vh - 200px)",
           overflowY: "auto",
+          maxHeight: "600px",
         }}>
         <div
             style={{
