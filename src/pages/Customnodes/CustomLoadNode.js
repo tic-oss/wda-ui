@@ -1,15 +1,13 @@
-import eck from "../../assets/eck.png"
-
+import eck from "../../assets/eck.png";
 
 // const handleStyle = { left: 25 };
 
-function CustomLoadNode({ data}) {
-
-  const logManagementType= data.logManagementType
+function CustomLoadNode({ data }) {
+  const logManagementType = data.logManagementType;
 
   return (
     <div>
-        <img width='60px' name={logManagementType} src={eck} /> 
+      <img width="60px" name={logManagementType} src={eck} />
     </div>
   );
 }

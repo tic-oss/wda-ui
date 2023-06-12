@@ -10,33 +10,48 @@ import {
   Select,
   Button,
   FormLabel,
-  FormControl
+  FormControl,
+  Alert,
+  AlertIcon,
 } from "@chakra-ui/react";
 
-const EdgeModal = ({ isOpen, CurrentEdge, onClose, handleEdgeData }) => {
-  console.log(CurrentEdge, 'edgeeeeee');
+const EdgeModal = ({
+  isOpen,
+  CurrentEdge,
+  onClose,
+  handleEdgeData,
+  isMessageBroker,
+}) => {
+  console.log(CurrentEdge, "edgeeeeee");
   const initialState = {
     type: "",
     framework: "",
-    ...CurrentEdge
+    ...CurrentEdge,
   };
   const [edgeData, setEdgeData] = useState(initialState);
 
   const handleData = (column, value) => {
-   
     if (column === "type") {
       setEdgeData((prev) => ({
         ...prev,
         [column]: value,
-        framework: ""
+        framework: "",
       }));
     } else {
       setEdgeData((prev) => ({
         ...prev,
-        [column]: value
+        [column]: value,
       }));
     }
   };
+
+  function handleSubmit(edgeData) {
+    if (edgeData.type === "asynchronous") {
+      handleEdgeData(edgeData);
+    } else if (edgeData.type === "synchronous") {
+      isMessageBroker && handleEdgeData(edgeData);
+    }
+  }
 
   return (
     <Modal isOpen={isOpen} onClose={() => onClose(false)} isCentered={true}>
@@ -62,7 +77,9 @@ const EdgeModal = ({ isOpen, CurrentEdge, onClose, handleEdgeData }) => {
                 value={edgeData.type}
                 onChange={(e) => handleData("type", e.target.value)}
               >
-                <option value="" disabled>Select an option</option>
+                <option value="" disabled>
+                  Select an option
+                </option>
                 <option value="asynchronous">Asynchronous</option>
                 <option value="synchronous">Synchronous</option>
               </Select>
@@ -79,11 +96,27 @@ const EdgeModal = ({ isOpen, CurrentEdge, onClose, handleEdgeData }) => {
                   value={edgeData.framework}
                   onChange={(e) => handleData("framework", e.target.value)}
                 >
-                  <option value="" disabled>Select an option</option>
+                  <option value="" disabled>
+                    Select an option
+                  </option>
                   <option value="rest">REST</option>
                 </Select>
               </FormControl>
             )}
+            {edgeData.type === "synchronous" &&
+              edgeData.framework === "rest" &&
+              !isMessageBroker && (
+                <Alert
+                  status="error"
+                  height="12px"
+                  fontSize="12px"
+                  borderRadius="3px"
+                  mb={2}
+                >
+                  <AlertIcon style={{ width: "14px", height: "14px" }} />
+                  Please select a message broker to save
+                </Alert>
+              )}
 
             {edgeData.type === "asynchronous" && (
               <FormControl>
@@ -96,7 +129,9 @@ const EdgeModal = ({ isOpen, CurrentEdge, onClose, handleEdgeData }) => {
                   value={edgeData.framework}
                   onChange={(e) => handleData("framework", e.target.value)}
                 >
-                   <option value="" disabled>Select an option</option>
+                  <option value="" disabled>
+                    Select an option
+                  </option>
                   <option value="rabbitmq">Rabbit MQ</option>
                   {/* <option value="kafka">Kafka</option>
                   <option value="pulsar">Pulsar</option> */}
@@ -106,7 +141,7 @@ const EdgeModal = ({ isOpen, CurrentEdge, onClose, handleEdgeData }) => {
           </div>
         </ModalBody>
         <ModalFooter>
-          <Button onClick={() => handleEdgeData(edgeData)}>Submit</Button>
+          <Button onClick={() => handleSubmit(edgeData)}>Submit</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

@@ -35,18 +35,23 @@ export default function Header({ children }) {
         mx="auto"
       >
         <Flex alignItems="center">
-        <Link to="/">
-          <Image
-            src={logo}
-            alt="App Logo"
-            style={{ width: "18px", height: "15px", marginRight: "30px", transform: "scale(3.5)" }}
-          />
+          <Link to="/">
+            <Image
+              src={logo}
+              alt="App Logo"
+              style={{
+                width: "18px",
+                height: "15px",
+                marginRight: "30px",
+                transform: "scale(3.5)",
+              }}
+            />
           </Link>
           <Link to="/">
-          <Text fontSize="xl" fontWeight="bold" color={color}>
-            TIC@coMakeIT
-          </Text>
-        </Link>
+            <Text fontSize="xl" fontWeight="bold" color={color}>
+              TIC@coMakeIT
+            </Text>
+          </Link>
         </Flex>
         <HStack spacing={4} display={{ base: "none", md: "flex" }}>
           <Link to="/" onClick={() => handleAction("home")}>
@@ -123,6 +128,15 @@ export default function Header({ children }) {
               fontWeight={action === "contact" ? "bold" : ""}
             >
               Contact
+            </Text>
+          </Link>
+          <Link to="/login" onClick={() => handleAction("login")}>
+            <Text
+              fontSize="md"
+              color={color}
+              fontWeight={action === "login" ? "bold" : ""}
+            >
+              Login
             </Text>
           </Link>
         </HStack>

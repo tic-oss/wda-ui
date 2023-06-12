@@ -21,8 +21,6 @@ function Application({
   checkDuplicateAppName,
   isDuplicateAppName,
   handleDeleteApplication,
-  checkGateway,
-  checkAppType,
 }) {
   const handleKeyPress = (event) => {
     const charCode = event.which ? event.which : event.keyCode;
@@ -39,14 +37,6 @@ function Application({
   };
   const handleInputChange = (field, value) => {
     checkDuplicateAppName(id, field, value);
-    if (field === "applicationType") {
-      if (
-        value === "gateway" &&
-        application.applicationType === "microservice"
-      ) {
-        checkAppType(true);
-      } else checkAppType(false);
-    }
     setApplication((state) => ({
       ...state,
       [id]: {
@@ -108,7 +98,6 @@ function Application({
                           boxShadow: "none",
                         },
                       }}
-                      autoComplete={false}
                     />
                   </div>
                   <Box>
@@ -134,22 +123,15 @@ function Application({
           <FormControl>
             <FormLabel>Application Type</FormLabel>
             <Select
-              key={application.applicationType}
               name="applicationType"
               onChange={({ target }) =>
                 handleInputChange("applicationType", target.value)
               }
               marginBottom="10px"
-              // defaultValue={application.applicationType}
+              defaultValue={application.applicationType}
             >
-              {!checkGateway || application.applicationType === "gateway" ? (
-                <>
-                  <option value="microservice">Microservice</option>
-                  <option value="gateway">UI + Gateway</option>
-                </>
-              ) : (
-                <option value="microservice">Microservice</option>
-              )}
+              <option value="microservice">Microservice</option>
+              <option value="gateway">UI + Gateway</option>
               {/* <option value="monolithic">Monolithic</option> */}
             </Select>
             {application.applicationType === "microservice" && (
@@ -269,6 +251,24 @@ function Application({
               <option value="consul">Consul</option>
               <option value="no">No</option>
             </Select>
+            {application.applicationType === "microservice" && (
+              <>
+                <FormLabel>Message Broker</FormLabel>
+                <Select
+                  name="messageBroker"
+                  onChange={({ target }) =>
+                    handleInputChange("messageBroker", target.value)
+                  }
+                  marginBottom="10px"
+                  defaultValue={application.messageBroker}
+                >
+                  <option value="rabbitmq">RabbitMQ</option>
+                  <option value="kafka">Kafka</option>
+                  <option value="pulsar">Pulsar</option>
+                  <option value="no">No</option>
+                </Select>
+              </>
+            )}
             <FormControl isInvalid={isErrorServerPort} isRequired>
               <FormLabel>Service Port</FormLabel>
               <Input
