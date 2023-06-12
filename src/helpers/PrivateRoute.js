@@ -1,32 +1,24 @@
-import React, { useEffect } from 'react';
-import { useKeycloak } from '@react-keycloak/web';
-import { useHistory } from 'react-router-dom';
+import { useKeycloak } from "@react-keycloak/web";
+import { useEffect } from "react";
 
 const PrivateRoute = ({ children }) => {
   const { keycloak } = useKeycloak();
-  const history = useHistory();
 
   useEffect(() => {
-    const loginIfUnauthorized = async () => {
-      const authenticated = await keycloak.init({ onLoad: 'check-sso' });
-      if (!authenticated) {
-        // Store the current location before redirecting to login
-        sessionStorage.setItem('redirectPathname', history.location.pathname);
-        keycloak.login();
+    const initKeycloak = async () => {
+      try {
+        await keycloak.init({
+          onLoad: "login-required" // Redirect to login if not authenticated
+        });
+      } catch (error) {
+        console.error("Keycloak initialization error:", error);
       }
     };
 
-    // Check if the route requires authentication
-    const isAuthenticationRequired = ['/wda', '/wdi', '/designer'].includes(
-      history.location.pathname
-    );
+    initKeycloak();
+  }, [keycloak]);
 
-    if (isAuthenticationRequired) {
-      loginIfUnauthorized();
-    }
-  }, [keycloak, history]);
-
-  return <>{children}</>;
+  return <>{children}</>; // Render the children directly
 };
 
 export default PrivateRoute;
