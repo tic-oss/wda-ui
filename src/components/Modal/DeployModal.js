@@ -22,12 +22,23 @@ const DeployModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
     cloudProvider: isOpen,
     deploymentType: "",
     ...(isOpen === "azure"
-      ? { azureRegion: "", acrRegistry: "", resourcegroupname: "" }
+      ? {
+          location: "",
+          acrRegistry: "",
+          resourcegroupname: "",
+          subscriptionId: "",
+          tenantId: "",
+        }
       : {}),
-    ...(isOpen === "aws" ? { awsAccountId: "", awsRegion: "us-east-2" } : {}),
+    ...(isOpen === "aws"
+      ? {
+          awsAccountId: "",
+          awsRegion: "us-east-2",
+          kubernetesStorageClassName: "",
+        }
+      : {}),
     clusterName: "",
     kubernetesUseDynamicStorage: "true",
-    kubernetesStorageClassName: "",
     kubernetesNamespace: "",
     ingressType: "istio",
     monitoring: "",
@@ -94,6 +105,30 @@ const DeployModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
                   ></Input>
                 </FormControl>
                 <FormControl>
+                  <FormLabel>Subscription Id</FormLabel>
+                  <Input
+                    mb={4}
+                    variant="outline"
+                    id="subscriptionId"
+                    borderColor={"black"}
+                    value={DeploymentData.subscriptionId}
+                    onChange={(e) =>
+                      handleData("subscriptionId", e.target.value)
+                    }
+                  ></Input>
+                </FormControl>
+                <FormControl>
+                  <FormLabel>Tenant ID</FormLabel>
+                  <Input
+                    mb={4}
+                    variant="outline"
+                    id="tenantId"
+                    borderColor={"black"}
+                    value={DeploymentData.tenantId}
+                    onChange={(e) => handleData("tenantId", e.target.value)}
+                  ></Input>
+                </FormControl>
+                <FormControl>
                   <FormLabel>Resource Group Name</FormLabel>
                   <Input
                     mb={4}
@@ -107,14 +142,14 @@ const DeployModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
                   ></Input>
                 </FormControl>
                 <FormControl>
-                  <FormLabel>Azure Region</FormLabel>
+                  <FormLabel>Location</FormLabel>
                   <Select
                     mb={4}
                     variant="outline"
-                    id="azureRegion"
+                    id="location"
                     borderColor={"black"}
-                    value={DeploymentData.azureRegion}
-                    onChange={(e) => handleData("azureRegion", e.target.value)}
+                    value={DeploymentData.location}
+                    onChange={(e) => handleData("location", e.target.value)}
                   >
                     <option value="" disabled>
                       Select an option
@@ -222,22 +257,26 @@ const DeployModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
                     <option value="false">No</option>
                   </Select>
                 </FormControl>
-                {DeploymentData.kubernetesUseDynamicStorage === "true" && (
-                  <FormControl>
-                    <FormLabel>Storage Class Name</FormLabel>
-                    <Input
-                      mb={4}
-                      variant="outline"
-                      id="kubernetesStorageClassName"
-                      placeholder="Kubernetes Storage Class Name"
-                      borderColor={"black"}
-                      value={DeploymentData.kubernetesStorageClassName}
-                      onChange={(e) =>
-                        handleData("kubernetesStorageClassName", e.target.value)
-                      }
-                    />
-                  </FormControl>
-                )}
+                {DeploymentData.kubernetesUseDynamicStorage === "true" &&
+                  isOpen === "aws" && (
+                    <FormControl>
+                      <FormLabel>Storage Class Name</FormLabel>
+                      <Input
+                        mb={4}
+                        variant="outline"
+                        id="kubernetesStorageClassName"
+                        placeholder="Kubernetes Storage Class Name"
+                        borderColor={"black"}
+                        value={DeploymentData.kubernetesStorageClassName}
+                        onChange={(e) =>
+                          handleData(
+                            "kubernetesStorageClassName",
+                            e.target.value
+                          )
+                        }
+                      />
+                    </FormControl>
+                  )}
 
                 <FormControl>
                   <FormLabel>Namespace</FormLabel>

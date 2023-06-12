@@ -11,7 +11,7 @@ import azure from "../assets/Azure.png";
 import aws from "../assets/aws.png";
 import eck from "../assets/eck.png";
 import "./../App.css";
-import { Input, FormLabel, Button } from "@chakra-ui/react";
+import { Input, FormLabel, Button, Flex, Spinner } from "@chakra-ui/react";
 
 export default ({
   isUINodeEnabled,
@@ -19,6 +19,7 @@ export default ({
   onSubmit,
   Service_Discovery_Data,
   authenticationData,
+  isLoading,
 }) => {
   const onDragStart = (event, nodeType, Name) => {
     if (Name === "UI") {
@@ -153,7 +154,7 @@ export default ({
           <div
             className="selectorNode"
             onDragStart={(event) =>
-              onDragStart(event, "default", "Database_mongo")
+              onDragStart(event, "default", "Database_mongodb")
             }
             draggable
           >
@@ -329,7 +330,9 @@ export default ({
       >
         {/* <div style={{ display:'flex', justifyContent:'center'}}> */}
         <Button
-          onClick={() => onSubmit(projectData)}
+          onClick={() => {
+            onSubmit(projectData) || isLoading(true);
+          }}
           mt={4}
           border="2px"
           borderColor="green.500"
@@ -345,6 +348,40 @@ export default ({
           Submit
         </Button>
         {/* </div> */}
+        {isLoading && (
+          <Flex
+            position="fixed"
+            top="0"
+            left="0"
+            right="0"
+            bottom="0"
+            alignItems="center"
+            justifyContent="center"
+            backgroundColor="rgba(240, 248, 255, 0.5)" // Use RGBA to set opacity
+            zIndex="9999"
+            display="flex"
+            flexDirection="column"
+          >
+            <Spinner
+              thickness="8px"
+              speed="0.9s"
+              emptyColor="gray.200"
+              color="#3182CE"
+              height="250px"
+              width="250px"
+            />
+            <div
+              style={{
+                marginTop: "40px",
+                color: "#3182CE",
+                fontWeight: "bolder",
+                fontSize: "20px",
+              }}
+            >
+              Please wait while we generate your project
+            </div>
+          </Flex>
+        )}
         {isEmpty || projectData.projectName === "" ? (
           <p
             style={{
