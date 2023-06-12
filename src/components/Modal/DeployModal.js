@@ -68,7 +68,11 @@ console.log(isOpen)
       <ModalContent>
         <ModalHeader>Deployment</ModalHeader>
         <ModalCloseButton/>
-        <ModalBody>
+        <ModalBody
+         style={{
+          maxHeight: "calc(100vh - 200px)",
+          overflowY: "auto",
+        }}>
         <div
             style={{
               display: "flex",
@@ -213,8 +217,6 @@ console.log(isOpen)
                 onChange={(e)=>handleData('kubernetesNamespace',e.target.value)}
               />
             </FormControl>
-            </div>
-            )}
             <FormControl>
               <FormLabel>Ingress Type</FormLabel>
               <Select mb={4} variant="outline" id="ingress" 
@@ -240,7 +242,7 @@ console.log(isOpen)
              />
            </FormControl> 
             )}
-            <FormControl>
+             <FormControl>
               <FormLabel>Enable Monitoring</FormLabel>
               <Select mb={4} variant="outline" id="monitoring" 
                 borderColor={"black"}
@@ -264,9 +266,9 @@ console.log(isOpen)
             <option value="no">No</option>
             </Select>
             </FormControl>
-
-
-
+            </div>
+            
+            )}
              </div>
           <ModalFooter>
           <Button onClick={() =>  handleSubmit(DeploymentData)}  type="submit"style={{ display: 'block', margin: '0 auto' }}>
