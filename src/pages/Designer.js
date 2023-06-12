@@ -520,25 +520,28 @@ const Designer = () => {
   const handleEdgeData = (Data) => {
     console.log(Data, IsEdgeopen);
     let UpdatedEdges = { ...edges };
-    if (Data.type === "synchronous") {
-      UpdatedEdges[IsEdgeopen].markerEnd = {
-        color: "black",
-        type: MarkerType.ArrowClosed,
-      };
-      UpdatedEdges[IsEdgeopen].style = { stroke: "black" };
+  
+    if (Data.framework === 'rest') {
+      UpdatedEdges[IsEdgeopen].label = 'Rest'; // Set label as 'REST' for the edge
     } else {
-      UpdatedEdges[IsEdgeopen].markerEnd = {
-        color: "#e2e8f0",
-        type: MarkerType.ArrowClosed,
-      };
-      UpdatedEdges[IsEdgeopen].style = { stroke: "#e2e8f0" };
+      UpdatedEdges[IsEdgeopen].label = 'Rabbitmq'; // Set image as the label
     }
+  
+    if (Data.type === 'synchronous') {
+      UpdatedEdges[IsEdgeopen].markerEnd = { color: 'black', type: MarkerType.ArrowClosed };
+      UpdatedEdges[IsEdgeopen].style = { stroke: 'black' };
+    } else {
+      UpdatedEdges[IsEdgeopen].markerEnd = { color: '#e2e8f0', type: MarkerType.ArrowClosed };
+      UpdatedEdges[IsEdgeopen].style = { stroke: '#e2e8f0' };
+    }
+  
     UpdatedEdges[IsEdgeopen].data = {
-      clientName: UpdatedEdges[IsEdgeopen].source,
-      serverName: UpdatedEdges[IsEdgeopen].target,
+      client: UpdatedEdges[IsEdgeopen].source,
+      server: UpdatedEdges[IsEdgeopen].target,
       ...UpdatedEdges[IsEdgeopen].data,
       ...Data,
     };
+  
     setEdges(UpdatedEdges);
     setEdgeopen(false);
   };
