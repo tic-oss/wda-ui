@@ -1,8 +1,7 @@
 import { Handle, Position } from "reactflow";
 import postgres from "../../assets/pstgrc.jpeg";
 import sql from "../../assets/mongo.png";
-import postgres from "../../assets/pstgrc.jpeg";
-import sql from "../../assets/mongo.png";
+
 
 
 function CustomImageNode({ data, isConnectable }) {
@@ -20,10 +19,7 @@ function CustomImageNode({ data, isConnectable }) {
           width="60px"
           src={data.prodDatabaseType == "postgresql" ? postgres : sql}
         />
-        <img
-          width="60px"
-          src={data.prodDatabaseType == "postgresql" ? postgres : sql}
-        />
+        
       </div>
     </div>
   );

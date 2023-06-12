@@ -10,6 +10,8 @@ import rabbitmq from "../assets/rabbitmq.png";
 import azure from "../assets/Azure.png";
 import aws from "../assets/aws.png";
 import eck from "../assets/eck.png";
+import mini from "../assets/mini.jpeg"
+import docker from "../assets/docker.png"
 import "./../App.css";
 import { Input, FormLabel, Button } from "@chakra-ui/react";
 
@@ -195,7 +197,7 @@ export default ({
           </div>
         </>
       )}
-      <h1>
+      {/* <h1>
         <span
           style={{
             cursor: "pointer",
@@ -246,7 +248,7 @@ export default ({
             <img width="120px" src={pulsar} alt="pulsarlogo" />
           </div>
         </>
-      )}
+      )} */}
 
       <h1>
         <span
@@ -315,6 +317,46 @@ export default ({
             draggable
           >
             <img width="120px" src={eck} alt="ecklogo" />
+          </div>
+        </>
+      )}
+      <h1>
+        <span
+          style={{
+            cursor: "pointer",
+            fontSize: "20px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+          onClick={() => toggleOption("Localenvironment")}
+        >
+          Localenvironment{" "}
+          {selectedOption === "Localenvironment" ? (
+            <span>&#x25B2;</span>
+          ) : (
+            <span>&#x25BC;</span>
+          )}
+        </span>
+      </h1>
+      {selectedOption === "Localenvironment" && (
+        <>
+          <div
+            className="selectorNode7"
+            onDragStart={(event) =>
+              onDragStart(event, "default", "Localenvironment_minikube")
+            }
+            draggable
+          >
+            <img width="120px" src={mini} alt="minikubelogo" />
+          </div>
+
+          <div
+            className="selectorNode7"
+            onDragStart={(event) => onDragStart(event, "default", "Localenvironment_docker")}
+            draggable
+          >
+            <img width="120px" src={docker} alt="dockerlogo" />
           </div>
         </>
       )}

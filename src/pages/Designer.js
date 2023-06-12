@@ -19,6 +19,7 @@ import CustomAuthNode from "./Customnodes/CustomAuthNode";
 import CustomMessageBrokerNode from "./Customnodes/CustomMessageBrokerNode";
 import CustomCloudNode from "./Customnodes/CustomCloudNode";
 import CustomLoadNode from "./Customnodes/CustomLoadNode";
+import CustomLocalenvironmentNode from "./Customnodes/CustomLocalenvironmentNode";
 import AlertModal from "../components/Modal/AlertModal";
 
 import "./../App.css";
@@ -43,6 +44,7 @@ const nodeTypes = {
   selectorNode4: CustomMessageBrokerNode,
   selectorNode5: CustomCloudNode,
   selectorNode6: CustomLoadNode,
+  selectorNode7: CustomLocalenvironmentNode,
 };
 
 const Designer = () => {
@@ -52,6 +54,7 @@ const Designer = () => {
   const [ServiceDiscoveryCount, setServiceDiscoveryCount] = useState(0);
   const [MessageBrokerCount, setMessageBrokerCount] = useState(0);
   const [CloudProviderCount, setCloudProviderCount] = useState(0);
+  const [LocalenvironmentCount,setLocalenvironmentCount]= useState(0);
 
   console.log("Nodes", nodes);
 
@@ -124,6 +127,7 @@ const Designer = () => {
             else if (change.id === "serviceDiscoveryType")
               setServiceDiscoveryCount(0);
             else if (change.id === "cloudProvider") setCloudProviderCount(0);
+            else if (change.id === "Localenvironment") setLocalenvironmentCount(0);
             delete updatedNodes[change.id];
 
             break;
@@ -254,7 +258,7 @@ const Designer = () => {
   };
 
   const onDrop = useCallback(
-    (event, servicecount, messagecount, cloudcount) => {
+    (event, servicecount, messagecount, cloudcount,Localenvcount) => {
       event.preventDefault();
       console.log(event);
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
@@ -344,7 +348,8 @@ const Designer = () => {
       } else if (name.startsWith("Cloud") && cloudcount >= 1) {
         console.log("else", cloudcount);
         setCloudProviderCount(2);
-      } else if (name.startsWith("Load")) {
+      } 
+      else if (name.startsWith("Load")) {
         const logManagementType = name.split("_").splice(1)[0];
         const newNode = {
           id: "logManagement",
@@ -354,7 +359,26 @@ const Designer = () => {
           style: { border: "1px solid", padding: "4px 4px" },
         };
         setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
-      } else {
+      } 
+      else if (name.startsWith("Localenvironment") && Localenvcount == 0) {
+        console.log(Localenvcount);
+        const Localenvironment = name.split("_").splice(1)[0];
+        console.log(Localenvironment);
+        const newNode = {
+          id: "Localenvironment",
+          type: "selectorNode7",
+          position,
+          data: { Localenvironment: Localenvironment },
+          style: { border: "1px solid", padding: "4px 4px" },
+        };
+        setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
+        setLocalenvironmentCount(1);
+      } else if (name.startsWith("Localenvironment") && Localenvcount >= 1) {
+        console.log("else", Localenvcount);
+        setLocalenvironmentCount(2);
+      } 
+      
+      else {
         const newNode = {
           id: getId(name),
           type,
@@ -524,7 +548,7 @@ const Designer = () => {
     if (Data.framework === 'rest') {
       UpdatedEdges[IsEdgeopen].label = 'Rest'; // Set label as 'REST' for the edge
     } else {
-      UpdatedEdges[IsEdgeopen].label = <img src={rabbitmqImage} alt="RabbitMQ" />; // Set image as the label
+      UpdatedEdges[IsEdgeopen].label = "RabbitMQ"
     }
   
     if (Data.type === 'synchronous') {
@@ -586,7 +610,8 @@ const Designer = () => {
                 e,
                 ServiceDiscoveryCount,
                 MessageBrokerCount,
-                CloudProviderCount
+                CloudProviderCount,
+                LocalenvironmentCount
               )
             }
             onDragOver={onDragOver}
@@ -672,6 +697,9 @@ const Designer = () => {
 
         {CloudProviderCount == 2 && (
           <AlertModal isOpen={true} onClose={() => setCloudProviderCount(1)} />
+        )}
+        {LocalenvironmentCount == 2 && (
+          <AlertModal isOpen={true} onClose={() => setLocalenvironmentCount(1)} />
         )}
 
         {/* <Button onClick={()=>onsubmit()}>Submit</Button> */}

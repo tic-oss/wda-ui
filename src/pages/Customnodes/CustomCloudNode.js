@@ -1,8 +1,7 @@
 import { Handle, Position } from "reactflow";
 import azure from "../../assets/Azure.png";
 import aws from "../../assets/aws.png";
-import azure from "../../assets/Azure.png";
-import aws from "../../assets/aws.png";
+
 const handleStyle = { left: 25 };
 
 function CustomCloudNode({ data, isConnectable }) {
