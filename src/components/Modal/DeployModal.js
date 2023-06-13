@@ -13,7 +13,7 @@ import {
   FormLabel,
   FormControl,
   Alert,
-  AlertIcon,
+  AlertIcon
 } from "@chakra-ui/react";
 
 const DeployModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
@@ -45,18 +45,19 @@ const DeployModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
     ingressDomain: "",
     k8sWebUI: "",
 
-    ...CurrentNode,
-  };
-  const handleKeyPress = (event) => {
-    const charCode = event.which ? event.which : event.keyCode;
-    if ((charCode >= 48 && charCode <= 57) || charCode === 8) {
-      return true;
-    } else {
-      event.preventDefault();
-      return false;
-    }
-  };
-  const [DeploymentData, setDeploymentData] = useState(IntialState);
+        ...CurrentNode
+      }
+      const handleKeyPress = (event) => {
+        const charCode = event.which ? event.which : event.keyCode;
+        if ((charCode >= 48 && charCode <= 57) || charCode === 8) {
+          return true;
+        } else {
+          event.preventDefault();
+          return false;
+        }
+      };
+console.log(isOpen)
+      const [DeploymentData,setDeploymentData] = useState(IntialState)
 
   const handleData = (column, value) => {
     if (column === "awsAccountId") validateInputValue(value);
@@ -82,9 +83,14 @@ const DeployModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Deployment</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
-          <div
+        <ModalCloseButton/>
+        <ModalBody
+         style={{
+          maxHeight: "calc(100vh - 200px)",
+          overflowY: "auto",
+          maxHeight: "600px",
+        }}>
+        <div
             style={{
               display: "flex",
               flexDirection: "column",
@@ -215,7 +221,7 @@ const DeployModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
                 id="deploymentType"
                 borderColor={"black"}
                 value={DeploymentData.deploymentType}
-                onChange={(e) => handleData("deploymentType", e.target.value)}
+                onChange={(e)=>handleData('deploymentType',e.target.value)}
               >
                 <option value="" disabled>
                   Select an option
@@ -224,19 +230,17 @@ const DeployModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
               </Select>
             </FormControl>
 
-            {DeploymentData.deploymentType === "kubernetes" && (
-              <div>
-                <FormControl>
-                  <FormLabel>Cluster Name</FormLabel>
-                  <Input
-                    mb={4}
-                    variant="outline"
-                    id="clusterName"
-                    borderColor={"black"}
-                    value={DeploymentData.clusterName}
-                    onChange={(e) => handleData("clusterName", e.target.value)}
-                  ></Input>
-                </FormControl>
+      { DeploymentData.deploymentType==='kubernetes' &&(
+        <div>
+            <FormControl>
+              <FormLabel>Cluster Name</FormLabel>
+              <Input mb={4} variant="outline" id="clusterName" 
+                borderColor={"black"}
+                value={DeploymentData.clusterName}
+                onChange={(e)=>handleData('clusterName',e.target.value)}
+              >  
+              </Input>
+            </FormControl>
 
                 <FormControl>
                   <FormLabel>Enable Dynamic Storage</FormLabel>
@@ -278,65 +282,55 @@ const DeployModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
                     </FormControl>
                   )}
 
-                <FormControl>
-                  <FormLabel>Namespace</FormLabel>
-                  <Input
-                    mb={4}
-                    variant="outline"
-                    id="kubernetesnamespace"
-                    placeholder="Kubernetes Namespace"
-                    borderColor={"black"}
-                    value={DeploymentData.kubernetesNamespace}
-                    onChange={(e) =>
-                      handleData("kubernetesNamespace", e.target.value)
-                    }
-                  />
-                </FormControl>
-              </div>
-            )}
+            <FormControl>
+              <FormLabel>Namespace</FormLabel>
+              <Input
+                mb={4}
+                variant="outline"
+                id="kubernetesnamespace"
+                placeholder="Kubernetes Namespace"
+                borderColor={"black"}
+                value={DeploymentData.kubernetesNamespace}
+                onChange={(e)=>handleData('kubernetesNamespace',e.target.value)}
+              />
+            </FormControl>
             <FormControl>
               <FormLabel>Ingress Type</FormLabel>
-              <Select
-                mb={4}
-                variant="outline"
-                id="ingressType"
+              <Select mb={4} variant="outline" id="ingress" 
                 borderColor={"black"}
-                value={DeploymentData.ingressType}
-                onChange={(e) => handleData("ingressType", e.target.value)}
+                value={DeploymentData.ingress}
+                onChange={(e)=>handleData('ingress',e.target.value)}
               >
                 <option value="istio">Istio</option>
-              </Select>
+              
+                </Select>
             </FormControl>
-            {DeploymentData.ingressType == "istio" && (
-              <FormControl>
-                <FormLabel>Ingress Domain Name</FormLabel>
-                <Input
-                  mb={4}
-                  variant="outline"
-                  id="ingressDomain"
-                  placeholder="Ingress Domain Name"
-                  borderColor={"black"}
-                  value={DeploymentData.ingressDomain}
-                  onChange={(e) => handleData("ingressDomain", e.target.value)}
-                />
-              </FormControl>
+            {DeploymentData.ingress=="istio"&&(
+             <FormControl>
+             <FormLabel>Ingress Domain Name</FormLabel>
+             <Input
+               mb={4}
+               variant="outline"
+               id="ingressDomain"
+               placeholder="Ingress Domain Name"
+               borderColor={"black"}
+               value={DeploymentData.ingressDomain}
+               onChange={(e)=>handleData('ingressDomain',e.target.value)}
+             />
+           </FormControl> 
             )}
-            <FormControl>
+             <FormControl>
               <FormLabel>Enable Monitoring</FormLabel>
-              <Select
-                mb={4}
-                variant="outline"
-                id="monitoring"
+              <Select mb={4} variant="outline" id="monitoring" 
                 borderColor={"black"}
                 value={DeploymentData.monitoring}
-                onChange={(e) => handleData("monitoring", e.target.value)}
+                onChange={(e)=>handleData('monitoring',e.target.value)}
               >
-                <option value="" disabled>
-                  Select an option
-                </option>
+                 <option value="" disabled>Select an option</option>
                 <option value="true">Yes</option>
                 <option value="false">No</option>
-              </Select>
+              
+                </Select>
             </FormControl>
             <FormControl>
               <FormLabel>Enable Web UI</FormLabel>
@@ -355,15 +349,16 @@ const DeployModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
                 <option value="false">No</option>
               </Select>
             </FormControl>
-          </div>
+            </div>
+            
+            )}
+             </div>
           <ModalFooter>
-            <Button
-              onClick={() => handleSubmit(DeploymentData)}
-              type="submit"
-              style={{ display: "block", margin: "0 auto" }}
-            >
-              Submit
-            </Button>
+          <Button onClick={() =>  handleSubmit(DeploymentData)}  type="submit"style={{ display: 'block', margin: '0 auto' }}>
+           Submit
+          </Button>
+
+
           </ModalFooter>
         </ModalBody>
       </ModalContent>
