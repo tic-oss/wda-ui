@@ -398,6 +398,8 @@ const Designer = () => {
           data: { label: name },
           style: { border: "1px solid", padding: "4px 4px" },
         };
+        if(name=='UI+Gateway')
+          newNode.type='input'
         setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
       }
     },
@@ -423,7 +425,7 @@ useEffect(() => {
   setNodes({
     UI: {
       id: "UI",
-      type: "default",
+      type: "input",
       data: { label: "UI+Gateway" },
       style: { border: "1px solid #8c8d8f", padding: "4px 4px" },
       position: { x: 250, y: 5 },

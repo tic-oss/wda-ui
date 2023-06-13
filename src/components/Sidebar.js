@@ -77,7 +77,7 @@ export default ({
 
       <div
         className={`dndnode output ${isUINodeEnabled ? "disabled" : ""}`}
-        onDragStart={(event) => onDragStart(event, "default", "UI")}
+        onDragStart={(event) => onDragStart(event, "default", "UI+Gateway")}
         draggable={!isUINodeEnabled}
         style={{
           backgroundColor: isUINodeEnabled ? "#CFCFCF" : "",
