@@ -544,7 +544,7 @@ const onCheckEdge = (edges) => {
     if (Edge.id.startsWith("UI")) {
       if (
         Edge.data.type === "synchronous" &&
-        Edge.data.framework === "rest"
+        Edge.data.framework === "rest-api"
       ) {
         delete Edge.data.type;
         delete Edge.data.framework;
@@ -570,7 +570,7 @@ const handleEdgeData = (Data) => {
   console.log(Data, IsEdgeopen);
   let UpdatedEdges = { ...edges };
 
-  if (Data.framework === 'rest') {
+  if (Data.framework === 'rest-api') {
     UpdatedEdges[IsEdgeopen].label = 'Rest'; // Set label as 'REST' for the edge
   } else {
     UpdatedEdges[IsEdgeopen].label = "RabbitMQ"

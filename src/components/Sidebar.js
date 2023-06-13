@@ -333,7 +333,7 @@ export default ({
           }}
           onClick={() => toggleOption("Localenvironment")}
         >
-          Localenvironment{" "}
+          Local Environment{" "}
           {selectedOption === "Localenvironment" ? (
             <span>&#x25B2;</span>
           ) : (
@@ -375,7 +375,8 @@ export default ({
           onClick={() => {
             onSubmit(projectData) || isLoading(true);
           }}
-          mt={4}
+          ml="auto"
+          mt={2}
           border="2px"
           borderColor="green.500"
           width="100px"
