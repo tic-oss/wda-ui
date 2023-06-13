@@ -10,29 +10,28 @@ import {
   Select,
   Button,
   FormLabel,
-  FormControl
+  FormControl,
 } from "@chakra-ui/react";
 
-const UiDataModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
-
-  const IntialState ={
-    'label':'UI',
-    'applicationName': 'UI', 
-    'clientFramework':'reactjs',
-    'packageName':'',
-    'serverPort':'',
-    'withExample':'',
-    'applicationType':'gateway',
-    ...CurrentNode
-  }
+const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
+  const IntialState = {
+    label: "UI",
+    applicationName: "UI",
+    clientFramework: "react",
+    packageName: "",
+    serverPort: "",
+    withExample: "",
+    applicationType: "gateway",
+    ...CurrentNode,
+  };
   const [UiData, setUiDataData] = useState(IntialState);
 
   const handleData = (column, value) => {
-    if (column === 'label') {
+    if (column === "label") {
       setUiDataData((prev) => ({
         ...prev,
         [column]: value,
-        applicationName: value, 
+        applicationName: value,
       }));
     } else {
       setUiDataData((prev) => ({
@@ -65,24 +64,28 @@ const UiDataModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
                 placeholder="Name"
                 borderColor={"black"}
                 value={UiData.applicationName}
-                onChange={(e)=>handleData('label',e.target.value)}
+                onChange={(e) => handleData("label", e.target.value)}
               />
             </FormControl>
             <FormControl>
-              <FormLabel>clientFramework</FormLabel>
-              <Select mb={4} variant="outline" id="clientFramework" 
+              <FormLabel>Client Framework</FormLabel>
+              <Select
+                mb={4}
+                variant="outline"
+                id="clientFramework"
                 borderColor={"black"}
                 value={UiData.clientFramework}
-                onChange={(e)=>handleData('clientFramework',e.target.value)}
+                onChange={(e) => handleData("clientFramework", e.target.value)}
               >
-                <option value="" disabled>Select an option</option>
+                <option value="" disabled>
+                  Select an option
+                </option>
                 <option value="react">React</option>
                 <option value="angular">Angular</option>
                 <option value="vue">Vue</option>
               </Select>
             </FormControl>
-              
-        
+
             <FormControl>
               <FormLabel>Package Name</FormLabel>
               <Input
@@ -92,7 +95,7 @@ const UiDataModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
                 placeholder="packageName"
                 borderColor={"black"}
                 value={UiData.packageName}
-                onChange={(e)=>handleData('packageName',e.target.value)}
+                onChange={(e) => handleData("packageName", e.target.value)}
               />
             </FormControl>
             <FormControl>
@@ -104,25 +107,33 @@ const UiDataModal = ({ isOpen, onClose, onSubmit,CurrentNode }) => {
                 placeholder="serverPort"
                 borderColor={"black"}
                 value={UiData.serverPort}
-                onChange={(e)=>handleData('serverPort',e.target.value)}
+                onChange={(e) => handleData("serverPort", e.target.value)}
               />
             </FormControl>
             <FormControl>
               <FormLabel>Want to have an Example</FormLabel>
-              <Select mb={4} variant="outline" id="withExample" 
+              <Select
+                mb={4}
+                variant="outline"
+                id="withExample"
                 borderColor={"black"}
                 value={UiData.withExample}
-                onChange={(e)=>handleData('withExample',e.target.value)}
+                onChange={(e) => handleData("withExample", e.target.value)}
               >
-                <option value="" disabled>Select an option</option>
+                <option value="" disabled>
+                  Select an option
+                </option>
                 <option value="true">Yes</option>
                 <option value="false">No</option>
-                
               </Select>
             </FormControl>
-            
           </div>
-          <Button onClick={()=>onSubmit(UiData)}style={{ display: 'block', margin: '0 auto' }}>Submit</Button>
+          <Button
+            onClick={() => onSubmit(UiData)}
+            style={{ display: "block", margin: "0 auto" }}
+          >
+            Submit
+          </Button>
         </ModalBody>
       </ModalContent>
     </Modal>

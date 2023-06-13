@@ -1,13 +1,11 @@
 import { Handle, Position } from "reactflow";
-import istio from "../../assets/istio.png"
-import consol from "../../assets/consol.png"
-
+import istio from "../../assets/istio.png";
+import consol from "../../assets/consol.png";
 
 const handleStyle = { left: 25 };
 
 function CustomIngressNode({ data, isConnectable }) {
-
-  const Ingress_Type= data.Ingress_Type
+  const Ingress_Type = data.Ingress_Type;
 
   return (
     <div>
@@ -17,10 +15,7 @@ function CustomIngressNode({ data, isConnectable }) {
         isConnectable={isConnectable}
       />
       <div>
-       
-          <img width='50px' name={Ingress_Type} src={istio} /> 
-         
-        
+        <img width="50px" name={Ingress_Type} src={istio} />
       </div>
       <Handle
         type="source"
