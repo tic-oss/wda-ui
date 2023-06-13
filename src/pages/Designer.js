@@ -413,6 +413,8 @@ const onChange = (Data) => {
       ...UpdatedNodes["cloudProvider"].data,
       ...Data,
     };
+    if(UpdatedNodes["cloudProvider"].data.kubernetesUseDynamicStorage === 'false')
+    delete UpdatedNodes["cloudProvider"].data.kubernetesStorageClassName
   } else {
     setUniqueApplicationNames((prev) => [...prev, Data.applicationName]);
     UpdatedNodes[Isopen].data = { ...UpdatedNodes[Isopen].data, ...Data };

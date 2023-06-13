@@ -300,6 +300,7 @@ console.log(isOpen)
                 borderColor={"black"}
                 value={DeploymentData.ingressType}
                 onChange={(e)=>handleData('ingressType',e.target.value)}
+
               >
                 <option value="istio">Istio</option>
               
