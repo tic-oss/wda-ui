@@ -296,16 +296,16 @@ console.log(isOpen)
             </FormControl>
             <FormControl>
               <FormLabel>Ingress Type</FormLabel>
-              <Select mb={4} variant="outline" id="ingress" 
+              <Select mb={4} variant="outline" id="ingressType" 
                 borderColor={"black"}
-                value={DeploymentData.ingress}
+                value={DeploymentData.ingressType}
                 onChange={(e)=>handleData('ingress',e.target.value)}
               >
                 <option value="istio">Istio</option>
               
                 </Select>
             </FormControl>
-            {DeploymentData.ingress=="istio"&&(
+            {DeploymentData.ingressType=="istio"&&(
              <FormControl>
              <FormLabel>Ingress Domain Name</FormLabel>
              <Input
