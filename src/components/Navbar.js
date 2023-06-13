@@ -156,7 +156,7 @@ export default function Header({ children }) {
           )}
 
           {keycloak.authenticated && (
-            <Text fontSize="md" color={color} onClick={() => keycloak.logout()}>
+            <Text fontSize="md" color={color} onClick={() => keycloak.logout({ redirectUri: process.env.REACT_APP_UI_BASE_URL })}>
               Logout 
               ({keycloak.tokenParsed.preferred_username})
             </Text>

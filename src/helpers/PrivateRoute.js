@@ -1,24 +1,19 @@
 import { useKeycloak } from "@react-keycloak/web";
-import { useEffect } from "react";
+import { useHistory } from "react-router-dom";
 
 const PrivateRoute = ({ children }) => {
-  const { keycloak } = useKeycloak();
+const { keycloak } = useKeycloak();
+const history = useHistory();
 
-  useEffect(() => {
-    const initKeycloak = async () => {
-      try {
-        await keycloak.init({
-          onLoad: "login-required" // Redirect to login if not authenticated
-        });
-      } catch (error) {
-        console.error("Keycloak initialization error:", error);
-      }
-    };
+const isLoggedIn = keycloak.authenticated;
 
-    initKeycloak();
-  }, [keycloak]);
+if (!isLoggedIn) {
+alert("Please login to continue.");
+history.replace("/");
+return null;
+}
 
-  return <>{children}</>; // Render the children directly
+return children;
 };
 
 export default PrivateRoute;
