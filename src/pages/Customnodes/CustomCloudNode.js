@@ -10,7 +10,7 @@ function CustomCloudNode({ data, isConnectable }) {
 
   return (
     <div>
-      {cloudProvider === "Azure" ? (
+      {cloudProvider === "azure" ? (
         <img width="60px" name={cloudProvider} src={azure} />
       ) : (
         <img width="60px" name={cloudProvider} src={aws} />
