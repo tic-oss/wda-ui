@@ -489,6 +489,8 @@ const onsubmit = (Data) => {
     let communicationIndex = 0;
     for (const edgeInfo in NewEdges) {
       const Edge = NewEdges[edgeInfo];
+      Edge.data.client=nodes[Edge.source].data.applicationName
+      Edge.data.server=nodes[Edge.target].data.applicationName
       if (Edge.data && Object.keys(Edge.data).length !== 0)
         Data["communications"][communicationIndex++] = Edge.data;
     }
@@ -516,26 +518,26 @@ const onsubmit = (Data) => {
       delete Data["deployment"];
     }
   }
-  console.log(Data);
+  console.log(Data,'Finaaal Dataaaaaaaaaa');
   setNodes(NewNodes);
 
-  setIsLoading(true);
-  fetch(process.env.REACT_APP_API_BASE_URL + "/api/generate", {
-    method: "post",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(Data),
-  })
-    .then((response) => response.blob())
-    .then((blob) => {
-      setIsLoading(false);
-      saveAs(blob, `${Data.projectName}.zip`); // Edit the name or ask the user for the project Name
-    })
-    .catch((error) => console.error(error))
-    .finally(() => {
-      window.location.replace("../../");
-    });
+  // setIsLoading(true);
+  // fetch(process.env.REACT_APP_API_BASE_URL + "/api/generate", {
+  //   method: "post",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify(Data),
+  // })
+  //   .then((response) => response.blob())
+  //   .then((blob) => {
+  //     setIsLoading(false);
+  //     saveAs(blob, `${Data.projectName}.zip`); // Edit the name or ask the user for the project Name
+  //   })
+  //   .catch((error) => console.error(error))
+  //   .finally(() => {
+  //     // window.location.replace("../../");
+  //   });
 };
 const onCheckEdge = (edges) => {
   let NewEdges = { ...edges };
