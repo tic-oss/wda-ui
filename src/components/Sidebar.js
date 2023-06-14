@@ -3,17 +3,20 @@ import db1 from "../assets/pstgrc.jpeg";
 import db2 from "../assets/mongo.png";
 import eurkea from "../assets/eureka.jpg";
 import keycloak from "../assets/keycloak.png";
-import istio from "../assets/istio.png";
-import kafka from "../assets/kafka.png";
-import pulsar from "../assets/pulsar.png";
-import rabbitmq from "../assets/rabbitmq.png";
 import azure from "../assets/Azure.png";
 import aws from "../assets/aws.png";
 import eck from "../assets/eck.png";
-import mini from "../assets/mini.jpeg"
-import docker from "../assets/docker.png"
+import mini from "../assets/mini.jpeg";
+import docker from "../assets/docker.png";
 import "./../App.css";
-import { Input, FormLabel, Button, Flex, Spinner } from "@chakra-ui/react";
+import {
+  Input,
+  FormLabel,
+  Button,
+  Flex,
+  Spinner,
+  Checkbox,
+} from "@chakra-ui/react";
 
 export default ({
   isUINodeEnabled,
@@ -355,7 +358,9 @@ export default ({
 
           <div
             className="selectorNode7"
-            onDragStart={(event) => onDragStart(event, "default", "Localenvironment_docker")}
+            onDragStart={(event) =>
+              onDragStart(event, "default", "Localenvironment_docker")
+            }
             draggable
           >
             <img width="120px" src={docker} alt="dockerlogo" />
@@ -370,26 +375,34 @@ export default ({
           bottom: "0",
         }}
       >
-        {/* <div style={{ display:'flex', justifyContent:'center'}}> */}
-        <Button
-          onClick={() => {
-            onSubmit(projectData) || isLoading(true);
-          }}
-          mt={4}
-          border="2px"
-          borderColor="green.500"
-          width="100px"
-          type="submit"
-          isDisabled={
-            !Service_Discovery_Data ||
-            // !authenticationData ||
-            isEmpty ||
-            projectData.projectName === ""
-          }
-        >
-          Submit
-        </Button>
-        {/* </div> */}
+        <div>
+          <Checkbox
+            size="md"
+            colorScheme="blue"
+            isChecked={saveMetadata}
+            onChange={Togglesave}
+          >
+            Save Metadata
+          </Checkbox>
+          <Button
+            onClick={() => {
+              onSubmit(projectData) || isLoading(true);
+            }}
+            mt={4}
+            border="2px"
+            borderColor="green.500"
+            width="100px"
+            type="submit"
+            isDisabled={
+              !Service_Discovery_Data ||
+              // !authenticationData ||
+              isEmpty ||
+              projectData.projectName === ""
+            }
+          >
+            Submit
+          </Button>
+        </div>
         {isLoading && (
           <Flex
             position="fixed"

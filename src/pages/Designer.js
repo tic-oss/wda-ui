@@ -59,7 +59,6 @@ const Designer = () => {
   const [LocalenvironmentCount, setLocalenvironmentCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
-
   console.log("Nodes", nodes);
 
   const addEdge = (edgeParams, edges) => {
@@ -130,12 +129,11 @@ const Designer = () => {
             } else if (change.id === "UI") setIsUINodeEnabled(false);
             else if (change.id === "serviceDiscoveryType")
               setServiceDiscoveryCount(0);
-
             else if (change.id === "cloudProvider") {
               setCloudProviderCount(0);
-            }
-            else if (change.id === "Localenvironment") { setLocalenvironmentCount(0); }
-            else if (change.id === "logManagement")
+            } else if (change.id === "Localenvironment") {
+              setLocalenvironmentCount(0);
+            } else if (change.id === "logManagement")
               updatedNodes.cloudProvider.data["enableECK"] = "false";
 
             delete updatedNodes[change.id];
@@ -267,9 +265,7 @@ const Designer = () => {
   };
 
   const onDrop = useCallback(
-
     (event, servicecount, messagecount, cloudcount, Localenvcount, nodes) => {
-
       event.preventDefault();
       console.log(event);
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
@@ -374,8 +370,7 @@ const Designer = () => {
         }
         Nodes[newNode.id] = newNode;
         setNodes(Nodes);
-      } 
-      else if (name.startsWith("Localenvironment") && Localenvcount === 0) {
+      } else if (name.startsWith("Localenvironment") && Localenvcount === 0) {
         console.log(Localenvcount);
         const Localenvironment = name.split("_").splice(1)[0];
         console.log(Localenvironment);
@@ -391,8 +386,7 @@ const Designer = () => {
       } else if (name.startsWith("Localenvironment") && Localenvcount >= 1) {
         console.log("else", Localenvcount);
         setLocalenvironmentCount(2);
-      }
-      else {
+      } else {
         const newNode = {
           id: getId(name),
           type,
@@ -400,350 +394,360 @@ const Designer = () => {
           data: { label: name },
           style: { border: "1px solid", padding: "4px 4px" },
         };
-        if(name === 'UI+Gateway')
-          newNode.type='input'
+        if (name === "UI+Gateway") newNode.type = "input";
         setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
       }
     },
     [reactFlowInstance]
   );
 
-const onChange = (Data) => {
-  let UpdatedNodes = { ...nodes };
-  if(Data.applicationName){
-    Data.applicationName = Data.applicationName.trim()
-    Data.label = Data.label.trim()
-  }
-  if (Isopen === "aws" || Isopen === "azure") {
-    UpdatedNodes["cloudProvider"].data = {
-      ...UpdatedNodes["cloudProvider"].data,
-      ...Data,
-    };
-    if(UpdatedNodes["cloudProvider"].data.kubernetesUseDynamicStorage === 'false')
-    delete UpdatedNodes["cloudProvider"].data.kubernetesStorageClassName
-  } else {
-    setUniqueApplicationNames((prev) => [...prev, Data.applicationName]);
-    UpdatedNodes[Isopen].data = { ...UpdatedNodes[Isopen].data, ...Data };
-  }
-  setNodes(UpdatedNodes);
-  setopen(false);
-};
-
-useEffect(() => {
-  setNodes({
-    UI: {
-      id: "UI",
-      type: "input",
-      data: { label: "UI+Gateway" },
-      style: { border: "1px solid #8c8d8f", padding: "4px 4px" },
-      position: { x: 250, y: 5 },
-    },
-  });
-}, []);
-
-const MergeData = (sourceId, targetId, Nodes) => {
-  const sourceType = sourceId.split("_")[0];
-  const targetType = targetId.split("_")[0];
-
-  console.log(sourceType, targetType);
-
-  if (sourceType !== targetType) {
-    if (
-      (sourceType === "Service" && targetType === "Database") ||
-      (sourceType === "UI" && targetType === "Database")
-    ) {
-      let AllNodes = { ...Nodes };
-      let sourceNode = AllNodes[sourceId];
-      let targetNode = AllNodes[targetId];
-      console.log(sourceNode, targetNode);
-      AllNodes[sourceId].data = { ...sourceNode.data, ...targetNode.data };
-      setNodes({ ...AllNodes });
+  const onChange = (Data) => {
+    let UpdatedNodes = { ...nodes };
+    if (Data.applicationName) {
+      Data.applicationName = Data.applicationName.trim();
+      Data.label = Data.label.trim();
     }
-  }
-};
-
-const onsubmit = (Data) => {
-  const NewNodes = { ...nodes };
-  const NewEdges = { ...edges };
-  let Service_Discovery_Data = nodes["serviceDiscoveryType"]?.data;
-  let authenticationData = nodes["authenticationType"]?.data;
-  let logManagementData = nodes["logManagement"]?.data;
-  for (const key in NewNodes) {
-    const Node = NewNodes[key];
-    if (Node.id.startsWith("Service") || Node.id === "UI")
-      Node.data = {
-        ...Node.data,
-        ...Service_Discovery_Data,
-        ...authenticationData,
-        ...logManagementData,
+    if (Isopen === "aws" || Isopen === "azure") {
+      UpdatedNodes["cloudProvider"].data = {
+        ...UpdatedNodes["cloudProvider"].data,
+        ...Data,
       };
-  }
-  if (Object.values(NewNodes).some((node) => node.data)) {
-    Data["services"] = {};
-    let serviceIndex = 0;
-    for (const nodeInfo in NewNodes) {
-      const Node = NewNodes[nodeInfo];
-      if (Node.data) {
-        if (Node.id.startsWith("Service") || Node.id === "UI") {
-          Data["services"][serviceIndex++] = Node.data;
-        }
-      }
-    }
-  }
-  if (Object.values(NewEdges).some((edge) => edge.data)) {
-    Data["communications"] = {};
-    let communicationIndex = 0;
-    for (const edgeInfo in NewEdges) {
-      const Edge = NewEdges[edgeInfo];
-      Edge.data.client=nodes[Edge.source].data.applicationName
-      Edge.data.server=nodes[Edge.target].data.applicationName
-      if (Edge.data && Object.keys(Edge.data).length !== 0)
-        Data["communications"][communicationIndex++] = Edge.data;
-    }
-  }
-  if (Object.values(NewNodes).some((node) => node.data)) {
-    Data["deployment"] = {};
-    let hasField = false;
-    for (const cloudInfo in NewNodes) {
-      console.log(cloudInfo, "cloudInfooo")
-      const Cloud = NewNodes[cloudInfo];
-      if (Cloud.data) {
-        console.log(Cloud.data, "cloCloud.dataudInfooo")
-
-        if (Cloud.id === "cloudProvider") {
-          console.log(Cloud.data, "kkkkkkkkkkkkkk")
-          Data["deployment"] = {
-            ...Cloud.data,
-            ...Service_Discovery_Data,
-          };
-          hasField = true;
-        }
-      }
-    }
-    if (!hasField) {
-      delete Data["deployment"];
-    }
-  }
-  console.log(Data,'Finaaal Dataaaaaaaaaa');
-  setNodes(NewNodes);
-
-  setIsLoading(true);
-  fetch(process.env.REACT_APP_API_BASE_URL + "/api/generate", {
-    method: "post",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": initialized ? `Bearer ${keycloak?.token}` : undefined,
-    },
-    body: JSON.stringify(Data),
-  })
-    .then((response) => response.blob())
-    .then((blob) => {
-      setIsLoading(false);
-      saveAs(blob, `${Data.projectName}.zip`); // Edit the name or ask the user for the project Name
-    })
-    .catch((error) => console.error(error))
-    .finally(() => {
-      window.location.replace("../../");
-    });
-};
-const onCheckEdge = (edges) => {
-  let NewEdges = { ...edges };
-  for (const key in NewEdges) {
-    const Edge = NewEdges[key];
-    if (Edge.id.startsWith("UI")) {
       if (
-        Edge.data.type === "synchronous" &&
-        Edge.data.framework === "rest"
-      ) {
-        delete Edge.data.type;
-        delete Edge.data.framework;
-      }
+        UpdatedNodes["cloudProvider"].data.kubernetesUseDynamicStorage ===
+        "false"
+      )
+        delete UpdatedNodes["cloudProvider"].data.kubernetesStorageClassName;
+    } else {
+      setUniqueApplicationNames((prev) => [...prev, Data.applicationName]);
+      UpdatedNodes[Isopen].data = { ...UpdatedNodes[Isopen].data, ...Data };
     }
-  }
-};
-
-const onEdgeClick = (e, edge) => {
-  const sourceType = edge.source.split("_")[0];
-  const targetType = edge.target.split("_")[0];
-  console.log(e, edge);
-  if (
-    (sourceType === "UI" && targetType === "Service") ||
-    (sourceType === "Service" && targetType === "Service")
-  ) {
-    setEdgeopen(edge.id);
-    setCurrentEdge(edges[edge.id].data);
-  }
-};
-
-const handleEdgeData = (Data) => {
-  console.log(Data, IsEdgeopen);
-  let UpdatedEdges = { ...edges };
-
-  if (Data.framework === 'rest') {
-    UpdatedEdges[IsEdgeopen].label = 'Rest'; // Set label as 'REST' for the edge
-  } else {
-    UpdatedEdges[IsEdgeopen].label = "RabbitMQ"
-  }
-
-  if (Data.type === 'synchronous') {
-    UpdatedEdges[IsEdgeopen].markerEnd = { color: 'black', type: MarkerType.ArrowClosed };
-    UpdatedEdges[IsEdgeopen].style = { stroke: 'black' };
-  } else {
-    UpdatedEdges[IsEdgeopen].markerEnd = { color: '#e2e8f0', type: MarkerType.ArrowClosed };
-    UpdatedEdges[IsEdgeopen].style = { stroke: '#e2e8f0' };
-  }
-
-  UpdatedEdges[IsEdgeopen].data = {
-    client: UpdatedEdges[IsEdgeopen].source,
-    server: UpdatedEdges[IsEdgeopen].target,
-    ...UpdatedEdges[IsEdgeopen].data,
-    ...Data,
+    setNodes(UpdatedNodes);
+    setopen(false);
   };
 
-  setEdges(UpdatedEdges);
-  setEdgeopen(false);
-};
+  useEffect(() => {
+    setNodes({
+      UI: {
+        id: "UI",
+        type: "input",
+        data: { label: "UI+Gateway" },
+        style: { border: "1px solid #8c8d8f", padding: "4px 4px" },
+        position: { x: 250, y: 5 },
+      },
+    });
+  }, []);
 
-const onConnect = useCallback((params, Nodes) => {
-  params.markerEnd = { type: MarkerType.ArrowClosed };
-  params.type = "straight";
-  params.data = {};
+  const MergeData = (sourceId, targetId, Nodes) => {
+    const sourceType = sourceId.split("_")[0];
+    const targetType = targetId.split("_")[0];
 
-  if (
-    !(
-      params.target.startsWith("Database") &&
-      Nodes[params.source]?.data["prodDatabaseType"]
-    )
-  ) {
-    // Validation of service Node to check if it has database or not
-    setEdges((eds) => addEdge(params, eds));
-    MergeData(params.source, params.target, Nodes);
-  }
-}, []);
+    console.log(sourceType, targetType);
 
-const [uniqueApplicationNames, setUniqueApplicationNames] = useState([]);
+    if (sourceType !== targetType) {
+      if (
+        (sourceType === "Service" && targetType === "Database") ||
+        (sourceType === "UI" && targetType === "Database")
+      ) {
+        let AllNodes = { ...Nodes };
+        let sourceNode = AllNodes[sourceId];
+        let targetNode = AllNodes[targetId];
+        console.log(sourceNode, targetNode);
+        AllNodes[sourceId].data = { ...sourceNode.data, ...targetNode.data };
+        setNodes({ ...AllNodes });
+      }
+    }
+  };
 
-return (
-  <div className="dndflow">
-    <ReactFlowProvider>
-      <div
-        className="reactflow-wrapper"
-        ref={reactFlowWrapper}
-        style={{ width: "100%", height: "90%" }}
-      >
-        <ReactFlow
-          nodes={Object.values(nodes)}
-          edges={Object.values(edges)}
-          nodeTypes={nodeTypes}
-          onNodesChange={(changes) => onNodesChange(edges, changes)}
-          onEdgesChange={(changes) => onEdgesChange(nodes, changes)}
-          onConnect={(params) => onConnect(params, nodes)}
-          onInit={setReactFlowInstance}
-          onDrop={(e) =>
-            onDrop(
-              e,
-              ServiceDiscoveryCount,
-              MessageBrokerCount,
-              CloudProviderCount,
-
-              LocalenvironmentCount,
-
-              nodes
-
-            )
+  const onsubmit = (Data) => {
+    const NewNodes = { ...nodes };
+    const NewEdges = { ...edges };
+    let Service_Discovery_Data = nodes["serviceDiscoveryType"]?.data;
+    let authenticationData = nodes["authenticationType"]?.data;
+    let logManagementData = nodes["logManagement"]?.data;
+    for (const key in NewNodes) {
+      const Node = NewNodes[key];
+      if (Node.id.startsWith("Service") || Node.id === "UI")
+        Node.data = {
+          ...Node.data,
+          ...Service_Discovery_Data,
+          ...authenticationData,
+          ...logManagementData,
+        };
+    }
+    if (Object.values(NewNodes).some((node) => node.data)) {
+      Data["services"] = {};
+      let serviceIndex = 0;
+      for (const nodeInfo in NewNodes) {
+        const Node = NewNodes[nodeInfo];
+        if (Node.data) {
+          if (Node.id.startsWith("Service") || Node.id === "UI") {
+            Data["services"][serviceIndex++] = Node.data;
           }
-          onDragOver={onDragOver}
-          onNodeDoubleClick={onclick}
-          deleteKeyCode={["Backspace", "Delete"]}
-          fitView
-          onEdgeUpdate={(oldEdge, newConnection) =>
-            onEdgeUpdate(nodes, oldEdge, newConnection)
+        }
+      }
+    }
+    if (Object.values(NewEdges).some((edge) => edge.data)) {
+      Data["communications"] = {};
+      let communicationIndex = 0;
+      for (const edgeInfo in NewEdges) {
+        const Edge = NewEdges[edgeInfo];
+        Edge.data.client = nodes[Edge.source].data.applicationName;
+        Edge.data.server = nodes[Edge.target].data.applicationName;
+        if (Edge.data && Object.keys(Edge.data).length !== 0)
+          Data["communications"][communicationIndex++] = Edge.data;
+      }
+    }
+    if (Object.values(NewNodes).some((node) => node.data)) {
+      Data["deployment"] = {};
+      let hasField = false;
+      for (const cloudInfo in NewNodes) {
+        console.log(cloudInfo, "cloudInfooo");
+        const Cloud = NewNodes[cloudInfo];
+        if (Cloud.data) {
+          console.log(Cloud.data, "cloCloud.dataudInfooo");
+
+          if (Cloud.id === "cloudProvider") {
+            console.log(Cloud.data, "kkkkkkkkkkkkkk");
+            Data["deployment"] = {
+              ...Cloud.data,
+              ...Service_Discovery_Data,
+            };
+            hasField = true;
           }
-          onEdgeUpdateStart={onEdgeUpdateStart}
-          onEdgeUpdateEnd={(_, edge) => onEdgeUpdateEnd(nodes, edge)}
-          onEdgeDoubleClick={onEdgeClick}
-          nodesFocusable={true}
+        }
+      }
+      if (!hasField) {
+        delete Data["deployment"];
+      }
+    }
+    console.log(Data, "Finaaal Dataaaaaaaaaa");
+    setNodes(NewNodes);
+
+    setIsLoading(true);
+    fetch(process.env.REACT_APP_API_BASE_URL + "/api/generate", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: initialized ? `Bearer ${keycloak?.token}` : undefined,
+      },
+      body: JSON.stringify(Data),
+    })
+      .then((response) => response.blob())
+      .then((blob) => {
+        setIsLoading(false);
+        saveAs(blob, `${Data.projectName}.zip`); // Edit the name or ask the user for the project Name
+      })
+      .catch((error) => console.error(error))
+      .finally(() => {
+        window.location.replace("../../");
+      });
+  };
+  const onCheckEdge = (edges) => {
+    let NewEdges = { ...edges };
+    for (const key in NewEdges) {
+      const Edge = NewEdges[key];
+      if (Edge.id.startsWith("UI")) {
+        if (
+          Edge.data.type === "synchronous" &&
+          Edge.data.framework === "rest"
+        ) {
+          delete Edge.data.type;
+          delete Edge.data.framework;
+        }
+      }
+    }
+  };
+
+  const onEdgeClick = (e, edge) => {
+    const sourceType = edge.source.split("_")[0];
+    const targetType = edge.target.split("_")[0];
+    console.log(e, edge);
+    if (
+      (sourceType === "UI" && targetType === "Service") ||
+      (sourceType === "Service" && targetType === "Service")
+    ) {
+      setEdgeopen(edge.id);
+      setCurrentEdge(edges[edge.id].data);
+    }
+  };
+
+  const handleEdgeData = (Data) => {
+    console.log(Data, IsEdgeopen);
+    let UpdatedEdges = { ...edges };
+
+    if (Data.framework === "rest") {
+      UpdatedEdges[IsEdgeopen].label = "Rest"; // Set label as 'REST' for the edge
+    } else {
+      UpdatedEdges[IsEdgeopen].label = "RabbitMQ";
+    }
+
+    if (Data.type === "synchronous") {
+      UpdatedEdges[IsEdgeopen].markerEnd = {
+        color: "black",
+        type: MarkerType.ArrowClosed,
+      };
+      UpdatedEdges[IsEdgeopen].style = { stroke: "black" };
+    } else {
+      UpdatedEdges[IsEdgeopen].markerEnd = {
+        color: "#e2e8f0",
+        type: MarkerType.ArrowClosed,
+      };
+      UpdatedEdges[IsEdgeopen].style = { stroke: "#e2e8f0" };
+    }
+
+    UpdatedEdges[IsEdgeopen].data = {
+      client: UpdatedEdges[IsEdgeopen].source,
+      server: UpdatedEdges[IsEdgeopen].target,
+      ...UpdatedEdges[IsEdgeopen].data,
+      ...Data,
+    };
+
+    setEdges(UpdatedEdges);
+    setEdgeopen(false);
+  };
+
+  const onConnect = useCallback((params, Nodes) => {
+    params.markerEnd = { type: MarkerType.ArrowClosed };
+    params.type = "straight";
+    params.data = {};
+
+    if (
+      !(
+        params.target.startsWith("Database") &&
+        Nodes[params.source]?.data["prodDatabaseType"]
+      )
+    ) {
+      // Validation of service Node to check if it has database or not
+      setEdges((eds) => addEdge(params, eds));
+      MergeData(params.source, params.target, Nodes);
+    }
+  }, []);
+
+  const [uniqueApplicationNames, setUniqueApplicationNames] = useState([]);
+
+  return (
+    <div className="dndflow">
+      <ReactFlowProvider>
+        <div
+          className="reactflow-wrapper"
+          ref={reactFlowWrapper}
+          style={{ width: "100%", height: "90%" }}
         >
-          <Controls />
-          <MiniMap style={{ backgroundColor: "#3182CE" }} />
-        </ReactFlow>
-      </div>
-      <Sidebar
-        isUINodeEnabled={isUINodeEnabled}
-        setIsUINodeEnabled={setIsUINodeEnabled}
-        Service_Discovery_Data={nodes["serviceDiscoveryType"]?.data}
-        authenticationData={nodes["authenticationType"]?.data}
-        onSubmit={onsubmit}
-        isLoading={isLoading}
-      />
+          <ReactFlow
+            nodes={Object.values(nodes)}
+            edges={Object.values(edges)}
+            nodeTypes={nodeTypes}
+            onNodesChange={(changes) => onNodesChange(edges, changes)}
+            onEdgesChange={(changes) => onEdgesChange(nodes, changes)}
+            onConnect={(params) => onConnect(params, nodes)}
+            onInit={setReactFlowInstance}
+            onDrop={(e) =>
+              onDrop(
+                e,
+                ServiceDiscoveryCount,
+                MessageBrokerCount,
+                CloudProviderCount,
 
-      {nodeType === "Service" && Isopen && (
-        <ServiceModal
-          isOpen={Isopen}
-          CurrentNode={CurrentNode}
-          onClose={setopen}
-          onSubmit={onChange}
-          uniqueApplicationNames={uniqueApplicationNames}
+                LocalenvironmentCount,
+
+                nodes
+              )
+            }
+            onDragOver={onDragOver}
+            onNodeDoubleClick={onclick}
+            deleteKeyCode={["Backspace", "Delete"]}
+            fitView
+            onEdgeUpdate={(oldEdge, newConnection) =>
+              onEdgeUpdate(nodes, oldEdge, newConnection)
+            }
+            onEdgeUpdateStart={onEdgeUpdateStart}
+            onEdgeUpdateEnd={(_, edge) => onEdgeUpdateEnd(nodes, edge)}
+            onEdgeDoubleClick={onEdgeClick}
+            nodesFocusable={true}
+          >
+            <Controls />
+            <MiniMap style={{ backgroundColor: "#3182CE" }} />
+          </ReactFlow>
+        </div>
+        <Sidebar
+          isUINodeEnabled={isUINodeEnabled}
+          setIsUINodeEnabled={setIsUINodeEnabled}
+          Service_Discovery_Data={nodes["serviceDiscoveryType"]?.data}
+          authenticationData={nodes["authenticationType"]?.data}
+          onSubmit={onsubmit}
+          isLoading={isLoading}
         />
-      )}
 
-      {nodeType === "azure" && Isopen && (
-        <DeployModal
-          isOpen={Isopen}
-          CurrentNode={CurrentNode}
-          onClose={setopen}
-          onSubmit={onChange}
-        />
-      )}
+        {nodeType === "Service" && Isopen && (
+          <ServiceModal
+            isOpen={Isopen}
+            CurrentNode={CurrentNode}
+            onClose={setopen}
+            onSubmit={onChange}
+            uniqueApplicationNames={uniqueApplicationNames}
+          />
+        )}
 
-      {nodeType === "aws" && Isopen && (
-        <DeployModal
-          isOpen={Isopen}
-          CurrentNode={CurrentNode}
-          onClose={setopen}
-          onSubmit={onChange}
-        />
-      )}
+        {nodeType === "azure" && Isopen && (
+          <DeployModal
+            isOpen={Isopen}
+            CurrentNode={CurrentNode}
+            onClose={setopen}
+            onSubmit={onChange}
+          />
+        )}
 
-      {nodeType === "UI" && Isopen && (
-        <UiDataModal
-          isOpen={Isopen}
-          CurrentNode={CurrentNode}
-          onClose={setopen}
-          onSubmit={onChange}
-        />
-      )}
+        {nodeType === "aws" && Isopen && (
+          <DeployModal
+            isOpen={Isopen}
+            CurrentNode={CurrentNode}
+            onClose={setopen}
+            onSubmit={onChange}
+          />
+        )}
 
-      {IsEdgeopen && (
-        <EdgeModal
-          isOpen={IsEdgeopen}
-          CurrentEdge={CurrentEdge}
-          onClose={setEdgeopen}
-          handleEdgeData={handleEdgeData}
-          isMessageBroker={isMessageBroker}
-        />
-      )}
+        {nodeType === "UI" && Isopen && (
+          <UiDataModal
+            isOpen={Isopen}
+            CurrentNode={CurrentNode}
+            onClose={setopen}
+            onSubmit={onChange}
+          />
+        )}
 
-      {ServiceDiscoveryCount === 2 && (
-        <AlertModal
-          isOpen={true}
-          onClose={() => setServiceDiscoveryCount(1)}
-        />
-      )}
+        {IsEdgeopen && (
+          <EdgeModal
+            isOpen={IsEdgeopen}
+            CurrentEdge={CurrentEdge}
+            onClose={setEdgeopen}
+            handleEdgeData={handleEdgeData}
+            isMessageBroker={isMessageBroker}
+          />
+        )}
 
-      {MessageBrokerCount === 2 && (
-        <AlertModal isOpen={true} onClose={() => setMessageBrokerCount(1)} />
-      )}
+        {ServiceDiscoveryCount === 2 && (
+          <AlertModal
+            isOpen={true}
+            onClose={() => setServiceDiscoveryCount(1)}
+          />
+        )}
 
-      {CloudProviderCount === 2 && (
-        <AlertModal isOpen={true} onClose={() => setCloudProviderCount(1)} />
-      )}
-      {LocalenvironmentCount === 2 && (
-        <AlertModal isOpen={true} onClose={() => setLocalenvironmentCount(1)} />
-      )}
-    </ReactFlowProvider>
-  </div>
-);
+        {MessageBrokerCount === 2 && (
+          <AlertModal isOpen={true} onClose={() => setMessageBrokerCount(1)} />
+        )}
+
+        {CloudProviderCount === 2 && (
+          <AlertModal isOpen={true} onClose={() => setCloudProviderCount(1)} />
+        )}
+        {LocalenvironmentCount === 2 && (
+          <AlertModal
+            isOpen={true}
+            onClose={() => setLocalenvironmentCount(1)}
+          />
+        )}
+      </ReactFlowProvider>
+    </div>
+  );
 };
 
 export default Designer;
