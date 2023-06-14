@@ -23,12 +23,12 @@ import CustomLocalenvironmentNode from "./Customnodes/CustomLocalenvironmentNode
 import AlertModal from "../components/Modal/AlertModal";
 
 import "./../App.css";
-import { Button } from "@chakra-ui/react";
 import EdgeModal from "../components/Modal/EdgeModal";
+import { useKeycloak } from "@react-keycloak/web";
 
 let service_id = 1;
 let database_id = 1;
-let totalnodes = 1;
+
 const getId = (type = "") => {
   if (type === "Service") return `Service_${service_id++}`;
   else if (type === "Database") return `Database_${database_id++}`;
@@ -36,6 +36,7 @@ const getId = (type = "") => {
   else if (type === "UI") return "UI";
   return "Id";
 };
+
 const nodeTypes = {
   selectorNode: CustomImageNode,
   selectorNode1: CustomServiceNode,
@@ -49,6 +50,7 @@ const nodeTypes = {
 
 const Designer = () => {
   const reactFlowWrapper = useRef(null);
+  const { keycloak, initialized } = useKeycloak();
   const [nodes, setNodes] = useState({});
   const [nodeType, setNodeType] = useState(null);
   const [ServiceDiscoveryCount, setServiceDiscoveryCount] = useState(0);
@@ -78,7 +80,7 @@ const Designer = () => {
       ...edges,
       [newEdgeId]: { id: newEdgeId, ...newConnection },
     };
-    if (oldEdge.id != newEdgeId) delete updatedEdges[oldEdge.id];
+    if (oldEdge.id !== newEdgeId) delete updatedEdges[oldEdge.id];
 
     return updatedEdges;
   };
@@ -257,7 +259,7 @@ const Designer = () => {
     if (Id) {
       const type = Id.split("_")[0];
       setNodeType(type);
-      if (type == "aws" || type === "azure") {
+      if (type === "aws" || type === "azure") {
         setCurrentNode(nodes["cloudProvider"].data);
       } else setCurrentNode(nodes[Id].data);
       setopen(Id);
@@ -297,7 +299,7 @@ const Designer = () => {
         //   newNode.data["databaseType"] = "sql";
         // }
         setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
-      } else if (name.startsWith("Discovery") && servicecount == 0) {
+      } else if (name.startsWith("Discovery") && servicecount === 0) {
         console.log(servicecount);
         const serviceDiscoveryType = name.split("_").splice(1)[0];
         console.log(serviceDiscoveryType);
@@ -324,7 +326,7 @@ const Designer = () => {
           style: { border: "1px solid", padding: "4px 4px" },
         };
         setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
-      } else if (name.startsWith("MessageBroker") && messagecount == 0) {
+      } else if (name.startsWith("MessageBroker") && messagecount === 0) {
         console.log(messagecount);
         const messageBroker = name.split("_").splice(1)[0];
         console.log(messageBroker);
@@ -341,7 +343,7 @@ const Designer = () => {
       } else if (name.startsWith("MessageBroker") && messagecount >= 1) {
         console.log("else", messagecount);
         setMessageBrokerCount(2);
-      } else if (name.startsWith("Cloud") && cloudcount == 0) {
+      } else if (name.startsWith("Cloud") && cloudcount === 0) {
         console.log(cloudcount);
         const cloudProvider = name.split("_").splice(1)[0];
         console.log(cloudProvider);
@@ -373,7 +375,7 @@ const Designer = () => {
         Nodes[newNode.id] = newNode;
         setNodes(Nodes);
       } 
-      else if (name.startsWith("Localenvironment") && Localenvcount == 0) {
+      else if (name.startsWith("Localenvironment") && Localenvcount === 0) {
         console.log(Localenvcount);
         const Localenvironment = name.split("_").splice(1)[0];
         console.log(Localenvironment);
@@ -398,7 +400,7 @@ const Designer = () => {
           data: { label: name },
           style: { border: "1px solid", padding: "4px 4px" },
         };
-        if(name=='UI+Gateway')
+        if(name === 'UI+Gateway')
           newNode.type='input'
         setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
       }
@@ -408,6 +410,10 @@ const Designer = () => {
 
 const onChange = (Data) => {
   let UpdatedNodes = { ...nodes };
+  if(Data.applicationName){
+    Data.applicationName = Data.applicationName.trim()
+    Data.label = Data.label.trim()
+  }
   if (Isopen === "aws" || Isopen === "azure") {
     UpdatedNodes["cloudProvider"].data = {
       ...UpdatedNodes["cloudProvider"].data,
@@ -489,6 +495,8 @@ const onsubmit = (Data) => {
     let communicationIndex = 0;
     for (const edgeInfo in NewEdges) {
       const Edge = NewEdges[edgeInfo];
+      Edge.data.client=nodes[Edge.source].data.applicationName
+      Edge.data.server=nodes[Edge.target].data.applicationName
       if (Edge.data && Object.keys(Edge.data).length !== 0)
         Data["communications"][communicationIndex++] = Edge.data;
     }
@@ -516,7 +524,7 @@ const onsubmit = (Data) => {
       delete Data["deployment"];
     }
   }
-  console.log(Data);
+  console.log(Data,'Finaaal Dataaaaaaaaaa');
   setNodes(NewNodes);
 
   setIsLoading(true);
@@ -524,6 +532,7 @@ const onsubmit = (Data) => {
     method: "post",
     headers: {
       "Content-Type": "application/json",
+      "Authorization": initialized ? `Bearer ${keycloak?.token}` : undefined,
     },
     body: JSON.stringify(Data),
   })
@@ -715,25 +724,23 @@ return (
         />
       )}
 
-      {ServiceDiscoveryCount == 2 && (
+      {ServiceDiscoveryCount === 2 && (
         <AlertModal
           isOpen={true}
           onClose={() => setServiceDiscoveryCount(1)}
         />
       )}
 
-      {MessageBrokerCount == 2 && (
+      {MessageBrokerCount === 2 && (
         <AlertModal isOpen={true} onClose={() => setMessageBrokerCount(1)} />
       )}
 
-      {CloudProviderCount == 2 && (
+      {CloudProviderCount === 2 && (
         <AlertModal isOpen={true} onClose={() => setCloudProviderCount(1)} />
       )}
-      {LocalenvironmentCount == 2 && (
+      {LocalenvironmentCount === 2 && (
         <AlertModal isOpen={true} onClose={() => setLocalenvironmentCount(1)} />
       )}
-
-      {/* <Button onClick={()=>onsubmit()}>Submit</Button> */}
     </ReactFlowProvider>
   </div>
 );
