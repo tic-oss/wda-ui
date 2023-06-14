@@ -588,7 +588,7 @@ const handleEdgeData = (Data) => {
   let UpdatedEdges = { ...edges };
 
   if (Data.framework === 'rest-api') {
-    UpdatedEdges[IsEdgeopen].label = 'Rest'; // Set label as 'REST' for the edge
+    UpdatedEdges[IsEdgeopen].label = 'Rest';
   } else {
     UpdatedEdges[IsEdgeopen].label = "RabbitMQ"
   }

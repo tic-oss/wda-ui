@@ -3,10 +3,6 @@ import db1 from "../assets/pstgrc.jpeg";
 import db2 from "../assets/mongo.png";
 import eurkea from "../assets/eureka.jpg";
 import keycloak from "../assets/keycloak.png";
-import istio from "../assets/istio.png";
-import kafka from "../assets/kafka.png";
-import pulsar from "../assets/pulsar.png";
-import rabbitmq from "../assets/rabbitmq.png";
 import azure from "../assets/Azure.png";
 import aws from "../assets/aws.png";
 import eck from "../assets/eck.png";
@@ -208,59 +204,6 @@ export default ({
           </div>
         </>
       )}
-      {/* <h1>
-        <span
-          style={{
-            cursor: "pointer",
-            fontSize: "20px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-          onClick={() => toggleOption("messageBroker")}
-        >
-          Message Broker{" "}
-          {selectedOption === "messageBroker" ? (
-            <span>&#x25B2;</span>
-          ) : (
-            <span>&#x25BC;</span>
-          )}
-        </span>
-      </h1>
-      {selectedOption === "messageBroker" && (
-        <>
-          <div
-            className="selectorNode4"
-            onDragStart={(event) =>
-              onDragStart(event, "default", "MessageBroker_RabbitMQ")
-            }
-            draggable
-          >
-            <img width="120px" src={rabbitmq} alt="rabbitmqlogo" />
-          </div>
-
-          <div
-            className="selectorNode4"
-            onDragStart={(event) =>
-              onDragStart(event, "default", "MessageBroker_Kafka")
-            }
-            draggable
-          >
-            <img width="120px" src={kafka} alt="kafkalogo" />
-          </div>
-
-          <div
-            className="selectorNode4"
-            onDragStart={(event) =>
-              onDragStart(event, "default", "MessageBroker_Pulsar")
-            }
-            draggable
-          >
-            <img width="120px" src={pulsar} alt="pulsarlogo" />
-          </div>
-        </>
-      )} */}
-
       <h1>
         <span
           style={{
@@ -390,24 +333,26 @@ export default ({
             >
               Save Metadata
             </Checkbox>
-          <Button
-            onClick={() => {
-              onSubmit(projectData) || isLoading(true);
-            }}
-            mt={4}
-            border="2px"
-            borderColor="green.500"
-            width="100px"
-            type="submit"
-            isDisabled={
-              !Service_Discovery_Data ||
-              // !authenticationData ||
-              isEmpty ||
-              projectData.projectName === ""
-            }
-          >
-            Submit
-          </Button>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <Button
+              onClick={() => {
+                onSubmit(projectData) || isLoading(true);
+              }}
+              mt={4}
+              border="2px"
+              borderColor="green.500"
+              width="100px"
+              type="submit"
+              position='bottomleft'
+              isDisabled={
+                !Service_Discovery_Data ||
+                isEmpty ||
+                projectData.projectName === ""
+              }
+            >
+              Submit
+            </Button>
+          </div>
         </div>
         {isLoading && (
           <Flex
@@ -418,7 +363,7 @@ export default ({
             bottom="0"
             alignItems="center"
             justifyContent="center"
-            backgroundColor="rgba(240, 248, 255, 0.5)" // Use RGBA to set opacity
+            backgroundColor="rgba(240, 248, 255, 0.5)"
             zIndex="9999"
             display="flex"
             flexDirection="column"
@@ -448,7 +393,6 @@ export default ({
             style={{
               fontSize: "10px",
               color: "red",
-              // paddingBottom: "5px",
               marginTop: "5px",
             }}
           >
@@ -482,7 +426,6 @@ export default ({
           </p>
         ) : (
           <></>
-          // <p style={{ marginBottom: "5px" }}></p>
         )}
       </div>
     </aside>

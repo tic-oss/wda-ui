@@ -138,5 +138,4 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
     </Modal>
   );
 };
-
 export default UiDataModal;

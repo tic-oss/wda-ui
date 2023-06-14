@@ -25,8 +25,6 @@ const isLoggedIn = keycloak.authenticated;
 history.replace("/");
     return null;
   }
-
-  return children;
+return children;
 };
-
 export default PrivateRoute;
