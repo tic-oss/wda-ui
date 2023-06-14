@@ -209,6 +209,7 @@ const Designer = () => {
   const edgeUpdateSuccessful = useRef(true);
   const [isUINodeEnabled, setIsUINodeEnabled] = useState(true);
   const [isMessageBroker, setIsMessageBroker] = useState(false);
+  const [saveMetadata,setsaveMetadata] = useState(false)
 
   const onEdgeUpdateStart = useCallback(() => {
     edgeUpdateSuccessful.current = false;
@@ -524,6 +525,13 @@ const onsubmit = (Data) => {
       delete Data["deployment"];
     }
   }
+  if(saveMetadata){
+    Data['metadata']={
+      'nodes':nodes,
+      'edges':edges
+    }
+  }
+  else delete Data?.metadata
   console.log(Data,'Finaaal Dataaaaaaaaaa');
   setNodes(NewNodes);
 
@@ -621,6 +629,10 @@ const onConnect = useCallback((params, Nodes) => {
   }
 }, []);
 
+const UpdateSave = ()=>{
+  setsaveMetadata((prev)=>!prev)
+}
+
 const [uniqueApplicationNames, setUniqueApplicationNames] = useState([]);
 
 return (
@@ -645,11 +657,8 @@ return (
               ServiceDiscoveryCount,
               MessageBrokerCount,
               CloudProviderCount,
-
               LocalenvironmentCount,
-
               nodes
-
             )
           }
           onDragOver={onDragOver}
@@ -674,6 +683,8 @@ return (
         Service_Discovery_Data={nodes["serviceDiscoveryType"]?.data}
         authenticationData={nodes["authenticationType"]?.data}
         onSubmit={onsubmit}
+        saveMetadata={saveMetadata}
+        Togglesave={UpdateSave}
         isLoading={isLoading}
       />
 

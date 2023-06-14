@@ -10,10 +10,17 @@ import rabbitmq from "../assets/rabbitmq.png";
 import azure from "../assets/Azure.png";
 import aws from "../assets/aws.png";
 import eck from "../assets/eck.png";
-import mini from "../assets/mini.jpeg"
-import docker from "../assets/docker.png"
+import mini from "../assets/mini.jpeg";
+import docker from "../assets/docker.png";
 import "./../App.css";
-import { Input, FormLabel, Button, Flex, Spinner } from "@chakra-ui/react";
+import {
+  Input,
+  FormLabel,
+  Button,
+  Flex,
+  Spinner,
+  Checkbox,
+} from "@chakra-ui/react";
 
 export default ({
   isUINodeEnabled,
@@ -22,6 +29,8 @@ export default ({
   Service_Discovery_Data,
   authenticationData,
   isLoading,
+  saveMetadata,
+  Togglesave,
 }) => {
   const onDragStart = (event, nodeType, Name) => {
     if (Name === "UI") {
@@ -71,7 +80,7 @@ export default ({
             justifyContent: "space-between",
           }}
         >
-          You can drag these nodes to the pane on the right.
+          You can drag these nodes to the pane on the left.
         </h2>
       </div>
 
@@ -355,7 +364,9 @@ export default ({
 
           <div
             className="selectorNode7"
-            onDragStart={(event) => onDragStart(event, "default", "Localenvironment_docker")}
+            onDragStart={(event) =>
+              onDragStart(event, "default", "Localenvironment_docker")
+            }
             draggable
           >
             <img width="120px" src={docker} alt="dockerlogo" />
@@ -370,26 +381,34 @@ export default ({
           bottom: "0",
         }}
       >
-        {/* <div style={{ display:'flex', justifyContent:'center'}}> */}
-        <Button
-          onClick={() => {
-            onSubmit(projectData) || isLoading(true);
-          }}
-          mt={4}
-          border="2px"
-          borderColor="green.500"
-          width="100px"
-          type="submit"
-          isDisabled={
-            !Service_Discovery_Data ||
-            // !authenticationData ||
-            isEmpty ||
-            projectData.projectName === ""
-          }
-        >
-          Submit
-        </Button>
-        {/* </div> */}
+        <div>
+            <Checkbox
+              size="md"
+              colorScheme="blue"
+              isChecked={saveMetadata}
+              onChange={Togglesave}
+            >
+              Save Metadata
+            </Checkbox>
+          <Button
+            onClick={() => {
+              onSubmit(projectData) || isLoading(true);
+            }}
+            mt={4}
+            border="2px"
+            borderColor="green.500"
+            width="100px"
+            type="submit"
+            isDisabled={
+              !Service_Discovery_Data ||
+              // !authenticationData ||
+              isEmpty ||
+              projectData.projectName === ""
+            }
+          >
+            Submit
+          </Button>
+        </div>
         {isLoading && (
           <Flex
             position="fixed"
