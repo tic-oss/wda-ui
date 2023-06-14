@@ -20,7 +20,7 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
     clientFramework: "react",
     packageName: "",
     serverPort: "",
-    withExample: "",
+    withExample: "false",
     applicationType: "gateway",
     ...CurrentNode,
   };
@@ -40,7 +40,6 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
       }));
     }
   };
-
   return (
     <Modal isOpen={isOpen} onClose={() => onClose(false)} isCentered={true}>
       <ModalOverlay />
@@ -117,7 +116,7 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
                 variant="outline"
                 id="withExample"
                 borderColor={"black"}
-                value={UiData.withExample || "false"} // Set "false" as the default value
+                value={UiData.withExample}
                 onChange={(e) => handleData("withExample", e.target.value)}
               >
                 <option value="" disabled>
