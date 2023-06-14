@@ -117,7 +117,7 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
                 variant="outline"
                 id="withExample"
                 borderColor={"black"}
-                value={UiData.withExample}
+                value={UiData.withExample || "false"} // Set "false" as the default value
                 onChange={(e) => handleData("withExample", e.target.value)}
               >
                 <option value="" disabled>
