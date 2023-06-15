@@ -19,7 +19,6 @@ import {
   ModalBody,
   Input,
   Select,
-  Button,
   FormLabel,
   FormControl,
 } from "@chakra-ui/react";
@@ -66,9 +65,7 @@ const Project = () => {
   }, []);
 
   const reactFlowWrapper = useRef(null);
-  const [tooltipData, setTooltipData] = useState(null);
-  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
-  const [isOpen, setIsOpen] = useState(false);
+  const [serviceModal, setserviceModal] = useState(false);
   const [nodeType, setNodeType] = useState("");
   const [applicationName, setApplicationName] = useState("");
   const [clientFramework, setClientFramework] = useState("");
@@ -76,12 +73,15 @@ const Project = () => {
   const [serverPort, setServerPort] = useState("");
   const [withExample, setWithExample] = useState("");
   const [applicationFramework, setApplicationFrameWork] = useState("");
-  
-  const onElementClick = (event, element) => {
+
+  const [edgeModal, setEdgeModal] = useState(false);
+  const [type, setType] = useState("");
+  const [typeName, setTypeName] = useState("");
+  const [framework, setFramework] = useState("");
+
+  const onNodeClick = (event, element) => {
     event.preventDefault();
-    setTooltipData(element.data.applicationName);
-    setTooltipPosition({ x: element.position.x, y: +element.position.y });
-    setIsOpen(true);
+    setserviceModal(true);
     if (element.data.applicationType === "gateway") {
       setNodeType("UI");
       setClientFramework(element.data.clientFramework);
@@ -95,26 +95,27 @@ const Project = () => {
     setServerPort(element.data.serverPort);
   };
 
-  const CustomTooltip = () => {
-    const tooltipStyle = {
-      position: "absolute",
-      left: tooltipPosition.x,
-      top: tooltipPosition.y,
-    };
-
-    return tooltipData ? (
-      <div className="tooltip" style={tooltipStyle}>
-        {tooltipData}
-      </div>
-    ) : null;
+  const onEdgeClick = (event, element) => {
+    console.log(element.data, "data");
+    event.preventDefault();
+    setEdgeModal(true);
+    if (element.data.type === "synchronous") {
+      setTypeName("synchronous");
+    } else setTypeName("asynchronous");
+    setType(element.data.type);
+    setFramework(element.data.framework);
   };
   const handleContainerClose = () => {
-    setIsOpen(false);
+    setserviceModal(false) || setEdgeModal(false);
   };
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={handleContainerClose} isCentered={true}>
+      <Modal
+        isOpen={serviceModal}
+        onClose={handleContainerClose}
+        isCentered={true}
+      >
         <ModalOverlay />
         <ModalContent>
           {nodeType === "UI" ? (
@@ -226,13 +227,81 @@ const Project = () => {
                 </FormControl>
               )}
             </div>
-            {/* <Button
-              // onClick={() => onSubmit(element.data)}
-              style={{ display: "block", margin: "0 auto", color:'#CFCFCF' }}
-              disabled={true}
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+      <Modal
+        isOpen={edgeModal}
+        onClose={handleContainerClose}
+        isCentered={true}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Communication</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "left",
+              }}
             >
-              Submit
-            </Button> */}
+              <FormControl>
+                <FormLabel>Type</FormLabel>
+                <Select
+                  mb={4}
+                  variant="outline"
+                  id="type"
+                  borderColor={"black"}
+                  value={type}
+                  isDisabled={true}
+                >
+                  <option value="" disabled>
+                    Select an option
+                  </option>
+                  <option value="asynchronous">Asynchronous</option>
+                  <option value="synchronous">Synchronous</option>
+                </Select>
+              </FormControl>
+
+              {typeName === "synchronous" && (
+                <FormControl>
+                  <FormLabel>Framework</FormLabel>
+                  <Select
+                    mb={4}
+                    variant="outline"
+                    id="framework"
+                    borderColor={"black"}
+                    value={framework}
+                    isDisabled={true}
+                  >
+                    <option value="" disabled>
+                      Select an option
+                    </option>
+                    <option value="rest">REST</option>
+                  </Select>
+                </FormControl>
+              )}
+              {typeName === "asynchronous" && (
+                <FormControl>
+                  <FormLabel>Framework</FormLabel>
+                  <Select
+                    mb={4}
+                    variant="outline"
+                    id="framework"
+                    borderColor={"black"}
+                    value={framework}
+                    isDisabled={true}
+                  >
+                    <option value="" disabled>
+                      Select an option
+                    </option>
+                    <option value="rabbitmq">Rabbit MQ</option>
+                  </Select>
+                </FormControl>
+              )}
+            </div>
           </ModalBody>
         </ModalContent>
       </Modal>
@@ -246,8 +315,8 @@ const Project = () => {
             <ReactFlow
               nodes={nodes}
               edges={edges}
-              onEdgeClick={onElementClick}
-              onNodeClick={onElementClick}
+              onEdgeClick={onEdgeClick}
+              onNodeClick={onNodeClick}
               nodesConnectable={false}
               elementsSelectable={false}
               nodesDraggable={false}
@@ -261,7 +330,6 @@ const Project = () => {
                 customReadOnlyEdge: readOnlyEdgeStyle,
               }}
             />
-            <CustomTooltip />
           </div>
         </ReactFlowProvider>
       </div>
