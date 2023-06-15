@@ -11,7 +11,6 @@ import Sidebar from "./../components/Sidebar";
 import { saveAs } from "file-saver";
 import ServiceModal from "../components/Modal/ServiceModal";
 import UiDataModal from "../components/Modal/UIModal";
-import DeployModal from "../components/Modal/DeployModal";
 import CustomImageNode from "./Customnodes/CustomImageNode";
 import CustomServiceNode from "./Customnodes/CustomServiceNode";
 import CustomIngressNode from "./Customnodes/CustomIngressNode";
@@ -58,8 +57,6 @@ const Designer = () => {
   const [CloudProviderCount, setCloudProviderCount] = useState(0);
   const [LocalenvironmentCount, setLocalenvironmentCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-
-
   console.log("Nodes", nodes);
 
   const addEdge = (edgeParams, edges) => {
@@ -296,9 +293,6 @@ const Designer = () => {
           data: { prodDatabaseType: prodDatabaseType },
           style: { border: "1px solid", padding: "4px 4px" },
         };
-        // if (prodDatabaseType === "postgresql") {
-        //   newNode.data["databaseType"] = "sql";
-        // }
         setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
       } else if (name.startsWith("Discovery") && servicecount === 0) {
         console.log(servicecount);
@@ -344,22 +338,6 @@ const Designer = () => {
       } else if (name.startsWith("MessageBroker") && messagecount >= 1) {
         console.log("else", messagecount);
         setMessageBrokerCount(2);
-      } else if (name.startsWith("Cloud") && cloudcount === 0) {
-        console.log(cloudcount);
-        const cloudProvider = name.split("_").splice(1)[0];
-        console.log(cloudProvider);
-        const newNode = {
-          id: "cloudProvider",
-          type: "selectorNode5",
-          position,
-          data: { cloudProvider: cloudProvider, enableECK: "false" },
-          style: { border: "1px solid", padding: "4px 4px" },
-        };
-        setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
-        setCloudProviderCount(1);
-      } else if (name.startsWith("Cloud") && cloudcount >= 1) {
-        console.log("else", cloudcount);
-        setCloudProviderCount(2);
       } else if (name.startsWith("Load")) {
         const logManagementType = name.split("_").splice(1)[0];
         const newNode = {
@@ -369,12 +347,7 @@ const Designer = () => {
           data: { logManagementType: logManagementType },
           style: { border: "1px solid", padding: "4px 4px" },
         };
-        let Nodes = { ...nodes };
-        if ("cloudProvider" in Nodes) {
-          Nodes["cloudProvider"].data["enableECK"] = "true";
-        }
-        Nodes[newNode.id] = newNode;
-        setNodes(Nodes);
+        setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
       } 
       else if (name.startsWith("Localenvironment") && Localenvcount === 0) {
         console.log(Localenvcount);
@@ -427,7 +400,7 @@ const onChange = (Data) => {
     UpdatedNodes[Isopen].data = { ...UpdatedNodes[Isopen].data, ...Data };
   }
   setNodes(UpdatedNodes);
-  setopen(false);
+  setopen(false)
 };
 
 useEffect(() => {
@@ -469,6 +442,9 @@ const onsubmit = (Data) => {
   let Service_Discovery_Data = nodes["serviceDiscoveryType"]?.data;
   let authenticationData = nodes["authenticationType"]?.data;
   let logManagementData = nodes["logManagement"]?.data;
+  if(logManagementData && Data?.deployment)
+    Data.deployment.enableECK = "true"
+  
   for (const key in NewNodes) {
     const Node = NewNodes[key];
     if (Node.id.startsWith("Service") || Node.id === "UI")
@@ -502,33 +478,11 @@ const onsubmit = (Data) => {
         Data["communications"][communicationIndex++] = Edge.data;
     }
   }
-  if (Object.values(NewNodes).some((node) => node.data)) {
-    Data["deployment"] = {};
-    let hasField = false;
-    for (const cloudInfo in NewNodes) {
-      console.log(cloudInfo, "cloudInfooo")
-      const Cloud = NewNodes[cloudInfo];
-      if (Cloud.data) {
-        console.log(Cloud.data, "cloCloud.dataudInfooo")
-
-        if (Cloud.id === "cloudProvider") {
-          console.log(Cloud.data, "kkkkkkkkkkkkkk")
-          Data["deployment"] = {
-            ...Cloud.data,
-            ...Service_Discovery_Data,
-          };
-          hasField = true;
-        }
-      }
-    }
-    if (!hasField) {
-      delete Data["deployment"];
-    }
-  }
   if(saveMetadata){
     Data['metadata']={
       'nodes':nodes,
-      'edges':edges
+      'edges':edges,
+       'deployment':Data.deployment
     }
   }
   else delete Data?.metadata
@@ -561,7 +515,7 @@ const onCheckEdge = (edges) => {
     if (Edge.id.startsWith("UI")) {
       if (
         Edge.data.type === "synchronous" &&
-        Edge.data.framework === "rest"
+        Edge.data.framework === "rest-api"
       ) {
         delete Edge.data.type;
         delete Edge.data.framework;
@@ -587,8 +541,8 @@ const handleEdgeData = (Data) => {
   console.log(Data, IsEdgeopen);
   let UpdatedEdges = { ...edges };
 
-  if (Data.framework === 'rest') {
-    UpdatedEdges[IsEdgeopen].label = 'Rest'; // Set label as 'REST' for the edge
+  if (Data.framework === 'rest-api') {
+    UpdatedEdges[IsEdgeopen].label = 'Rest';
   } else {
     UpdatedEdges[IsEdgeopen].label = "RabbitMQ"
   }
@@ -695,24 +649,6 @@ return (
           onClose={setopen}
           onSubmit={onChange}
           uniqueApplicationNames={uniqueApplicationNames}
-        />
-      )}
-
-      {nodeType === "azure" && Isopen && (
-        <DeployModal
-          isOpen={Isopen}
-          CurrentNode={CurrentNode}
-          onClose={setopen}
-          onSubmit={onChange}
-        />
-      )}
-
-      {nodeType === "aws" && Isopen && (
-        <DeployModal
-          isOpen={Isopen}
-          CurrentNode={CurrentNode}
-          onClose={setopen}
-          onSubmit={onChange}
         />
       )}
 
