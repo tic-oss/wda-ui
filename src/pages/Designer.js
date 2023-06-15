@@ -673,24 +673,6 @@ return (
         />
       )}
 
-      {nodeType === "azure" && Isopen && (
-        <DeployModal
-          isOpen={Isopen}
-          CurrentNode={CurrentNode}
-          onClose={setopen}
-          onSubmit={onChange}
-        />
-      )}
-
-      {nodeType === "aws" && Isopen && (
-        <DeployModal
-          isOpen={Isopen}
-          CurrentNode={CurrentNode}
-          onClose={setopen}
-          onSubmit={onChange}
-        />
-      )}
-
       {nodeType === "UI" && Isopen && (
         <UiDataModal
           isOpen={Isopen}
