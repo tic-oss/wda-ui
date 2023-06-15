@@ -31,6 +31,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData }) => {
   };
   const IntialState = {
     deploymentType: "",
+    enableECK: "false",
     ...(selectedImage === "azure"
     ? {
       location: "",
@@ -77,6 +78,8 @@ const DeployModal = ({ onSubmit, isLoading, projectData }) => {
     } else setCheckLength(false);
   };
   function handleSubmit(DeploymentData) {
+    if(DeploymentData.kubernetesUseDynamicStorage === 'false')
+    delete DeploymentData?.kubernetesStorageClassName
     if (selectedImage === "aws") {
       !checkLength && onSubmit({...projectData, deployment: DeploymentData});
     } else if (selectedImage === "azure") {

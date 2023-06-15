@@ -11,7 +11,6 @@ import Sidebar from "./../components/Sidebar";
 import { saveAs } from "file-saver";
 import ServiceModal from "../components/Modal/ServiceModal";
 import UiDataModal from "../components/Modal/UIModal";
-import DeployModal from "../components/Modal/DeployModal";
 import CustomImageNode from "./Customnodes/CustomImageNode";
 import CustomServiceNode from "./Customnodes/CustomServiceNode";
 import CustomIngressNode from "./Customnodes/CustomIngressNode";
@@ -294,9 +293,6 @@ const Designer = () => {
           data: { prodDatabaseType: prodDatabaseType },
           style: { border: "1px solid", padding: "4px 4px" },
         };
-        // if (prodDatabaseType === "postgresql") {
-        //   newNode.data["databaseType"] = "sql";
-        // }
         setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
       } else if (name.startsWith("Discovery") && servicecount === 0) {
         console.log(servicecount);
@@ -342,22 +338,6 @@ const Designer = () => {
       } else if (name.startsWith("MessageBroker") && messagecount >= 1) {
         console.log("else", messagecount);
         setMessageBrokerCount(2);
-      } else if (name.startsWith("Cloud") && cloudcount === 0) {
-        console.log(cloudcount);
-        const cloudProvider = name.split("_").splice(1)[0];
-        console.log(cloudProvider);
-        const newNode = {
-          id: "cloudProvider",
-          type: "selectorNode5",
-          position,
-          data: { cloudProvider: cloudProvider, enableECK: "false" },
-          style: { border: "1px solid", padding: "4px 4px" },
-        };
-        setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
-        setCloudProviderCount(1);
-      } else if (name.startsWith("Cloud") && cloudcount >= 1) {
-        console.log("else", cloudcount);
-        setCloudProviderCount(2);
       } else if (name.startsWith("Load")) {
         const logManagementType = name.split("_").splice(1)[0];
         const newNode = {
@@ -367,12 +347,7 @@ const Designer = () => {
           data: { logManagementType: logManagementType },
           style: { border: "1px solid", padding: "4px 4px" },
         };
-        let Nodes = { ...nodes };
-        if ("cloudProvider" in Nodes) {
-          Nodes["cloudProvider"].data["enableECK"] = "true";
-        }
-        Nodes[newNode.id] = newNode;
-        setNodes(Nodes);
+        setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
       } 
       else if (name.startsWith("Localenvironment") && Localenvcount === 0) {
         console.log(Localenvcount);
@@ -425,7 +400,6 @@ const onChange = (Data) => {
     UpdatedNodes[Isopen].data = { ...UpdatedNodes[Isopen].data, ...Data };
   }
   setNodes(UpdatedNodes);
-  setopen(false);
 };
 
 useEffect(() => {
@@ -467,6 +441,10 @@ const onsubmit = (Data) => {
   let Service_Discovery_Data = nodes["serviceDiscoveryType"]?.data;
   let authenticationData = nodes["authenticationType"]?.data;
   let logManagementData = nodes["logManagement"]?.data;
+  if(logManagementData)
+    Data.deployment.enableECK = "true"
+  else 
+    Data.deployment.enableECK = "false"
   for (const key in NewNodes) {
     const Node = NewNodes[key];
     if (Node.id.startsWith("Service") || Node.id === "UI")
@@ -503,7 +481,8 @@ const onsubmit = (Data) => {
   if(saveMetadata){
     Data['metadata']={
       'nodes':nodes,
-      'edges':edges
+      'edges':edges,
+       'deployment':Data.deployment
     }
   }
   else delete Data?.metadata

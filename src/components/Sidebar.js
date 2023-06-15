@@ -12,19 +12,7 @@ import "./../App.css";
 import {
   Input,
   FormLabel,
-  Button,
-  Flex,
-  Spinner,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  FormControl,
-  Select,
-  Alert,
-  AlertIcon,
+  Button
 } from "@chakra-ui/react";
 import DeployModal from "./Modal/DeployModal";
 
