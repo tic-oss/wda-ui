@@ -400,6 +400,7 @@ const onChange = (Data) => {
     UpdatedNodes[Isopen].data = { ...UpdatedNodes[Isopen].data, ...Data };
   }
   setNodes(UpdatedNodes);
+  setIsOpen(false)
 };
 
 useEffect(() => {
