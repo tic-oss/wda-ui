@@ -9,7 +9,11 @@ import eck from "../assets/eck.png";
 import mini from "../assets/mini.jpeg";
 import docker from "../assets/docker.png";
 import "./../App.css";
-import { Input, FormLabel, Button } from "@chakra-ui/react";
+import {
+  Input,
+  FormLabel,
+  Button
+} from "@chakra-ui/react";
 import DeployModal from "./Modal/DeployModal";
 
 export default ({
@@ -18,8 +22,7 @@ export default ({
   Service_Discovery_Data,
   onSubmit,
   authenticationData,
-  isLoading,
-  nodes,
+  isLoading
 }) => {
   const onDragStart = (event, nodeType, Name) => {
     if (Name === "UI") {
@@ -49,7 +52,7 @@ export default ({
   const handleButtonClick = () => {
     setShowModal(true);
   };
-
+  
   return (
     <>
       <aside
@@ -302,9 +305,8 @@ export default ({
           {showModal && (
             <DeployModal
               onSubmit={onSubmit}
-              isLoading={isLoading}
+              isLoading={isLoading} 
               projectData={projectData}
-              nodes={nodes}
             />
           )}
           <br />
