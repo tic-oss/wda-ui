@@ -400,7 +400,7 @@ const onChange = (Data) => {
     UpdatedNodes[Isopen].data = { ...UpdatedNodes[Isopen].data, ...Data };
   }
   setNodes(UpdatedNodes);
-  setIsOpen(false)
+  setopen(false)
 };
 
 useEffect(() => {
@@ -442,10 +442,9 @@ const onsubmit = (Data) => {
   let Service_Discovery_Data = nodes["serviceDiscoveryType"]?.data;
   let authenticationData = nodes["authenticationType"]?.data;
   let logManagementData = nodes["logManagement"]?.data;
-  if(logManagementData)
+  if(logManagementData && Data?.deployment)
     Data.deployment.enableECK = "true"
-  else 
-    Data.deployment.enableECK = "false"
+  
   for (const key in NewNodes) {
     const Node = NewNodes[key];
     if (Node.id.startsWith("Service") || Node.id === "UI")
