@@ -75,7 +75,8 @@ const Project = () => {
   const [packageName, setPackageName] = useState("");
   const [serverPort, setServerPort] = useState("");
   const [withExample, setWithExample] = useState("");
-  const [applicationFramework, setApplicationFrameWork] = useState("")
+  const [applicationFramework, setApplicationFrameWork] = useState("");
+  
   const onElementClick = (event, element) => {
     event.preventDefault();
     setTooltipData(element.data.applicationName);
@@ -87,16 +88,11 @@ const Project = () => {
       setWithExample(element.data.withExample);
     } else {
       setNodeType("Service");
-      setApplicationFrameWork(element.data.applicationFramework)
-
+      setApplicationFrameWork(element.data.applicationFramework);
     }
-    console.log(element.data.applicationType, nodeType, "nodeType");
     setApplicationName(element.data.applicationName);
     setPackageName(element.data.packageName);
     setServerPort(element.data.serverPort);
-
-    console.log(element.data);
-    console.log(element.data.applicationName, "data");
   };
 
   const CustomTooltip = () => {
@@ -144,22 +140,46 @@ const Project = () => {
                   placeholder="Name"
                   borderColor={"black"}
                   value={applicationName}
+                  isDisabled={true}
                 />
               </FormControl>
-              {nodeType === "UI" && (
-                
-              <FormControl>
-                <FormLabel>Client Framework</FormLabel>
-                <Select
-                  mb={4}
-                  variant="outline"
-                  id="clientFramework"
-                  borderColor={"black"}
-                  value={clientFramework}
-                >
-                 
-                </Select>
-              </FormControl>
+              {nodeType === "UI" ? (
+                <FormControl>
+                  <FormLabel>Client Framework</FormLabel>
+                  <Select
+                    mb={4}
+                    variant="outline"
+                    id="clientFramework"
+                    borderColor={"black"}
+                    value={clientFramework}
+                    isDisabled={true}
+                  >
+                    <option value="" disabled>
+                      Select an option
+                    </option>
+                    <option value="react">React</option>
+                    <option value="angular">Angular</option>
+                    <option value="vue">Vue</option>
+                  </Select>
+                </FormControl>
+              ) : (
+                <FormControl>
+                  <FormLabel>Application Framework</FormLabel>
+                  <Select
+                    mb={4}
+                    variant="outline"
+                    id="applicationFramework"
+                    borderColor={"black"}
+                    value={applicationFramework}
+                    isDisabled={true}
+                  >
+                    <option value="" disabled>
+                      Select an option
+                    </option>
+                    <option value="java">Java</option>
+                    <option value="go">Go</option>
+                  </Select>
+                </FormControl>
               )}
 
               <FormControl>
@@ -171,6 +191,7 @@ const Project = () => {
                   placeholder="packageName"
                   borderColor={"black"}
                   value={packageName}
+                  isDisabled={true}
                 />
               </FormControl>
               <FormControl>
@@ -182,29 +203,36 @@ const Project = () => {
                   placeholder="serverPort"
                   borderColor={"black"}
                   value={serverPort}
+                  isDisabled={true}
                 />
               </FormControl>
               {nodeType === "UI" && (
-              <FormControl>
-                <FormLabel>Want to have an Example</FormLabel>
-                <Select
-                  mb={4}
-                  variant="outline"
-                  id="withExample"
-                  borderColor={"black"}
-                  value={withExample}
-                >
-                </Select>
-              </FormControl>
+                <FormControl>
+                  <FormLabel>Want to have an Example</FormLabel>
+                  <Select
+                    mb={4}
+                    variant="outline"
+                    id="withExample"
+                    borderColor={"black"}
+                    value={withExample}
+                    isDisabled={true}
+                  >
+                    <option value="" disabled>
+                      Select an option
+                    </option>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                  </Select>
+                </FormControl>
               )}
             </div>
-            <Button
+            {/* <Button
               // onClick={() => onSubmit(element.data)}
-              style={{ display: "block", margin: "0 auto" }}
+              style={{ display: "block", margin: "0 auto", color:'#CFCFCF' }}
               disabled={true}
             >
               Submit
-            </Button>
+            </Button> */}
           </ModalBody>
         </ModalContent>
       </Modal>
