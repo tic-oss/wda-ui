@@ -14,12 +14,12 @@ import {
   Alert,
   AlertIcon,
   Flex,
-  Spinner,
+  Spinner
 } from "@chakra-ui/react";
 import azure from "../../../src/assets/Azure.png";
 import aws from "../../../src/assets/aws.png";
 
-const DeployModal = ({ onSubmit, isLoading, projectData, nodes }) => {
+const DeployModal = ({ onSubmit, isLoading, projectData }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [checkLength, setCheckLength] = useState(false);
   const handleImageClick = (image) => {
@@ -33,21 +33,21 @@ const DeployModal = ({ onSubmit, isLoading, projectData, nodes }) => {
     deploymentType: "",
     enableECK: "false",
     ...(selectedImage === "azure"
-      ? {
-          location: "",
-          acrRegistry: "",
-          resourcegroupname: "",
-          subscriptionId: "",
-          tenantId: "",
-        }
-      : {}),
+    ? {
+      location: "",
+      acrRegistry: "",
+      resourcegroupname: "",
+      subscriptionId: "",
+      tenantId: "",
+    }
+    : {}),
     ...(selectedImage === "aws"
-      ? {
-          awsAccountId: "",
-          awsRegion: "",
-          kubernetesStorageClassName: "",
-        }
-      : {}),
+    ? {
+      awsAccountId: "",
+      awsRegion: "",
+      kubernetesStorageClassName: "",
+    }
+    : {}),
     clusterName: "",
     kubernetesUseDynamicStorage: "true",
     kubernetesNamespace: "",
@@ -78,18 +78,12 @@ const DeployModal = ({ onSubmit, isLoading, projectData, nodes }) => {
     } else setCheckLength(false);
   };
   function handleSubmit(DeploymentData) {
-    if (DeploymentData.kubernetesUseDynamicStorage === "false")
-      delete DeploymentData?.kubernetesStorageClassName;
-    let logManagementData = nodes["logManagement"]?.data;
-    if (logManagementData) {
-      DeploymentData.enableECK = "true";
-    } else {
-      DeploymentData.enableECK = "false";
-    }
+    if(DeploymentData.kubernetesUseDynamicStorage === 'false')
+    delete DeploymentData?.kubernetesStorageClassName
     if (selectedImage === "aws") {
-      !checkLength && onSubmit({ ...projectData, deployment: DeploymentData });
+      !checkLength && onSubmit({...projectData, deployment: DeploymentData});
     } else if (selectedImage === "azure") {
-      onSubmit({ ...projectData, deployment: DeploymentData });
+      onSubmit({...projectData, deployment: DeploymentData});
     }
   }
   const [isOpen, setIsOpen] = useState(true);
@@ -429,7 +423,8 @@ const DeployModal = ({ onSubmit, isLoading, projectData, nodes }) => {
           </Button>
           <Button
             onClick={() => {
-              handleSubmit(DeploymentData, nodes) || isLoading(true);
+              handleSubmit(DeploymentData) ||
+                isLoading(true);
             }}
             mt={4}
             border="2px"
