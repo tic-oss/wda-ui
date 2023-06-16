@@ -41,15 +41,23 @@ const Project = () => {
 
   useEffect(() => {
     const data = location?.state;
+    console.log(data, metadata, "data");
     if (!data) {
       const data = JSON.parse(localStorage.metadata);
       setmetadata(data);
       setNodes(Object.values(data?.nodes));
-      setEdges(Object.values(data?.edges));
+      if (data?.edges) {
+        setEdges(Object.values(data?.edges));
+      }
     } else {
       localStorage.metadata = JSON.stringify(metadata);
-      setNodes(Object.values(metadata?.nodes));
-      setEdges(Object.values(metadata?.edges));
+      if (metadata?.nodes) {
+        setNodes(Object.values(metadata?.nodes));
+      } else if (metadata?.edges) {
+        setEdges(Object.values(data?.edges));
+      } else {
+        setNodes([getDeploymentNode(metadata)])
+      }
     }
   }, []);
 
@@ -67,6 +75,16 @@ const Project = () => {
   const [type, setType] = useState("");
   const [typeName, setTypeName] = useState("");
   const [framework, setFramework] = useState("");
+
+  const getDeploymentNode = (data) => {
+    return {
+      id: "Deployment",
+      type: "selectorNode5",
+      data: { data },
+      style: { border: "1px solid #8c8d8f", padding: "4px 4px" },
+      position: { x: 250, y: 5 },
+    };
+  };
 
   const onNodeClick = (event, element) => {
     event.preventDefault();

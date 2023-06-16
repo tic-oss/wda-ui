@@ -22,16 +22,17 @@ function Projects() {
 
   const handleClick = (data, column, name) => {
     console.log(data);
-    const navigate = window.open("/project/" + name, "_blank");
+    // const navigate = window.open("/project/" + name, "_blank");
     if (column === "Architecture")
       history.push({
-        pathname: navigate.focus(),
+        // pathname: navigate.focus(),
+        pathname: "/project/" + name,
         state: data,
       });
     else
       history.push({
-        pathname: navigate.focus(),
-        state: { nodes: data },
+        pathname: "/project/" + name,
+        state: data,
       });
   };
   useEffect(() => {
@@ -89,27 +90,31 @@ function Projects() {
                       {project.projectName}
                     </Button>
                   </Td>
-                  <Td>
-                    <Button
-                      colorScheme="teal"
-                      variant="link"
-                      onClick={(e) =>
-                        handleClick(
-                          project.metadata,
-                          "Infrastructure",
-                          project.projectName
-                        )
-                      }
-                      _hover={{
-                        transform: "scale(1.1)",
-                        transition: "transform 0.3s",
-                        fontWeight: "bolder",
-                        color: "red",
-                      }}
-                    >
-                      Link
-                    </Button>
-                  </Td>
+                  {project.metadata?.deployment ? (
+                    <Td>
+                      <Button
+                        colorScheme="teal"
+                        variant="link"
+                        onClick={(e) =>
+                          handleClick(
+                            project.metadata?.deployment,
+                            "Infrastructure",
+                            project.projectName
+                          )
+                        }
+                        _hover={{
+                          transform: "scale(1.1)",
+                          transition: "transform 0.3s",
+                          fontWeight: "bolder",
+                          color: "red",
+                        }}
+                      >
+                        Link
+                      </Button>
+                    </Td>
+                  ) : (
+                    <Td>-</Td>
+                  )}
                 </Tr>
               );
             })}
