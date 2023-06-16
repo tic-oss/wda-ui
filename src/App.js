@@ -52,7 +52,7 @@ function App() {
                   <Projects/>
               {/* </PrivateRoute> */}
             </Route>
-            <Route exact path="/project">
+            <Route exact path="/project/:id">
             {/* <PrivateRoute> */}
                   <Project/>
               {/* </PrivateRoute> */}

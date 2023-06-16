@@ -207,10 +207,10 @@ function Projects() {
         }
     
     ]
-    const handleClick= (data)=>{
+    const handleClick= (data,id)=>{
         console.log(data)
         history.push({
-            pathname: '/project',
+            pathname: '/project/'+id,
             state: data
           });
     }
@@ -237,7 +237,11 @@ function Projects() {
                         <Td>{project.projectName}</Td>
                         <Td><Button colorScheme='teal'
                              variant='link'
-                             onClick={(e)=>handleClick(project.metadata)}
+                             onClick={(e)=>handleClick(project.metadata,project.project_id)}
+                        >Link</Button></Td>
+                        <Td><Button colorScheme='teal'
+                             variant='link'
+                             onClick={(e)=>handleClick(project.metadata?.deployment,project.project_id)}
                         >Link</Button></Td>
                     </Tr>
                 )
