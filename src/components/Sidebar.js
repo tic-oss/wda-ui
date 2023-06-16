@@ -7,11 +7,7 @@ import eck from "../assets/eck.png";
 import mini from "../assets/mini.jpeg";
 import docker from "../assets/docker.png";
 import "./../App.css";
-import {
-  Input,
-  FormLabel,
-  Button
-} from "@chakra-ui/react";
+import { Input, FormLabel, Button, Checkbox } from "@chakra-ui/react";
 import DeployModal from "./Modal/DeployModal";
 
 export default ({
@@ -20,7 +16,9 @@ export default ({
   Service_Discovery_Data,
   onSubmit,
   authenticationData,
-  isLoading
+  isLoading,
+  saveMetadata,
+  Togglesave,
 }) => {
   const onDragStart = (event, nodeType, Name) => {
     if (Name === "UI") {
@@ -57,7 +55,13 @@ export default ({
   return (
     <>
       <aside
-        style={{ position: "relative", overflow: "hidden", height: "88vh", border:'1px Solid #CFCFCF', backgroundColor:'#f7f7f7' }}
+        style={{
+          position: "relative",
+          overflow: "hidden",
+          height: "88vh",
+          border: "1px Solid #CFCFCF",
+          backgroundColor: "#f7f7f7",
+        }}
       >
         <FormLabel fontWeight="bold">Project Name</FormLabel>
         <Input
@@ -286,6 +290,14 @@ export default ({
             bottom: "0",
           }}
         >
+          <Checkbox
+            size="md"
+            colorScheme="blue"
+            isChecked={saveMetadata}
+            onChange={Togglesave}
+          >
+            Save Metadata
+          </Checkbox>
           {/* <div style={{ display:'flex', justifyContent:'center'}}> */}
           <Button
             onClick={handleButtonClick}
@@ -295,10 +307,7 @@ export default ({
             width="100px"
             type="submit"
             isDisabled={
-              !Service_Discovery_Data ||
-              !authenticationData ||
-              isEmpty ||
-              projectData.projectName === ""
+              !authenticationData || isEmpty || projectData.projectName === ""
             }
           >
             Next
@@ -306,7 +315,7 @@ export default ({
           {showModal && (
             <DeployModal
               onSubmit={onSubmit}
-              isLoading={isLoading} 
+              isLoading={isLoading}
               projectData={projectData}
               onClose={handleCloseModal}
             />
@@ -337,19 +346,6 @@ export default ({
             </p>
           ) : (
             <p style={{ marginBottom: "5px" }}></p>
-          )}
-          {!Service_Discovery_Data ? (
-            <p
-              style={{
-                fontSize: "10px",
-                color: "red",
-                marginTop: "5px",
-              }}
-            >
-              Please select Service Discovery type
-            </p>
-          ) : (
-            <></>
           )}
         </div>
       </aside>
