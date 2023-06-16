@@ -14,12 +14,13 @@ import {
   Alert,
   AlertIcon,
   Flex,
-  Spinner
+  Spinner,
+  ModalCloseButton
 } from "@chakra-ui/react";
 import azure from "../../../src/assets/Azure.png";
 import aws from "../../../src/assets/aws.png";
 
-const DeployModal = ({ onSubmit, isLoading, projectData }) => {
+const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [checkLength, setCheckLength] = useState(false);
   const handleImageClick = (image) => {
@@ -89,12 +90,13 @@ const DeployModal = ({ onSubmit, isLoading, projectData }) => {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
-    <Modal isOpen={isOpen}>
+    <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
           <h2 style={{ display: "inline-block" }}>Deployment Infrastructure</h2>
         </ModalHeader>
+        <ModalCloseButton onClick={onClose}/>
         <ModalBody
           style={{
             maxHeight: "calc(100vh - 200px)",
@@ -119,10 +121,11 @@ const DeployModal = ({ onSubmit, isLoading, projectData }) => {
                 marginBottom: "10px",
                 width: "120px",
                 cursor: "pointer",
+                marginRight:'10px',
                 border:
                   selectedImage === "azure"
                     ? "2px solid #3182CE"
-                    : "2px solid transparent",
+                    : "2px solid #d9d9d9",
               }}
             />
             <img
@@ -138,7 +141,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData }) => {
                 border:
                   selectedImage === "aws"
                     ? "2px solid #3182CE"
-                    : "2px solid transparent",
+                    : "2px solid #d9d9d9",
               }}
             />
           </div>
@@ -226,7 +229,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData }) => {
                 ></Input>
               </FormControl>
               {DeploymentData.awsAccountId &&
-                DeploymentData.awsAccountId.length != 12 && (
+                DeploymentData.awsAccountId.length !== 12 && (
                   <Alert
                     status="error"
                     height="12px"
@@ -354,7 +357,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData }) => {
                   <option value="istio">Istio</option>
                 </Select>
               </FormControl>
-              {DeploymentData.ingressType == "istio" && (
+              {DeploymentData.ingressType === "istio" && (
                 <FormControl>
                   <FormLabel>Ingress Domain Name</FormLabel>
                   <Input

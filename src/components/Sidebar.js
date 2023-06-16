@@ -3,8 +3,6 @@ import db1 from "../assets/pstgrc.jpeg";
 import db2 from "../assets/mongo.png";
 import eurkea from "../assets/eureka.jpg";
 import keycloak from "../assets/keycloak.png";
-import azure from "../assets/Azure.png";
-import aws from "../assets/aws.png";
 import eck from "../assets/eck.png";
 import mini from "../assets/mini.jpeg";
 import docker from "../assets/docker.png";
@@ -52,11 +50,14 @@ export default ({
   const handleButtonClick = () => {
     setShowModal(true);
   };
-  
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
   return (
     <>
       <aside
-        style={{ position: "relative", overflow: "hidden", height: "88vh" }}
+        style={{ position: "relative", overflow: "hidden", height: "88vh", border:'1px Solid #CFCFCF', backgroundColor:'#f7f7f7' }}
       >
         <FormLabel fontWeight="bold">Project Name</FormLabel>
         <Input
@@ -139,16 +140,16 @@ export default ({
             alignItems: "center",
             justifyContent: "space-between",
           }}
-          onClick={() => toggleOption("Databases")}
+          onClick={() => toggleOption("Database")}
         >
-          Databases{" "}
+          Database{" "}
           {selectedOption === "Databases" ? (
             <span>&#x25B2;</span>
           ) : (
             <span>&#x25BC;</span>
           )}
         </h1>
-        {selectedOption === "Databases" && (
+        {selectedOption === "Database" && (
           <>
             <div
               className="selectorNode"
@@ -235,7 +236,7 @@ export default ({
             </div>
           </>
         )}
-        <h1>
+        {/* <h1>
           <span
             style={{
               cursor: "pointer",
@@ -276,7 +277,7 @@ export default ({
               <img width="120px" src={docker} alt="dockerlogo" />
             </div>
           </>
-        )}
+        )} */}
         <div
           style={{
             position: "absolute",
@@ -307,9 +308,9 @@ export default ({
               onSubmit={onSubmit}
               isLoading={isLoading} 
               projectData={projectData}
+              onClose={handleCloseModal}
             />
           )}
-          <br />
 
           {isEmpty || projectData.projectName === "" ? (
             <p
