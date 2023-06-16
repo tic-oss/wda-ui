@@ -75,9 +75,11 @@ const Project = () => {
       setNodeType("UI");
       setClientFramework(element.data.clientFramework);
       setWithExample(element.data.withExample);
-    } else {
+    } else if (element.data.applicationType === "microservice") {
       setNodeType("Service");
       setApplicationFrameWork(element.data.applicationFramework);
+    } else {
+      setNodeType("other");
     }
     setApplicationName(element.data.applicationName);
     setPackageName(element.data.packageName);
@@ -128,7 +130,7 @@ const Project = () => {
           </div>
         </ReactFlowProvider>
       </div>
-      {nodeType && (
+      {nodeType === "UI" || nodeType === "Service" ? (
         <ProjectModal
           nodeType={nodeType}
           serviceModal={serviceModal}
@@ -144,6 +146,8 @@ const Project = () => {
           typeName={typeName}
           framework={framework}
         />
+      ) : (
+        <></>
       )}
     </>
   );
