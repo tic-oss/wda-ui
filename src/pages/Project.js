@@ -11,6 +11,7 @@ import CustomCloudNode from "./Customnodes/CustomCloudNode";
 import CustomLoadNode from "./Customnodes/CustomLoadNode";
 import CustomLocalenvironmentNode from "./Customnodes/CustomLocalenvironmentNode";
 import ProjectModal from "../components/Modal/ProjectModal";
+import DeploymentModal from "../components/Modal/DeploymentModal";
 
 const readOnlyNodeStyle = {
   border: "1px solid #ccc",
@@ -56,7 +57,7 @@ const Project = () => {
       } else if (metadata?.edges) {
         setEdges(Object.values(data?.edges));
       } else {
-        setNodes([getDeploymentNode(metadata)])
+        setNodes([getDeploymentNode(metadata)]);
       }
     }
   }, []);
@@ -76,6 +77,29 @@ const Project = () => {
   const [typeName, setTypeName] = useState("");
   const [framework, setFramework] = useState("");
 
+  const [cloudModal, setCloudModal] = useState(false);
+  const [cloudName, setCloudName] = useState("");
+  const [awsAccountId, setAwsAccountId] = useState("");
+  const [awsRegion, setAwsRegion] = useState("");
+  const [kubernetesStorageClassName, setKubernetesStorageClassName] =
+    useState("");
+
+  const [clusterName, setClusterName] = useState("");
+  const [deploymentType, setDeploymentType] = useState("");
+  const [ingressDomain, setIngressDomain] = useState("");
+  const [ingressType, setIngressType] = useState("");
+  const [k8sWebUI, setk8sWebUI] = useState("");
+  const [kubernetesNamespace, setKubernetesNamespace] = useState("");
+  const [kubernetesUseDynamicStorage, setKubernetesUseDynamicStorage] =
+    useState("");
+  const [monitoring, setMonitoring] = useState("");
+
+  const [azureLocation, setAzureLocation] = useState("");
+  const [acrRegistry, setAcrRegistry] = useState("");
+  const [resourcegroupname, setResourcegroupname] = useState("");
+  const [subscriptionId, setSubscriptionId] = useState("");
+  const [tenantId, setTenantId] = useState("");
+
   const getDeploymentNode = (data) => {
     return {
       id: "Deployment",
@@ -88,20 +112,51 @@ const Project = () => {
 
   const onNodeClick = (event, element) => {
     event.preventDefault();
-    setserviceModal(true);
     if (element.data.applicationType === "gateway") {
       setNodeType("UI");
+      setserviceModal(true);
       setClientFramework(element.data.clientFramework);
       setWithExample(element.data.withExample);
     } else if (element.data.applicationType === "microservice") {
       setNodeType("Service");
+      setserviceModal(true);
       setApplicationFrameWork(element.data.applicationFramework);
+    } else if (element.data?.data?.cloudProvider === "aws") {
+      setNodeType("Cloud");
+      setCloudName("aws");
+      setCloudModal(true);
+      setAwsAccountId(element.data?.data?.awsAccountId);
+      setAwsRegion(element.data?.data?.awsRegion);
+      setKubernetesStorageClassName(
+        element.data?.data?.kubernetesStorageClassName
+      );
+    } else if (element.data?.data?.cloudProvider === "azure") {
+      setNodeType("Cloud");
+      setCloudName("azure");
+      setCloudModal(true);
+      setAzureLocation(element.data?.data?.azureLocation);
+      setAcrRegistry(element.data?.data?.acrRegistry);
+      setResourcegroupname(element.data?.data?.resourcegroupname);
+      setSubscriptionId(element.data?.data?.subscriptionId);
+      setTenantId(element.data?.data?.tenantId);
     } else {
       setNodeType("other");
     }
+
     setApplicationName(element.data.applicationName);
     setPackageName(element.data.packageName);
     setServerPort(element.data.serverPort);
+
+    setClusterName(element.data?.data?.clusterName);
+    setDeploymentType(element.data?.data?.deploymentType);
+    setIngressDomain(element.data?.data?.ingressDomain);
+    setIngressType(element.data?.data?.ingressType);
+    setk8sWebUI(element.data?.data?.k8sWebUI);
+    setKubernetesNamespace(element.data?.data?.kubernetesNamespace);
+    setKubernetesUseDynamicStorage(
+      element.data?.data?.kubernetesUseDynamicStorage
+    );
+    setMonitoring(element.data?.data?.monitoring);
   };
 
   const onEdgeClick = (event, element) => {
@@ -115,7 +170,7 @@ const Project = () => {
     setFramework(element.data.framework);
   };
   const handleContainerClose = () => {
-    setserviceModal(false) || setEdgeModal(false);
+    setserviceModal(false) || setEdgeModal(false) || setCloudModal(false);
   };
 
   return (
@@ -166,6 +221,29 @@ const Project = () => {
         />
       ) : (
         <></>
+      )}
+      {nodeType === "Cloud" && (
+        <DeploymentModal
+          cloudModal={cloudModal}
+          cloudName={cloudName}
+          handleContainerClose={handleContainerClose}
+          awsAccountId={awsAccountId}
+          awsRegion={awsRegion}
+          kubernetesStorageClassName={kubernetesStorageClassName}
+          azureLocation={azureLocation}
+          acrRegistry={acrRegistry}
+          resourcegroupname={resourcegroupname}
+          subscriptionId={subscriptionId}
+          tenantId={tenantId}
+          clusterName={clusterName}
+          deploymentType={deploymentType}
+          ingressDomain={ingressDomain}
+          ingressType={ingressType}
+          k8sWebUI={k8sWebUI}
+          kubernetesNamespace={kubernetesNamespace}
+          kubernetesUseDynamicStorage={kubernetesUseDynamicStorage}
+          monitoring={monitoring}
+        />
       )}
     </>
   );
