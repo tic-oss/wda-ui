@@ -49,6 +49,8 @@ const Project = () => {
       setNodes(Object.values(data?.nodes));
       if (data?.edges) {
         setEdges(Object.values(data?.edges));
+      } else {
+        setEdges([]);
       }
     } else {
       localStorage.metadata = JSON.stringify(metadata);
@@ -58,6 +60,11 @@ const Project = () => {
         setEdges(Object.values(data?.edges));
       } else {
         setNodes([getDeploymentNode(metadata)]);
+      }
+      if (metadata?.edges) {
+        setEdges(Object.values(metadata?.edges));
+      } else {
+        setEdges([]);
       }
     }
   }, []);
