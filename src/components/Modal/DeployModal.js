@@ -15,7 +15,7 @@ import {
   AlertIcon,
   Flex,
   Spinner,
-  ModalCloseButton
+  ModalCloseButton,
 } from "@chakra-ui/react";
 import azure from "../../../src/assets/Azure.png";
 import aws from "../../../src/assets/aws.png";
@@ -34,21 +34,21 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
     deploymentType: "",
     enableECK: "false",
     ...(selectedImage === "azure"
-    ? {
-      location: "",
-      acrRegistry: "",
-      resourcegroupname: "",
-      subscriptionId: "",
-      tenantId: "",
-    }
-    : {}),
+      ? {
+          location: "",
+          acrRegistry: "",
+          resourcegroupname: "",
+          subscriptionId: "",
+          tenantId: "",
+        }
+      : {}),
     ...(selectedImage === "aws"
-    ? {
-      awsAccountId: "",
-      awsRegion: "",
-      kubernetesStorageClassName: "",
-    }
-    : {}),
+      ? {
+          awsAccountId: "",
+          awsRegion: "",
+          kubernetesStorageClassName: "",
+        }
+      : {}),
     clusterName: "",
     kubernetesUseDynamicStorage: "true",
     kubernetesNamespace: "",
@@ -79,12 +79,12 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
     } else setCheckLength(false);
   };
   function handleSubmit(DeploymentData) {
-    if(DeploymentData.kubernetesUseDynamicStorage === 'false')
-    delete DeploymentData?.kubernetesStorageClassName
+    if (DeploymentData.kubernetesUseDynamicStorage === "false")
+      delete DeploymentData?.kubernetesStorageClassName;
     if (selectedImage === "aws") {
-      !checkLength && onSubmit({...projectData, deployment: DeploymentData});
+      !checkLength && onSubmit({ ...projectData, deployment: DeploymentData });
     } else if (selectedImage === "azure") {
-      onSubmit({...projectData, deployment: DeploymentData});
+      onSubmit({ ...projectData, deployment: DeploymentData });
     }
   }
   const [isOpen, setIsOpen] = useState(true);
@@ -96,7 +96,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
         <ModalHeader>
           <h2 style={{ display: "inline-block" }}>Deployment Infrastructure</h2>
         </ModalHeader>
-        <ModalCloseButton onClick={onClose}/>
+        <ModalCloseButton onClick={onClose} />
         <ModalBody
           style={{
             maxHeight: "calc(100vh - 200px)",
@@ -121,7 +121,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                 marginBottom: "10px",
                 width: "120px",
                 cursor: "pointer",
-                marginRight:'10px',
+                marginRight: "10px",
                 border:
                   selectedImage === "azure"
                     ? "2px solid #3182CE"
@@ -313,22 +313,23 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                   <option value="false">No</option>
                 </Select>
               </FormControl>
-              {DeploymentData.kubernetesUseDynamicStorage === "true" && (
-                <FormControl>
-                  <FormLabel>Storage Class Name</FormLabel>
-                  <Input
-                    mb={4}
-                    variant="outline"
-                    id="kubernetesStorageClassName"
-                    placeholder="Kubernetes Storage Class Name"
-                    borderColor={"black"}
-                    value={DeploymentData.kubernetesStorageClassName}
-                    onChange={(e) =>
-                      handleData("kubernetesStorageClassName", e.target.value)
-                    }
-                  />
-                </FormControl>
-              )}
+              {DeploymentData.kubernetesUseDynamicStorage === "true" &&
+                selectedImage !== "azure" && (
+                  <FormControl>
+                    <FormLabel>Storage Class Name</FormLabel>
+                    <Input
+                      mb={4}
+                      variant="outline"
+                      id="kubernetesStorageClassName"
+                      placeholder="Kubernetes Storage Class Name"
+                      borderColor={"black"}
+                      value={DeploymentData.kubernetesStorageClassName}
+                      onChange={(e) =>
+                        handleData("kubernetesStorageClassName", e.target.value)
+                      }
+                    />
+                  </FormControl>
+                )}
 
               <FormControl>
                 <FormLabel>Namespace</FormLabel>
@@ -426,8 +427,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
           </Button>
           <Button
             onClick={() => {
-              handleSubmit(DeploymentData) ||
-                isLoading(true);
+              handleSubmit(DeploymentData) || isLoading(true);
             }}
             mt={4}
             border="2px"

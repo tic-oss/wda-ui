@@ -162,7 +162,7 @@ export default ({
               }
               draggable
             >
-              <img width="120px" src={db1} alt="postgreslogo"></img>
+              <img width="120px" style={{marginBottom:'10px'}} src={db1} alt="postgreslogo"></img>
             </div>
             <div
               className="selectorNode"
@@ -288,6 +288,8 @@ export default ({
             marginTop: "auto",
             marginBottom: "10px",
             bottom: "0",
+            display:'flex',
+            flexDirection:'column'
           }}
         >
           <Checkbox
