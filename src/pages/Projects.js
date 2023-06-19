@@ -12,6 +12,8 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useKeycloak } from "@react-keycloak/web";
+import azure from "../../src/assets/Azure.png";
+import aws from "../../src/assets/aws.png";
 
 function Projects() {
   // const {data,loading,error} = useFetch('/api/projects')
@@ -109,7 +111,12 @@ function Projects() {
                           color: "red",
                         }}
                       >
-                        Link
+                        {project.metadata.deployment.cloudProvider ===
+                        "azure" ? (
+                          <img width="60px" src={azure} />
+                        ) : (
+                          <img width="60px" src={aws} />
+                        )}
                       </Button>
                     </Td>
                   ) : (
