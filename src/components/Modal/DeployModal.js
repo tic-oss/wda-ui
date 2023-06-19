@@ -23,41 +23,46 @@ import aws from "../../../src/assets/aws.png";
 const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [checkLength, setCheckLength] = useState(false);
+  const [DeploymentData, setDeploymentData] = useState({});
+
   const handleImageClick = (image) => {
     setSelectedImage(image);
-    setDeploymentData((prevState) => ({
-      ...prevState,
-      cloudProvider: image,
-    }));
-  };
-  const IntialState = {
-    deploymentType: "",
-    enableECK: "false",
-    ...(selectedImage === "azure"
-      ? {
-          location: "",
+
+    let ProviderStates
+    if(image === 'aws'){
+      ProviderStates={
+        awsAccountId: "",
+        awsRegion: "",
+        kubernetesStorageClassName: "",
+      }
+    }
+    else {
+      ProviderStates={
+          location: "canadacentral",
           acrRegistry: "",
           resourcegroupname: "",
           subscriptionId: "",
           tenantId: "",
-        }
-      : {}),
-    ...(selectedImage === "aws"
-      ? {
-          awsAccountId: "",
-          awsRegion: "",
-          kubernetesStorageClassName: "",
-        }
-      : {}),
-    clusterName: "",
-    kubernetesUseDynamicStorage: "true",
-    kubernetesNamespace: "",
-    ingressType: "istio",
-    monitoring: "",
-    ingressDomain: "",
-    k8sWebUI: "",
+      }
+    }
+    ProviderStates = {...ProviderStates, 
+      deploymentType: "",
+      enableECK: "false",
+      clusterName: "",
+      kubernetesUseDynamicStorage: "true",
+      kubernetesNamespace: "",
+      ingressType: "istio",
+      monitoring: "",
+      ingressDomain: "",
+      k8sWebUI: "",
+    }
+    setDeploymentData((prevState) => ({
+      ...prevState,
+      cloudProvider: image,
+      ...ProviderStates
+    }));
   };
-  const [DeploymentData, setDeploymentData] = useState(IntialState);
+
   const handleKeyPress = (event) => {
     const charCode = event.which ? event.which : event.keyCode;
     if ((charCode >= 48 && charCode <= 57) || charCode === 8) {
@@ -79,12 +84,26 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
     } else setCheckLength(false);
   };
   function handleSubmit(DeploymentData) {
-    if (DeploymentData.kubernetesUseDynamicStorage === "false")
-      delete DeploymentData?.kubernetesStorageClassName;
+    let FinalData = {...DeploymentData}
+
+    if(FinalData.cloudProvider === 'aws'){
+      delete FinalData?.location
+      delete FinalData?.acrRegistry
+      delete FinalData?.resourcegroupname
+      delete FinalData?.subscriptionId
+      delete FinalData?.tenantId
+    }
+    else {
+      delete FinalData?.awsAccountId
+      delete FinalData?.awsRegion
+      delete FinalData?.kubernetesStorageClassName
+    }
+    if (FinalData.kubernetesUseDynamicStorage === "false")
+      delete FinalData?.kubernetesStorageClassName;
     if (selectedImage === "aws") {
-      !checkLength && onSubmit({ ...projectData, deployment: DeploymentData });
+      !checkLength && onSubmit({ ...projectData, deployment: FinalData });
     } else if (selectedImage === "azure") {
-      onSubmit({ ...projectData, deployment: DeploymentData });
+      onSubmit({ ...projectData, deployment: FinalData });
     }
   }
   const [isOpen, setIsOpen] = useState(true);
@@ -203,9 +222,6 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                   value={DeploymentData.location}
                   onChange={(e) => handleData("location", e.target.value)}
                 >
-                  <option value="" disabled>
-                    Select an option
-                  </option>
                   <option value="canadacentral">Canada Central</option>
                 </Select>
               </FormControl>
