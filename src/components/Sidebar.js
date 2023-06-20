@@ -3,17 +3,11 @@ import db1 from "../assets/pstgrc.jpeg";
 import db2 from "../assets/mongo.png";
 import eurkea from "../assets/eureka.jpg";
 import keycloak from "../assets/keycloak.png";
-import azure from "../assets/Azure.png";
-import aws from "../assets/aws.png";
 import eck from "../assets/eck.png";
 import mini from "../assets/mini.jpeg";
 import docker from "../assets/docker.png";
 import "./../App.css";
-import {
-  Input,
-  FormLabel,
-  Button
-} from "@chakra-ui/react";
+import { Input, FormLabel, Button, Checkbox } from "@chakra-ui/react";
 import DeployModal from "./Modal/DeployModal";
 
 export default ({
@@ -22,7 +16,9 @@ export default ({
   Service_Discovery_Data,
   onSubmit,
   authenticationData,
-  isLoading
+  isLoading,
+  saveMetadata,
+  Togglesave,
 }) => {
   const onDragStart = (event, nodeType, Name) => {
     if (Name === "UI") {
@@ -52,11 +48,20 @@ export default ({
   const handleButtonClick = () => {
     setShowModal(true);
   };
-  
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
   return (
     <>
       <aside
-        style={{ position: "relative", overflow: "hidden", height: "88vh" }}
+        style={{
+          position: "relative",
+          overflow: "hidden",
+          height: "88vh",
+          border: "1px Solid #CFCFCF",
+          backgroundColor: "#f7f7f7",
+        }}
       >
         <FormLabel fontWeight="bold">Project Name</FormLabel>
         <Input
@@ -139,16 +144,16 @@ export default ({
             alignItems: "center",
             justifyContent: "space-between",
           }}
-          onClick={() => toggleOption("Databases")}
+          onClick={() => toggleOption("Database")}
         >
-          Databases{" "}
+          Database{" "}
           {selectedOption === "Databases" ? (
             <span>&#x25B2;</span>
           ) : (
             <span>&#x25BC;</span>
           )}
         </h1>
-        {selectedOption === "Databases" && (
+        {selectedOption === "Database" && (
           <>
             <div
               className="selectorNode"
@@ -157,7 +162,7 @@ export default ({
               }
               draggable
             >
-              <img width="120px" src={db1} alt="postgreslogo"></img>
+              <img width="120px" style={{marginBottom:'10px'}} src={db1} alt="postgreslogo"></img>
             </div>
             <div
               className="selectorNode"
@@ -235,7 +240,7 @@ export default ({
             </div>
           </>
         )}
-        <h1>
+        {/* <h1>
           <span
             style={{
               cursor: "pointer",
@@ -276,15 +281,25 @@ export default ({
               <img width="120px" src={docker} alt="dockerlogo" />
             </div>
           </>
-        )}
+        )} */}
         <div
           style={{
             position: "absolute",
             marginTop: "auto",
             marginBottom: "10px",
             bottom: "0",
+            display:'flex',
+            flexDirection:'column'
           }}
         >
+          <Checkbox
+            size="md"
+            colorScheme="blue"
+            isChecked={saveMetadata}
+            onChange={Togglesave}
+          >
+            Save Metadata
+          </Checkbox>
           {/* <div style={{ display:'flex', justifyContent:'center'}}> */}
           <Button
             onClick={handleButtonClick}
@@ -294,10 +309,7 @@ export default ({
             width="100px"
             type="submit"
             isDisabled={
-              !Service_Discovery_Data ||
-              !authenticationData ||
-              isEmpty ||
-              projectData.projectName === ""
+              !authenticationData || isEmpty || projectData.projectName === ""
             }
           >
             Next
@@ -305,11 +317,11 @@ export default ({
           {showModal && (
             <DeployModal
               onSubmit={onSubmit}
-              isLoading={isLoading} 
+              isLoading={isLoading}
               projectData={projectData}
+              onClose={handleCloseModal}
             />
           )}
-          <br />
 
           {isEmpty || projectData.projectName === "" ? (
             <p
@@ -336,19 +348,6 @@ export default ({
             </p>
           ) : (
             <p style={{ marginBottom: "5px" }}></p>
-          )}
-          {!Service_Discovery_Data ? (
-            <p
-              style={{
-                fontSize: "10px",
-                color: "red",
-                marginTop: "5px",
-              }}
-            >
-              Please select Service Discovery type
-            </p>
-          ) : (
-            <></>
           )}
         </div>
       </aside>

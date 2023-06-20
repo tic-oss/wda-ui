@@ -14,49 +14,55 @@ import {
   Alert,
   AlertIcon,
   Flex,
-  Spinner
+  Spinner,
+  ModalCloseButton,
 } from "@chakra-ui/react";
 import azure from "../../../src/assets/Azure.png";
 import aws from "../../../src/assets/aws.png";
 
-const DeployModal = ({ onSubmit, isLoading, projectData }) => {
+const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [checkLength, setCheckLength] = useState(false);
+  const [DeploymentData, setDeploymentData] = useState({});
+
   const handleImageClick = (image) => {
     setSelectedImage(image);
+
+    let ProviderStates
+    if(image === 'aws'){
+      ProviderStates={
+        awsAccountId: "",
+        awsRegion: "",
+        kubernetesStorageClassName: "",
+      }
+    }
+    else {
+      ProviderStates={
+          location: "canadacentral",
+          acrRegistry: "",
+          resourcegroupname: "",
+          subscriptionId: "",
+          tenantId: "",
+      }
+    }
+    ProviderStates = {...ProviderStates, 
+      deploymentType: "",
+      enableECK: "false",
+      clusterName: "",
+      kubernetesUseDynamicStorage: "true",
+      kubernetesNamespace: "",
+      ingressType: "istio",
+      monitoring: "",
+      ingressDomain: "",
+      k8sWebUI: "",
+    }
     setDeploymentData((prevState) => ({
       ...prevState,
       cloudProvider: image,
+      ...ProviderStates
     }));
   };
-  const IntialState = {
-    deploymentType: "",
-    enableECK: "false",
-    ...(selectedImage === "azure"
-    ? {
-      location: "",
-      acrRegistry: "",
-      resourcegroupname: "",
-      subscriptionId: "",
-      tenantId: "",
-    }
-    : {}),
-    ...(selectedImage === "aws"
-    ? {
-      awsAccountId: "",
-      awsRegion: "",
-      kubernetesStorageClassName: "",
-    }
-    : {}),
-    clusterName: "",
-    kubernetesUseDynamicStorage: "true",
-    kubernetesNamespace: "",
-    ingressType: "istio",
-    monitoring: "",
-    ingressDomain: "",
-    k8sWebUI: "",
-  };
-  const [DeploymentData, setDeploymentData] = useState(IntialState);
+
   const handleKeyPress = (event) => {
     const charCode = event.which ? event.which : event.keyCode;
     if ((charCode >= 48 && charCode <= 57) || charCode === 8) {
@@ -78,23 +84,38 @@ const DeployModal = ({ onSubmit, isLoading, projectData }) => {
     } else setCheckLength(false);
   };
   function handleSubmit(DeploymentData) {
-    if(DeploymentData.kubernetesUseDynamicStorage === 'false')
-    delete DeploymentData?.kubernetesStorageClassName
+    let FinalData = {...DeploymentData}
+
+    if(FinalData.cloudProvider === 'aws'){
+      delete FinalData?.location
+      delete FinalData?.acrRegistry
+      delete FinalData?.resourcegroupname
+      delete FinalData?.subscriptionId
+      delete FinalData?.tenantId
+    }
+    else {
+      delete FinalData?.awsAccountId
+      delete FinalData?.awsRegion
+      delete FinalData?.kubernetesStorageClassName
+    }
+    if (FinalData.kubernetesUseDynamicStorage === "false")
+      delete FinalData?.kubernetesStorageClassName;
     if (selectedImage === "aws") {
-      !checkLength && onSubmit({...projectData, deployment: DeploymentData});
+      !checkLength && onSubmit({ ...projectData, deployment: FinalData });
     } else if (selectedImage === "azure") {
-      onSubmit({...projectData, deployment: DeploymentData});
+      onSubmit({ ...projectData, deployment: FinalData });
     }
   }
   const [isOpen, setIsOpen] = useState(true);
 
   return (
-    <Modal isOpen={isOpen}>
+    <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
           <h2 style={{ display: "inline-block" }}>Deployment Infrastructure</h2>
         </ModalHeader>
+        <ModalCloseButton onClick={onClose} />
         <ModalBody
           style={{
             maxHeight: "calc(100vh - 200px)",
@@ -119,10 +140,11 @@ const DeployModal = ({ onSubmit, isLoading, projectData }) => {
                 marginBottom: "10px",
                 width: "120px",
                 cursor: "pointer",
+                marginRight: "10px",
                 border:
                   selectedImage === "azure"
                     ? "2px solid #3182CE"
-                    : "2px solid transparent",
+                    : "2px solid #d9d9d9",
               }}
             />
             <img
@@ -138,7 +160,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData }) => {
                 border:
                   selectedImage === "aws"
                     ? "2px solid #3182CE"
-                    : "2px solid transparent",
+                    : "2px solid #d9d9d9",
               }}
             />
           </div>
@@ -200,9 +222,6 @@ const DeployModal = ({ onSubmit, isLoading, projectData }) => {
                   value={DeploymentData.location}
                   onChange={(e) => handleData("location", e.target.value)}
                 >
-                  <option value="" disabled>
-                    Select an option
-                  </option>
                   <option value="canadacentral">Canada Central</option>
                 </Select>
               </FormControl>
@@ -226,7 +245,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData }) => {
                 ></Input>
               </FormControl>
               {DeploymentData.awsAccountId &&
-                DeploymentData.awsAccountId.length != 12 && (
+                DeploymentData.awsAccountId.length !== 12 && (
                   <Alert
                     status="error"
                     height="12px"
@@ -310,22 +329,23 @@ const DeployModal = ({ onSubmit, isLoading, projectData }) => {
                   <option value="false">No</option>
                 </Select>
               </FormControl>
-              {DeploymentData.kubernetesUseDynamicStorage === "true" && (
-                <FormControl>
-                  <FormLabel>Storage Class Name</FormLabel>
-                  <Input
-                    mb={4}
-                    variant="outline"
-                    id="kubernetesStorageClassName"
-                    placeholder="Kubernetes Storage Class Name"
-                    borderColor={"black"}
-                    value={DeploymentData.kubernetesStorageClassName}
-                    onChange={(e) =>
-                      handleData("kubernetesStorageClassName", e.target.value)
-                    }
-                  />
-                </FormControl>
-              )}
+              {DeploymentData.kubernetesUseDynamicStorage === "true" &&
+                selectedImage !== "azure" && (
+                  <FormControl>
+                    <FormLabel>Storage Class Name</FormLabel>
+                    <Input
+                      mb={4}
+                      variant="outline"
+                      id="kubernetesStorageClassName"
+                      placeholder="Kubernetes Storage Class Name"
+                      borderColor={"black"}
+                      value={DeploymentData.kubernetesStorageClassName}
+                      onChange={(e) =>
+                        handleData("kubernetesStorageClassName", e.target.value)
+                      }
+                    />
+                  </FormControl>
+                )}
 
               <FormControl>
                 <FormLabel>Namespace</FormLabel>
@@ -354,7 +374,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData }) => {
                   <option value="istio">Istio</option>
                 </Select>
               </FormControl>
-              {DeploymentData.ingressType == "istio" && (
+              {DeploymentData.ingressType === "istio" && (
                 <FormControl>
                   <FormLabel>Ingress Domain Name</FormLabel>
                   <Input
@@ -423,8 +443,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData }) => {
           </Button>
           <Button
             onClick={() => {
-              handleSubmit(DeploymentData) ||
-                isLoading(true);
+              handleSubmit(DeploymentData) || isLoading(true);
             }}
             mt={4}
             border="2px"

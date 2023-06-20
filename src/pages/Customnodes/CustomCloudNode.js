@@ -6,7 +6,7 @@ const handleStyle = { left: 25 };
 
 function CustomCloudNode({ data, isConnectable }) {
 
-  const cloudProvider= data.cloudProvider
+  const cloudProvider= data.data.cloudProvider
 
   return (
     <div>

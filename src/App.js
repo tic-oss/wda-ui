@@ -42,7 +42,7 @@ function App() {
             <Route exact path="/products">
               <Products />
             </Route>
-            <Route exact path="/designer">
+            <Route exact path="/mindmap">
               <PrivateRoute>
                 <Designer />
               </PrivateRoute>
