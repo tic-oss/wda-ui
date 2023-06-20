@@ -48,14 +48,14 @@ function App() {
               </PrivateRoute>
             </Route>
             <Route exact path="/projects">
-              {/* <PrivateRoute> */}
+              <PrivateRoute>
                   <Projects/>
-              {/* </PrivateRoute> */}
+              </PrivateRoute>
             </Route>
-            <Route exact path="/project/:id">
-            {/* <PrivateRoute> */}
+            <Route exact path="/projects/:id">
+            <PrivateRoute>
                   <Project/>
-              {/* </PrivateRoute> */}
+              </PrivateRoute>
             </Route>
             <Route exact path="/docs">
               <DocHome />

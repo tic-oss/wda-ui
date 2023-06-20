@@ -28,12 +28,12 @@ function Projects() {
     if (column === "Architecture")
       history.push({
         // pathname: navigate.focus(),
-        pathname: "/project/" + name,
+        pathname: "/projects/" + name,
         state: data,
       });
     else
       history.push({
-        pathname: "/project/" + name,
+        pathname: "/projects/" + name,
         state: data,
       });
   };
