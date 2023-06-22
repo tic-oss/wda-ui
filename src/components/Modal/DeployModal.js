@@ -16,9 +16,11 @@ import {
   Flex,
   Spinner,
   ModalCloseButton,
+  Tooltip,
 } from "@chakra-ui/react";
 import azure from "../../../src/assets/Azure.png";
 import aws from "../../../src/assets/aws.png";
+import { InfoIcon } from "@chakra-ui/icons";
 
 const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -120,8 +122,17 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>
+        <ModalHeader style={{display:'flex',justifyContent:'space-between'}}>
           <h2 style={{ display: "inline-block" }}>Deployment Infrastructure</h2>
+          <Tooltip
+            hasArrow
+            label="Infrastructure deployment includes all the prerequisites for the network function to be successfully deployed and configured"
+            bg="gray.300"
+            color="black"
+            placement='bottom-end'
+          >
+            <InfoIcon marginRight="20px" style={{fontSize:'16px', color:'#a6a6a6'}} />
+          </Tooltip>
         </ModalHeader>
         <ModalCloseButton onClick={onClose} />
         <ModalBody
@@ -464,6 +475,15 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
           )}
         </ModalBody>
         <ModalFooter>
+          <Tooltip
+            hasArrow
+            label="Skip button allows you to submit the form without infrastructure and if you want deployment infrastructure to be included in your project click on the desired deployement fill the details and click on submit"
+            bg="gray.300"
+            color="black"
+            placement='top'
+          >
+            <InfoIcon marginRight="10px" marginTop="10px" style={{fontSize:'16px', color:'#a6a6a6'}}/>
+          </Tooltip>
           <Button
             onClick={() => {
               onSubmit(projectData) || isLoading(true);
