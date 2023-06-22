@@ -133,7 +133,7 @@ const Designer = () => {
               setLocalenvironmentCount(0);
             } else if (change.id === "logManagement")
               updatedNodes.cloudProvider.data["enableECK"] = "false";
-
+            console.log(change,'Chanfe')
             delete updatedNodes[change.id];
             break;
 
@@ -159,6 +159,7 @@ const Designer = () => {
     setEdges((oldEdges) => {
       const updatedEdges = { ...oldEdges };
       console.log(changes, updatedEdges);
+      let UpdatedNodes = { ...Nodes }
       changes.forEach((change) => {
         switch (change.type) {
           case "add":
@@ -167,15 +168,13 @@ const Designer = () => {
             break;
           case "remove":
             let [sourceId, targetId] = change.id.split("-");
-            if (
-              targetId.startsWith("Database") &&
-              sourceId.startsWith("Service")
-            ) {
-              let UpdatedNodes = { ...Nodes };
-              delete UpdatedNodes[sourceId].data.prodDatabaseType;
+            if ( targetId.startsWith("Database") ) {
+              UpdatedNodes[targetId].data.isConnected = false
+              if(sourceId.startsWith("Service") || sourceId.startsWith('UI'))
+                delete UpdatedNodes[sourceId].data.prodDatabaseType;
               setNodes(UpdatedNodes);
             }
-            delete updatedEdges[change.id];
+              delete updatedEdges[change.id];
             // Handle remove event
             break;
           case "update":
@@ -221,8 +220,8 @@ const Designer = () => {
       )
     ) {
       // Validation of service Node to check if it has database or not
-      setEdges((els) => updateEdge(oldEdge, newConnection, els));
-      MergeData(newConnection.source, newConnection.target, Nodes);
+        setEdges((els) => updateEdge(oldEdge, newConnection, els));
+        MergeData(newConnection.source, newConnection.target, Nodes);
     }
   }, []);
 
@@ -287,7 +286,7 @@ const Designer = () => {
           id: getId("Database"),
           type: "selectorNode",
           position,
-          data: { prodDatabaseType: prodDatabaseType },
+          data: { prodDatabaseType: prodDatabaseType, isConnected: false },
           style: { border: "1px solid", padding: "4px 4px" },
         };
         setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
@@ -427,7 +426,7 @@ const Designer = () => {
         let sourceNode = AllNodes[sourceId];
         let targetNode = AllNodes[targetId];
         console.log(sourceNode, targetNode);
-        AllNodes[sourceId].data = { ...sourceNode.data, ...targetNode.data };
+        AllNodes[sourceId].data = { ...sourceNode.data, prodDatabaseType :targetNode.data.prodDatabaseType };
         setNodes({ ...AllNodes });
       }
     }
@@ -578,16 +577,20 @@ const Designer = () => {
     params.markerEnd = { type: MarkerType.ArrowClosed };
     params.type = "straight";
     params.data = {};
-
+    const targetNode = Nodes[params.target]
     if (
       !(
         params.target.startsWith("Database") &&
         Nodes[params.source]?.data["prodDatabaseType"]
       )
     ) {
+      console.log(targetNode,'Target')
       // Validation of service Node to check if it has database or not
-      setEdges((eds) => addEdge(params, eds));
-      MergeData(params.source, params.target, Nodes);
+      if(!targetNode.data.isConnected){
+        targetNode.data.isConnected = true
+        setEdges((eds) => addEdge(params, eds,Nodes));
+        MergeData(params.source, params.target, Nodes);
+      }
     }
   }, []);
 
