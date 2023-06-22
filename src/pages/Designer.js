@@ -65,7 +65,7 @@ const Designer = () => {
     return { ...edges, [edgeId]: { id: edgeId, ...edgeParams } };
   };
 
-  const updateEdge = (oldEdge, newConnection, edges) => {
+  const updateEdge = (oldEdge, newConnection, edges,Nodes) => {
     console.log("OldEdge", oldEdge);
     console.log("New Connection", newConnection);
     console.log("Edges", edges);
@@ -78,7 +78,9 @@ const Designer = () => {
       [newEdgeId]: { id: newEdgeId, ...newConnection },
     };
     if (oldEdge.id !== newEdgeId) delete updatedEdges[oldEdge.id];
-
+    const oldSourceNode = Nodes[oldEdge.source]
+    delete oldSourceNode?.data?.prodDatabaseType
+    setNodes((prev)=>({...prev,[oldSourceNode.id]:oldSourceNode}))
     return updatedEdges;
   };
 
@@ -220,7 +222,7 @@ const Designer = () => {
       )
     ) {
       // Validation of service Node to check if it has database or not
-        setEdges((els) => updateEdge(oldEdge, newConnection, els));
+        setEdges((els) => updateEdge(oldEdge, newConnection, els,Nodes));
         MergeData(newConnection.source, newConnection.target, Nodes);
     }
   }, []);
@@ -233,6 +235,7 @@ const Designer = () => {
           // If the edge is removed between Service and Database
           let UpdatedNodes = { ...Nodes };
           delete UpdatedNodes[edge.source].data.prodDatabaseType;
+          UpdatedNodes[edge.target].data.isConnected = false
           setNodes(UpdatedNodes);
         }
         delete AllEdges[edge.id];
