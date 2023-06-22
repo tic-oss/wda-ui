@@ -21,8 +21,6 @@ const DeploymentModal = ({
   awsRegion,
   kubernetesStorageClassName,
   azureLocation,
-  acrRegistry,
-  resourcegroupname,
   subscriptionId,
   tenantId,
   clusterName,
@@ -59,17 +57,6 @@ const DeploymentModal = ({
             {cloudName === "azure" && (
               <div>
                 <FormControl>
-                  <FormLabel>Azure Registry</FormLabel>
-                  <Input
-                    mb={4}
-                    variant="outline"
-                    id="acrRegistry"
-                    borderColor={"black"}
-                    value={acrRegistry}
-                    disabled={true}
-                  ></Input>
-                </FormControl>
-                <FormControl>
                   <FormLabel>Subscription Id</FormLabel>
                   <Input
                     mb={4}
@@ -88,17 +75,6 @@ const DeploymentModal = ({
                     id="tenantId"
                     borderColor={"black"}
                     value={tenantId}
-                    disabled={true}
-                  ></Input>
-                </FormControl>
-                <FormControl>
-                  <FormLabel>Resource Group Name</FormLabel>
-                  <Input
-                    mb={4}
-                    variant="outline"
-                    id="resourcegroupname"
-                    borderColor={"black"}
-                    value={resourcegroupname}
                     disabled={true}
                   ></Input>
                 </FormControl>

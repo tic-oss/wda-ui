@@ -21,6 +21,7 @@ import {
 import azure from "../../../src/assets/Azure.png";
 import aws from "../../../src/assets/aws.png";
 import { InfoIcon } from "@chakra-ui/icons";
+// import mini from "../../assets/mini.jpeg";
 
 const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -41,8 +42,6 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
     } else {
       ProviderStates = {
         location: "canadacentral",
-        acrRegistry: "",
-        resourcegroupname: "",
         subscriptionId: "",
         tenantId: "",
       };
@@ -99,8 +98,6 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
 
     if (FinalData.cloudProvider === "aws") {
       delete FinalData?.location;
-      delete FinalData?.acrRegistry;
-      delete FinalData?.resourcegroupname;
       delete FinalData?.subscriptionId;
       delete FinalData?.tenantId;
     } else {
@@ -122,16 +119,21 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader style={{display:'flex',justifyContent:'space-between'}}>
+        <ModalHeader
+          style={{ display: "flex", justifyContent: "space-between" }}
+        >
           <h2 style={{ display: "inline-block" }}>Deployment Infrastructure</h2>
           <Tooltip
             hasArrow
             label="Infrastructure deployment includes all the prerequisites for the network function to be successfully deployed and configured"
             bg="gray.300"
             color="black"
-            placement='bottom-end'
+            placement="bottom-end"
           >
-            <InfoIcon marginRight="20px" style={{fontSize:'16px', color:'#a6a6a6'}} />
+            <InfoIcon
+              marginRight="20px"
+              style={{ fontSize: "16px", color: "#a6a6a6" }}
+            />
           </Tooltip>
         </ModalHeader>
         <ModalCloseButton onClick={onClose} />
@@ -182,20 +184,10 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                     : "2px solid #d9d9d9",
               }}
             />
+            {/* <img width="120px" src={mini} alt="minikubelogo" /> */}
           </div>
           {selectedImage === "azure" && (
             <div>
-              <FormControl>
-                <FormLabel>Azure Registry</FormLabel>
-                <Input
-                  mb={4}
-                  variant="outline"
-                  id="acrRegistry"
-                  borderColor={"black"}
-                  value={DeploymentData.acrRegistry}
-                  onChange={(e) => handleData("acrRegistry", e.target.value)}
-                ></Input>
-              </FormControl>
               <FormControl>
                 <FormLabel>Subscription Id</FormLabel>
                 <Input
@@ -218,7 +210,8 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                     mb={2}
                   >
                     <AlertIcon style={{ width: "14px", height: "14px" }} />
-                    Input value must be at least 36 digits
+                    Input value must be at least 36 characters and should be
+                    valid
                   </Alert>
                 )}
               <FormControl>
@@ -243,22 +236,10 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                     mb={2}
                   >
                     <AlertIcon style={{ width: "14px", height: "14px" }} />
-                    Input value must be at least 36 digits
+                    Input value must be at least 36 characters and should be
+                    valid
                   </Alert>
                 )}
-              <FormControl>
-                <FormLabel>Resource Group Name</FormLabel>
-                <Input
-                  mb={4}
-                  variant="outline"
-                  id="resourcegroupname"
-                  borderColor={"black"}
-                  value={DeploymentData.resourcegroupname}
-                  onChange={(e) =>
-                    handleData("resourcegroupname", e.target.value)
-                  }
-                ></Input>
-              </FormControl>
               <FormControl>
                 <FormLabel>Location</FormLabel>
                 <Select
@@ -480,9 +461,13 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
             label="Skip button allows you to submit the form without infrastructure and if you want deployment infrastructure to be included in your project click on the desired deployement fill the details and click on submit"
             bg="gray.300"
             color="black"
-            placement='top'
+            placement="top"
           >
-            <InfoIcon marginRight="10px" marginTop="10px" style={{fontSize:'16px', color:'#a6a6a6'}}/>
+            <InfoIcon
+              marginRight="10px"
+              marginTop="10px"
+              style={{ fontSize: "16px", color: "#a6a6a6" }}
+            />
           </Tooltip>
           <Button
             onClick={() => {
