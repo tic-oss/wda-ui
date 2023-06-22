@@ -23,29 +23,30 @@ import aws from "../../../src/assets/aws.png";
 const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [checkLength, setCheckLength] = useState(false);
+  const [checkAzureLength, setCheckAzureLength] = useState(false);
   const [DeploymentData, setDeploymentData] = useState({});
 
   const handleImageClick = (image) => {
     setSelectedImage(image);
 
-    let ProviderStates
-    if(image === 'aws'){
-      ProviderStates={
+    let ProviderStates;
+    if (image === "aws") {
+      ProviderStates = {
         awsAccountId: "",
         awsRegion: "",
         kubernetesStorageClassName: "",
-      }
+      };
+    } else {
+      ProviderStates = {
+        location: "canadacentral",
+        acrRegistry: "",
+        resourcegroupname: "",
+        subscriptionId: "",
+        tenantId: "",
+      };
     }
-    else {
-      ProviderStates={
-          location: "canadacentral",
-          acrRegistry: "",
-          resourcegroupname: "",
-          subscriptionId: "",
-          tenantId: "",
-      }
-    }
-    ProviderStates = {...ProviderStates, 
+    ProviderStates = {
+      ...ProviderStates,
       deploymentType: "",
       enableECK: "false",
       clusterName: "",
@@ -55,11 +56,11 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
       monitoring: "",
       ingressDomain: "",
       k8sWebUI: "",
-    }
+    };
     setDeploymentData((prevState) => ({
       ...prevState,
       cloudProvider: image,
-      ...ProviderStates
+      ...ProviderStates,
     }));
   };
 
@@ -75,6 +76,8 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
 
   const handleData = (column, value) => {
     if (column === "awsAccountId") validateInputValue(value);
+    if (column === "tenantId") validateAzureInputValue(value);
+    if (column === "subscriptionId") validateAzureInputValue(value);
     setDeploymentData((prev) => ({ ...prev, [column]: value }));
   };
 
@@ -83,27 +86,32 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
       setCheckLength(true);
     } else setCheckLength(false);
   };
-  function handleSubmit(DeploymentData) {
-    let FinalData = {...DeploymentData}
+  const validateAzureInputValue = (value) => {
+    if (value.length < 36) {
+      setCheckAzureLength(true);
+    } else setCheckAzureLength(false);
+  };
 
-    if(FinalData.cloudProvider === 'aws'){
-      delete FinalData?.location
-      delete FinalData?.acrRegistry
-      delete FinalData?.resourcegroupname
-      delete FinalData?.subscriptionId
-      delete FinalData?.tenantId
-    }
-    else {
-      delete FinalData?.awsAccountId
-      delete FinalData?.awsRegion
-      delete FinalData?.kubernetesStorageClassName
+  function handleSubmit(DeploymentData) {
+    let FinalData = { ...DeploymentData };
+
+    if (FinalData.cloudProvider === "aws") {
+      delete FinalData?.location;
+      delete FinalData?.acrRegistry;
+      delete FinalData?.resourcegroupname;
+      delete FinalData?.subscriptionId;
+      delete FinalData?.tenantId;
+    } else {
+      delete FinalData?.awsAccountId;
+      delete FinalData?.awsRegion;
+      delete FinalData?.kubernetesStorageClassName;
     }
     if (FinalData.kubernetesUseDynamicStorage === "false")
       delete FinalData?.kubernetesStorageClassName;
     if (selectedImage === "aws") {
       !checkLength && onSubmit({ ...projectData, deployment: FinalData });
     } else if (selectedImage === "azure") {
-      onSubmit({ ...projectData, deployment: FinalData });
+      !checkAzureLength && onSubmit({ ...projectData, deployment: FinalData });
     }
   }
   const [isOpen, setIsOpen] = useState(true);
@@ -184,10 +192,24 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                   variant="outline"
                   id="subscriptionId"
                   borderColor={"black"}
+                  maxLength="36"
                   value={DeploymentData.subscriptionId}
                   onChange={(e) => handleData("subscriptionId", e.target.value)}
                 ></Input>
               </FormControl>
+              {DeploymentData.subscriptionId &&
+                DeploymentData.subscriptionId.length !== 36 && (
+                  <Alert
+                    status="error"
+                    height="12px"
+                    fontSize="12px"
+                    borderRadius="3px"
+                    mb={2}
+                  >
+                    <AlertIcon style={{ width: "14px", height: "14px" }} />
+                    Input value must be at least 36 digits
+                  </Alert>
+                )}
               <FormControl>
                 <FormLabel>Tenant ID</FormLabel>
                 <Input
@@ -195,10 +217,24 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                   variant="outline"
                   id="tenantId"
                   borderColor={"black"}
+                  maxLength="36"
                   value={DeploymentData.tenantId}
                   onChange={(e) => handleData("tenantId", e.target.value)}
                 ></Input>
               </FormControl>
+              {DeploymentData.tenantId &&
+                DeploymentData.tenantId.length !== 36 && (
+                  <Alert
+                    status="error"
+                    height="12px"
+                    fontSize="12px"
+                    borderRadius="3px"
+                    mb={2}
+                  >
+                    <AlertIcon style={{ width: "14px", height: "14px" }} />
+                    Input value must be at least 36 digits
+                  </Alert>
+                )}
               <FormControl>
                 <FormLabel>Resource Group Name</FormLabel>
                 <Input
