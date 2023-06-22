@@ -54,7 +54,7 @@ function Projects() {
   return (
     <div>
       <TableContainer sx={{ margin: "5%" }}>
-        <Table variant="striped" colorScheme="gray">
+        <Table size="sm" colorScheme="gray">
           <Thead>
             <Tr>
               <Th>S.No</Th>
@@ -66,7 +66,7 @@ function Projects() {
             {data.map((project, index) => {
               return (
                 <Tr key={index}>
-                  <Td>{index+1}</Td>
+                  <Td>{index + 1}</Td>
                   <Td>
                     <Button
                       colorScheme="teal"
@@ -109,14 +109,16 @@ function Projects() {
                       >
                         {project.metadata.deployment.cloudProvider ===
                         "azure" ? (
-                          <img width="60px" src={azure} />
+                          <img width="40px" src={azure} />
                         ) : (
-                          <img width="60px" src={aws} />
+                          <img width="40px" src={aws} />
                         )}
                       </Button>
                     </Td>
                   ) : (
-                    <Td>-</Td>
+                    <Td>
+                      <span style={{ lineHeight: "40px" }}>-</span>
+                    </Td>
                   )}
                 </Tr>
               );
