@@ -21,7 +21,7 @@ import {
 import azure from "../../../src/assets/Azure.png";
 import aws from "../../../src/assets/aws.png";
 import { InfoIcon } from "@chakra-ui/icons";
-// import mini from "../../assets/mini.jpeg";
+import minikube from "../../assets/mini.jpeg";
 
 const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -38,7 +38,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
         awsRegion: "",
         kubernetesStorageClassName: "",
       };
-    } else {
+    } else if (image === "azure") {
       ProviderStates = {
         location: "canadacentral",
         subscriptionId: "",
@@ -56,6 +56,25 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
       monitoring: "",
       ingressDomain: "",
       k8sWebUI: "",
+    };
+    setDeploymentData((prevState) => ({
+      ...prevState,
+      cloudProvider: image,
+      ...ProviderStates,
+    }));
+  };
+  const handleImageClickMinikube = (image) => {
+    setSelectedImage(image);
+
+    let ProviderStates;
+    ProviderStates = {
+      ...ProviderStates,
+      kubernetesNamespace: "",
+      dockerRepositoryName: "",
+      ingressType: "istio",
+      enableECK: "false",
+      kubernetesUseDynamicStorage: "true",
+      monitoring: "",
     };
     setDeploymentData((prevState) => ({
       ...prevState,
@@ -101,10 +120,23 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
       delete FinalData?.location;
       delete FinalData?.subscriptionId;
       delete FinalData?.tenantId;
-    } else {
+      delete FinalData?.dockerRepositoryName;
+    } else if (FinalData.cloudProvider === "azure") {
       delete FinalData?.awsAccountId;
       delete FinalData?.awsRegion;
       delete FinalData?.kubernetesStorageClassName;
+      delete FinalData?.dockerRepositoryName;
+    } else {
+      delete FinalData?.location;
+      delete FinalData?.subscriptionId;
+      delete FinalData?.tenantId;
+      delete FinalData?.awsAccountId;
+      delete FinalData?.awsRegion;
+      delete FinalData?.kubernetesStorageClassName;
+      delete FinalData?.deploymentType;
+      delete FinalData?.clusterName;
+      delete FinalData?.ingressDomain;
+      delete FinalData?.k8sWebUI;
     }
     if (FinalData.kubernetesUseDynamicStorage === "false")
       delete FinalData?.kubernetesStorageClassName;
@@ -117,6 +149,8 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
       if (isAzureInputValid) {
         onSubmit({ ...projectData, deployment: FinalData });
       }
+    } else {
+      onSubmit({ ...projectData, deployment: FinalData });
     }
   }
   const [isOpen, setIsOpen] = useState(true);
@@ -183,6 +217,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                 padding: "10px",
                 marginBottom: "10px",
                 width: "120px",
+                marginRight: "10px",
                 cursor: "pointer",
                 border:
                   selectedImage === "aws"
@@ -190,7 +225,23 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                     : "2px solid #d9d9d9",
               }}
             />
-            {/* <img width="120px" src={mini} alt="minikubelogo" /> */}
+            <img
+              width="120px"
+              height="20px"
+              src={minikube}
+              alt="minikubelogo"
+              onClick={() => handleImageClickMinikube("minikube")}
+              style={{
+                padding: "10px",
+                marginBottom: "10px",
+                width: "120px",
+                cursor: "pointer",
+                border:
+                  selectedImage === "minikube"
+                    ? "2px solid #3182CE"
+                    : "2px solid #d9d9d9",
+              }}
+            />
           </div>
           {selectedImage === "azure" && (
             <div>
@@ -339,7 +390,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
               </FormControl>
             </div>
           )}
-          {selectedImage && (
+          {selectedImage && selectedImage !== "minikube" ? (
             <FormControl>
               <FormLabel>Deployment Type</FormLabel>
               <Select
@@ -356,6 +407,8 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                 <option value="kubernetes">Kubernetes</option>
               </Select>
             </FormControl>
+          ) : (
+            <></>
           )}
 
           {DeploymentData.deploymentType === "kubernetes" && (
@@ -488,6 +541,87 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
               </FormControl>
             </div>
           )}
+          {selectedImage === "minikube" && (
+            <>
+              <FormControl>
+                <FormLabel>Namespace</FormLabel>
+                <Input
+                  mb={4}
+                  variant="outline"
+                  id="kubernetesnamespace"
+                  placeholder="Kubernetes Namespace"
+                  borderColor={"black"}
+                  value={DeploymentData.kubernetesNamespace}
+                  onChange={(e) =>
+                    handleData("kubernetesNamespace", e.target.value)
+                  }
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel>Repository Name</FormLabel>
+                <Input
+                  mb={4}
+                  variant="outline"
+                  id="dockerRepositoryName"
+                  placeholder="Docker Repository Name"
+                  borderColor={"black"}
+                  value={DeploymentData.dockerRepositoryName}
+                  onChange={(e) =>
+                    handleData("dockerRepositoryName", e.target.value)
+                  }
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel>Ingress Type</FormLabel>
+                <Select
+                  mb={4}
+                  variant="outline"
+                  id="ingressType"
+                  borderColor={"black"}
+                  value={DeploymentData.ingressType}
+                  onChange={(e) => handleData("ingress", e.target.value)}
+                >
+                  <option value="istio">Istio</option>
+                </Select>
+              </FormControl>
+              <FormControl>
+                <FormLabel>Enable Dynamic Storage</FormLabel>
+                <Select
+                  mb={4}
+                  variant="outline"
+                  id="kubernetesUseDynamicStorage"
+                  borderColor={"black"}
+                  value={DeploymentData.kubernetesUseDynamicStorage}
+                  onChange={(e) =>
+                    handleData("kubernetesUseDynamicStorage", e.target.value)
+                  }
+                >
+                  <option value="" disabled>
+                    Select an option
+                  </option>
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </Select>
+              </FormControl>
+              <FormControl>
+                <FormLabel>Enable Monitoring</FormLabel>
+                <Select
+                  mb={4}
+                  variant="outline"
+                  id="monitoring"
+                  borderColor={"black"}
+                  value={DeploymentData.monitoring}
+                  onChange={(e) => handleData("monitoring", e.target.value)}
+                >
+                  <option value="" disabled>
+                    Select an option
+                  </option>
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </Select>
+              </FormControl>
+            </>
+          )}
         </ModalBody>
         <ModalFooter>
           <Tooltip
@@ -525,6 +659,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
             borderColor="green.500"
             width="100px"
             type="submit"
+            isDisabled={!selectedImage}
           >
             Submit
           </Button>

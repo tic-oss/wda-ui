@@ -31,6 +31,7 @@ const DeploymentModal = ({
   kubernetesNamespace,
   kubernetesUseDynamicStorage,
   monitoring,
+  dockerRepositoryName,
 }) => {
   return (
     <>
@@ -128,7 +129,7 @@ const DeploymentModal = ({
                 </FormControl>
               </div>
             )}
-            {cloudName && (
+            {cloudName && cloudName !== "minikube" ? (
               <FormControl>
                 <FormLabel>Deployment Type</FormLabel>
                 <Select
@@ -145,6 +146,8 @@ const DeploymentModal = ({
                   <option value="kubernetes">Kubernetes</option>
                 </Select>
               </FormControl>
+            ) : (
+              <></>
             )}
 
             {deploymentType === "kubernetes" && (
@@ -268,6 +271,81 @@ const DeploymentModal = ({
                   </Select>
                 </FormControl>
               </div>
+            )}
+            {cloudName === "minikube" && (
+              <>
+                <FormControl>
+                  <FormLabel>Namespace</FormLabel>
+                  <Input
+                    mb={4}
+                    variant="outline"
+                    id="kubernetesnamespace"
+                    placeholder="Kubernetes Namespace"
+                    borderColor={"black"}
+                    value={kubernetesNamespace}
+                    disabled={true}
+                  />
+                </FormControl>
+                <FormControl>
+                  <FormLabel>Repository Name</FormLabel>
+                  <Input
+                    mb={4}
+                    variant="outline"
+                    id="dockerRepositoryName"
+                    placeholder="Docker Repository Name"
+                    borderColor={"black"}
+                    value={dockerRepositoryName}
+                    disabled={true}
+                  />
+                </FormControl>
+                <FormControl>
+                  <FormLabel>Ingress Type</FormLabel>
+                  <Select
+                    mb={4}
+                    variant="outline"
+                    id="ingressType"
+                    borderColor={"black"}
+                    value={ingressType}
+                    disabled={true}
+                  >
+                    <option value="istio">Istio</option>
+                  </Select>
+                </FormControl>
+                <FormControl>
+                  <FormLabel>Enable Dynamic Storage</FormLabel>
+                  <Select
+                    mb={4}
+                    variant="outline"
+                    id="kubernetesUseDynamicStorage"
+                    borderColor={"black"}
+                    value={kubernetesUseDynamicStorage}
+                    disabled={true}
+                  >
+                    <option value="" disabled>
+                      Select an option
+                    </option>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                  </Select>
+                </FormControl>
+                <FormControl>
+                  <FormLabel>Enable Monitoring</FormLabel>
+                  <Select
+                    mb={4}
+                    variant="outline"
+                    id="monitoring"
+                    borderColor={"black"}
+                    value={monitoring}
+                    disabled={true}
+                  >
+                    <option value="" disabled>
+                      Select an option
+                    </option>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                  </Select>
+                </FormControl>
+              </>
             )}
           </ModalBody>
         </ModalContent>

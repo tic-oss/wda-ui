@@ -320,6 +320,7 @@ export default ({
               isLoading={isLoading}
               projectData={projectData}
               onClose={handleCloseModal}
+              Service_Discovery_Data={Service_Discovery_Data}
             />
           )}
 

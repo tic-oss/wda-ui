@@ -14,6 +14,7 @@ import { useState, useEffect } from "react";
 import { useKeycloak } from "@react-keycloak/web";
 import azure from "../../src/assets/Azure.png";
 import aws from "../../src/assets/aws.png";
+import minikube from "../../src/assets/mini.jpeg";
 
 function Projects() {
   const history = useHistory();
@@ -110,8 +111,11 @@ function Projects() {
                         {project.metadata.deployment.cloudProvider ===
                         "azure" ? (
                           <img width="40px" src={azure} />
-                        ) : (
+                        ) : project.metadata.deployment.cloudProvider ===
+                          "aws" ? (
                           <img width="40px" src={aws} />
+                        ) : (
+                          <img width="40px" src={minikube} />
                         )}
                       </Button>
                     </Td>

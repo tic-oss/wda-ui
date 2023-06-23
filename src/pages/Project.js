@@ -102,6 +102,8 @@ const Project = () => {
     azureLocation: "",
     subscriptionId: "",
     tenantId: "",
+
+    dockerRepositoryName:"",
   };
 
   const [appData, setAppData] = useState(DefaultAppData);
@@ -154,6 +156,14 @@ const Project = () => {
         azureLocation: element.data?.data?.azureLocation,
         subscriptionId: element.data?.data?.subscriptionId,
         tenantId: element.data?.data?.tenantId,
+      }));
+    } else if (element.data?.data?.cloudProvider === "minikube") {
+      setNodeType("Cloud");
+      setCloudName("minikube");
+      setCloudModal(true);
+      setData((prev) => ({
+        ...prev,
+        dockerRepositoryName: element.data?.data?.dockerRepositoryName,
       }));
     } else {
       setNodeType("other");
@@ -273,6 +283,7 @@ const Project = () => {
           kubernetesNamespace={data.kubernetesNamespace}
           kubernetesUseDynamicStorage={data.kubernetesUseDynamicStorage}
           monitoring={data.monitoring}
+          dockerRepositoryName={data.dockerRepositoryName}
         />
       )}
     </>
