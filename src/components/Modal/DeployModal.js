@@ -16,9 +16,12 @@ import {
   Flex,
   Spinner,
   ModalCloseButton,
+  Tooltip,
 } from "@chakra-ui/react";
 import azure from "../../../src/assets/Azure.png";
 import aws from "../../../src/assets/aws.png";
+import { InfoIcon } from "@chakra-ui/icons";
+import minikube from "../../assets/mini.jpeg";
 
 const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -28,24 +31,22 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
   const handleImageClick = (image) => {
     setSelectedImage(image);
 
-    let ProviderStates
-    if(image === 'aws'){
-      ProviderStates={
+    let ProviderStates;
+    if (image === "aws") {
+      ProviderStates = {
         awsAccountId: "",
         awsRegion: "",
         kubernetesStorageClassName: "",
-      }
+      };
+    } else if (image === "azure") {
+      ProviderStates = {
+        location: "canadacentral",
+        subscriptionId: "",
+        tenantId: "",
+      };
     }
-    else {
-      ProviderStates={
-          location: "canadacentral",
-          acrRegistry: "",
-          resourcegroupname: "",
-          subscriptionId: "",
-          tenantId: "",
-      }
-    }
-    ProviderStates = {...ProviderStates, 
+    ProviderStates = {
+      ...ProviderStates,
       deploymentType: "",
       enableECK: "false",
       clusterName: "",
@@ -55,11 +56,30 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
       monitoring: "",
       ingressDomain: "",
       k8sWebUI: "",
-    }
+    };
     setDeploymentData((prevState) => ({
       ...prevState,
       cloudProvider: image,
-      ...ProviderStates
+      ...ProviderStates,
+    }));
+  };
+  const handleImageClickMinikube = (image) => {
+    setSelectedImage(image);
+
+    let ProviderStates;
+    ProviderStates = {
+      ...ProviderStates,
+      kubernetesNamespace: "",
+      dockerRepositoryName: "",
+      ingressType: "istio",
+      enableECK: "false",
+      kubernetesUseDynamicStorage: "true",
+      monitoring: "",
+    };
+    setDeploymentData((prevState) => ({
+      ...prevState,
+      cloudProvider: image,
+      ...ProviderStates,
     }));
   };
 
@@ -75,6 +95,8 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
 
   const handleData = (column, value) => {
     if (column === "awsAccountId") validateInputValue(value);
+    if (column === "tenantId") validateAzureInputValue(value);
+    if (column === "subscriptionId") validateAzureInputValue(value);
     setDeploymentData((prev) => ({ ...prev, [column]: value }));
   };
 
@@ -83,26 +105,51 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
       setCheckLength(true);
     } else setCheckLength(false);
   };
-  function handleSubmit(DeploymentData) {
-    let FinalData = {...DeploymentData}
+  const validateAzureInputValue = (value) => {
+    const regexExp =
+      /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+    const isValidLength = value.length >= 36;
+    const isValidFormat = regexExp.test(value);
+    return isValidLength && isValidFormat;
+  };
 
-    if(FinalData.cloudProvider === 'aws'){
-      delete FinalData?.location
-      delete FinalData?.acrRegistry
-      delete FinalData?.resourcegroupname
-      delete FinalData?.subscriptionId
-      delete FinalData?.tenantId
-    }
-    else {
-      delete FinalData?.awsAccountId
-      delete FinalData?.awsRegion
-      delete FinalData?.kubernetesStorageClassName
+  function handleSubmit(DeploymentData) {
+    let FinalData = { ...DeploymentData };
+
+    if (FinalData.cloudProvider === "aws") {
+      delete FinalData?.location;
+      delete FinalData?.subscriptionId;
+      delete FinalData?.tenantId;
+      delete FinalData?.dockerRepositoryName;
+    } else if (FinalData.cloudProvider === "azure") {
+      delete FinalData?.awsAccountId;
+      delete FinalData?.awsRegion;
+      delete FinalData?.kubernetesStorageClassName;
+      delete FinalData?.dockerRepositoryName;
+    } else {
+      delete FinalData?.location;
+      delete FinalData?.subscriptionId;
+      delete FinalData?.tenantId;
+      delete FinalData?.awsAccountId;
+      delete FinalData?.awsRegion;
+      delete FinalData?.kubernetesStorageClassName;
+      delete FinalData?.deploymentType;
+      delete FinalData?.clusterName;
+      delete FinalData?.ingressDomain;
+      delete FinalData?.k8sWebUI;
     }
     if (FinalData.kubernetesUseDynamicStorage === "false")
       delete FinalData?.kubernetesStorageClassName;
     if (selectedImage === "aws") {
       !checkLength && onSubmit({ ...projectData, deployment: FinalData });
     } else if (selectedImage === "azure") {
+      const isAzureInputValid = validateAzureInputValue(
+        FinalData.subscriptionId
+      );
+      if (isAzureInputValid) {
+        onSubmit({ ...projectData, deployment: FinalData });
+      }
+    } else {
       onSubmit({ ...projectData, deployment: FinalData });
     }
   }
@@ -112,8 +159,22 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>
+        <ModalHeader
+          style={{ display: "flex", justifyContent: "space-between" }}
+        >
           <h2 style={{ display: "inline-block" }}>Deployment Infrastructure</h2>
+          <Tooltip
+            hasArrow
+            label="Infrastructure deployment includes all the prerequisites for the network function to be successfully deployed and configured"
+            bg="gray.300"
+            color="black"
+            placement="bottom-end"
+          >
+            <InfoIcon
+              marginRight="20px"
+              style={{ fontSize: "16px", color: "#a6a6a6" }}
+            />
+          </Tooltip>
         </ModalHeader>
         <ModalCloseButton onClick={onClose} />
         <ModalBody
@@ -156,9 +217,27 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                 padding: "10px",
                 marginBottom: "10px",
                 width: "120px",
+                marginRight: "10px",
                 cursor: "pointer",
                 border:
                   selectedImage === "aws"
+                    ? "2px solid #3182CE"
+                    : "2px solid #d9d9d9",
+              }}
+            />
+            <img
+              width="120px"
+              height="20px"
+              src={minikube}
+              alt="minikubelogo"
+              onClick={() => handleImageClickMinikube("minikube")}
+              style={{
+                padding: "10px",
+                marginBottom: "10px",
+                width: "120px",
+                cursor: "pointer",
+                border:
+                  selectedImage === "minikube"
                     ? "2px solid #3182CE"
                     : "2px solid #d9d9d9",
               }}
@@ -167,27 +246,45 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
           {selectedImage === "azure" && (
             <div>
               <FormControl>
-                <FormLabel>Azure Registry</FormLabel>
-                <Input
-                  mb={4}
-                  variant="outline"
-                  id="acrRegistry"
-                  borderColor={"black"}
-                  value={DeploymentData.acrRegistry}
-                  onChange={(e) => handleData("acrRegistry", e.target.value)}
-                ></Input>
-              </FormControl>
-              <FormControl>
                 <FormLabel>Subscription Id</FormLabel>
                 <Input
                   mb={4}
                   variant="outline"
                   id="subscriptionId"
                   borderColor={"black"}
+                  maxLength="36"
                   value={DeploymentData.subscriptionId}
                   onChange={(e) => handleData("subscriptionId", e.target.value)}
                 ></Input>
               </FormControl>
+              {DeploymentData.subscriptionId && (
+                <>
+                  {DeploymentData.subscriptionId.length < 36 && (
+                    <Alert
+                      status="error"
+                      height="12px"
+                      fontSize="12px"
+                      borderRadius="3px"
+                      mb={2}
+                    >
+                      <AlertIcon style={{ width: "14px", height: "14px" }} />
+                      Input value must be at least 36 characters
+                    </Alert>
+                  )}
+                  {!validateAzureInputValue(DeploymentData.subscriptionId) && (
+                    <Alert
+                      status="error"
+                      height="12px"
+                      fontSize="12px"
+                      borderRadius="3px"
+                      mb={2}
+                    >
+                      <AlertIcon style={{ width: "14px", height: "14px" }} />
+                      Input value does not match the required format
+                    </Alert>
+                  )}
+                </>
+              )}
               <FormControl>
                 <FormLabel>Tenant ID</FormLabel>
                 <Input
@@ -195,23 +292,39 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                   variant="outline"
                   id="tenantId"
                   borderColor={"black"}
+                  maxLength="36"
                   value={DeploymentData.tenantId}
                   onChange={(e) => handleData("tenantId", e.target.value)}
                 ></Input>
               </FormControl>
-              <FormControl>
-                <FormLabel>Resource Group Name</FormLabel>
-                <Input
-                  mb={4}
-                  variant="outline"
-                  id="resourcegroupname"
-                  borderColor={"black"}
-                  value={DeploymentData.resourcegroupname}
-                  onChange={(e) =>
-                    handleData("resourcegroupname", e.target.value)
-                  }
-                ></Input>
-              </FormControl>
+              {DeploymentData.tenantId && (
+                <>
+                  {DeploymentData.tenantId.length < 36 && (
+                    <Alert
+                      status="error"
+                      height="12px"
+                      fontSize="12px"
+                      borderRadius="3px"
+                      mb={2}
+                    >
+                      <AlertIcon style={{ width: "14px", height: "14px" }} />
+                      Input value must be at least 36 characters
+                    </Alert>
+                  )}
+                  {!validateAzureInputValue(DeploymentData.tenantId) && (
+                    <Alert
+                      status="error"
+                      height="12px"
+                      fontSize="12px"
+                      borderRadius="3px"
+                      mb={2}
+                    >
+                      <AlertIcon style={{ width: "14px", height: "14px" }} />
+                      Input value does not match the required format
+                    </Alert>
+                  )}
+                </>
+              )}
               <FormControl>
                 <FormLabel>Location</FormLabel>
                 <Select
@@ -277,7 +390,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
               </FormControl>
             </div>
           )}
-          {selectedImage && (
+          {selectedImage && selectedImage !== "minikube" ? (
             <FormControl>
               <FormLabel>Deployment Type</FormLabel>
               <Select
@@ -294,6 +407,8 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                 <option value="kubernetes">Kubernetes</option>
               </Select>
             </FormControl>
+          ) : (
+            <></>
           )}
 
           {DeploymentData.deploymentType === "kubernetes" && (
@@ -426,8 +541,102 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
               </FormControl>
             </div>
           )}
+          {selectedImage === "minikube" && (
+            <>
+              <FormControl>
+                <FormLabel>Namespace</FormLabel>
+                <Input
+                  mb={4}
+                  variant="outline"
+                  id="kubernetesnamespace"
+                  placeholder="Kubernetes Namespace"
+                  borderColor={"black"}
+                  value={DeploymentData.kubernetesNamespace}
+                  onChange={(e) =>
+                    handleData("kubernetesNamespace", e.target.value)
+                  }
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel>Repository Name</FormLabel>
+                <Input
+                  mb={4}
+                  variant="outline"
+                  id="dockerRepositoryName"
+                  placeholder="Docker Repository Name"
+                  borderColor={"black"}
+                  value={DeploymentData.dockerRepositoryName}
+                  onChange={(e) =>
+                    handleData("dockerRepositoryName", e.target.value)
+                  }
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel>Ingress Type</FormLabel>
+                <Select
+                  mb={4}
+                  variant="outline"
+                  id="ingressType"
+                  borderColor={"black"}
+                  value={DeploymentData.ingressType}
+                  onChange={(e) => handleData("ingress", e.target.value)}
+                >
+                  <option value="istio">Istio</option>
+                </Select>
+              </FormControl>
+              <FormControl>
+                <FormLabel>Enable Dynamic Storage</FormLabel>
+                <Select
+                  mb={4}
+                  variant="outline"
+                  id="kubernetesUseDynamicStorage"
+                  borderColor={"black"}
+                  value={DeploymentData.kubernetesUseDynamicStorage}
+                  onChange={(e) =>
+                    handleData("kubernetesUseDynamicStorage", e.target.value)
+                  }
+                >
+                  <option value="" disabled>
+                    Select an option
+                  </option>
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </Select>
+              </FormControl>
+              <FormControl>
+                <FormLabel>Enable Monitoring</FormLabel>
+                <Select
+                  mb={4}
+                  variant="outline"
+                  id="monitoring"
+                  borderColor={"black"}
+                  value={DeploymentData.monitoring}
+                  onChange={(e) => handleData("monitoring", e.target.value)}
+                >
+                  <option value="" disabled>
+                    Select an option
+                  </option>
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </Select>
+              </FormControl>
+            </>
+          )}
         </ModalBody>
         <ModalFooter>
+          <Tooltip
+            hasArrow
+            label="Skip button allows you to submit the form without infrastructure and if you want deployment infrastructure to be included in your project click on the desired deployement fill the details and click on submit"
+            bg="gray.300"
+            color="black"
+            placement="top"
+          >
+            <InfoIcon
+              marginRight="10px"
+              marginTop="10px"
+              style={{ fontSize: "16px", color: "#a6a6a6" }}
+            />
+          </Tooltip>
           <Button
             onClick={() => {
               onSubmit(projectData) || isLoading(true);
@@ -450,6 +659,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
             borderColor="green.500"
             width="100px"
             type="submit"
+            isDisabled={!selectedImage}
           >
             Submit
           </Button>

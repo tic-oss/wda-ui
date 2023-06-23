@@ -400,9 +400,10 @@ const Designer = () => {
     }
     setNodes(UpdatedNodes);
     setopen(false);
-  };
+  }; 
 
   useEffect(() => {
+    document.title = 'WDA';
     setNodes({
       UI: {
         id: "UI",
