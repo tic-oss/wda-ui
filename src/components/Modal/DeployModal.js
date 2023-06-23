@@ -26,7 +26,6 @@ import { InfoIcon } from "@chakra-ui/icons";
 const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [checkLength, setCheckLength] = useState(false);
-  const [checkAzureLength, setCheckAzureLength] = useState(false);
   const [DeploymentData, setDeploymentData] = useState({});
 
   const handleImageClick = (image) => {
@@ -88,9 +87,11 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
     } else setCheckLength(false);
   };
   const validateAzureInputValue = (value) => {
-    if (value.length < 36) {
-      setCheckAzureLength(true);
-    } else setCheckAzureLength(false);
+    const regexExp =
+      /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+    const isValidLength = value.length >= 36;
+    const isValidFormat = regexExp.test(value);
+    return isValidLength && isValidFormat;
   };
 
   function handleSubmit(DeploymentData) {
@@ -110,7 +111,12 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
     if (selectedImage === "aws") {
       !checkLength && onSubmit({ ...projectData, deployment: FinalData });
     } else if (selectedImage === "azure") {
-      !checkAzureLength && onSubmit({ ...projectData, deployment: FinalData });
+      const isAzureInputValid = validateAzureInputValue(
+        FinalData.subscriptionId
+      );
+      if (isAzureInputValid) {
+        onSubmit({ ...projectData, deployment: FinalData });
+      }
     }
   }
   const [isOpen, setIsOpen] = useState(true);
@@ -200,20 +206,34 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                   onChange={(e) => handleData("subscriptionId", e.target.value)}
                 ></Input>
               </FormControl>
-              {DeploymentData.subscriptionId &&
-                DeploymentData.subscriptionId.length !== 36 && (
-                  <Alert
-                    status="error"
-                    height="12px"
-                    fontSize="12px"
-                    borderRadius="3px"
-                    mb={2}
-                  >
-                    <AlertIcon style={{ width: "14px", height: "14px" }} />
-                    Input value must be at least 36 characters and should be
-                    valid
-                  </Alert>
-                )}
+              {DeploymentData.subscriptionId && (
+                <>
+                  {DeploymentData.subscriptionId.length < 36 && (
+                    <Alert
+                      status="error"
+                      height="12px"
+                      fontSize="12px"
+                      borderRadius="3px"
+                      mb={2}
+                    >
+                      <AlertIcon style={{ width: "14px", height: "14px" }} />
+                      Input value must be at least 36 characters
+                    </Alert>
+                  )}
+                  {!validateAzureInputValue(DeploymentData.subscriptionId) && (
+                    <Alert
+                      status="error"
+                      height="12px"
+                      fontSize="12px"
+                      borderRadius="3px"
+                      mb={2}
+                    >
+                      <AlertIcon style={{ width: "14px", height: "14px" }} />
+                      Input value does not match the required format
+                    </Alert>
+                  )}
+                </>
+              )}
               <FormControl>
                 <FormLabel>Tenant ID</FormLabel>
                 <Input
@@ -226,20 +246,34 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                   onChange={(e) => handleData("tenantId", e.target.value)}
                 ></Input>
               </FormControl>
-              {DeploymentData.tenantId &&
-                DeploymentData.tenantId.length !== 36 && (
-                  <Alert
-                    status="error"
-                    height="12px"
-                    fontSize="12px"
-                    borderRadius="3px"
-                    mb={2}
-                  >
-                    <AlertIcon style={{ width: "14px", height: "14px" }} />
-                    Input value must be at least 36 characters and should be
-                    valid
-                  </Alert>
-                )}
+              {DeploymentData.tenantId && (
+                <>
+                  {DeploymentData.tenantId.length < 36 && (
+                    <Alert
+                      status="error"
+                      height="12px"
+                      fontSize="12px"
+                      borderRadius="3px"
+                      mb={2}
+                    >
+                      <AlertIcon style={{ width: "14px", height: "14px" }} />
+                      Input value must be at least 36 characters
+                    </Alert>
+                  )}
+                  {!validateAzureInputValue(DeploymentData.tenantId) && (
+                    <Alert
+                      status="error"
+                      height="12px"
+                      fontSize="12px"
+                      borderRadius="3px"
+                      mb={2}
+                    >
+                      <AlertIcon style={{ width: "14px", height: "14px" }} />
+                      Input value does not match the required format
+                    </Alert>
+                  )}
+                </>
+              )}
               <FormControl>
                 <FormLabel>Location</FormLabel>
                 <Select
