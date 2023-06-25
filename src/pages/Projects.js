@@ -59,7 +59,7 @@ function Projects() {
           <Thead>
             <Tr>
               <Th>S.No</Th>
-              <Th>Projects</Th>
+              <Th>Project</Th>
               <Th>View Infrastructure</Th>
             </Tr>
           </Thead>
@@ -121,7 +121,7 @@ function Projects() {
                     </Td>
                   ) : (
                     <Td>
-                      <span style={{ lineHeight: "40px" }}>-</span>
+                      <span style={{ lineHeight: "40px" }}>NA</span>
                     </Td>
                   )}
                 </Tr>
