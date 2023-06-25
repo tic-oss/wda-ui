@@ -60,7 +60,7 @@ function Projects() {
             <Tr>
               <Th>S.No</Th>
               <Th>Project</Th>
-              <Th>View Infrastructure</Th>
+              <Th>Infrastructure</Th>
             </Tr>
           </Thead>
           <Tbody>
