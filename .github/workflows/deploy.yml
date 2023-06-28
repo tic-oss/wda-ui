@@ -17,7 +17,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region:            ap-south-1
 
-        name: Update DNS name 
+      - name: Update DNS name 
         run: |
           echo "Updating API URL in .env.production..."
 
