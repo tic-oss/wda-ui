@@ -20,6 +20,7 @@ import CustomCloudNode from "./Customnodes/CustomCloudNode";
 import CustomLoadNode from "./Customnodes/CustomLoadNode";
 import CustomLocalenvironmentNode from "./Customnodes/CustomLocalenvironmentNode";
 import AlertModal from "../components/Modal/AlertModal";
+import resizeableNode from "./Customnodes/ResizeableNode";
 
 import "./../App.css";
 import EdgeModal from "../components/Modal/EdgeModal";
@@ -45,6 +46,7 @@ const nodeTypes = {
   selectorNode5: CustomCloudNode,
   selectorNode6: CustomLoadNode,
   selectorNode7: CustomLocalenvironmentNode,
+  ResizableNode : resizeableNode
 };
 
 const Designer = () => {
@@ -91,12 +93,17 @@ const Designer = () => {
       changes.forEach((change) => {
         switch (change.type) {
           case "dimensions":
+            console.log(change,'Dimensions')
+            if(change.resizing)
             updatedNodes[change.id] = {
               ...updatedNodes[change.id],
               position: {
                 ...updatedNodes[change.id].position,
-                ...change.dimensions,
               },
+            style:{
+              ...updatedNodes[change.id].style,
+              ...change.dimensions
+            }
             };
             break;
           case "position":
@@ -251,9 +258,8 @@ const Designer = () => {
     event.dataTransfer.dropEffect = "move";
   }, []);
 
-  const onclick = (e) => {
-    console.log(e);
-    const Id = e.target.dataset.id || e.target.name;
+  const onclick = (e,node) => {
+    const Id = e.target.dataset.id || e.target.name || node.id;
     console.log(Id);
     if (Id) {
       const type = Id.split("_")[0];
@@ -366,12 +372,11 @@ const Designer = () => {
       } else {
         const newNode = {
           id: getId(name),
-          type,
+          type:'ResizableNode',
           position,
           data: { label: name },
-          style: { border: "1px solid", padding: "4px 4px" },
+          style: { border: "1px solid", padding: "4px 4px", borderRadius:'15px' },
         };
-        if (name === "UI+Gateway") newNode.type = "input";
         setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
       }
     },
@@ -397,6 +402,7 @@ const Designer = () => {
     } else {
       setUniqueApplicationNames((prev) => [...prev, Data.applicationName]);
       UpdatedNodes[Isopen].data = { ...UpdatedNodes[Isopen].data, ...Data };
+      UpdatedNodes[Isopen].selected = false
     }
     setNodes(UpdatedNodes);
     setopen(false);
@@ -407,9 +413,9 @@ const Designer = () => {
     setNodes({
       UI: {
         id: "UI",
-        type: "input",
+        type: "ResizableNode",
         data: { label: "UI+Gateway" },
-        style: { border: "1px solid #8c8d8f", padding: "4px 4px" },
+        style: { border: "1px solid #8c8d8f", padding: "4px 4px" , borderRadius:'15px' },
         position: { x: 250, y: 5 },
       },
     });
@@ -606,11 +612,11 @@ const Designer = () => {
   return (
     <div className="dndflow" style={{overflow:'hidden !important'}}>
       <ReactFlowProvider>
-        <div
-          className="reactflow-wrapper"
-          ref={reactFlowWrapper}
-          style={{ width: "100%", height: "90vh" }}
-        >
+          <div
+            className="reactflow-wrapper"
+            ref={reactFlowWrapper}
+            style={{ width: "100%", height: "90vh" }}
+          >
           <ReactFlow
             nodes={Object.values(nodes)}
             edges={Object.values(edges)}
@@ -629,7 +635,7 @@ const Designer = () => {
             }
             onDragOver={onDragOver}
             onNodeDoubleClick={onclick}
-            deleteKeyCode={["Backspace", "Delete"]}
+            deleteKeyCode={["Delete"]}
             fitView
             onEdgeUpdate={(oldEdge, newConnection) =>
               onEdgeUpdate(nodes, oldEdge, newConnection)
