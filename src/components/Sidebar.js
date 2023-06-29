@@ -21,7 +21,7 @@ export default ({
   Togglesave,
 }) => {
   const onDragStart = (event, nodeType, Name) => {
-    if (Name === "UI") {
+    if (Name === "UI+Gateway") {
       setIsUINodeEnabled(true);
     }
     event.dataTransfer.setData("Name", Name);

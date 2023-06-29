@@ -25,6 +25,8 @@ import "./../App.css";
 import EdgeModal from "../components/Modal/EdgeModal";
 import { useKeycloak } from "@react-keycloak/web";
 
+import ColorChooserNode from "./Customnodes/ColorChooserNode";
+
 let service_id = 1;
 let database_id = 1;
 
@@ -45,6 +47,7 @@ const nodeTypes = {
   selectorNode5: CustomCloudNode,
   selectorNode6: CustomLoadNode,
   selectorNode7: CustomLocalenvironmentNode,
+  colorChooser: ColorChooserNode,
 };
 
 const Designer = () => {
@@ -65,7 +68,7 @@ const Designer = () => {
     return { ...edges, [edgeId]: { id: edgeId, ...edgeParams } };
   };
 
-  const updateEdge = (oldEdge, newConnection, edges,Nodes) => {
+  const updateEdge = (oldEdge, newConnection, edges, Nodes) => {
     console.log("OldEdge", oldEdge);
     console.log("New Connection", newConnection);
     console.log("Edges", edges);
@@ -78,9 +81,9 @@ const Designer = () => {
       [newEdgeId]: { id: newEdgeId, ...newConnection },
     };
     if (oldEdge.id !== newEdgeId) delete updatedEdges[oldEdge.id];
-    const oldSourceNode = Nodes[oldEdge.source]
-    delete oldSourceNode?.data?.prodDatabaseType
-    setNodes((prev)=>({...prev,[oldSourceNode.id]:oldSourceNode}))
+    const oldSourceNode = Nodes[oldEdge.source];
+    delete oldSourceNode?.data?.prodDatabaseType;
+    setNodes((prev) => ({ ...prev, [oldSourceNode.id]: oldSourceNode }));
     return updatedEdges;
   };
 
@@ -91,13 +94,17 @@ const Designer = () => {
       changes.forEach((change) => {
         switch (change.type) {
           case "dimensions":
-            updatedNodes[change.id] = {
-              ...updatedNodes[change.id],
-              position: {
-                ...updatedNodes[change.id].position,
-                ...change.dimensions,
-              },
-            };
+            if (change.resizing)
+              updatedNodes[change.id] = {
+                ...updatedNodes[change.id],
+                position: {
+                  ...updatedNodes[change.id].position,
+                },
+                style: {
+                  ...updatedNodes[change.id].style,
+                  ...change.dimensions,
+                },
+              };
             break;
           case "position":
             updatedNodes[change.id] = {
@@ -135,7 +142,7 @@ const Designer = () => {
               setLocalenvironmentCount(0);
             } else if (change.id === "logManagement")
               updatedNodes.cloudProvider.data["enableECK"] = "false";
-            console.log(change,'Chanfe')
+            console.log(change, "Chanfe");
             delete updatedNodes[change.id];
             break;
 
@@ -161,7 +168,7 @@ const Designer = () => {
     setEdges((oldEdges) => {
       const updatedEdges = { ...oldEdges };
       console.log(changes, updatedEdges);
-      let UpdatedNodes = { ...Nodes }
+      let UpdatedNodes = { ...Nodes };
       changes.forEach((change) => {
         switch (change.type) {
           case "add":
@@ -170,13 +177,13 @@ const Designer = () => {
             break;
           case "remove":
             let [sourceId, targetId] = change.id.split("-");
-            if ( targetId.startsWith("Database") ) {
-              UpdatedNodes[targetId].data.isConnected = false
-              if(sourceId.startsWith("Service") || sourceId.startsWith('UI'))
+            if (targetId.startsWith("Database")) {
+              UpdatedNodes[targetId].data.isConnected = false;
+              if (sourceId.startsWith("Service") || sourceId.startsWith("UI"))
                 delete UpdatedNodes[sourceId].data.prodDatabaseType;
               setNodes(UpdatedNodes);
             }
-              delete updatedEdges[change.id];
+            delete updatedEdges[change.id];
             // Handle remove event
             break;
           case "update":
@@ -222,8 +229,8 @@ const Designer = () => {
       )
     ) {
       // Validation of service Node to check if it has database or not
-        setEdges((els) => updateEdge(oldEdge, newConnection, els,Nodes));
-        MergeData(newConnection.source, newConnection.target, Nodes);
+      setEdges((els) => updateEdge(oldEdge, newConnection, els, Nodes));
+      MergeData(newConnection.source, newConnection.target, Nodes);
     }
   }, []);
 
@@ -235,7 +242,7 @@ const Designer = () => {
           // If the edge is removed between Service and Database
           let UpdatedNodes = { ...Nodes };
           delete UpdatedNodes[edge.source].data.prodDatabaseType;
-          UpdatedNodes[edge.target].data.isConnected = false
+          UpdatedNodes[edge.target].data.isConnected = false;
           setNodes(UpdatedNodes);
         }
         delete AllEdges[edge.id];
@@ -251,9 +258,8 @@ const Designer = () => {
     event.dataTransfer.dropEffect = "move";
   }, []);
 
-  const onclick = (e) => {
-    console.log(e);
-    const Id = e.target.dataset.id || e.target.name;
+  const onclick = (e, node) => {
+    const Id = e.target.dataset.id || e.target.name || node.id;
     console.log(Id);
     if (Id) {
       const type = Id.split("_")[0];
@@ -366,12 +372,16 @@ const Designer = () => {
       } else {
         const newNode = {
           id: getId(name),
-          type,
+          type: "colorChooser",
           position,
           data: { label: name },
-          style: { border: "1px solid", padding: "4px 4px" },
+          style: {
+            border: "1px solid",
+            // padding: "4px 4px",
+            borderRadius: "8px",
+          },
         };
-        if (name === "UI+Gateway") newNode.type = "input";
+        if (name === "UI+Gateway") newNode.type = "colorChooser";
         setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
       }
     },
@@ -397,19 +407,24 @@ const Designer = () => {
     } else {
       setUniqueApplicationNames((prev) => [...prev, Data.applicationName]);
       UpdatedNodes[Isopen].data = { ...UpdatedNodes[Isopen].data, ...Data };
+      UpdatedNodes[Isopen].selected = false;
     }
     setNodes(UpdatedNodes);
     setopen(false);
-  }; 
+  };
 
   useEffect(() => {
-    document.title = 'WDA';
+    document.title = "WDA";
     setNodes({
       UI: {
         id: "UI",
-        type: "input",
+        type: "colorChooser",
         data: { label: "UI+Gateway" },
-        style: { border: "1px solid #8c8d8f", padding: "4px 4px" },
+        style: {
+          border: "1px solid",
+          // padding: "4px 4px",
+          borderRadius: "8px",
+        },
         position: { x: 250, y: 5 },
       },
     });
@@ -430,7 +445,10 @@ const Designer = () => {
         let sourceNode = AllNodes[sourceId];
         let targetNode = AllNodes[targetId];
         console.log(sourceNode, targetNode);
-        AllNodes[sourceId].data = { ...sourceNode.data, prodDatabaseType :targetNode.data.prodDatabaseType };
+        AllNodes[sourceId].data = {
+          ...sourceNode.data,
+          prodDatabaseType: targetNode.data.prodDatabaseType,
+        };
         setNodes({ ...AllNodes });
       }
     }
@@ -444,8 +462,8 @@ const Designer = () => {
     let logManagementData = nodes["logManagement"]?.data;
     if (logManagementData && Data?.deployment)
       Data.deployment.enableECK = "true";
-    if(Data.deployment && Service_Discovery_Data?.serviceDiscoveryType)
-      Data.deployment = {...Data.deployment,...Service_Discovery_Data}
+    if (Data.deployment && Service_Discovery_Data?.serviceDiscoveryType)
+      Data.deployment = { ...Data.deployment, ...Service_Discovery_Data };
     for (const key in NewNodes) {
       const Node = NewNodes[key];
       if (Node.id.startsWith("Service") || Node.id === "UI")
@@ -468,23 +486,27 @@ const Designer = () => {
         }
       }
     }
-    if (Object.values(NewEdges).some((edge) => edge.data  && JSON.stringify(edge.data) !== "{}")) {
-      console.log("object")
+    if (
+      Object.values(NewEdges).some(
+        (edge) => edge.data && JSON.stringify(edge.data) !== "{}"
+      )
+    ) {
+      console.log("object");
       Data["communications"] = {};
       let communicationIndex = 0;
       for (const edgeInfo in NewEdges) {
         const Edge = NewEdges[edgeInfo];
-        if(!Edge.target.startsWith('Database')){
-        Edge.data.client = nodes[Edge.source].data.applicationName;
-        Edge.data.server = nodes[Edge.target].data.applicationName;
-        if (
-          Edge.data &&
-          Object.keys(Edge.data).length !== 0 &&
-          !Edge.target.startsWith("Database")
-        )
-          Data["communications"][communicationIndex++] = Edge.data;
+        if (!Edge.target.startsWith("Database")) {
+          Edge.data.client = nodes[Edge.source].data.applicationName;
+          Edge.data.server = nodes[Edge.target].data.applicationName;
+          if (
+            Edge.data &&
+            Object.keys(Edge.data).length !== 0 &&
+            !Edge.target.startsWith("Database")
+          )
+            Data["communications"][communicationIndex++] = Edge.data;
+        }
       }
-    }
     }
     if (saveMetadata) {
       Data["metadata"] = {
@@ -583,17 +605,19 @@ const Designer = () => {
     params.markerEnd = { type: MarkerType.ArrowClosed };
     params.type = "straight";
     params.data = {};
-    const targetNode = Nodes[params.target]
+    const targetNode = Nodes[params.target];
 
-    if(targetNode.id.startsWith('Database')){
-      if( !Nodes[params.source]?.data["prodDatabaseType"] && !targetNode.data.isConnected){
-        targetNode.data.isConnected = true
-        setEdges((eds) => addEdge(params, eds,Nodes));
+    if (targetNode.id.startsWith("Database")) {
+      if (
+        !Nodes[params.source]?.data["prodDatabaseType"] &&
+        !targetNode.data.isConnected
+      ) {
+        targetNode.data.isConnected = true;
+        setEdges((eds) => addEdge(params, eds, Nodes));
         MergeData(params.source, params.target, Nodes);
       }
-    }
-    else{
-      setEdges((eds) => addEdge(params, eds,Nodes));
+    } else {
+      setEdges((eds) => addEdge(params, eds, Nodes));
     }
   }, []);
 
@@ -604,7 +628,7 @@ const Designer = () => {
   const [uniqueApplicationNames, setUniqueApplicationNames] = useState([]);
 
   return (
-    <div className="dndflow" style={{overflow:'hidden !important'}}>
+    <div className="dndflow" style={{ overflow: "hidden !important" }}>
       <ReactFlowProvider>
         <div
           className="reactflow-wrapper"
@@ -624,12 +648,12 @@ const Designer = () => {
                 e,
                 ServiceDiscoveryCount,
                 MessageBrokerCount,
-                LocalenvironmentCount,
+                LocalenvironmentCount
               )
             }
             onDragOver={onDragOver}
             onNodeDoubleClick={onclick}
-            deleteKeyCode={["Backspace", "Delete"]}
+            deleteKeyCode={["Delete"]}
             fitView
             onEdgeUpdate={(oldEdge, newConnection) =>
               onEdgeUpdate(nodes, oldEdge, newConnection)
@@ -638,6 +662,8 @@ const Designer = () => {
             onEdgeUpdateEnd={(_, edge) => onEdgeUpdateEnd(nodes, edge)}
             onEdgeDoubleClick={onEdgeClick}
             nodesFocusable={true}
+            // minZoom={0.2}
+            // maxZoom={4}
           >
             <Controls />
             <MiniMap style={{ backgroundColor: "#3182CE" }} />
