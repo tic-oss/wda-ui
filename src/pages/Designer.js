@@ -93,7 +93,6 @@ const Designer = () => {
       changes.forEach((change) => {
         switch (change.type) {
           case "dimensions":
-            console.log(change,'Dimensions')
             if(change.resizing)
             updatedNodes[change.id] = {
               ...updatedNodes[change.id],
@@ -401,6 +400,7 @@ const Designer = () => {
         delete UpdatedNodes["cloudProvider"].data.kubernetesStorageClassName;
     } else {
       setUniqueApplicationNames((prev) => [...prev, Data.applicationName]);
+      UpdatedNodes[Isopen].style.backgroundColor = Data.color
       UpdatedNodes[Isopen].data = { ...UpdatedNodes[Isopen].data, ...Data };
       UpdatedNodes[Isopen].selected = false
     }
@@ -454,6 +454,7 @@ const Designer = () => {
       Data.deployment = {...Data.deployment,...Service_Discovery_Data}
     for (const key in NewNodes) {
       const Node = NewNodes[key];
+      delete Node.data?.color
       if (Node.id.startsWith("Service") || Node.id === "UI")
         Node.data = {
           ...Node.data,

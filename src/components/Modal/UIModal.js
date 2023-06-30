@@ -22,6 +22,7 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
     serverPort: "",
     withExample: "false",
     applicationType: "gateway",
+    color:'#000000',
     ...CurrentNode,
   };
   const [UiData, setUiDataData] = useState(IntialState);
@@ -110,21 +111,17 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
               />
             </FormControl>
             <FormControl>
-              <FormLabel>Want to have an Example</FormLabel>
-              <Select
+              <FormLabel>Select Background Color</FormLabel>
+              <Input
                 mb={4}
                 variant="outline"
-                id="withExample"
+                type="color"
+                id="color"
+                style={{border:'0',padding:'0'}}
                 borderColor={"black"}
-                value={UiData.withExample}
-                onChange={(e) => handleData("withExample", e.target.value)}
-              >
-                <option value="" disabled>
-                  Select an option
-                </option>
-                <option value="true">Yes</option>
-                <option value="false">No</option>
-              </Select>
+                value={UiData.color}
+                onChange={(e) => handleData("color", e.target.value)}
+              />
             </FormControl>
           </div>
           <Button

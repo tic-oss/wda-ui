@@ -29,6 +29,7 @@ const ServiceModal = ({
     packageName: "",
     serverPort: "",
     applicationType: "microservice",
+    color:'#000000',
     ...CurrentNode,
   };
   const [ApplicationData, setApplicationData] = useState(IntialState);
@@ -144,6 +145,19 @@ const ServiceModal = ({
                 borderColor={"black"}
                 value={ApplicationData.serverPort}
                 onChange={(e) => handleData("serverPort", e.target.value)}
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Select Background Color</FormLabel>
+              <Input
+                mb={4}
+                variant="outline"
+                type="color"
+                id="color"
+                style={{border:'0',padding:'0'}}
+                borderColor={"black"}
+                value={ApplicationData.color}
+                onChange={(e) => handleData("color", e.target.value)}
               />
             </FormControl>
           </div>
