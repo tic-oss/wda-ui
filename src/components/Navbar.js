@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import logo from "../assets/TIC.png";
+import logo from "../assets/TIC_logo.png";
 import { useKeycloak } from "@react-keycloak/web";
 import { useHistory } from "react-router-dom";
 
