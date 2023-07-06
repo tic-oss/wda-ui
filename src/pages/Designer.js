@@ -59,6 +59,8 @@ const Designer = () => {
   const [MessageBrokerCount, setMessageBrokerCount] = useState(0);
   const [CloudProviderCount, setCloudProviderCount] = useState(0);
   const [LocalenvironmentCount, setLocalenvironmentCount] = useState(0);
+  const [LogManagemntCount, setLogManagementCount] = useState(0);
+  const [AuthProviderCount, setAuthProviderCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   console.log("Nodes", nodes);
 
@@ -90,6 +92,7 @@ const Designer = () => {
   const onNodesChange = useCallback((edges, changes = []) => {
     setNodes((oldNodes) => {
       const updatedNodes = { ...oldNodes };
+      const deletedApplicationNames = []; // Track deleted application names
 
       changes.forEach((change) => {
         switch (change.type) {
@@ -138,24 +141,35 @@ const Designer = () => {
               setServiceDiscoveryCount(0);
             else if (change.id === "cloudProvider") {
               setCloudProviderCount(0);
+            } else if (change.id === "authenticationType") {
+              setAuthProviderCount(0);
             } else if (change.id === "Localenvironment") {
               setLocalenvironmentCount(0);
-            } else if (change.id === "logManagement")
-              updatedNodes.cloudProvider.data["enableECK"] = "false";
+            } else if (change.id === "logManagement") {
+              setLogManagementCount(0);
+            }
             console.log(change, "Chanfe");
+            // Remove the deleted node from updatedNodes
             delete updatedNodes[change.id];
-            break;
-
-          case "add":
-            updatedNodes[change.item.id] = change.item;
-            break;
-          case "reset":
-            updatedNodes[change.item.id] = change.item;
-            break;
-          default:
+            // Remove the applicationName from uniqueApplicationNames
+            const deletedNode = oldNodes[change.id];
+            if (
+              deletedNode &&
+              deletedNode.data &&
+              deletedNode.data.applicationName
+            ) {
+              deletedApplicationNames.push(
+                deletedNode.data.applicationName.trim()
+              );
+            }
             break;
         }
       });
+
+      // Remove deleted application names from uniqueApplicationNames
+      setUniqueApplicationNames((prev) =>
+        prev.filter((appName) => !deletedApplicationNames.includes(appName))
+      );
 
       return updatedNodes;
     });
@@ -272,7 +286,14 @@ const Designer = () => {
   };
 
   const onDrop = useCallback(
-    (event, servicecount, messagecount, Localenvcount) => {
+    (
+      event,
+      servicecount,
+      messagecount,
+      loadcount,
+      authcount,
+      Localenvcount
+    ) => {
       event.preventDefault();
       console.log(event);
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
@@ -315,7 +336,7 @@ const Designer = () => {
       } else if (name.startsWith("Discovery") && servicecount >= 1) {
         console.log("else", servicecount);
         setServiceDiscoveryCount(2);
-      } else if (name.startsWith("Auth")) {
+      } else if (name.startsWith("Auth") && authcount === 0) {
         const authenticationType = name.split("_").splice(1)[0];
         console.log(authenticationType);
         const newNode = {
@@ -326,6 +347,10 @@ const Designer = () => {
           style: { border: "1px solid", padding: "4px 4px" },
         };
         setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
+        setAuthProviderCount(1);
+      } else if (name.startsWith("Auth") && authcount >= 1) {
+        console.log("else", authcount);
+        setAuthProviderCount(2);
       } else if (name.startsWith("MessageBroker") && messagecount === 0) {
         console.log(messagecount);
         const messageBroker = name.split("_").splice(1)[0];
@@ -343,7 +368,7 @@ const Designer = () => {
       } else if (name.startsWith("MessageBroker") && messagecount >= 1) {
         console.log("else", messagecount);
         setMessageBrokerCount(2);
-      } else if (name.startsWith("Load")) {
+      } else if (name.startsWith("Load") && loadcount === 0) {
         const logManagementType = name.split("_").splice(1)[0];
         const newNode = {
           id: "logManagement",
@@ -353,6 +378,10 @@ const Designer = () => {
           style: { border: "1px solid", padding: "4px 4px" },
         };
         setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
+        setLogManagementCount(1);
+      } else if (name.startsWith("Load") && loadcount >= 1) {
+        console.log("else", loadcount);
+        setLogManagementCount(2);
       } else if (name.startsWith("Localenvironment") && Localenvcount === 0) {
         console.log(Localenvcount);
         const Localenvironment = name.split("_").splice(1)[0];
@@ -405,9 +434,8 @@ const Designer = () => {
       )
         delete UpdatedNodes["cloudProvider"].data.kubernetesStorageClassName;
     } else {
-      setUniqueApplicationNames((prev) => [...prev, Data.applicationName]);
       UpdatedNodes[Isopen].data = { ...UpdatedNodes[Isopen].data, ...Data };
-      UpdatedNodes[Isopen].selected = false;
+      setUniqueApplicationNames((prev) => [...prev, Data.applicationName]);
     }
     setNodes(UpdatedNodes);
     setopen(false);
@@ -648,6 +676,8 @@ const Designer = () => {
                 e,
                 ServiceDiscoveryCount,
                 MessageBrokerCount,
+                LogManagemntCount,
+                AuthProviderCount,
                 LocalenvironmentCount
               )
             }
@@ -724,11 +754,17 @@ const Designer = () => {
         {CloudProviderCount === 2 && (
           <AlertModal isOpen={true} onClose={() => setCloudProviderCount(1)} />
         )}
+        {LogManagemntCount === 2 && (
+          <AlertModal isOpen={true} onClose={() => setLogManagementCount(1)} />
+        )}
         {LocalenvironmentCount === 2 && (
           <AlertModal
             isOpen={true}
             onClose={() => setLocalenvironmentCount(1)}
           />
+        )}
+        {AuthProviderCount === 2 && (
+          <AlertModal isOpen={true} onClose={() => setAuthProviderCount(1)} />
         )}
       </ReactFlowProvider>
     </div>
