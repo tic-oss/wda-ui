@@ -28,6 +28,37 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
   const [checkLength, setCheckLength] = useState(false);
   const [DeploymentData, setDeploymentData] = useState({});
 
+  const isCheckEmpty = () => {
+    if (DeploymentData.cloudProvider === "azure") {
+      return (
+        DeploymentData.deploymentType === "" ||
+        DeploymentData.clusterName === "" ||
+        DeploymentData.kubernetesNamespace === "" ||
+        DeploymentData.monitoring === "" ||
+        DeploymentData.ingressDomain === "" ||
+        DeploymentData.k8sWebUI === ""
+      );
+    } else if (DeploymentData.cloudProvider === "aws") {
+      return (
+        DeploymentData.awsRegion === "" ||
+        DeploymentData.kubernetesStorageClassName === "" ||
+        DeploymentData.deploymentType === "" ||
+        DeploymentData.clusterName === "" ||
+        DeploymentData.kubernetesNamespace === "" ||
+        DeploymentData.monitoring === "" ||
+        DeploymentData.ingressDomain === "" ||
+        DeploymentData.k8sWebUI === ""
+      );
+    } else {
+      return (
+        DeploymentData.dockerRepositoryName === "" ||
+        DeploymentData.kubernetesNamespace === "" ||
+        DeploymentData.monitoring === "" 
+      );
+    }
+  };
+  
+  
   const handleImageClick = (image) => {
     setSelectedImage(image);
 
@@ -51,31 +82,14 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
       enableECK: "false",
       clusterName: "",
       kubernetesUseDynamicStorage: "true",
+      dockerRepositoryName: "",
       kubernetesNamespace: "",
       ingressType: "istio",
       monitoring: "",
       ingressDomain: "",
       k8sWebUI: "",
     };
-    setDeploymentData((prevState) => ({
-      ...prevState,
-      cloudProvider: image,
-      ...ProviderStates,
-    }));
-  };
-  const handleImageClickMinikube = (image) => {
-    setSelectedImage(image);
 
-    let ProviderStates;
-    ProviderStates = {
-      ...ProviderStates,
-      kubernetesNamespace: "",
-      dockerRepositoryName: "",
-      ingressType: "istio",
-      enableECK: "false",
-      kubernetesUseDynamicStorage: "true",
-      monitoring: "",
-    };
     setDeploymentData((prevState) => ({
       ...prevState,
       cloudProvider: image,
@@ -229,7 +243,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
               width="170px"
               src={minikube}
               alt="minikubelogo"
-              onClick={() => handleImageClickMinikube("minikube")}
+              onClick={() => handleImageClick("minikube")}
               style={{
                 padding: "10px",
                 marginBottom: "10px",
@@ -658,7 +672,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
             borderColor="green.500"
             width="100px"
             type="submit"
-            isDisabled={!selectedImage}
+            isDisabled={!selectedImage || isCheckEmpty()}
           >
             Submit
           </Button>
