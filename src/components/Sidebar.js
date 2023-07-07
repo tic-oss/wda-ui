@@ -19,10 +19,16 @@ export default ({
   isLoading,
   saveMetadata,
   Togglesave,
+  nodes,
+  isEmptyUiSubmit,
+  setIsEmptyUiSubmit,
+  isEmptyServiceSubmit,
+  seIsEmptyServiceSubmit,
 }) => {
   const onDragStart = (event, nodeType, Name) => {
-    if (Name === "UI") {
+    if (Name === "UI+Gateway") {
       setIsUINodeEnabled(true);
+      setIsEmptyUiSubmit(true);
     }
     event.dataTransfer.setData("Name", Name);
     event.dataTransfer.setData("application/reactflow", nodeType);
@@ -51,6 +57,9 @@ export default ({
   const handleCloseModal = () => {
     setShowModal(false);
   };
+  const checkNodeExists =
+    nodes?.UI ||
+    Object.values(nodes).some((node) => node.id.startsWith("Service"));
 
   return (
     <>
@@ -162,7 +171,12 @@ export default ({
               }
               draggable
             >
-              <img width="120px" style={{marginBottom:'10px'}} src={db1} alt="postgreslogo"></img>
+              <img
+                width="120px"
+                style={{ marginBottom: "10px" }}
+                src={db1}
+                alt="postgreslogo"
+              ></img>
             </div>
             <div
               className="selectorNode"
@@ -288,8 +302,8 @@ export default ({
             marginTop: "auto",
             marginBottom: "10px",
             bottom: "0",
-            display:'flex',
-            flexDirection:'column'
+            display: "flex",
+            flexDirection: "column",
           }}
         >
           <Checkbox
@@ -309,7 +323,13 @@ export default ({
             width="100px"
             type="submit"
             isDisabled={
-              !authenticationData || isEmpty || projectData.projectName === ""
+              !checkNodeExists ||
+              !authenticationData ||
+              isEmpty ||
+              projectData.projectName === "" ||
+              !Service_Discovery_Data ||
+              isEmptyUiSubmit === true ||
+              isEmptyServiceSubmit === true
             }
           >
             Next
@@ -324,6 +344,19 @@ export default ({
             />
           )}
 
+          {!checkNodeExists ? (
+            <p
+              style={{
+                fontSize: "10px",
+                color: "red",
+                marginTop: "5px",
+              }}
+            >
+              Please ensure there exists atleast one application
+            </p>
+          ) : (
+            <></>
+          )}
           {isEmpty || projectData.projectName === "" ? (
             <p
               style={{
@@ -335,7 +368,7 @@ export default ({
               Please enter Project Name
             </p>
           ) : (
-            <p style={{ marginBottom: "5px" }}></p>
+            <></>
           )}
           {!authenticationData ? (
             <p
@@ -348,7 +381,46 @@ export default ({
               Please select Authentication type
             </p>
           ) : (
-            <p style={{ marginBottom: "5px" }}></p>
+            <></>
+          )}
+          {!Service_Discovery_Data ? (
+            <p
+              style={{
+                fontSize: "10px",
+                color: "red",
+                marginTop: "5px",
+              }}
+            >
+              Please select Service Discovery type
+            </p>
+          ) : (
+            <></>
+          )}
+          {isEmptyUiSubmit === true ? (
+            <p
+              style={{
+                fontSize: "10px",
+                color: "red",
+                marginTop: "5px",
+              }}
+            >
+              Please ensure all mandatory fields in UI are filled
+            </p>
+          ) : (
+            <></>
+          )}
+          {isEmptyServiceSubmit === true ? (
+            <p
+              style={{
+                fontSize: "10px",
+                color: "red",
+                marginTop: "5px",
+              }}
+            >
+              Please ensure all mandatory fields in Service are filled
+            </p>
+          ) : (
+            <></>
           )}
         </div>
       </aside>

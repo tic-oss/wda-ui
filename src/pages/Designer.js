@@ -59,8 +59,11 @@ const Designer = () => {
   const [LogManagemntCount, setLogManagementCount] = useState(0);
   const [AuthProviderCount, setAuthProviderCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [isEmptyUiSubmit, setIsEmptyUiSubmit] = useState(true);
+  const [isEmptyServiceSubmit, setIsEmptyServiceSubmit] = useState(false);
+  
   console.log("Nodes", nodes);
-
+ 
   const addEdge = (edgeParams, edges) => {
     console.log(edgeParams, "edgeee");
     const edgeId = `${edgeParams.source}-${edgeParams.target}`;
@@ -129,8 +132,12 @@ const Designer = () => {
               setIsMessageBroker(false);
               onCheckEdge(edges);
               setMessageBrokerCount(0);
-            } else if (change.id === "UI") setIsUINodeEnabled(false);
-            else if (change.id === "serviceDiscoveryType")
+            } else if (change.id === "UI") {
+              setIsUINodeEnabled(false);
+              setIsEmptyUiSubmit(false);
+            } else if (change.id.startsWith("Service")) {
+              setIsEmptyServiceSubmit(false);
+            } else if (change.id === "serviceDiscoveryType")
               setServiceDiscoveryCount(0);
             else if (change.id === "cloudProvider") {
               setCloudProviderCount(0);
@@ -303,7 +310,17 @@ const Designer = () => {
         y: event.clientY - reactFlowBounds.top,
       });
 
-      if (name.startsWith("Database")) {
+      if (name === "Service") {
+        const newNode = {
+          id: getId("Service"),
+          type: "default",
+          position,
+          data: { label: "Service" },
+          style: { border: "1px solid", padding: "4px 4px" },
+        };
+        setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
+        setIsEmptyServiceSubmit(true);
+      } else if (name.startsWith("Database")) {
         const prodDatabaseType = name.split("_").splice(1)[0];
         console.log(prodDatabaseType);
         const newNode = {
@@ -408,6 +425,11 @@ const Designer = () => {
   );
 
   const onChange = (Data) => {
+    if (Data.applicationType === "gateway") {
+      setIsEmptyUiSubmit("false");
+    } else {
+      setIsEmptyServiceSubmit("false");
+    }
     let UpdatedNodes = { ...nodes };
     if (Data.applicationName) {
       Data.applicationName = Data.applicationName.trim();
@@ -548,7 +570,7 @@ const Designer = () => {
       })
       .catch((error) => console.error(error))
       .finally(() => {
-        window.location.replace("../../");
+        // window.location.replace("../../");
       });
   };
   const onCheckEdge = (edges) => {
@@ -669,7 +691,7 @@ const Designer = () => {
             }
             onDragOver={onDragOver}
             onNodeDoubleClick={onclick}
-            deleteKeyCode={["Backspace", "Delete"]}
+            deleteKeyCode={["Delete"]}
             fitView
             onEdgeUpdate={(oldEdge, newConnection) =>
               onEdgeUpdate(nodes, oldEdge, newConnection)
@@ -693,6 +715,9 @@ const Designer = () => {
           saveMetadata={saveMetadata}
           Togglesave={UpdateSave}
           isLoading={isLoading}
+          isEmptyUiSubmit={isEmptyUiSubmit}
+          setIsEmptyUiSubmit={setIsEmptyUiSubmit}
+          isEmptyServiceSubmit={isEmptyServiceSubmit}
         />
 
         {nodeType === "Service" && Isopen && (
