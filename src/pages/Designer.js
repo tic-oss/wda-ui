@@ -62,6 +62,8 @@ const Designer = () => {
   const [isEmptyUiSubmit, setIsEmptyUiSubmit] = useState(true);
   const [isEmptyServiceSubmit, setIsEmptyServiceSubmit] = useState(false);
 
+  const [serviceInputCheck, setServiceInputCheck] = useState({});
+
   console.log("Nodes", nodes);
   const addEdge = (edgeParams, edges) => {
     console.log(edgeParams, "edgeee");
@@ -332,6 +334,10 @@ const Designer = () => {
         };
         setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
         setIsEmptyServiceSubmit(true);
+        setServiceInputCheck((prev) => ({
+          ...prev,
+          [newNode.id]: true,
+        }));
       } else if (name.startsWith("Database")) {
         const prodDatabaseType = name.split("_").splice(1)[0];
         console.log(prodDatabaseType);
@@ -441,7 +447,20 @@ const Designer = () => {
     if (Data.applicationType === "gateway") {
       setIsEmptyUiSubmit("false");
     } else {
-      setIsEmptyServiceSubmit("false");
+      let flag = false;
+      for (let key in serviceInputCheck) {
+        if (key != Isopen && serviceInputCheck[key] === true) {
+          flag = true;
+          setIsEmptyServiceSubmit(true);
+        }
+      }
+      if (!flag) {
+        setIsEmptyServiceSubmit(false);
+      }
+      setServiceInputCheck((prev) => ({
+        ...prev,
+        [Isopen]: false,
+      }));
     }
     let UpdatedNodes = { ...nodes };
     if (Data.applicationName) {
