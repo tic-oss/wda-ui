@@ -53,12 +53,96 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
       return (
         DeploymentData.dockerRepositoryName === "" ||
         DeploymentData.kubernetesNamespace === "" ||
-        DeploymentData.monitoring === "" 
+        DeploymentData.monitoring === ""
       );
     }
   };
-  
-  
+
+  const forbiddenWords = [
+    "admin",
+    "adfs",
+    "adsync",
+    "api",
+    "appgateway",
+    "appservice",
+    "archive",
+    "arm",
+    "automation",
+    "autoscale",
+    "az",
+    "azure",
+    "batch",
+    "bing",
+    "biztalk",
+    "bot",
+    "cdn",
+    "cloud",
+    "container",
+    "cosmos",
+    "data",
+    "dev",
+    "diagnostics",
+    "dns",
+    "documentdb",
+    "edge",
+    "eventhub",
+    "express",
+    "fabric",
+    "frontdoor",
+    "gateway",
+    "graph",
+    "hana",
+    "health",
+    "host",
+    "hybrid",
+    "insight",
+    "iot",
+    "keyvault",
+    "lab",
+    "machinelearning",
+    "management",
+    "market",
+    "media",
+    "mobile",
+    "ms",
+    "msit",
+    "my",
+    "mysql",
+    "network",
+    "notification",
+    "oms",
+    "orchestration",
+    "portal",
+    "recovery",
+    "redis",
+    "scheduling",
+    "search",
+    "server",
+    "service",
+    "shop",
+    "sql",
+    "stack",
+    "storage",
+    "store",
+    "stream",
+    "support",
+    "syndication",
+    "trafficmanager",
+    "user",
+    "virtualnetwork",
+    "visualstudio",
+    "vm",
+    "vpn",
+    "vsts",
+    "web",
+    "webservices",
+    "worker",
+  ];
+
+  const azureClusterNameCheck =
+    DeploymentData.cloudProvider === "azure" &&
+    forbiddenWords.includes(DeploymentData.clusterName);
+
   const handleImageClick = (image) => {
     setSelectedImage(image);
 
@@ -437,7 +521,12 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                   onChange={(e) => handleData("clusterName", e.target.value)}
                 ></Input>
               </FormControl>
-
+              {azureClusterNameCheck && (
+                <Alert status="error" mb={2}>
+                  <AlertIcon />
+                  The input contain this reserved word
+                </Alert>
+              )}
               <FormControl>
                 <FormLabel>Enable Dynamic Storage</FormLabel>
                 <Select

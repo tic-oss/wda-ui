@@ -47,6 +47,16 @@ const ServiceModal = ({
     }
   };
 
+  const handleKeyPress = (event) => {
+    const charCode = event.which ? event.which : event.keyCode;
+    if ((charCode >= 48 && charCode <= 57) || charCode === 8) {
+      return true;
+    } else {
+      event.preventDefault();
+      return false;
+    }
+  };
+
   const handleData = (column, value) => {
     if (column === "label") {
       ValidateName(value);
@@ -68,6 +78,14 @@ const ServiceModal = ({
       setApplicationData((prev) => ({ ...prev, [column]: value }));
     }
   };
+
+  const isSubmitDisabled =
+    ApplicationData.applicationName === "" ||
+    ApplicationData.packageName === "" ||
+    ApplicationData.serverPort === "";
+
+  const appNameCheck = /\d|_/.test(ApplicationData.applicationName);
+
   return (
     <Modal isOpen={isOpen} onClose={() => onClose(false)} isCentered={true}>
       <ModalOverlay />
@@ -94,6 +112,12 @@ const ServiceModal = ({
                 onChange={(e) => handleData("label", e.target.value)}
               />
             </FormControl>
+            {appNameCheck && (
+              <Alert status="error" mb={2}>
+                <AlertIcon />
+                Application Name should not contain underscore( _ ) or number.
+              </Alert>
+            )}
             {duplicateApplicationNameError && (
               <Alert status="error" mb={2}>
                 <AlertIcon />
@@ -143,6 +167,8 @@ const ServiceModal = ({
                 placeholder="ServerPort"
                 borderColor={"black"}
                 value={ApplicationData.serverPort}
+                maxLength="4"
+                onKeyPress={handleKeyPress}
                 onChange={(e) => handleData("serverPort", e.target.value)}
               />
             </FormControl>
@@ -152,6 +178,7 @@ const ServiceModal = ({
               !duplicateApplicationNameError && onSubmit(ApplicationData)
             }
             style={{ display: "block", margin: "0 auto" }}
+            isDisabled={isSubmitDisabled}
           >
             Submit
           </Button>

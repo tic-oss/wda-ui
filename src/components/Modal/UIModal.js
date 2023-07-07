@@ -11,6 +11,8 @@ import {
   Button,
   FormLabel,
   FormControl,
+  Alert,
+  AlertIcon,
 } from "@chakra-ui/react";
 
 const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
@@ -25,6 +27,22 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
     ...CurrentNode,
   };
   const [UiData, setUiDataData] = useState(IntialState);
+  const isEmptyUiSubmit =
+    UiData.applicationName === "" ||
+    UiData.packageName === "" ||
+    UiData.serverPort === "";
+
+  const appNameCheck = /\d|_/.test(UiData.applicationName);
+
+  const handleKeyPress = (event) => {
+    const charCode = event.which ? event.which : event.keyCode;
+    if ((charCode >= 48 && charCode <= 57) || charCode === 8) {
+      return true;
+    } else {
+      event.preventDefault();
+      return false;
+    }
+  };
 
   const handleData = (column, value) => {
     if (column === "label") {
@@ -65,6 +83,12 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
                 value={UiData.applicationName}
                 onChange={(e) => handleData("label", e.target.value)}
               />
+              {appNameCheck && (
+                <Alert status="error" mb={2}>
+                  <AlertIcon />
+                  Application Name should not contain underscore( _ ) or number.
+                </Alert>
+              )}
             </FormControl>
             <FormControl>
               <FormLabel>Client Framework</FormLabel>
@@ -106,6 +130,8 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
                 placeholder="serverPort"
                 borderColor={"black"}
                 value={UiData.serverPort}
+                maxLength="4"
+                onKeyPress={handleKeyPress}
                 onChange={(e) => handleData("serverPort", e.target.value)}
               />
             </FormControl>
@@ -130,6 +156,7 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
           <Button
             onClick={() => onSubmit(UiData)}
             style={{ display: "block", margin: "0 auto" }}
+            isDisabled={isEmptyUiSubmit}
           >
             Submit
           </Button>
