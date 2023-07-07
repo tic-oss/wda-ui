@@ -84,7 +84,7 @@ const ServiceModal = ({
     ApplicationData.packageName === "" ||
     ApplicationData.serverPort === "";
 
-  const appNameCheck = /\d|_/.test(ApplicationData.applicationName);
+  const appNameCheck = /[0-9_-]/.test(ApplicationData.applicationName);
 
   return (
     <Modal isOpen={isOpen} onClose={() => onClose(false)} isCentered={true}>
@@ -115,7 +115,7 @@ const ServiceModal = ({
             {appNameCheck && (
               <Alert status="error" mb={2}>
                 <AlertIcon />
-                Application Name should not contain underscore( _ ) or number.
+                Application Name should not contain -, _ or number.
               </Alert>
             )}
             {duplicateApplicationNameError && (

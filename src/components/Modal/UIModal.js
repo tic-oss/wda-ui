@@ -32,7 +32,7 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
     UiData.packageName === "" ||
     UiData.serverPort === "";
 
-  const appNameCheck = /\d|_/.test(UiData.applicationName);
+  const appNameCheck = /[0-9_-]/.test(UiData.applicationName);
 
   const handleKeyPress = (event) => {
     const charCode = event.which ? event.which : event.keyCode;
@@ -86,7 +86,7 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
               {appNameCheck && (
                 <Alert status="error" mb={2}>
                   <AlertIcon />
-                  Application Name should not contain underscore( _ ) or number.
+                  Application Name should not contain -, _ or number.
                 </Alert>
               )}
             </FormControl>
