@@ -61,9 +61,8 @@ const Designer = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isEmptyUiSubmit, setIsEmptyUiSubmit] = useState(true);
   const [isEmptyServiceSubmit, setIsEmptyServiceSubmit] = useState(false);
-  
+
   console.log("Nodes", nodes);
- 
   const addEdge = (edgeParams, edges) => {
     console.log(edgeParams, "edgeee");
     const edgeId = `${edgeParams.source}-${edgeParams.target}`;
@@ -92,6 +91,7 @@ const Designer = () => {
   const onNodesChange = useCallback((edges, changes = []) => {
     setNodes((oldNodes) => {
       const updatedNodes = { ...oldNodes };
+      const updatedEdges = { ...edges };
       const deletedApplicationNames = []; // Track deleted application names
 
       changes.forEach((change) => {
@@ -137,9 +137,20 @@ const Designer = () => {
               setIsEmptyUiSubmit(false);
             } else if (change.id.startsWith("Service")) {
               setIsEmptyServiceSubmit(false);
-            } else if (change.id === "serviceDiscoveryType")
+            } else if (change.id === "serviceDiscoveryType") {
+              setIsServiceDiscovery(false);
               setServiceDiscoveryCount(0);
-            else if (change.id === "cloudProvider") {
+              setIsServiceDiscovery(false);
+              for (let key in updatedEdges) {
+                let Edge = updatedEdges[key];
+                if (Edge?.data?.framework === "rest-api") {
+                  delete Edge?.data?.type;
+                  delete Edge?.data?.framework;
+                  delete Edge?.label;
+                }
+                setEdges(updatedEdges);
+              }
+            } else if (change.id === "cloudProvider") {
               setCloudProviderCount(0);
             } else if (change.id === "authenticationType") {
               setAuthProviderCount(0);
@@ -227,6 +238,7 @@ const Designer = () => {
   const edgeUpdateSuccessful = useRef(true);
   const [isUINodeEnabled, setIsUINodeEnabled] = useState(true);
   const [isMessageBroker, setIsMessageBroker] = useState(false);
+  const [isServiceDiscovery, setIsServiceDiscovery] = useState(false);
   const [saveMetadata, setsaveMetadata] = useState(false);
 
   const onEdgeUpdateStart = useCallback(() => {
@@ -343,6 +355,7 @@ const Designer = () => {
           style: { border: "1px solid", padding: "4px 4px" },
         };
         setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
+        setIsServiceDiscovery(true);
         setServiceDiscoveryCount(1);
       } else if (name.startsWith("Discovery") && servicecount >= 1) {
         console.log("else", servicecount);
@@ -570,7 +583,7 @@ const Designer = () => {
       })
       .catch((error) => console.error(error))
       .finally(() => {
-        // window.location.replace("../../");
+        window.location.replace("../../");
       });
   };
   const onCheckEdge = (edges) => {
@@ -606,7 +619,7 @@ const Designer = () => {
     console.log(Data, IsEdgeopen);
     let UpdatedEdges = { ...edges };
 
-    if (Data.framework === "rest-api") {
+    if (Data.framework === "rest-api" && isServiceDiscovery) {
       UpdatedEdges[IsEdgeopen].label = "Rest";
     } else {
       UpdatedEdges[IsEdgeopen].label = "RabbitMQ";
@@ -738,13 +751,13 @@ const Designer = () => {
             onSubmit={onChange}
           />
         )}
-
         {IsEdgeopen && (
           <EdgeModal
             isOpen={IsEdgeopen}
             CurrentEdge={CurrentEdge}
             onClose={setEdgeopen}
             handleEdgeData={handleEdgeData}
+            isServiceDiscovery={isServiceDiscovery}
             isMessageBroker={isMessageBroker}
           />
         )}
