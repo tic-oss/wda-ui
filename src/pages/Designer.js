@@ -701,7 +701,13 @@ const Designer = () => {
         <div
           className="reactflow-wrapper"
           ref={reactFlowWrapper}
-          style={{ width: "100%", height: "90vh" }}
+          style={{
+            width: "100%",
+            height: "90vh",
+            backgroundImage:
+              "linear-gradient(to right, #cfcfcf 1px, transparent 1px), linear-gradient(to bottom, #cfcfcf 1px, transparent 1px)",
+            backgroundSize: "20px 20px",
+          }}
         >
           <ReactFlow
             nodes={Object.values(nodes)}
