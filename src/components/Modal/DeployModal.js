@@ -291,7 +291,8 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
             label="Select your infrastructure and provide required configuration"
             bg="gray.300"
             color="black"
-            placement="bottom-end"
+            placement="bottom"
+            width="250px"
           >
             <InfoIcon
               marginRight="20px"
@@ -828,19 +829,6 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
           )}
         </ModalBody>
         <ModalFooter>
-          <Tooltip
-            hasArrow
-            label="Skip button allows you to submit the form without infrastructure and if you want deployment infrastructure to be included in your project click on the desired deployement fill the details and click on submit"
-            bg="gray.300"
-            color="black"
-            placement="top"
-          >
-            <InfoIcon
-              marginRight="10px"
-              marginTop="10px"
-              style={{ fontSize: "16px", color: "#a6a6a6" }}
-            />
-          </Tooltip>
           <Button
             onClick={() => {
               onSubmit(projectData) || isLoading(true);
@@ -848,11 +836,10 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
             mt={4}
             border="2px"
             borderColor="black.500"
-            width="100px"
             type="submit"
             marginRight="5px"
           >
-            Skip
+            Skip Infrastructure
           </Button>
           <Button
             onClick={() => {
