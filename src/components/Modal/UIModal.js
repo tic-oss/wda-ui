@@ -22,7 +22,6 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
     serverPort: "",
     withExample: "false",
     applicationType: "gateway",
-    color:'#000000',
     ...CurrentNode,
   };
   const [UiData, setUiDataData] = useState(IntialState);
@@ -41,11 +40,14 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
       }));
     }
   };
+
   return (
     <Modal isOpen={isOpen} onClose={() => onClose(false)} isCentered={true}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>UI</ModalHeader>
+        <ModalHeader style={{ textAlign: "center" }}>
+          User Interface
+        </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <div
@@ -108,19 +110,6 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
                 borderColor={"black"}
                 value={UiData.serverPort}
                 onChange={(e) => handleData("serverPort", e.target.value)}
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel>Select Background Color</FormLabel>
-              <Input
-                mb={4}
-                variant="outline"
-                type="color"
-                id="color"
-                style={{border:'0',padding:'0'}}
-                borderColor={"black"}
-                value={UiData.color}
-                onChange={(e) => handleData("color", e.target.value)}
               />
             </FormControl>
           </div>

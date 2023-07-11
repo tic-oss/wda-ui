@@ -46,7 +46,7 @@ const nodeTypes = {
   selectorNode5: CustomCloudNode,
   selectorNode6: CustomLoadNode,
   selectorNode7: CustomLocalenvironmentNode,
-  ResizableNode : resizeableNode
+  ResizableNode: resizeableNode,
 };
 
 const Designer = () => {
@@ -96,17 +96,17 @@ const Designer = () => {
       changes.forEach((change) => {
         switch (change.type) {
           case "dimensions":
-            if(change.resizing)
-            updatedNodes[change.id] = {
-              ...updatedNodes[change.id],
-              position: {
-                ...updatedNodes[change.id].position,
-              },
-            style:{
-              ...updatedNodes[change.id].style,
-              ...change.dimensions
-            }
-            };
+            if (change.resizing)
+              updatedNodes[change.id] = {
+                ...updatedNodes[change.id],
+                position: {
+                  ...updatedNodes[change.id].position,
+                },
+                style: {
+                  ...updatedNodes[change.id].style,
+                  ...change.dimensions,
+                },
+              };
             break;
           case "position":
             updatedNodes[change.id] = {
@@ -164,7 +164,7 @@ const Designer = () => {
             break;
         }
       });
-      console.log(deletedApplicationNames)
+      console.log(deletedApplicationNames);
       // Remove deleted application names from uniqueApplicationNames
       setUniqueApplicationNames((prev) =>
         prev.filter((appName) => !deletedApplicationNames.includes(appName))
@@ -220,6 +220,7 @@ const Designer = () => {
 
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [Isopen, setopen] = useState(false);
+  const [nodeClick, setNodeClick] = useState(false);
   const [IsEdgeopen, setEdgeopen] = useState(false);
   const [CurrentNode, setCurrentNode] = useState({});
   const [CurrentEdge, setCurrentEdge] = useState({});
@@ -271,7 +272,7 @@ const Designer = () => {
     event.dataTransfer.dropEffect = "move";
   }, []);
 
-  const onclick = (e,node) => {
+  const onclick = (e, node) => {
     const Id = e.target.dataset.id || e.target.name || node.id;
     console.log(Id);
     if (Id) {
@@ -282,6 +283,12 @@ const Designer = () => {
       } else setCurrentNode(nodes[Id].data);
       setopen(Id);
     }
+  };
+
+  const onSingleClick = (e, node) => {
+    const Id = e.target.dataset.id || e.target.name || node.id;
+    console.log(Id);
+    setNodeClick(Id);
   };
 
   const onDrop = useCallback(
@@ -400,10 +407,14 @@ const Designer = () => {
       } else {
         const newNode = {
           id: getId(name),
-          type:'ResizableNode',
+          type: "ResizableNode",
           position,
           data: { label: name },
-          style: { border: "1px solid", padding: "4px 4px", borderRadius:'15px' },
+          style: {
+            border: "1px solid",
+            padding: "4px 4px",
+            borderRadius: "15px",
+          },
         };
         setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
       }
@@ -429,9 +440,9 @@ const Designer = () => {
         delete UpdatedNodes["cloudProvider"].data.kubernetesStorageClassName;
     } else {
       setUniqueApplicationNames((prev) => [...prev, Data.applicationName]);
-      UpdatedNodes[Isopen].style.backgroundColor = Data.color
+      UpdatedNodes[Isopen].style.backgroundColor = Data.color;
       UpdatedNodes[Isopen].data = { ...UpdatedNodes[Isopen].data, ...Data };
-      UpdatedNodes[Isopen].selected = false
+      UpdatedNodes[Isopen].selected = false;
     }
     setNodes(UpdatedNodes);
     setopen(false);
@@ -444,7 +455,11 @@ const Designer = () => {
         id: "UI",
         type: "ResizableNode",
         data: { label: "UI+Gateway" },
-        style: { border: "1px solid #8c8d8f", padding: "4px 4px" , borderRadius:'15px' },
+        style: {
+          border: "1px solid #8c8d8f",
+          padding: "4px 4px",
+          borderRadius: "15px",
+        },
         position: { x: 250, y: 5 },
       },
     });
@@ -486,7 +501,7 @@ const Designer = () => {
       Data.deployment = { ...Data.deployment, ...Service_Discovery_Data };
     for (const key in NewNodes) {
       const Node = NewNodes[key];
-      delete Node.data?.color
+      delete Node.data?.color;
       if (Node.id.startsWith("Service") || Node.id === "UI")
         Node.data = {
           ...Node.data,
@@ -648,14 +663,23 @@ const Designer = () => {
 
   const [uniqueApplicationNames, setUniqueApplicationNames] = useState([]);
 
+  const [selectedColor, setSelectedColor] = useState("");
+
+  const handleColorClick = (color) => {
+    let UpdatedNodes = { ...nodes };
+    setSelectedColor(color);
+    (UpdatedNodes[nodeClick].style ??= {}).backgroundColor = color;
+    setNodes(UpdatedNodes);
+  };
+
   return (
     <div className="dndflow" style={{ overflow: "hidden !important" }}>
       <ReactFlowProvider>
-          <div
-            className="reactflow-wrapper"
-            ref={reactFlowWrapper}
-            style={{ width: "100%", height: "90vh" }}
-          >
+        <div
+          className="reactflow-wrapper"
+          ref={reactFlowWrapper}
+          style={{ width: "100%", height: "90vh" }}
+        >
           <ReactFlow
             nodes={Object.values(nodes)}
             edges={Object.values(edges)}
@@ -676,6 +700,7 @@ const Designer = () => {
             }
             onDragOver={onDragOver}
             onNodeDoubleClick={onclick}
+            onNodeClick={onSingleClick}
             deleteKeyCode={["Delete"]}
             fitView
             onEdgeUpdate={(oldEdge, newConnection) =>
@@ -700,6 +725,9 @@ const Designer = () => {
           saveMetadata={saveMetadata}
           Togglesave={UpdateSave}
           isLoading={isLoading}
+          selectedColor={selectedColor}
+          handleColorClick={handleColorClick}
+          nodeClick={nodeClick}
         />
 
         {nodeType === "Service" && Isopen && (
