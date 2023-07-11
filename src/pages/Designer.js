@@ -722,7 +722,7 @@ const Designer = () => {
             width: "100%",
             height: "90vh",
             backgroundImage:
-              "linear-gradient(to right, #eaeaea 1px, transparent 1px), linear-gradient(to bottom, #eaeaea 1px, transparent 1px)",
+              "linear-gradient(to right, #f2f2f2 1px, transparent 1px), linear-gradient(to bottom, #f2f2f2 1px, transparent 1px)",
             backgroundSize: "20px 20px",
           }}
         >
