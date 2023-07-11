@@ -84,8 +84,14 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
                 onChange={(e) => handleData("label", e.target.value)}
               />
               {appNameCheck && (
-                <Alert status="error" mb={2}>
-                  <AlertIcon />
+                <Alert
+                status="error"
+                height="12px"
+                fontSize="12px"
+                borderRadius="3px"
+                mb={2}
+              >
+                <AlertIcon style={{ width: "14px", height: "14px" }} />
                   Application Name should not contain -, _ or number.
                 </Alert>
               )}
@@ -127,7 +133,7 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
                 mb={4}
                 variant="outline"
                 id="serverPort"
-                placeholder="serverPort"
+                placeholder="9000"
                 borderColor={"black"}
                 value={UiData.serverPort}
                 maxLength="4"
@@ -135,28 +141,11 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
                 onChange={(e) => handleData("serverPort", e.target.value)}
               />
             </FormControl>
-            <FormControl>
-              <FormLabel>Want to have an Example</FormLabel>
-              <Select
-                mb={4}
-                variant="outline"
-                id="withExample"
-                borderColor={"black"}
-                value={UiData.withExample}
-                onChange={(e) => handleData("withExample", e.target.value)}
-              >
-                <option value="" disabled>
-                  Select an option
-                </option>
-                <option value="true">Yes</option>
-                <option value="false">No</option>
-              </Select>
-            </FormControl>
           </div>
           <Button
             onClick={() => onSubmit(UiData)}
             style={{ display: "block", margin: "0 auto" }}
-            isDisabled={isEmptyUiSubmit}
+            isDisabled={isEmptyUiSubmit && appNameCheck}
           >
             Submit
           </Button>

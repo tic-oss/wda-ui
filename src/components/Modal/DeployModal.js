@@ -197,7 +197,32 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
     if (column === "subscriptionId") validateAzureInputValue(value);
     setDeploymentData((prev) => ({ ...prev, [column]: value }));
   };
+  const namespaceCheck = /^[a-zA-Z][a-zA-Z0-9-]*$/.test(
+    DeploymentData.kubernetesNamespace
+  );
+  const clusterNameCheck = /^[a-zA-Z][a-zA-Z0-9-]*$/.test(
+    DeploymentData.clusterName
+  );
+  const storageClassCheck = /^[a-z0-9]([-a-z0-9]*[a-z0-9])?$/.test(
+    DeploymentData.kubernetesStorageClassName
+  );
+  const domainNameCheck =
+    /^(?!:\/\/)(?:[a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,63}$/.test(
+      DeploymentData.ingressDomain
+    );
 
+  const checkValidation = () => {
+    if (selectedImage === "minikube") return !namespaceCheck;
+    else if (selectedImage === "aws") {
+      return (
+        !namespaceCheck ||
+        !domainNameCheck ||
+        !storageClassCheck ||
+        !clusterNameCheck
+      );
+    }
+    return !namespaceCheck || !domainNameCheck || !clusterNameCheck;
+  };
   const validateInputValue = (value) => {
     if (value.length < 12) {
       setCheckLength(true);
@@ -258,12 +283,12 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
       <ModalOverlay />
       <ModalContent>
         <ModalHeader
-          style={{ display: "flex", justifyContent: "space-between" }}
+          // style={{ display: "flex", justifyContent: "space-between" }}
         >
-          <h2 style={{ display: "inline-block" }}>Deployment Infrastructure</h2>
+          <h2 style={{ display: "inline", marginRight:'10px' }}>Deployment Infrastructure</h2>
           <Tooltip
             hasArrow
-            label="Infrastructure deployment includes all the prerequisites for the network function to be successfully deployed and configured"
+            label="Select your infrastructure and provide required configuration"
             bg="gray.300"
             color="black"
             placement="bottom-end"
@@ -517,10 +542,25 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                   variant="outline"
                   id="clusterName"
                   borderColor={"black"}
+                  maxLength="63"
                   value={DeploymentData.clusterName}
                   onChange={(e) => handleData("clusterName", e.target.value)}
-                ></Input>
+                />
               </FormControl>
+              {DeploymentData.clusterName && !clusterNameCheck ? (
+                <Alert
+                  status="error"
+                  height="12px"
+                  fontSize="12px"
+                  borderRadius="3px"
+                  mb={2}
+                >
+                  <AlertIcon style={{ width: "14px", height: "14px" }} />
+                  Cluster Name should not contain special characters.
+                </Alert>
+              ) : (
+                <></>
+              )}
               {azureClusterNameCheck && (
                 <Alert status="error" mb={2}>
                   <AlertIcon />
@@ -556,11 +596,28 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                       id="kubernetesStorageClassName"
                       placeholder="Kubernetes Storage Class Name"
                       borderColor={"black"}
+                      maxLength="63"
                       value={DeploymentData.kubernetesStorageClassName}
                       onChange={(e) =>
                         handleData("kubernetesStorageClassName", e.target.value)
                       }
                     />
+                    {DeploymentData.kubernetesStorageClassName &&
+                    !storageClassCheck ? (
+                      <Alert
+                        status="error"
+                        height="38px"
+                        fontSize="12px"
+                        borderRadius="3px"
+                        mb={2}
+                      >
+                        <AlertIcon style={{ width: "14px", height: "14px" }} />
+                        Storage Class Name should not contain special characters
+                        or start with uppercase.
+                      </Alert>
+                    ) : (
+                      <></>
+                    )}
                   </FormControl>
                 )}
 
@@ -570,6 +627,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                   mb={4}
                   variant="outline"
                   id="kubernetesnamespace"
+                  maxLength="63"
                   placeholder="Kubernetes Namespace"
                   borderColor={"black"}
                   value={DeploymentData.kubernetesNamespace}
@@ -578,6 +636,20 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                   }
                 />
               </FormControl>
+              {DeploymentData.kubernetesNamespace && !namespaceCheck ? (
+                <Alert
+                  status="error"
+                  height="12px"
+                  fontSize="12px"
+                  borderRadius="3px"
+                  mb={2}
+                >
+                  <AlertIcon style={{ width: "14px", height: "14px" }} />
+                  Namespace should not contain special characters.
+                </Alert>
+              ) : (
+                <></>
+              )}
               <FormControl>
                 <FormLabel>Ingress Type</FormLabel>
                 <Select
@@ -600,11 +672,26 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                     id="ingressDomain"
                     placeholder="Ingress Domain Name"
                     borderColor={"black"}
+                    maxLength="63"
                     value={DeploymentData.ingressDomain}
                     onChange={(e) =>
                       handleData("ingressDomain", e.target.value)
                     }
                   />
+                  {DeploymentData.ingressDomain && !domainNameCheck ? (
+                    <Alert
+                      status="error"
+                      height="12px"
+                      fontSize="12px"
+                      borderRadius="3px"
+                      mb={2}
+                    >
+                      <AlertIcon style={{ width: "14px", height: "14px" }} />
+                      Domain name validation is not satisfied.
+                    </Alert>
+                  ) : (
+                    <></>
+                  )}
                 </FormControl>
               )}
               <FormControl>
@@ -651,6 +738,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                   mb={4}
                   variant="outline"
                   id="kubernetesnamespace"
+                  maxLength="63"
                   placeholder="Kubernetes Namespace"
                   borderColor={"black"}
                   value={DeploymentData.kubernetesNamespace}
@@ -659,6 +747,20 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                   }
                 />
               </FormControl>
+              {DeploymentData.kubernetesNamespace && !namespaceCheck ? (
+                <Alert
+                  status="error"
+                  height="12px"
+                  fontSize="12px"
+                  borderRadius="3px"
+                  mb={2}
+                >
+                  <AlertIcon style={{ width: "14px", height: "14px" }} />
+                  Namespace should not contain special characters.
+                </Alert>
+              ) : (
+                <></>
+              )}
               <FormControl>
                 <FormLabel>Repository Name</FormLabel>
                 <Input
@@ -761,7 +863,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
             borderColor="green.500"
             width="100px"
             type="submit"
-            isDisabled={!selectedImage || isCheckEmpty()}
+            isDisabled={!selectedImage || isCheckEmpty() || checkValidation()}
           >
             Submit
           </Button>

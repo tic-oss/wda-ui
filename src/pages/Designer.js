@@ -330,7 +330,12 @@ const Designer = () => {
           type: "default",
           position,
           data: { label: "Service" },
-          style: { border: "1px solid", padding: "4px 4px" },
+          style: {
+            border: "1px solid",
+            width: "120px",
+            height: "40px",
+            // padding: "4px 4px"
+          },
         };
         setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
         setIsEmptyServiceSubmit(true);
@@ -434,7 +439,12 @@ const Designer = () => {
           type,
           position,
           data: { label: name },
-          style: { border: "1px solid", padding: "4px 4px" },
+          style: {
+            border: "1px solid",
+            width: "120px",
+            height: "40px",
+            // padding: "4px 4px"
+          },
         };
         if (name === "UI+Gateway") newNode.type = "input";
         setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
@@ -492,8 +502,15 @@ const Designer = () => {
         id: "UI",
         type: "input",
         data: { label: "UI+Gateway" },
-        style: { border: "1px solid #8c8d8f", padding: "4px 4px" },
-        position: { x: 250, y: 5 },
+        style: {
+          border: "1px solid #8c8d8f",
+          // padding: "8px 4px",
+          // display:'flex',justifyContent:'center',
+          width: "120px",
+          height: "40px",
+          // fontSize: "10px",
+        },
+        position: { x: 260, y: 4 },
       },
     });
   }, []);
@@ -705,7 +722,7 @@ const Designer = () => {
             width: "100%",
             height: "90vh",
             backgroundImage:
-              "linear-gradient(to right, #cfcfcf 1px, transparent 1px), linear-gradient(to bottom, #cfcfcf 1px, transparent 1px)",
+              "linear-gradient(to right, #eaeaea 1px, transparent 1px), linear-gradient(to bottom, #eaeaea 1px, transparent 1px)",
             backgroundSize: "20px 20px",
           }}
         >
@@ -713,6 +730,8 @@ const Designer = () => {
             nodes={Object.values(nodes)}
             edges={Object.values(edges)}
             nodeTypes={nodeTypes}
+            snapToGrid
+            snapGrid={[20, 20]}
             onNodesChange={(changes) => onNodesChange(edges, changes)}
             onEdgesChange={(changes) => onEdgesChange(nodes, changes)}
             onConnect={(params) => onConnect(params, nodes)}

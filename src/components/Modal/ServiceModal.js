@@ -113,14 +113,26 @@ const ServiceModal = ({
               />
             </FormControl>
             {appNameCheck && (
-              <Alert status="error" mb={2}>
-                <AlertIcon />
+              <Alert
+              status="error"
+              height="12px"
+              fontSize="12px"
+              borderRadius="3px"
+              mb={2}
+            >
+              <AlertIcon style={{ width: "14px", height: "14px" }} />
                 Application Name should not contain -, _ or number.
               </Alert>
             )}
             {duplicateApplicationNameError && (
-              <Alert status="error" mb={2}>
-                <AlertIcon />
+              <Alert 
+              status="error"
+              height="12px"
+              fontSize="12px"
+              borderRadius="3px"
+              mb={2}
+            >
+              <AlertIcon style={{ width: "14px", height: "14px" }} />
                 Application name already exists. Please choose a unique name.
               </Alert>
             )}
@@ -164,7 +176,7 @@ const ServiceModal = ({
                 defaultValue={9000}
                 variant="outline"
                 id="serverport"
-                placeholder="ServerPort"
+                placeholder="9000"
                 borderColor={"black"}
                 value={ApplicationData.serverPort}
                 maxLength="4"
@@ -178,7 +190,7 @@ const ServiceModal = ({
               !duplicateApplicationNameError && onSubmit(ApplicationData)
             }
             style={{ display: "block", margin: "0 auto" }}
-            isDisabled={isSubmitDisabled}
+            isDisabled={isSubmitDisabled && appNameCheck}
           >
             Submit
           </Button>

@@ -327,7 +327,6 @@ export default ({
               !authenticationData ||
               isEmpty ||
               projectData.projectName === "" ||
-              !Service_Discovery_Data ||
               isEmptyUiSubmit === true ||
               isEmptyServiceSubmit === true
             }
@@ -379,19 +378,6 @@ export default ({
               }}
             >
               Please select Authentication type
-            </p>
-          ) : (
-            <></>
-          )}
-          {!Service_Discovery_Data ? (
-            <p
-              style={{
-                fontSize: "10px",
-                color: "red",
-                marginTop: "5px",
-              }}
-            >
-              Please select Service Discovery type
             </p>
           ) : (
             <></>
