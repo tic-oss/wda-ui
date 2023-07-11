@@ -193,8 +193,11 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
 
   const handleBlur = (column, value) => {
     if (column === "awsAccountId") validateInputValue(value);
-    if (column === "tenantId") validateAzureInputValue(value);
-    if (column === "subscriptionId") validateAzureInputValue(value);
+    else if (column === "tenantId") {
+      validateAzureInputValue("tenantId", value);
+    } else if (column === "subscriptionId") {
+      validateAzureInputValue("subscriptionId", value);
+    }
   };
   const handleData = (column, value) => {
     setDeploymentData((prev) => ({ ...prev, [column]: value }));
@@ -230,14 +233,31 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
       setCheckLength(true);
     } else setCheckLength(false);
   };
-  const [validateAzureField, setValidateAzureField] = useState(false);
-  const validateAzureInputValue = (value) => {
+  const [validateSubscriptionIdField, setValidateSubscriptionIdField] =
+    useState(false);
+  const [validateTenantIdField, setValidateTenantIdField] = useState(false);
+  const validateAzureInputValue = (column, value) => {
+    console.log("hloooo", column, value);
     const regexExp =
       /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
-    const isValidLength = value.length == 36;
-    const isValidFormat = regexExp.test(value);
-    if (!isValidLength || !isValidFormat) setValidateAzureField(true);
-    else setValidateAzureField(false);
+
+    if (column === "tenantId") {
+      const isValidLength = value.length == 36;
+      const isValidFormat = regexExp.test(value);
+      if (!isValidLength || !isValidFormat) {
+        setValidateTenantIdField(true);
+      } else {
+        setValidateTenantIdField(false);
+      }
+    } else if (column === "subscriptionId") {
+      const isValidLength = value.length == 36;
+      const isValidFormat = regexExp.test(value);
+      if (!isValidLength || !isValidFormat) {
+        setValidateSubscriptionIdField(true);
+      } else {
+        setValidateSubscriptionIdField(false);
+      }
+    }
   };
 
   function handleSubmit(DeploymentData) {
@@ -387,7 +407,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                   onBlur={(e) => handleBlur("subscriptionId", e.target.value)}
                 ></Input>
               </FormControl>
-              {validateAzureField && (
+              {validateSubscriptionIdField && (
                 <>
                   {DeploymentData.subscriptionId.length < 36 ? (
                     <Alert
@@ -427,7 +447,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                   onBlur={(e) => handleBlur("tenantId", e.target.value)}
                 ></Input>
               </FormControl>
-              {validateAzureField && (
+              {validateTenantIdField && (
                 <>
                   {DeploymentData.tenantId.length < 36 ? (
                     <Alert
