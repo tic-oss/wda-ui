@@ -191,10 +191,12 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
     }
   };
 
-  const handleData = (column, value) => {
+  const handleBlur = (column, value) => {
     if (column === "awsAccountId") validateInputValue(value);
     if (column === "tenantId") validateAzureInputValue(value);
     if (column === "subscriptionId") validateAzureInputValue(value);
+  };
+  const handleData = (column, value) => {
     setDeploymentData((prev) => ({ ...prev, [column]: value }));
   };
   const namespaceCheck = /^[a-zA-Z][a-zA-Z0-9-]*$/.test(
@@ -228,12 +230,14 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
       setCheckLength(true);
     } else setCheckLength(false);
   };
+  const [validateAzureField, setValidateAzureField] = useState(false);
   const validateAzureInputValue = (value) => {
     const regexExp =
       /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
-    const isValidLength = value.length >= 36;
+    const isValidLength = value.length == 36;
     const isValidFormat = regexExp.test(value);
-    return isValidLength && isValidFormat;
+    if (!isValidLength || !isValidFormat) setValidateAzureField(true);
+    else setValidateAzureField(false);
   };
 
   function handleSubmit(DeploymentData) {
@@ -283,9 +287,11 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
       <ModalOverlay />
       <ModalContent>
         <ModalHeader
-          // style={{ display: "flex", justifyContent: "space-between" }}
+        // style={{ display: "flex", justifyContent: "space-between" }}
         >
-          <h2 style={{ display: "inline", marginRight:'10px' }}>Deployment Infrastructure</h2>
+          <h2 style={{ display: "inline", marginRight: "10px" }}>
+            Deployment Infrastructure
+          </h2>
           <Tooltip
             hasArrow
             label="Select your infrastructure and provide required configuration"
@@ -378,11 +384,12 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                   maxLength="36"
                   value={DeploymentData.subscriptionId}
                   onChange={(e) => handleData("subscriptionId", e.target.value)}
+                  onBlur={(e) => handleBlur("subscriptionId", e.target.value)}
                 ></Input>
               </FormControl>
-              {DeploymentData.subscriptionId && (
+              {validateAzureField && (
                 <>
-                  {DeploymentData.subscriptionId.length < 36 && (
+                  {DeploymentData.subscriptionId.length < 36 ? (
                     <Alert
                       status="error"
                       height="12px"
@@ -393,8 +400,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                       <AlertIcon style={{ width: "14px", height: "14px" }} />
                       Input value must be at least 36 characters
                     </Alert>
-                  )}
-                  {!validateAzureInputValue(DeploymentData.subscriptionId) && (
+                  ) : (
                     <Alert
                       status="error"
                       height="12px"
@@ -418,11 +424,12 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                   maxLength="36"
                   value={DeploymentData.tenantId}
                   onChange={(e) => handleData("tenantId", e.target.value)}
+                  onBlur={(e) => handleBlur("tenantId", e.target.value)}
                 ></Input>
               </FormControl>
-              {DeploymentData.tenantId && (
+              {validateAzureField && (
                 <>
-                  {DeploymentData.tenantId.length < 36 && (
+                  {DeploymentData.tenantId.length < 36 ? (
                     <Alert
                       status="error"
                       height="12px"
@@ -433,8 +440,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                       <AlertIcon style={{ width: "14px", height: "14px" }} />
                       Input value must be at least 36 characters
                     </Alert>
-                  )}
-                  {!validateAzureInputValue(DeploymentData.tenantId) && (
+                  ) : (
                     <Alert
                       status="error"
                       height="12px"
