@@ -226,7 +226,13 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
         !clusterNameCheck
       );
     }
-    return !namespaceCheck || !domainNameCheck || !clusterNameCheck;
+    return (
+      !namespaceCheck ||
+      !domainNameCheck ||
+      !clusterNameCheck ||
+      validateSubscriptionIdField ||
+      validateTenantIdField
+    );
   };
   const validateInputValue = (value) => {
     if (value.length < 12) {
