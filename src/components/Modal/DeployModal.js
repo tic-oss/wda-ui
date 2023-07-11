@@ -237,7 +237,6 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
     useState(false);
   const [validateTenantIdField, setValidateTenantIdField] = useState(false);
   const validateAzureInputValue = (column, value) => {
-    console.log("hloooo", column, value);
     const regexExp =
       /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
 
