@@ -148,7 +148,7 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
           <Button
             onClick={() => onSubmit(UiData)}
             style={{ display: "block", margin: "0 auto" }}
-            isDisabled={isEmptyUiSubmit && appNameCheck}
+            isDisabled={isEmptyUiSubmit || appNameCheck}
           >
             Submit
           </Button>

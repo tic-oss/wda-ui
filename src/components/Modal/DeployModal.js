@@ -380,7 +380,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                     : "2px solid #d9d9d9",
               }}
             />
-            <img
+            {/* <img
               width="170px"
               src={minikube}
               alt="minikubelogo"
@@ -395,7 +395,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                     ? "2px solid #3182CE"
                     : "2px solid #d9d9d9",
               }}
-            />
+            /> */}
           </div>
           {selectedImage === "azure" && (
             <div>

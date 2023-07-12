@@ -7,6 +7,7 @@ import ReactFlow, {
 } from "reactflow";
 import "reactflow/dist/style.css";
 import { Button } from "@chakra-ui/react";
+import { ArrowRightIcon } from "@chakra-ui/icons";
 import Sidebar from "./../components/Sidebar";
 import { saveAs } from "file-saver";
 import ServiceModal from "../components/Modal/ServiceModal";
@@ -800,7 +801,7 @@ const Designer = () => {
                   marginBottom: "10px",
                 }}
               >
-                Select a node from the right pane and drop here
+                Drag and drop components here
               </div>
               <div
                 style={{
@@ -810,19 +811,21 @@ const Designer = () => {
                   color: "#c3c3c3",
                 }}
               >
-                And connect the services accordingly
+                To design your architecture
               </div>
-              {/* <Button
+              <Button
                 mt={4}
                 border="2px"
                 borderColor="#3182CE"
-                width="100px"
                 alignContent="center"
                 color="#3182CE"
                 style={{ margin: "0 auto" }}
               >
-                Let's Go
-              </Button> */}
+                Drag & Drop{" "}
+                <ArrowRightIcon
+                  style={{ marginLeft: "10px", fontSize: "11px" }}
+                />
+              </Button>
             </div>
           )}
           <ReactFlow
@@ -878,16 +881,8 @@ const Designer = () => {
           selectedColor={selectedColor}
           handleColorClick={handleColorClick}
           nodeClick={nodeClick}
+          edges={edges}
         />
-        {nodeType === "Service" && Isopen && (
-          <ServiceModal
-            isOpen={Isopen}
-            CurrentNode={CurrentNode}
-            onClose={setopen}
-            onSubmit={onChange}
-            uniqueApplicationNames={uniqueApplicationNames}
-          />
-        )}
 
         {nodeType === "UI" && Isopen && (
           <UiDataModal
@@ -897,7 +892,24 @@ const Designer = () => {
             onSubmit={onChange}
           />
         )}
-        
+        {nodeType === "Service" && Isopen && (
+          <ServiceModal
+            isOpen={Isopen}
+            CurrentNode={CurrentNode}
+            onClose={setopen}
+            onSubmit={onChange}
+            uniqueApplicationNames={uniqueApplicationNames}
+          />
+        )}
+        {nodeType === "group" && Isopen && (
+          <GroupDataModal
+            isOpen={Isopen}
+            CurrentNode={CurrentNode}
+            onClose={setopen}
+            onSubmit={onChange}
+          />
+        )}
+
         {IsEdgeopen && (
           <EdgeModal
             isOpen={IsEdgeopen}

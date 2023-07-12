@@ -43,9 +43,9 @@ function App() {
               <Products />
             </Route>
             <Route exact path="/mindmap">
-              <PrivateRoute>
+              {/* <PrivateRoute> */}
                 <Designer />
-              </PrivateRoute>
+              {/* </PrivateRoute> */}
             </Route>
             <Route exact path="/projects">
               <PrivateRoute>

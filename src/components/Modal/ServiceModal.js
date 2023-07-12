@@ -29,7 +29,6 @@ const ServiceModal = ({
     packageName: "",
     serverPort: "",
     applicationType: "microservice",
-    color: "#000000",
     ...CurrentNode,
   };
   const [ApplicationData, setApplicationData] = useState(IntialState);
@@ -191,7 +190,7 @@ const ServiceModal = ({
               !duplicateApplicationNameError && onSubmit(ApplicationData)
             }
             style={{ display: "block", margin: "0 auto" }}
-            isDisabled={isSubmitDisabled && appNameCheck}
+            isDisabled={isSubmitDisabled || appNameCheck}
           >
             Submit
           </Button>

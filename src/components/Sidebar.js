@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import db1 from "../assets/pstgrc.jpeg";
 import db2 from "../assets/mongo.png";
 import eurkea from "../assets/eureka.jpg";
-import keycloak from "../assets/keycloak.png";
+import keycloakIcon from "../assets/keycloak.png";
 import eck from "../assets/eck.png";
 import mini from "../assets/mini.jpeg";
 import docker from "../assets/docker.png";
 import "./../App.css";
 import { Input, FormLabel, Button, Checkbox } from "@chakra-ui/react";
 import DeployModal from "./Modal/DeployModal";
+import { useKeycloak } from "@react-keycloak/web";
 
 export default ({
   isUINodeEnabled,
@@ -23,6 +24,7 @@ export default ({
   isEmptyServiceSubmit,
   selectedColor,
   handleColorClick,
+  edges,
 }) => {
   const onDragStart = (event, nodeType, Name) => {
     event.dataTransfer.setData("Name", Name);
@@ -45,6 +47,7 @@ export default ({
     setprojectData((prev) => ({ ...prev, [column]: value }));
   };
   const [showModal, setShowModal] = useState(false);
+  const { initialized, keycloak } = useKeycloak();
 
   const handleButtonClick = () => {
     setShowModal(true);
@@ -143,7 +146,7 @@ export default ({
               }
               draggable
             >
-              <img width="145px" src={keycloak} alt="keycloaklogo"></img>
+              <img width="145px" src={keycloakIcon} alt="keycloaklogo"></img>
             </div>
           </>
         )}
@@ -389,14 +392,16 @@ export default ({
               onClick={() => handleColorClick("#fff")}
             ></div>
           </div>
-          <Checkbox
-            size="md"
-            colorScheme="blue"
-            isChecked={saveMetadata}
-            onChange={Togglesave}
-          >
-            Save Project
-          </Checkbox>
+          {initialized && keycloak.authenticated && (
+            <Checkbox
+              size="md"
+              colorScheme="blue"
+              isChecked={saveMetadata}
+              onChange={Togglesave}
+            >
+              Save Project
+            </Checkbox>
+          )}
           {/* <div style={{ display:'flex', justifyContent:'center'}}> */}
           <Button
             onClick={handleButtonClick}
