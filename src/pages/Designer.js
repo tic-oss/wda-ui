@@ -20,6 +20,7 @@ import CustomCloudNode from "./Customnodes/CustomCloudNode";
 import CustomLoadNode from "./Customnodes/CustomLoadNode";
 import CustomLocalenvironmentNode from "./Customnodes/CustomLocalenvironmentNode";
 import AlertModal from "../components/Modal/AlertModal";
+import resizeableNode from "./Customnodes/ResizeableNode";
 
 import "./../App.css";
 import EdgeModal from "../components/Modal/EdgeModal";
@@ -33,7 +34,7 @@ const getId = (type = "") => {
   if (type === "Service") return `Service_${service_id++}`;
   else if (type === "Database") return `Database_${database_id++}`;
   else if (type === "Authentication") return "Authentication_1";
-  else if (type === "UI") return "UI";
+  else if (type === "UI+Gateway") return "UI";
   return "Id";
 };
 
@@ -46,6 +47,7 @@ const nodeTypes = {
   selectorNode5: CustomCloudNode,
   selectorNode6: CustomLoadNode,
   selectorNode7: CustomLocalenvironmentNode,
+  ResizableNode: resizeableNode,
 };
 
 const Designer = () => {
@@ -100,13 +102,17 @@ const Designer = () => {
       changes.forEach((change) => {
         switch (change.type) {
           case "dimensions":
-            updatedNodes[change.id] = {
-              ...updatedNodes[change.id],
-              position: {
-                ...updatedNodes[change.id].position,
-                ...change.dimensions,
-              },
-            };
+            if (change.resizing)
+              updatedNodes[change.id] = {
+                ...updatedNodes[change.id],
+                position: {
+                  ...updatedNodes[change.id].position,
+                },
+                style: {
+                  ...updatedNodes[change.id].style,
+                  ...change.dimensions,
+                },
+              };
             break;
           case "position":
             updatedNodes[change.id] = {
@@ -235,6 +241,7 @@ const Designer = () => {
 
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [Isopen, setopen] = useState(false);
+  const [nodeClick, setNodeClick] = useState(false);
   const [IsEdgeopen, setEdgeopen] = useState(false);
   const [CurrentNode, setCurrentNode] = useState({});
   const [CurrentEdge, setCurrentEdge] = useState({});
@@ -287,9 +294,8 @@ const Designer = () => {
     event.dataTransfer.dropEffect = "move";
   }, []);
 
-  const onclick = (e) => {
-    console.log(e);
-    const Id = e.target.dataset.id || e.target.name;
+  const onclick = (e, node) => {
+    const Id = e.target.dataset.id || e.target.name || node.id;
     console.log(Id);
     if (Id) {
       const type = Id.split("_")[0];
@@ -299,6 +305,12 @@ const Designer = () => {
       } else setCurrentNode(nodes[Id].data);
       setopen(Id);
     }
+  };
+
+  const onSingleClick = (e, node) => {
+    const Id = e.target.dataset.id || e.target.name || node.id;
+    console.log(Id);
+    setNodeClick(Id);
   };
 
   const onDrop = useCallback(
@@ -329,14 +341,14 @@ const Designer = () => {
       if (name === "Service") {
         const newNode = {
           id: getId("Service"),
-          type: "default",
+          type: "ResizableNode",
           position,
           data: { label: "Service" },
           style: {
             border: "1px solid",
             width: "120px",
             height: "40px",
-            // padding: "4px 4px"
+            borderRadius: "15px",
           },
         };
         setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
@@ -438,13 +450,14 @@ const Designer = () => {
       } else {
         const newNode = {
           id: getId("UI"),
-          type: "input",
+          type: "ResizableNode",
           position,
           data: { label: "UI+Gateway" },
           style: {
             border: "1px solid #8c8d8f",
             width: "120px",
             height: "40px",
+            borderRadius: "15px",
           },
         };
         setIsUINodeEnabled(true);
@@ -490,8 +503,10 @@ const Designer = () => {
       )
         delete UpdatedNodes["cloudProvider"].data.kubernetesStorageClassName;
     } else {
-      UpdatedNodes[Isopen].data = { ...UpdatedNodes[Isopen].data, ...Data };
       setUniqueApplicationNames((prev) => [...prev, Data.applicationName]);
+      UpdatedNodes[Isopen].style.backgroundColor = Data.color;
+      UpdatedNodes[Isopen].data = { ...UpdatedNodes[Isopen].data, ...Data };
+      UpdatedNodes[Isopen].selected = false;
     }
     setNodes(UpdatedNodes);
     setopen(false);
@@ -540,6 +555,7 @@ const Designer = () => {
       Data.deployment = { ...Data.deployment, ...Service_Discovery_Data };
     for (const key in NewNodes) {
       const Node = NewNodes[key];
+      delete Node.data?.color;
       if (Node.id.startsWith("Service") || Node.id === "UI")
         Node.data = {
           ...Node.data,
@@ -701,6 +717,15 @@ const Designer = () => {
 
   const [uniqueApplicationNames, setUniqueApplicationNames] = useState([]);
 
+  const [selectedColor, setSelectedColor] = useState("");
+
+  const handleColorClick = (color) => {
+    let UpdatedNodes = { ...nodes };
+    setSelectedColor(color);
+    (UpdatedNodes[nodeClick].style ??= {}).backgroundColor = color;
+    setNodes(UpdatedNodes);
+  };
+
   return (
     <div className="dndflow" style={{ overflow: "hidden !important" }}>
       <ReactFlowProvider>
@@ -802,6 +827,7 @@ const Designer = () => {
             }
             onDragOver={onDragOver}
             onNodeDoubleClick={onclick}
+            onNodeClick={onSingleClick}
             deleteKeyCode={["Delete"]}
             fitView
             onEdgeUpdate={(oldEdge, newConnection) =>
@@ -827,6 +853,9 @@ const Designer = () => {
           isLoading={isLoading}
           isEmptyUiSubmit={isEmptyUiSubmit}
           isEmptyServiceSubmit={isEmptyServiceSubmit}
+          selectedColor={selectedColor}
+          handleColorClick={handleColorClick}
+          nodeClick={nodeClick}
         />
 
         {nodeType === "Service" && Isopen && (

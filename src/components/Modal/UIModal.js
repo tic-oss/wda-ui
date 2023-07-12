@@ -58,11 +58,14 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
       }));
     }
   };
+
   return (
     <Modal isOpen={isOpen} onClose={() => onClose(false)} isCentered={true}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>UI</ModalHeader>
+        <ModalHeader style={{ textAlign: "center" }}>
+          User Interface
+        </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <div
