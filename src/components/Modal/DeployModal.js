@@ -159,6 +159,10 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
         subscriptionId: "",
         tenantId: "",
       };
+    } else if (image === "minikube") {
+      ProviderStates = {
+        dockerRepositoryName: "",
+      };
     }
     ProviderStates = {
       ...ProviderStates,
@@ -166,7 +170,6 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
       enableECK: "false",
       clusterName: "",
       kubernetesUseDynamicStorage: "true",
-      dockerRepositoryName: "",
       kubernetesNamespace: "",
       ingressType: "istio",
       monitoring: "",
@@ -242,28 +245,25 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
   const [validateSubscriptionIdField, setValidateSubscriptionIdField] =
     useState(false);
   const [validateTenantIdField, setValidateTenantIdField] = useState(false);
+  
   const validateAzureInputValue = (column, value) => {
-    const regexExp =
-      /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
-
+    const regexExp = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+    let isValid = true;
+  
     if (column === "tenantId") {
-      const isValidLength = value.length == 36;
+      const isValidLength = value.length === 36;
       const isValidFormat = regexExp.test(value);
-      if (!isValidLength || !isValidFormat) {
-        setValidateTenantIdField(true);
-      } else {
-        setValidateTenantIdField(false);
-      }
+      isValid = isValidLength && isValidFormat;
+      setValidateTenantIdField(!isValid);
     } else if (column === "subscriptionId") {
-      const isValidLength = value.length == 36;
+      const isValidLength = value.length === 36;
       const isValidFormat = regexExp.test(value);
-      if (!isValidLength || !isValidFormat) {
-        setValidateSubscriptionIdField(true);
-      } else {
-        setValidateSubscriptionIdField(false);
-      }
+      isValid = isValidLength && isValidFormat;
+      setValidateSubscriptionIdField(!isValid);
     }
-  };
+  
+    return isValid;
+  };  
 
   function handleSubmit(DeploymentData) {
     let FinalData = { ...DeploymentData };
@@ -274,6 +274,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
       delete FinalData?.tenantId;
       delete FinalData?.dockerRepositoryName;
     } else if (FinalData.cloudProvider === "azure") {
+      console.log("hloooooo")
       delete FinalData?.awsAccountId;
       delete FinalData?.awsRegion;
       delete FinalData?.kubernetesStorageClassName;
@@ -295,16 +296,18 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
     if (selectedImage === "aws") {
       !checkLength && onSubmit({ ...projectData, deployment: FinalData });
     } else if (selectedImage === "azure") {
-      const isAzureInputValid = validateAzureInputValue(
-        FinalData.subscriptionId
-      );
-      if (isAzureInputValid) {
+      const isAzureInputValid = validateAzureInputValue("subscriptionId", FinalData.subscriptionId);
+      const isAzureInputValidField = validateAzureInputValue("tenantId", FinalData.tenantId);
+      setValidateSubscriptionIdField(!isAzureInputValid);
+      setValidateTenantIdField(!isAzureInputValidField);
+      if (isAzureInputValid && isAzureInputValidField) {
         onSubmit({ ...projectData, deployment: FinalData });
       }
     } else {
       onSubmit({ ...projectData, deployment: FinalData });
     }
   }
+
   const [isOpen, setIsOpen] = useState(true);
 
   return (
