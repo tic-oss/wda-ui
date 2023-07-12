@@ -110,6 +110,13 @@ export default ({
         >
           Service
         </div>
+        <div
+          className="dndnode output"
+          onDragStart={(event) => onDragStart(event, "default", "Group")}
+          draggable
+        >
+          Group
+        </div>
         <h1
           style={{
             cursor: "pointer",

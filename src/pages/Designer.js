@@ -11,6 +11,7 @@ import Sidebar from "./../components/Sidebar";
 import { saveAs } from "file-saver";
 import ServiceModal from "../components/Modal/ServiceModal";
 import UiDataModal from "../components/Modal/UIModal";
+import GroupDataModal from "../components/Modal/GroupDataModel";
 import CustomImageNode from "./Customnodes/CustomImageNode";
 import CustomServiceNode from "./Customnodes/CustomServiceNode";
 import CustomIngressNode from "./Customnodes/CustomIngressNode";
@@ -21,6 +22,7 @@ import CustomLoadNode from "./Customnodes/CustomLoadNode";
 import CustomLocalenvironmentNode from "./Customnodes/CustomLocalenvironmentNode";
 import AlertModal from "../components/Modal/AlertModal";
 import resizeableNode from "./Customnodes/ResizeableNode";
+import groupNode from "./Customnodes/GroupNode";
 
 import "./../App.css";
 import EdgeModal from "../components/Modal/EdgeModal";
@@ -29,12 +31,14 @@ import { FiUploadCloud } from "react-icons/fi";
 
 let service_id = 1;
 let database_id = 1;
+let group_id = 1;
 
 const getId = (type = "") => {
   if (type === "Service") return `Service_${service_id++}`;
   else if (type === "Database") return `Database_${database_id++}`;
   else if (type === "Authentication") return "Authentication_1";
   else if (type === "UI+Gateway") return "UI";
+  else if (type === "Group") return `group_${group_id++}`;
   return "Id";
 };
 
@@ -48,6 +52,7 @@ const nodeTypes = {
   selectorNode6: CustomLoadNode,
   selectorNode7: CustomLocalenvironmentNode,
   ResizableNode: resizeableNode,
+  GroupNode: groupNode,
 };
 
 const Designer = () => {
@@ -414,6 +419,21 @@ const Designer = () => {
         setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
         setIsMessageBroker(true);
         setMessageBrokerCount(1);
+      } else if (name.startsWith("Group")) {
+        const newNode = {
+          id: getId(name),
+          type: "GroupNode",
+          position,
+          data: { label: name },
+          style: {
+            border: "1px dashed",
+            borderRadius: "15px",
+            width: "120px",
+            height: "40px",
+            zIndex: -1,
+          },
+        };
+        setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
       } else if (name.startsWith("MessageBroker") && messagecount >= 1) {
         console.log("else", messagecount);
         setMessageBrokerCount(2);
@@ -449,7 +469,7 @@ const Designer = () => {
         setLocalenvironmentCount(2);
       } else {
         const newNode = {
-          id: getId("UI"),
+          id: getId("UI+Gateway"),
           type: "ResizableNode",
           position,
           data: { label: "UI+Gateway" },
@@ -460,9 +480,9 @@ const Designer = () => {
             borderRadius: "15px",
           },
         };
+        setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
         setIsUINodeEnabled(true);
         setIsEmptyUiSubmit(true);
-        setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
       }
     },
     [reactFlowInstance]
@@ -502,6 +522,8 @@ const Designer = () => {
         "false"
       )
         delete UpdatedNodes["cloudProvider"].data.kubernetesStorageClassName;
+    } else if (Data?.type === "Group") {
+      UpdatedNodes[Isopen].data = { ...UpdatedNodes[Isopen].data, ...Data };
     } else {
       setUniqueApplicationNames((prev) => [...prev, Data.applicationName]);
       UpdatedNodes[Isopen].style.backgroundColor = Data.color;
@@ -857,7 +879,6 @@ const Designer = () => {
           handleColorClick={handleColorClick}
           nodeClick={nodeClick}
         />
-
         {nodeType === "Service" && Isopen && (
           <ServiceModal
             isOpen={Isopen}
@@ -876,6 +897,7 @@ const Designer = () => {
             onSubmit={onChange}
           />
         )}
+        
         {IsEdgeopen && (
           <EdgeModal
             isOpen={IsEdgeopen}

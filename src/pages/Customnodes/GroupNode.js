@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { Handle, Position, NodeResizer } from "reactflow";
 
-const ResizableNode = ({ data, selected }) => {
+const GroupNode = ({ data, selected }) => {
   return (
     <>
       <NodeResizer
@@ -17,4 +17,4 @@ const ResizableNode = ({ data, selected }) => {
   );
 };
 
-export default memo(ResizableNode);
+export default memo(GroupNode);
