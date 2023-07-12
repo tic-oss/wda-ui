@@ -12,7 +12,6 @@ import DeployModal from "./Modal/DeployModal";
 
 export default ({
   isUINodeEnabled,
-  setIsUINodeEnabled,
   Service_Discovery_Data,
   onSubmit,
   authenticationData,
@@ -21,15 +20,9 @@ export default ({
   Togglesave,
   nodes,
   isEmptyUiSubmit,
-  setIsEmptyUiSubmit,
   isEmptyServiceSubmit,
-  seIsEmptyServiceSubmit,
 }) => {
   const onDragStart = (event, nodeType, Name) => {
-    if (Name === "UI+Gateway") {
-      setIsUINodeEnabled(true);
-      setIsEmptyUiSubmit(true);
-    }
     event.dataTransfer.setData("Name", Name);
     event.dataTransfer.setData("application/reactflow", nodeType);
     event.dataTransfer.effectAllowed = "move";

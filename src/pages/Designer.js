@@ -6,7 +6,7 @@ import ReactFlow, {
   MiniMap,
 } from "reactflow";
 import "reactflow/dist/style.css";
-
+import { Button } from "@chakra-ui/react";
 import Sidebar from "./../components/Sidebar";
 import { saveAs } from "file-saver";
 import ServiceModal from "../components/Modal/ServiceModal";
@@ -24,6 +24,7 @@ import AlertModal from "../components/Modal/AlertModal";
 import "./../App.css";
 import EdgeModal from "../components/Modal/EdgeModal";
 import { useKeycloak } from "@react-keycloak/web";
+import { FiUploadCloud } from "react-icons/fi";
 
 let service_id = 1;
 let database_id = 1;
@@ -59,7 +60,7 @@ const Designer = () => {
   const [LogManagemntCount, setLogManagementCount] = useState(0);
   const [AuthProviderCount, setAuthProviderCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [isEmptyUiSubmit, setIsEmptyUiSubmit] = useState(true);
+  const [isEmptyUiSubmit, setIsEmptyUiSubmit] = useState(false);
   const [isEmptyServiceSubmit, setIsEmptyServiceSubmit] = useState(false);
 
   const [serviceInputCheck, setServiceInputCheck] = useState({});
@@ -90,7 +91,7 @@ const Designer = () => {
     return updatedEdges;
   };
 
-  const onNodesChange = useCallback((edges, changes = []) => {
+  const onNodesChange = useCallback((setShowDiv, edges, changes = []) => {
     setNodes((oldNodes) => {
       const updatedNodes = { ...oldNodes };
       const updatedEdges = { ...edges };
@@ -178,7 +179,7 @@ const Designer = () => {
             break;
         }
       });
-
+      if (Object.keys(updatedNodes).length === 0) setShowDiv(true);
       // Remove deleted application names from uniqueApplicationNames
       setUniqueApplicationNames((prev) =>
         prev.filter((appName) => !deletedApplicationNames.includes(appName))
@@ -238,7 +239,7 @@ const Designer = () => {
   const [CurrentNode, setCurrentNode] = useState({});
   const [CurrentEdge, setCurrentEdge] = useState({});
   const edgeUpdateSuccessful = useRef(true);
-  const [isUINodeEnabled, setIsUINodeEnabled] = useState(true);
+  const [isUINodeEnabled, setIsUINodeEnabled] = useState(false);
   const [isMessageBroker, setIsMessageBroker] = useState(false);
   const [isServiceDiscovery, setIsServiceDiscovery] = useState(false);
   const [saveMetadata, setsaveMetadata] = useState(false);
@@ -309,6 +310,7 @@ const Designer = () => {
       authcount,
       Localenvcount
     ) => {
+      setShowDiv(false);
       event.preventDefault();
       console.log(event);
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
@@ -435,18 +437,18 @@ const Designer = () => {
         setLocalenvironmentCount(2);
       } else {
         const newNode = {
-          id: getId(name),
-          type,
+          id: getId("UI"),
+          type: "input",
           position,
-          data: { label: name },
+          data: { label: "UI+Gateway" },
           style: {
-            border: "1px solid",
+            border: "1px solid #8c8d8f",
             width: "120px",
             height: "40px",
-            // padding: "4px 4px"
           },
         };
-        if (name === "UI+Gateway") newNode.type = "input";
+        setIsUINodeEnabled(true);
+        setIsEmptyUiSubmit(true);
         setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
       }
     },
@@ -495,24 +497,11 @@ const Designer = () => {
     setopen(false);
   };
 
+  const [showDiv, setShowDiv] = useState(false);
   useEffect(() => {
     document.title = "WDA";
-    setNodes({
-      UI: {
-        id: "UI",
-        type: "input",
-        data: { label: "UI+Gateway" },
-        style: {
-          border: "1px solid #8c8d8f",
-          // padding: "8px 4px",
-          // display:'flex',justifyContent:'center',
-          width: "120px",
-          height: "40px",
-          // fontSize: "10px",
-        },
-        position: { x: 260, y: 4 },
-      },
-    });
+    setShowDiv(true);
+    return () => setShowDiv(false);
   }, []);
 
   const MergeData = (sourceId, targetId, Nodes) => {
@@ -726,13 +715,78 @@ const Designer = () => {
             backgroundSize: "20px 20px",
           }}
         >
+          {showDiv && (
+            <div
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-60%, -50%)",
+                display: "flex",
+                flexDirection: "column",
+                textAlign: "center",
+                padding: "50px",
+                justifyContent: "center",
+                border: "2px dashed #cfcfcf",
+                borderRadius: "8px",
+              }}
+            >
+              <div
+                style={{
+                  marginBottom: "20px",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <FiUploadCloud
+                  style={{
+                    fontSize: "62px",
+                    color: "#c3c3c3",
+                    marginBottom: "30px",
+                  }}
+                />
+              </div>
+              <div
+                style={{
+                  fontSize: "38px",
+                  fontWeight: "500",
+                  marginBottom: "10px",
+                }}
+              >
+                Select a node from the right pane and drop here
+              </div>
+              <div
+                style={{
+                  fontSize: "24px",
+                  fontWeight: "300",
+                  marginBottom: "30px",
+                  color: "#c3c3c3",
+                }}
+              >
+                And connect the services accordingly
+              </div>
+              {/* <Button
+                mt={4}
+                border="2px"
+                borderColor="#3182CE"
+                width="100px"
+                alignContent="center"
+                color="#3182CE"
+                style={{ margin: "0 auto" }}
+              >
+                Let's Go
+              </Button> */}
+            </div>
+          )}
           <ReactFlow
             nodes={Object.values(nodes)}
             edges={Object.values(edges)}
             nodeTypes={nodeTypes}
             snapToGrid
             snapGrid={[20, 20]}
-            onNodesChange={(changes) => onNodesChange(edges, changes)}
+            onNodesChange={(changes) =>
+              onNodesChange(setShowDiv, edges, changes)
+            }
             onEdgesChange={(changes) => onEdgesChange(nodes, changes)}
             onConnect={(params) => onConnect(params, nodes)}
             onInit={setReactFlowInstance}
@@ -764,7 +818,6 @@ const Designer = () => {
         </div>
         <Sidebar
           isUINodeEnabled={isUINodeEnabled}
-          setIsUINodeEnabled={setIsUINodeEnabled}
           Service_Discovery_Data={nodes["serviceDiscoveryType"]?.data}
           authenticationData={nodes["authenticationType"]?.data}
           nodes={nodes}
@@ -773,7 +826,6 @@ const Designer = () => {
           Togglesave={UpdateSave}
           isLoading={isLoading}
           isEmptyUiSubmit={isEmptyUiSubmit}
-          setIsEmptyUiSubmit={setIsEmptyUiSubmit}
           isEmptyServiceSubmit={isEmptyServiceSubmit}
         />
 
