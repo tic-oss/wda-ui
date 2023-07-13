@@ -234,7 +234,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
     }
     return (
       !namespaceCheck ||
-      // !domainNameCheck ||
+      !domainNameCheck ||
       !clusterNameCheck ||
       validateSubscriptionIdField ||
       validateTenantIdField
