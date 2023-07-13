@@ -35,7 +35,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
         DeploymentData.clusterName === "" ||
         DeploymentData.kubernetesNamespace === "" ||
         DeploymentData.monitoring === "" ||
-        DeploymentData.ingressDomain === "" ||
+        // DeploymentData.ingressDomain === "" ||
         DeploymentData.k8sWebUI === ""
       );
     } else if (DeploymentData.cloudProvider === "aws") {
@@ -46,7 +46,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
         DeploymentData.clusterName === "" ||
         DeploymentData.kubernetesNamespace === "" ||
         DeploymentData.monitoring === "" ||
-        DeploymentData.ingressDomain === "" ||
+        // DeploymentData.ingressDomain === "" ||
         DeploymentData.k8sWebUI === ""
       );
     } else {
@@ -214,10 +214,13 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
   const storageClassCheck = /^[a-z0-9]([-a-z0-9]*[a-z0-9])?$/.test(
     DeploymentData.kubernetesStorageClassName
   );
-  const domainNameCheck =
-    /^(?!:\/\/)(?:[a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,63}$/.test(
+
+  let domainNameCheck = true;
+  if (DeploymentData.ingressDomain !== "") {
+    domainNameCheck = /^(?!:\/\/)(?:[a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,63}$/.test(
       DeploymentData.ingressDomain
     );
+  }
 
   const checkValidation = () => {
     if (selectedImage === "minikube") return !namespaceCheck;
@@ -231,7 +234,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
     }
     return (
       !namespaceCheck ||
-      !domainNameCheck ||
+      // !domainNameCheck ||
       !clusterNameCheck ||
       validateSubscriptionIdField ||
       validateTenantIdField
@@ -245,11 +248,12 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
   const [validateSubscriptionIdField, setValidateSubscriptionIdField] =
     useState(false);
   const [validateTenantIdField, setValidateTenantIdField] = useState(false);
-  
+
   const validateAzureInputValue = (column, value) => {
-    const regexExp = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+    const regexExp =
+      /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
     let isValid = true;
-  
+
     if (column === "tenantId") {
       const isValidLength = value.length === 36;
       const isValidFormat = regexExp.test(value);
@@ -261,9 +265,9 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
       isValid = isValidLength && isValidFormat;
       setValidateSubscriptionIdField(!isValid);
     }
-  
+
     return isValid;
-  };  
+  };
 
   function handleSubmit(DeploymentData) {
     let FinalData = { ...DeploymentData };
@@ -274,7 +278,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
       delete FinalData?.tenantId;
       delete FinalData?.dockerRepositoryName;
     } else if (FinalData.cloudProvider === "azure") {
-      console.log("hloooooo")
+      console.log("hloooooo");
       delete FinalData?.awsAccountId;
       delete FinalData?.awsRegion;
       delete FinalData?.kubernetesStorageClassName;
@@ -296,8 +300,14 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
     if (selectedImage === "aws") {
       !checkLength && onSubmit({ ...projectData, deployment: FinalData });
     } else if (selectedImage === "azure") {
-      const isAzureInputValid = validateAzureInputValue("subscriptionId", FinalData.subscriptionId);
-      const isAzureInputValidField = validateAzureInputValue("tenantId", FinalData.tenantId);
+      const isAzureInputValid = validateAzureInputValue(
+        "subscriptionId",
+        FinalData.subscriptionId
+      );
+      const isAzureInputValidField = validateAzureInputValue(
+        "tenantId",
+        FinalData.tenantId
+      );
       setValidateSubscriptionIdField(!isAzureInputValid);
       setValidateTenantIdField(!isAzureInputValidField);
       if (isAzureInputValid && isAzureInputValidField) {
