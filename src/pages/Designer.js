@@ -855,7 +855,7 @@ const Designer = () => {
             onDragOver={onDragOver}
             onNodeDoubleClick={onclick}
             onNodeClick={onSingleClick}
-            deleteKeyCode={["Delete"]}
+            deleteKeyCode={["Backspace","Delete"]}
             fitView
             onEdgeUpdate={(oldEdge, newConnection) =>
               onEdgeUpdate(nodes, oldEdge, newConnection)
