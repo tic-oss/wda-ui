@@ -4,6 +4,7 @@ import ReactFlow, {
   Controls,
   MarkerType,
   MiniMap,
+  ConnectionLineType,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import { Button } from "@chakra-ui/react";
@@ -716,7 +717,7 @@ const Designer = () => {
 
   const onConnect = useCallback((params, Nodes) => {
     params.markerEnd = { type: MarkerType.ArrowClosed };
-    params.type = "straight";
+    params.type = "smoothstep";
     params.data = {};
     const targetNode = Nodes[params.target];
 
@@ -833,6 +834,7 @@ const Designer = () => {
             edges={Object.values(edges)}
             nodeTypes={nodeTypes}
             snapToGrid
+            connectionLineType={ConnectionLineType.Step}
             snapGrid={[20, 20]}
             onNodesChange={(changes) =>
               onNodesChange(setShowDiv, edges, changes)
