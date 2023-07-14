@@ -168,7 +168,13 @@ export default ({
           )}
         </h1>
         {selectedOption === "Database" && (
-          <>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
             <div
               className="selectorNode"
               onDragStart={(event) =>
@@ -177,12 +183,13 @@ export default ({
               draggable
             >
               <img
-                width="120px"
+                width="95px"
                 style={{ marginBottom: "10px" }}
                 src={db1}
                 alt="postgreslogo"
               ></img>
             </div>
+            &nbsp;
             <div
               className="selectorNode"
               onDragStart={(event) =>
@@ -190,9 +197,9 @@ export default ({
               }
               draggable
             >
-              <img width="120px" src={db2} alt="mongologo"></img>
+              <img width="95px" src={db2} alt="mongologo"></img>
             </div>
-          </>
+          </div>
         )}
 
         <h1>
