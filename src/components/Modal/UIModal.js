@@ -32,7 +32,13 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
     UiData.packageName === "" ||
     UiData.serverPort === "";
 
-  const appNameCheck = /[0-9_-]/.test(UiData.applicationName);
+  const forbiddenPorts = ["8080", "5601", "9200"];
+  const serverPortCheck =
+    UiData.serverPort && forbiddenPorts.includes(UiData.serverPort);
+
+  const appNameCheck = !/^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$/g.test(
+    UiData.applicationName
+  );
 
   const handleKeyPress = (event) => {
     const charCode = event.which ? event.which : event.keyCode;
@@ -88,14 +94,14 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
               />
               {appNameCheck && (
                 <Alert
-                status="error"
-                height="12px"
-                fontSize="12px"
-                borderRadius="3px"
-                mb={2}
-              >
-                <AlertIcon style={{ width: "14px", height: "14px" }} />
-                  Application Name should not contain -, _ or number.
+                  status="error"
+                  height="12px"
+                  fontSize="12px"
+                  borderRadius="3px"
+                  mb={2}
+                >
+                  <AlertIcon style={{ width: "14px", height: "14px" }} />
+                  Enter a valid application name
                 </Alert>
               )}
             </FormControl>
@@ -144,11 +150,23 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
                 onChange={(e) => handleData("serverPort", e.target.value)}
               />
             </FormControl>
+            {serverPortCheck && (
+              <Alert
+                status="error"
+                height="12px"
+                fontSize="12px"
+                borderRadius="3px"
+                mb={2}
+              >
+                <AlertIcon style={{ width: "14px", height: "14px" }} />
+                The input contain cannot this reserved port number
+              </Alert>
+            )}
           </div>
           <Button
             onClick={() => onSubmit(UiData)}
             style={{ display: "block", margin: "0 auto" }}
-            isDisabled={isEmptyUiSubmit || appNameCheck}
+            isDisabled={isEmptyUiSubmit || appNameCheck || serverPortCheck}
           >
             Submit
           </Button>

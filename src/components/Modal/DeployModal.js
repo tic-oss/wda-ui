@@ -236,6 +236,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
       !namespaceCheck ||
       !domainNameCheck ||
       !clusterNameCheck ||
+      azureClusterNameCheck ||
       validateSubscriptionIdField ||
       validateTenantIdField
     );
@@ -607,9 +608,15 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                 <></>
               )}
               {azureClusterNameCheck && (
-                <Alert status="error" mb={2}>
-                  <AlertIcon />
-                  The input contain this reserved word
+                <Alert
+                  status="error"
+                  height="12px"
+                  fontSize="12px"
+                  borderRadius="3px"
+                  mb={2}
+                >
+                  <AlertIcon style={{ width: "14px", height: "14px" }} />
+                  The input cannot contain this reserved word
                 </Alert>
               )}
               <FormControl>
@@ -907,7 +914,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
               bottom="0"
               alignItems="center"
               justifyContent="center"
-              backgroundColor="rgba(240, 248, 255, 0.5)"
+              backgroundColor="rgba(240, 248, 255, 0.85)"
               zIndex="9999"
               display="flex"
               flexDirection="column"
