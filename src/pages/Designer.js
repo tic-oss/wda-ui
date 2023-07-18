@@ -701,7 +701,7 @@ const Designer = () => {
         color: "#e2e8f0",
         type: MarkerType.ArrowClosed,
       };
-      UpdatedEdges[IsEdgeopen].style = { stroke: "#e2e8f0" };
+      UpdatedEdges[IsEdgeopen].style = { stroke: "#bcbaba" };
     }
 
     UpdatedEdges[IsEdgeopen].data = {
