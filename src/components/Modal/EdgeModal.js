@@ -131,9 +131,10 @@ const EdgeModal = ({
               !isServiceDiscovery && (
                 <Alert
                   status="error"
-                  height="12px"
+                  // height="12px"
                   fontSize="12px"
                   borderRadius="3px"
+                  padding="4px"
                   mb={2}
                 >
                   <AlertIcon style={{ width: "14px", height: "14px" }} />
