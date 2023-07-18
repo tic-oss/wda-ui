@@ -317,6 +317,8 @@ export default ({
             position: "sticky",
             bottom: "0",
             marginTop: "10px",
+            display:'flex',
+            flexDirection:'column'
           }}
         >
           <div
