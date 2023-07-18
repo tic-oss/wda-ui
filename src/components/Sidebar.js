@@ -65,7 +65,7 @@ export default ({
         style={{
           position: "relative",
           overflow: "hidden",
-          height: "88vh",
+          height: "94vh",
           border: "1px Solid #CFCFCF",
           backgroundColor: "#f7f7f7",
           display: "flex",

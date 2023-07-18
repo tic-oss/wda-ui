@@ -751,14 +751,14 @@ const Designer = () => {
   };
 
   return (
-    <div className="dndflow" style={{ overflow: "hidden !important" }}>
+    <div className="dndflow" style={{ overflow: "hidden !important", bottom:0 }}>
       <ReactFlowProvider>
         <div
           className="reactflow-wrapper"
           ref={reactFlowWrapper}
           style={{
             width: "100%",
-            height: "90vh",
+            height: "94vh",
             backgroundImage:
               "linear-gradient(to right, #f2f2f2 1px, transparent 1px), linear-gradient(to bottom, #f2f2f2 1px, transparent 1px)",
             backgroundSize: "20px 20px",

@@ -38,11 +38,7 @@ function App() {
             <Route exact path="/">
               <Home />
             </Route>
-
-            <Route exact path="/products">
-              <Products />
-            </Route>
-            <Route exact path="/mindmap">
+            <Route exact path="/canvasToCode">
               {/* <PrivateRoute> */}
                 <Designer />
               {/* </PrivateRoute> */}
@@ -73,7 +69,7 @@ function App() {
               <SignUp />
             </Route>      
           </Switch>
-          <Footer />
+          {/* <Footer /> */}
         </Router>
     </ReactKeycloakProvider>
   );
