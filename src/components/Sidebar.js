@@ -68,6 +68,8 @@ export default ({
           height: "88vh",
           border: "1px Solid #CFCFCF",
           backgroundColor: "#f7f7f7",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
         <FormLabel fontWeight="bold">Project Name</FormLabel>
@@ -83,7 +85,6 @@ export default ({
         <div className="description">
           <h2
             style={{
-              cursor: "pointer",
               fontSize: "12px",
               display: "flex",
               alignItems: "center",
@@ -120,153 +121,155 @@ export default ({
         >
           Group
         </div>
-        <h1
+        <div class="middleBlock"
           style={{
-            cursor: "pointer",
-            fontSize: "20px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
+            position: "relative",
+            flex: "1",
+            overflowY: "auto",
           }}
-          onClick={() => toggleOption("Authentication")}
         >
-          Authentication{" "}
-          {selectedOption === "Authentication" ? (
-            <span>&#x25B2;</span>
-          ) : (
-            <span>&#x25BC;</span>
-          )}
-        </h1>
-        {selectedOption === "Authentication" && (
-          <>
-            <div
-              className="selectorNode3"
-              onDragStart={(event) =>
-                onDragStart(event, "default", "Auth_oauth2")
-              }
-              draggable
-            >
-              <img width="145px" src={keycloakIcon} alt="keycloaklogo"></img>
-            </div>
-          </>
-        )}
-        <h1
-          style={{
-            cursor: "pointer",
-            fontSize: "20px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-          onClick={() => toggleOption("Database")}
-        >
-          Database{" "}
-          {selectedOption === "Databases" ? (
-            <span>&#x25B2;</span>
-          ) : (
-            <span>&#x25BC;</span>
-          )}
-        </h1>
-        {selectedOption === "Database" && (
-          <div
+          <h1
             style={{
+              cursor: "pointer",
+              fontSize: "20px",
               display: "flex",
-              flexDirection: "row",
+              alignItems: "center",
               justifyContent: "space-between",
             }}
+            onClick={() => toggleOption("Authentication")}
           >
-            <div
-              className="selectorNode"
-              onDragStart={(event) =>
-                onDragStart(event, "default", "Database_postgresql")
-              }
-              draggable
-            >
-              <img
-                width="95px"
-                style={{ marginBottom: "10px" }}
-                src={db1}
-                alt="postgreslogo"
-              ></img>
-            </div>
-            &nbsp;
-            <div
-              className="selectorNode"
-              onDragStart={(event) =>
-                onDragStart(event, "default", "Database_mongodb")
-              }
-              draggable
-            >
-              <img width="95px" src={db2} alt="mongologo"></img>
-            </div>
-          </div>
-        )}
+            Authentication{" "}
+            {selectedOption === "Authentication" ? (
+              <span>&#x25B2;</span>
+            ) : (
+              <span>&#x25BC;</span>
+            )}
+          </h1>
+          {selectedOption === "Authentication" && (
+            <>
+              <div
+                className="selectorNode3"
+                onDragStart={(event) =>
+                  onDragStart(event, "default", "Auth_oauth2")
+                }
+                draggable
+              >
+                <img width="145px" src={keycloakIcon} alt="keycloaklogo"></img>
+              </div>
+            </>
+          )}
+          <h1
+            style={{
+              cursor: "pointer",
+              fontSize: "20px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+            onClick={() => toggleOption("Database")}
+          >
+            Database{" "}
+            {selectedOption === "Databases" ? (
+              <span>&#x25B2;</span>
+            ) : (
+              <span>&#x25BC;</span>
+            )}
+          </h1>
+          {selectedOption === "Database" && (
+            <>
+              <div
+                className="selectorNode"
+                onDragStart={(event) =>
+                  onDragStart(event, "default", "Database_postgresql")
+                }
+                draggable
+              >
+                <img
+                  width="120px"
+                  style={{ marginBottom: "10px" }}
+                  src={db1}
+                  alt="postgreslogo"
+                ></img>
+              </div>
+              <div
+                className="selectorNode"
+                onDragStart={(event) =>
+                  onDragStart(event, "default", "Database_mongodb")
+                }
+                draggable
+              >
+                <img width="120px" src={db2} alt="mongologo"></img>
+              </div>
+            </>
+          )}
 
-        <h1>
-          <span
-            style={{
-              cursor: "pointer",
-              fontSize: "20px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              display: "flex",
-              alignItems: "center",
-            }}
-            onClick={() => toggleOption("serviceDiscovery")}
-          >
-            Service Discovery{" "}
-            {selectedOption === "serviceDiscovery" ? (
-              <span>&#x25B2;</span>
-            ) : (
-              <span>&#x25BC;</span>
-            )}
-          </span>
-        </h1>
-        {selectedOption === "serviceDiscovery" && (
-          <>
-            <div
-              className="selectorNode1"
-              onDragStart={(event) =>
-                onDragStart(event, "default", "Discovery_eureka")
-              }
-              draggable
+          <h1>
+            <span
+              style={{
+                cursor: "pointer",
+                fontSize: "20px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                display: "flex",
+                alignItems: "center",
+              }}
+              onClick={() => toggleOption("serviceDiscovery")}
             >
-              <img width="120px" src={eurkea} alt="eurekalogo"></img>
-            </div>
-          </>
-        )}
-        <h1>
-          <span
-            style={{
-              cursor: "pointer",
-              fontSize: "20px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-            onClick={() => toggleOption("loadManagement")}
-          >
-            Log Management{" "}
-            {selectedOption === "loadManagement" ? (
-              <span>&#x25B2;</span>
-            ) : (
-              <span>&#x25BC;</span>
-            )}
-          </span>
-        </h1>
-        {selectedOption === "loadManagement" && (
-          <>
-            <div
-              className="selectorNode6"
-              onDragStart={(event) => onDragStart(event, "default", "Load_eck")}
-              draggable
+              Service Discovery{" "}
+              {selectedOption === "serviceDiscovery" ? (
+                <span>&#x25B2;</span>
+              ) : (
+                <span>&#x25BC;</span>
+              )}
+            </span>
+          </h1>
+          {selectedOption === "serviceDiscovery" && (
+            <>
+              <div
+                className="selectorNode1"
+                onDragStart={(event) =>
+                  onDragStart(event, "default", "Discovery_eureka")
+                }
+                draggable
+              >
+                <img width="120px" src={eurkea} alt="eurekalogo"></img>
+              </div>
+            </>
+          )}
+          <h1>
+            <span
+              style={{
+                cursor: "pointer",
+                fontSize: "20px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+              onClick={() => toggleOption("loadManagement")}
             >
-              <img width="120px" src={eck} alt="ecklogo" />
-            </div>
-          </>
-        )}
-        {/* <h1>
+              Log Management{" "}
+              {selectedOption === "loadManagement" ? (
+                <span>&#x25B2;</span>
+              ) : (
+                <span>&#x25BC;</span>
+              )}
+            </span>
+          </h1>
+          {selectedOption === "loadManagement" && (
+            <>
+              <div
+                className="selectorNode6"
+                onDragStart={(event) =>
+                  onDragStart(event, "default", "Load_eck")
+                }
+                draggable
+              >
+                <img width="120px" src={eck} alt="ecklogo" />
+              </div>
+            </>
+          )}
+          {/* <h1>
           <span
             style={{
               cursor: "pointer",
@@ -308,14 +311,12 @@ export default ({
             </div>
           </>
         )} */}
+        </div>
         <div
           style={{
-            position: "absolute",
-            marginTop: "auto",
-            marginBottom: "10px",
+            position: "sticky",
             bottom: "0",
-            display: "flex",
-            flexDirection: "column",
+            marginTop: "10px",
           }}
         >
           <div

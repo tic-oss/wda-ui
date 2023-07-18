@@ -56,6 +56,15 @@ body,
   margin-bottom: 14px;
 }
 
+.dndflow aside .middleBlock::-webkit-scrollbar {
+  width: 0.1em;
+  background: transparent;
+}
+
+.dndflow aside .middleBlock::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
 .dndflow .dndnode {
   height: 40px;
   padding: 4px;
