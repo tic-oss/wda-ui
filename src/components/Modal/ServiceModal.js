@@ -84,6 +84,10 @@ const ServiceModal = ({
     ApplicationData.packageName === "" ||
     ApplicationData.serverPort === "";
 
+  const forbiddenPorts = ["8080", "5601", "9200"];
+  const serverPortCheck =
+    ApplicationData.serverPort && forbiddenPorts.includes(ApplicationData.serverPort);
+
   const appNameCheck = /[0-9_-]/.test(ApplicationData.applicationName);
 
   return (
@@ -114,25 +118,25 @@ const ServiceModal = ({
             </FormControl>
             {appNameCheck && (
               <Alert
-              status="error"
-              height="12px"
-              fontSize="12px"
-              borderRadius="3px"
-              mb={2}
-            >
-              <AlertIcon style={{ width: "14px", height: "14px" }} />
+                status="error"
+                height="12px"
+                fontSize="12px"
+                borderRadius="3px"
+                mb={2}
+              >
+                <AlertIcon style={{ width: "14px", height: "14px" }} />
                 Application Name should not contain -, _ or number.
               </Alert>
             )}
             {duplicateApplicationNameError && (
-              <Alert 
-              status="error"
-              height="12px"
-              fontSize="12px"
-              borderRadius="3px"
-              mb={2}
-            >
-              <AlertIcon style={{ width: "14px", height: "14px" }} />
+              <Alert
+                status="error"
+                height="12px"
+                fontSize="12px"
+                borderRadius="3px"
+                mb={2}
+              >
+                <AlertIcon style={{ width: "14px", height: "14px" }} />
                 Application name already exists. Please choose a unique name.
               </Alert>
             )}
@@ -184,13 +188,25 @@ const ServiceModal = ({
                 onChange={(e) => handleData("serverPort", e.target.value)}
               />
             </FormControl>
+            {serverPortCheck && (
+              <Alert
+                status="error"
+                height="12px"
+                fontSize="12px"
+                borderRadius="3px"
+                mb={2}
+              >
+                <AlertIcon style={{ width: "14px", height: "14px" }} />
+                The input contain cannot this reserved port number
+              </Alert>
+            )}
           </div>
           <Button
             onClick={() =>
               !duplicateApplicationNameError && onSubmit(ApplicationData)
             }
             style={{ display: "block", margin: "0 auto" }}
-            isDisabled={isSubmitDisabled || appNameCheck}
+            isDisabled={isSubmitDisabled || appNameCheck || serverPortCheck}
           >
             Submit
           </Button>
