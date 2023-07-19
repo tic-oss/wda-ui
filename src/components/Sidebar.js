@@ -72,6 +72,13 @@ export default ({
           flexDirection: "column",
         }}
       >
+        <div class="sideBlock"
+          style={{
+            position: "relative",
+            flex: "1",
+            overflowY: "auto",
+          }}
+        >
         <FormLabel fontWeight="bold">Project Name</FormLabel>
         <Input
           mb={4}
@@ -121,13 +128,6 @@ export default ({
         >
           Group
         </div>
-        <div class="middleBlock"
-          style={{
-            position: "relative",
-            flex: "1",
-            overflowY: "auto",
-          }}
-        >
           <h1
             style={{
               cursor: "pointer",
