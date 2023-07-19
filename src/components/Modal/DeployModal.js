@@ -827,6 +827,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
                   id="dockerRepositoryName"
                   placeholder="Docker Repository Name"
                   borderColor={"black"}
+                  maxLength="32"
                   value={DeploymentData.dockerRepositoryName}
                   onChange={(e) =>
                     handleData("dockerRepositoryName", e.target.value)
