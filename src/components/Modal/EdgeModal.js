@@ -105,7 +105,7 @@ const EdgeModal = ({
                 </Select>
               </FormControl>
             )}
-             {edgeData.type === "asynchronous" && (
+            {edgeData.type === "asynchronous" && (
               <FormControl>
                 <FormLabel>Framework</FormLabel>
                 <Select
@@ -158,7 +158,12 @@ const EdgeModal = ({
           </div>
         </ModalBody>
         <ModalFooter>
-          <Button onClick={() => handleSubmit(edgeData)}>Submit</Button>
+          <Button
+            style={{ display: "block", margin: "0 auto" }}
+            onClick={() => handleSubmit(edgeData)}
+          >
+            Submit
+          </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
