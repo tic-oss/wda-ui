@@ -40,6 +40,10 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
     UiData.applicationName
   );
 
+  const packageNameCheck =
+    UiData.packageName &&
+    !/^[a-zA-Z](?:[a-zA-Z0-9_.-]*[a-zA-Z0-9])?$/g.test(UiData.packageName);
+
   const handleKeyPress = (event) => {
     const charCode = event.which ? event.which : event.keyCode;
     if ((charCode >= 48 && charCode <= 57) || charCode === 8) {
@@ -138,6 +142,18 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
                 onChange={(e) => handleData("packageName", e.target.value)}
               />
             </FormControl>
+            {packageNameCheck && (
+              <Alert
+                status="error"
+                height="12px"
+                fontSize="12px"
+                borderRadius="3px"
+                mb={2}
+              >
+                <AlertIcon style={{ width: "14px", height: "14px" }} />
+                Enter a valid package name
+              </Alert>
+            )}
             <FormControl>
               <FormLabel>Server Port</FormLabel>
               <Input
