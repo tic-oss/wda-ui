@@ -802,7 +802,7 @@ const Designer = () => {
                   marginBottom: "10px",
                 }}
               >
-                Drag and drop components here
+                Design your application architecture here
               </div>
               <div
                 style={{
@@ -812,7 +812,7 @@ const Designer = () => {
                   color: "#c3c3c3",
                 }}
               >
-                To design your architecture
+                Click next to auto generate code and setup infrastructure
               </div>
               <Button
                 mt={4}
