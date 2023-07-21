@@ -78,7 +78,19 @@ const Designer = () => {
   const addEdge = (edgeParams, edges) => {
     console.log(edgeParams, "edgeee");
     const edgeId = `${edgeParams.source}-${edgeParams.target}`;
-    return { ...edges, [edgeId]: { id: edgeId, ...edgeParams } };
+    if (!edges[edgeId]) {
+      edges[edgeId] = {
+        id: edgeId,
+        ...edgeParams,
+        markerEnd: {
+          color: "#ff0000",
+          type: MarkerType.ArrowClosed,
+        },
+        style: { stroke: "#ff0000" },
+      };
+    }
+    return { ...edges };
+    // return { ...edges, [edgeId]: { id: edgeId, ...edgeParams } };
   };
 
   const updateEdge = (oldEdge, newConnection, edges, Nodes) => {
@@ -698,7 +710,7 @@ const Designer = () => {
       UpdatedEdges[IsEdgeopen].style = { stroke: "black" };
     } else {
       UpdatedEdges[IsEdgeopen].markerEnd = {
-        color: "#e2e8f0",
+        color: "#bcbaba",
         type: MarkerType.ArrowClosed,
       };
       UpdatedEdges[IsEdgeopen].style = { stroke: "#bcbaba" };
