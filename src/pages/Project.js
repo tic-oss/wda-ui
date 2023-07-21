@@ -58,7 +58,6 @@ const Project = () => {
       } else if (metadata?.edges) {
         setEdges(Object.values(data?.edges));
       } else {
-        
         setNodes([getDeploymentNode(metadata)]);
       }
       if (metadata?.edges) {

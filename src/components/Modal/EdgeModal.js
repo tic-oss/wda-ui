@@ -31,6 +31,8 @@ const EdgeModal = ({
   };
   const [edgeData, setEdgeData] = useState(initialState);
 
+  const isEmpty = edgeData.type === "" || edgeData.framework === "";
+
   const handleData = (column, value) => {
     if (column === "type") {
       setEdgeData((prev) => ({
@@ -160,6 +162,7 @@ const EdgeModal = ({
         <ModalFooter>
           <Button
             style={{ display: "block", margin: "0 auto" }}
+            isDisabled={isEmpty}
             onClick={() => handleSubmit(edgeData)}
           >
             Submit
