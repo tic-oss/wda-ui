@@ -84,15 +84,18 @@ const ServiceModal = ({
     ApplicationData.packageName === "" ||
     ApplicationData.serverPort === "";
 
-  const forbiddenPorts = ["8080", "5601", "9200"];
+  const forbiddenPorts = ["5601", "9200", "15021", "20001", "3000", "8080"];
   const serverPortCheck =
-    ApplicationData.serverPort && forbiddenPorts.includes(ApplicationData.serverPort);
+    ApplicationData.serverPort &&
+    forbiddenPorts.includes(ApplicationData.serverPort);
 
   const appNameCheck = /[0-9_-]/.test(ApplicationData.applicationName);
 
   const packageNameCheck =
     ApplicationData.packageName &&
-    !/^[a-zA-Z](?:[a-zA-Z0-9_.-]*[a-zA-Z0-9])?$/g.test(ApplicationData.packageName);
+    !/^[a-zA-Z](?:[a-zA-Z0-9_.-]*[a-zA-Z0-9])?$/g.test(
+      ApplicationData.packageName
+    );
 
   return (
     <Modal isOpen={isOpen} onClose={() => onClose(false)} isCentered={true}>
