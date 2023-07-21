@@ -15,6 +15,18 @@ function Contact() {
           don't hesitate to get in touch with us.
         </Heading>
         <br />
+        <p style={{ fontStyle: "italic", fontWeight: "bold" }}>
+          Have a question?{" "}
+          <a
+            href="https://github.com/orgs/tic-oss/discussions"
+            target="_blank"
+            style={{ textDecoration: "underline", color: "blue" }}
+          >
+            Click here
+          </a>{" "}
+          to post it on our discussion forum.
+        </p>
+        <br />
         <p style={{ fontStyle: "italic", fontWeight: "bold" }}>Email:</p>
         <p>tic.dev@comakeit.com</p>
         <br />
@@ -46,7 +58,7 @@ function Contact() {
           back to you as soon as possible. Thank you for using our app!
         </Heading>
       </Container>
-      <Footer/>
+      <Footer />
     </>
   );
 }
