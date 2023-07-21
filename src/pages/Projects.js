@@ -8,7 +8,6 @@ import {
   Td,
   TableContainer,
   Button,
-  Modal,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useKeycloak } from "@react-keycloak/web";
@@ -177,12 +176,12 @@ function Projects() {
                       >
                         {project.metadata.deployment.cloudProvider ===
                         "azure" ? (
-                          <img width="40px" src={azure} />
+                          <img width="40px" src={azure} alt="azure" />
                         ) : project.metadata.deployment.cloudProvider ===
                           "aws" ? (
-                          <img width="40px" src={aws} />
+                          <img width="40px" src={aws} alt="aws" />
                         ) : (
-                          <img width="40px" src={minikube} />
+                          <img width="40px" src={minikube} alt="minikube" />
                         )}
                       </Button>
                     </Td>

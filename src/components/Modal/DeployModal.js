@@ -21,7 +21,7 @@ import {
 import azure from "../../../src/assets/Azure.png";
 import aws from "../../../src/assets/aws.png";
 import { InfoIcon } from "@chakra-ui/icons";
-import minikube from "../../assets/mini.png";
+// import minikube from "../../assets/mini.png";
 
 const DeployModal = ({ onSubmit, isLoading, projectData, onClose }) => {
   const [selectedImage, setSelectedImage] = useState(null);

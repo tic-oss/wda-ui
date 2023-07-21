@@ -21,7 +21,6 @@ const EdgeModal = ({
   onClose,
   handleEdgeData,
   isServiceDiscovery,
-  isMessageBroker,
 }) => {
   console.log(CurrentEdge, "edgeeeeee");
   const initialState = {

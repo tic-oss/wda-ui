@@ -202,6 +202,8 @@ const Designer = () => {
               );
             }
             break;
+          default:
+            break;
         }
       });
       if (Object.keys(updatedNodes).length === 0) setShowDiv(true);
@@ -508,7 +510,7 @@ const Designer = () => {
     } else {
       let flag = false;
       for (let key in serviceInputCheck) {
-        if (key != Isopen && serviceInputCheck[key] === true) {
+        if (key !== Isopen && serviceInputCheck[key] === true) {
           flag = true;
           setIsEmptyServiceSubmit(true);
         }
@@ -763,7 +765,10 @@ const Designer = () => {
   };
 
   return (
-    <div className="dndflow" style={{ overflow: "hidden !important", bottom:0 }}>
+    <div
+      className="dndflow"
+      style={{ overflow: "hidden !important", bottom: 0 }}
+    >
       <ReactFlowProvider>
         <div
           className="reactflow-wrapper"
@@ -867,7 +872,7 @@ const Designer = () => {
             onDragOver={onDragOver}
             onNodeDoubleClick={onclick}
             onNodeClick={onSingleClick}
-            deleteKeyCode={["Backspace","Delete"]}
+            deleteKeyCode={["Backspace", "Delete"]}
             fitView
             onEdgeUpdate={(oldEdge, newConnection) =>
               onEdgeUpdate(nodes, oldEdge, newConnection)

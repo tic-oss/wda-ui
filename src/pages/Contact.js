@@ -1,6 +1,6 @@
 import React from "react";
-import { Heading, Button, Container } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { Heading, Container } from "@chakra-ui/react";
+// import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 
 function Contact() {
@@ -20,6 +20,7 @@ function Contact() {
           <a
             href="https://github.com/orgs/tic-oss/discussions"
             target="_blank"
+            rel="noopener noreferrer"
             style={{ textDecoration: "underline", color: "blue" }}
           >
             Click here
