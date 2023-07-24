@@ -1,6 +1,5 @@
 import { Handle, Position } from "reactflow";
 import istio from "../../assets/istio.png";
-// import consol from "../../assets/consol.png";
 
 const handleStyle = { left: 25 };
 
