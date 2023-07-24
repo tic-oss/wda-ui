@@ -84,10 +84,10 @@ const ServiceModal = ({
     ApplicationData.packageName === "" ||
     ApplicationData.serverPort === "";
 
-  const forbiddenPorts = ["5601", "9200", "15021", "20001", "3000", "8080"];
+  const reservedPorts = ["5601", "9200", "15021", "20001", "3000", "8080"];
   const serverPortCheck =
     ApplicationData.serverPort &&
-    forbiddenPorts.includes(ApplicationData.serverPort);
+    reservedPorts.includes(ApplicationData.serverPort);
 
   const appNameCheck = /[0-9_-]/.test(ApplicationData.applicationName);
 

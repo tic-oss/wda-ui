@@ -32,9 +32,9 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
     UiData.packageName === "" ||
     UiData.serverPort === "";
 
-  const forbiddenPorts = ["5601", "9200", "15021", "20001", "3000", "8080"];
+  const reservedPorts = ["5601", "9200", "15021", "20001", "3000", "8080"];
   const serverPortCheck =
-    UiData.serverPort && forbiddenPorts.includes(UiData.serverPort);
+    UiData.serverPort && reservedPorts.includes(UiData.serverPort);
 
   const appNameCheck = !/^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$/g.test(
     UiData.applicationName
