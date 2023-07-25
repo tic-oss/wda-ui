@@ -78,7 +78,8 @@ const Designer = () => {
   const addEdge = (edgeParams, edges) => {
     console.log(edgeParams, "edgeee");
     const edgeId = `${edgeParams.source}-${edgeParams.target}`;
-    if (!edges[edgeId]) {
+    const databaseEdge = edgeParams?.target.startsWith("Database");
+    if (!edges[edgeId] && !databaseEdge) {
       edges[edgeId] = {
         id: edgeId,
         ...edgeParams,
@@ -87,6 +88,17 @@ const Designer = () => {
           type: MarkerType.ArrowClosed,
         },
         style: { stroke: "#ff0000" },
+      };
+    }
+    if (databaseEdge) {
+      edges[edgeId] = {
+        id: edgeId,
+        ...edgeParams,
+        markerEnd: {
+          color: "black",
+          type: MarkerType.ArrowClosed,
+        },
+        style: { stroke: "black" },
       };
     }
     return { ...edges };
