@@ -475,7 +475,7 @@ const Sidebar = ({
           ) : (
             <></>
           )}
-          {isEmptyUiSubmit === true ? (
+          {/* {isEmptyUiSubmit === true ? (
             <p
               style={{
                 fontSize: "10px",
@@ -500,7 +500,7 @@ const Sidebar = ({
             </p>
           ) : (
             <></>
-          )}
+          )} */}
         </div>
       </aside>
     </>
