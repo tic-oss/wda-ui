@@ -81,7 +81,8 @@ const Designer = () => {
     console.log(edgeParams, "edgeee");
     const edgeId = `${edgeParams.source}-${edgeParams.target}`;
     const databaseEdge = edgeParams?.target.startsWith("Database");
-    if (!edges[edgeId] && !databaseEdge) {
+    const groupEdge = edgeParams?.target.startsWith("group");
+    if (!edges[edgeId] && !databaseEdge && !groupEdge) {
       edges[edgeId] = {
         id: edgeId,
         ...edgeParams,
@@ -92,7 +93,7 @@ const Designer = () => {
         style: { stroke: "#ff0000" },
       };
     }
-    if (databaseEdge) {
+    if (databaseEdge || groupEdge) {
       edges[edgeId] = {
         id: edgeId,
         ...edgeParams,
@@ -814,7 +815,11 @@ const Designer = () => {
       style={{ overflow: "hidden !important", bottom: 0 }}
     >
       <ReactFlowProvider>
-        <div className="reactflow-wrapper" ref={reactFlowWrapper}>
+        <div
+          className="reactflow-wrapper"
+          ref={reactFlowWrapper}
+          style={{ width: "100%", height: "94vh" }}
+        >
           {showDiv && (
             <div
               style={{
