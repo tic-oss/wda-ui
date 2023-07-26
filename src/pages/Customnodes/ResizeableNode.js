@@ -7,7 +7,6 @@ export default function ResizableNode({ id, data, selected }) {
 
   const isConnecting = !!connectionNodeId;
   const sourceStyle = { zIndex: !isConnecting ? 1 : 0 };
-  // const isTarget = connectionNodeId && connectionNodeId !== id;
 
   return (
     <>
