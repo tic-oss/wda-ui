@@ -46,6 +46,8 @@ const getId = (type = "") => {
   return "Id";
 };
 
+const defaultViewport = { x: 0, y: 0, zoom: 10 };
+
 const nodeTypes = {
   selectorNode: CustomImageNode,
   selectorNode1: CustomServiceNode,
@@ -899,6 +901,7 @@ const Designer = () => {
             onEdgesChange={(changes) => onEdgesChange(nodes, changes)}
             onConnect={(params) => onConnect(params, nodes)}
             onInit={setReactFlowInstance}
+            onNodeDrag={onSingleClick}
             onDrop={(e) =>
               onDrop(
                 e,
@@ -922,16 +925,13 @@ const Designer = () => {
             onEdgeUpdateEnd={(_, edge) => onEdgeUpdateEnd(nodes, edge)}
             onEdgeDoubleClick={onEdgeClick}
             nodesFocusable={true}
-            // defaultEdgeOptions={defaultEdgeOptions}
-            // connectionLineComponent={CustomConnectionLine}
-            // connectionLineStyle={connectionLineStyle}
+            defaultViewport={defaultViewport}
           >
             <Controls />
             <MiniMap style={{ backgroundColor: "#3182CE" }} />
             <Background
-              zIndex={10}
               gap={10}
-              color="#e7e7e7"
+              color="#f2f2f2"
               variant={BackgroundVariant.Lines}
             />
           </ReactFlow>
