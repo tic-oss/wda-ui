@@ -25,6 +25,9 @@ import CustomLocalenvironmentNode from "./Customnodes/CustomLocalenvironmentNode
 import AlertModal from "../components/Modal/AlertModal";
 import resizeableNode from "./Customnodes/ResizeableNode";
 import groupNode from "./Customnodes/GroupNode";
+import CustomNode from "./Customnodes/ComponentNode";
+import CustomConnectionLine from "./CustomEdges/CustomConnectionLine";
+import FloatingEdge from "./CustomEdges/FloatingEdge";
 
 import "./../App.css";
 import EdgeModal from "../components/Modal/EdgeModal";
@@ -41,7 +44,17 @@ const getId = (type = "") => {
   else if (type === "Authentication") return "Authentication_1";
   else if (type === "UI+Gateway") return "UI";
   else if (type === "Group") return `group_${group_id++}`;
+  else if (type === "customnode") return `customnode_${group_id++}`;
   return "Id";
+};
+
+// const connectionLineStyle = {
+//   strokeWidth: 3,
+//   stroke: "black",
+// };
+
+const edgeTypes = {
+  floating: FloatingEdge,
 };
 
 const nodeTypes = {
@@ -55,6 +68,16 @@ const nodeTypes = {
   selectorNode7: CustomLocalenvironmentNode,
   ResizableNode: resizeableNode,
   GroupNode: groupNode,
+  customnode: CustomNode,
+};
+
+const defaultEdgeOptions = {
+  style: { strokeWidth: 3, stroke: "black" },
+  type: "floating",
+  markerEnd: {
+    type: MarkerType.ArrowClosed,
+    color: "black",
+  },
 };
 
 const Designer = () => {
@@ -459,6 +482,20 @@ const Designer = () => {
             width: "120px",
             height: "40px",
             zIndex: -1,
+          },
+        };
+        setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
+      } else if (name.startsWith("customnode")) {
+        const newNode = {
+          id: getId(name),
+          type: "customnode",
+          position,
+          data: { label: name },
+          style: {
+            border: "1px solid #ff0000",
+            width: "120px",
+            height: "40px",
+            borderRadius: "15px",
           },
         };
         setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
@@ -885,9 +922,10 @@ const Designer = () => {
             nodes={Object.values(nodes)}
             edges={Object.values(edges)}
             nodeTypes={nodeTypes}
+            edgeTypes={edgeTypes}
             snapToGrid
             connectionLineType={ConnectionLineType.Step}
-            snapGrid={[20, 20]}
+            snapGrid={[10, 10]}
             onNodesChange={(changes) =>
               onNodesChange(setShowDiv, edges, changes)
             }
@@ -916,6 +954,9 @@ const Designer = () => {
             onEdgeUpdateEnd={(_, edge) => onEdgeUpdateEnd(nodes, edge)}
             onEdgeDoubleClick={onEdgeClick}
             nodesFocusable={true}
+            // defaultEdgeOptions={defaultEdgeOptions}
+            // connectionLineComponent={CustomConnectionLine}
+            // connectionLineStyle={connectionLineStyle}
           >
             <Controls />
             <MiniMap style={{ backgroundColor: "#3182CE" }} />

@@ -138,6 +138,13 @@ const Sidebar = ({
           >
             Group
           </div>
+          <div
+            className="dndnode output"
+            onDragStart={(event) => onDragStart(event, "default", "customnode")}
+            draggable
+          >
+            Custom Node
+          </div>
           <h1
             style={{
               cursor: "pointer",
