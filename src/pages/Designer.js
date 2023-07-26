@@ -817,11 +817,7 @@ const Designer = () => {
       style={{ overflow: "hidden !important", bottom: 0 }}
     >
       <ReactFlowProvider>
-        <div
-          className="reactflow-wrapper"
-          ref={reactFlowWrapper}
-          style={{ width: "100%", height: "94vh" }}
-        >
+        <div className="reactflow-wrapper" ref={reactFlowWrapper}>
           {showDiv && (
             <div
               style={{
