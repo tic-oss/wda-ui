@@ -5,6 +5,8 @@ import ReactFlow, {
   MarkerType,
   MiniMap,
   ConnectionLineType,
+  Background,
+  BackgroundVariant,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import { Button } from "@chakra-ui/react";
@@ -25,9 +27,6 @@ import CustomLocalenvironmentNode from "./Customnodes/CustomLocalenvironmentNode
 import AlertModal from "../components/Modal/AlertModal";
 import resizeableNode from "./Customnodes/ResizeableNode";
 import groupNode from "./Customnodes/GroupNode";
-import CustomNode from "./Customnodes/ComponentNode";
-import CustomConnectionLine from "./CustomEdges/CustomConnectionLine";
-import FloatingEdge from "./CustomEdges/FloatingEdge";
 
 import "./../App.css";
 import EdgeModal from "../components/Modal/EdgeModal";
@@ -44,17 +43,7 @@ const getId = (type = "") => {
   else if (type === "Authentication") return "Authentication_1";
   else if (type === "UI+Gateway") return "UI";
   else if (type === "Group") return `group_${group_id++}`;
-  else if (type === "customnode") return `customnode_${group_id++}`;
   return "Id";
-};
-
-// const connectionLineStyle = {
-//   strokeWidth: 3,
-//   stroke: "black",
-// };
-
-const edgeTypes = {
-  floating: FloatingEdge,
 };
 
 const nodeTypes = {
@@ -68,16 +57,6 @@ const nodeTypes = {
   selectorNode7: CustomLocalenvironmentNode,
   ResizableNode: resizeableNode,
   GroupNode: groupNode,
-  customnode: CustomNode,
-};
-
-const defaultEdgeOptions = {
-  style: { strokeWidth: 3, stroke: "black" },
-  type: "floating",
-  markerEnd: {
-    type: MarkerType.ArrowClosed,
-    color: "black",
-  },
 };
 
 const Designer = () => {
@@ -348,6 +327,13 @@ const Designer = () => {
   const onDragOver = useCallback((event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
+    setShowDiv(false);
+  }, []);
+
+  const onDragStop = useCallback((event) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+    setShowDiv(true);
   }, []);
 
   const onclick = (e, node) => {
@@ -378,7 +364,6 @@ const Designer = () => {
       authcount,
       Localenvcount
     ) => {
-      setShowDiv(false);
       event.preventDefault();
       console.log(event);
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
@@ -386,6 +371,7 @@ const Designer = () => {
       const name = event.dataTransfer.getData("Name");
 
       if (typeof type === "undefined" || !type) {
+        setShowDiv(true);
         return;
       }
 
@@ -482,20 +468,6 @@ const Designer = () => {
             width: "120px",
             height: "40px",
             zIndex: -1,
-          },
-        };
-        setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
-      } else if (name.startsWith("customnode")) {
-        const newNode = {
-          id: getId(name),
-          type: "customnode",
-          position,
-          data: { label: name },
-          style: {
-            border: "1px solid #ff0000",
-            width: "120px",
-            height: "40px",
-            borderRadius: "15px",
           },
         };
         setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
@@ -842,17 +814,7 @@ const Designer = () => {
       style={{ overflow: "hidden !important", bottom: 0 }}
     >
       <ReactFlowProvider>
-        <div
-          className="reactflow-wrapper"
-          ref={reactFlowWrapper}
-          style={{
-            width: "100%",
-            height: "94vh",
-            backgroundImage:
-              "linear-gradient(to right, #f2f2f2 1px, transparent 1px), linear-gradient(to bottom, #f2f2f2 1px, transparent 1px)",
-            backgroundSize: "20px 20px",
-          }}
-        >
+        <div className="reactflow-wrapper" ref={reactFlowWrapper}>
           {showDiv && (
             <div
               style={{
@@ -867,6 +829,7 @@ const Designer = () => {
                 justifyContent: "center",
                 border: "2px dashed #cfcfcf",
                 borderRadius: "8px",
+                zIndex: 1,
               }}
             >
               <div
@@ -922,7 +885,6 @@ const Designer = () => {
             nodes={Object.values(nodes)}
             edges={Object.values(edges)}
             nodeTypes={nodeTypes}
-            edgeTypes={edgeTypes}
             snapToGrid
             connectionLineType={ConnectionLineType.Step}
             snapGrid={[10, 10]}
@@ -943,6 +905,7 @@ const Designer = () => {
               )
             }
             onDragOver={onDragOver}
+            onDragLeave={() => setShowDiv(Object.keys(nodes).length === 0)}
             onNodeDoubleClick={onclick}
             onNodeClick={onSingleClick}
             deleteKeyCode={["Backspace", "Delete"]}
@@ -960,6 +923,12 @@ const Designer = () => {
           >
             <Controls />
             <MiniMap style={{ backgroundColor: "#3182CE" }} />
+            <Background
+              zIndex={10}
+              gap={10}
+              color="#e7e7e7"
+              variant={BackgroundVariant.Lines}
+            />
           </ReactFlow>
         </div>
         <Sidebar

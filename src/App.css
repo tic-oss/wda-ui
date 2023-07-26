@@ -179,3 +179,25 @@ div.customHandle {
   border: none;
   opacity: 0;
 }
+
+/* .react-flow__handle-connecting {
+  background: #ff6060;
+}
+
+.react-flow__handle-valid {
+  background: #55dd99;
+} */
+
+/* .react-flow__handle-left,
+.react-flow__handle-right {
+  border-radius: 0px;
+  height: 7px;
+  width: 3px;
+}
+
+.react-flow__handle-top,
+.react-flow__handle-bottom {
+  border-radius: 0px;
+  width: 7px;
+  height: 3px;
+} */
