@@ -7,7 +7,6 @@ export default function GroupNode({ id, data, selected }) {
 
   const isConnecting = !!connectionNodeId;
   const sourceStyle = { zIndex: !isConnecting ? 1 : 0 };
-  // const isTarget = connectionNodeId && connectionNodeId !== id;
 
   return (
     <>
@@ -20,7 +19,6 @@ export default function GroupNode({ id, data, selected }) {
       <div style={{ textAlign: "center" }}>{data.label}</div>
       <>
         <Handle
-          // className="customHandle"
           id="source.Right"
           position={Position.Right}
           type="source"
