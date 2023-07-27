@@ -83,7 +83,9 @@ const Designer = () => {
     console.log(edgeParams, "edgeee");
     const edgeId = `${edgeParams.source}-${edgeParams.target}`;
     const databaseEdge = edgeParams?.target.startsWith("Database");
-    const groupEdge = edgeParams?.target.startsWith("group");
+    const groupEdge =
+      edgeParams?.target.startsWith("group") ||
+      edgeParams?.source.startsWith("group");
     if (!edges[edgeId] && !databaseEdge && !groupEdge) {
       edges[edgeId] = {
         id: edgeId,
