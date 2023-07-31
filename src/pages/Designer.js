@@ -335,12 +335,6 @@ const Designer = () => {
     setShowDiv(false);
   }, []);
 
-  const onDragStop = useCallback((event) => {
-    event.preventDefault();
-    event.dataTransfer.dropEffect = "move";
-    setShowDiv(true);
-  }, []);
-
   const onclick = (e, node) => {
     const Id = e.target.dataset.id || e.target.name || node.id;
     console.log(Id);
@@ -352,11 +346,11 @@ const Designer = () => {
       } else setCurrentNode(nodes[Id].data);
       setopen(Id);
     }
-  };
+  // };
 
-  const onSingleClick = (e, node) => {
-    const Id = e.target.dataset.id || e.target.name || node.id;
-    console.log(Id);
+  // const onSingleClick = (e, node) => {
+    // const Id = e.target.dataset.id || e.target.name || node.id;
+    // console.log(Id);
     setNodeClick(Id);
   };
 
@@ -825,7 +819,7 @@ const Designer = () => {
               style={{
                 position: "absolute",
                 top: "50%",
-                left: "50%",
+                left: "60%",
                 transform: "translate(-60%, -50%)",
                 display: "flex",
                 flexDirection: "column",
@@ -899,7 +893,7 @@ const Designer = () => {
             onEdgesChange={(changes) => onEdgesChange(nodes, changes)}
             onConnect={(params) => onConnect(params, nodes)}
             onInit={setReactFlowInstance}
-            onNodeDrag={onSingleClick}
+            onNodeDrag={onclick}
             onDrop={(e) =>
               onDrop(
                 e,
@@ -912,8 +906,8 @@ const Designer = () => {
             }
             onDragOver={onDragOver}
             onDragLeave={() => setShowDiv(Object.keys(nodes).length === 0)}
-            onNodeDoubleClick={onclick}
-            onNodeClick={onSingleClick}
+            onNodeClick={onclick}
+            // onNodeClick={onSingleClick}
             deleteKeyCode={["Backspace", "Delete"]}
             fitView
             onEdgeUpdate={(oldEdge, newConnection) =>

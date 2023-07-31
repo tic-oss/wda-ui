@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Modal,
-  ModalOverlay,
   ModalContent,
   ModalHeader,
   ModalCloseButton,
@@ -27,6 +26,24 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
     ...CurrentNode,
   };
   const [UiData, setUiDataData] = useState(IntialState);
+
+  useEffect(() => {
+    const handleDeleteKeyPress = (event) => {
+      if (
+        isOpen &&
+        (event.key === "Backspace" || event.key === "Delete") &&
+        event.target.tagName !== "INPUT"
+      ) {
+        onClose();
+      }
+    };
+
+    window.addEventListener("keydown", handleDeleteKeyPress);
+    return () => {
+      window.removeEventListener("keydown", handleDeleteKeyPress);
+    };
+  }, [isOpen, onClose]);
+
   const isEmptyUiSubmit =
     UiData.applicationName === "" ||
     UiData.packageName === "" ||
@@ -70,9 +87,16 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={() => onClose(false)} isCentered={true}>
-      <ModalOverlay />
-      <ModalContent>
+    <Modal isOpen={isOpen} onClose={() => onClose(false)}>
+      {/* <ModalOverlay /> */}
+      <ModalContent
+        style={{
+          position: "absolute",
+          top: "20px",
+          right: "10px",
+          width: "300px",
+        }}
+      >
         <ModalHeader style={{ textAlign: "center" }}>
           User Interface
         </ModalHeader>

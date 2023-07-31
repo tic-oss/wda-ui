@@ -63,7 +63,8 @@ const Sidebar = ({
     <>
       <aside
         style={{
-          position: "relative",
+          position: "fixed", 
+          left: 0, 
           overflow: "hidden",
           height: "94vh",
           border: "1px Solid #CFCFCF",

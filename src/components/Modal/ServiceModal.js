@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Modal,
-  ModalOverlay,
   ModalContent,
   ModalHeader,
   ModalCloseButton,
@@ -32,6 +31,24 @@ const ServiceModal = ({
     ...CurrentNode,
   };
   const [ApplicationData, setApplicationData] = useState(IntialState);
+
+  useEffect(() => {
+    const handleDeleteKeyPress = (event) => {
+      if (
+        isOpen &&
+        (event.key === "Backspace" || event.key === "Delete") &&
+        event.target.tagName !== "INPUT"
+      ) {
+        onClose();
+      }
+    };
+
+    window.addEventListener("keydown", handleDeleteKeyPress);
+    return () => {
+      window.removeEventListener("keydown", handleDeleteKeyPress);
+    };
+  }, [isOpen, onClose]);
+
   const [duplicateApplicationNameError, setDuplicateApplicationNameError] =
     useState(false);
 
@@ -98,9 +115,16 @@ const ServiceModal = ({
     );
 
   return (
-    <Modal isOpen={isOpen} onClose={() => onClose(false)} isCentered={true}>
-      <ModalOverlay />
-      <ModalContent>
+    <Modal isOpen={isOpen} onClose={() => onClose(false)}>
+      {/* <ModalOverlay /> */}
+      <ModalContent
+        style={{
+          position: "absolute",
+          top: "20px",
+          right: "10px",
+          width: "300px",
+        }}
+      >
         <ModalHeader style={{ textAlign: "center" }}>Service</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
@@ -127,7 +151,7 @@ const ServiceModal = ({
             {appNameCheck && (
               <Alert
                 status="error"
-                height="12px"
+                // height="12px"
                 fontSize="12px"
                 borderRadius="3px"
                 mb={2}
@@ -139,7 +163,7 @@ const ServiceModal = ({
             {duplicateApplicationNameError && (
               <Alert
                 status="error"
-                height="12px"
+                // height="12px"
                 fontSize="12px"
                 borderRadius="3px"
                 mb={2}
