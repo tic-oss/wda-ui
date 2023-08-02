@@ -920,7 +920,7 @@ const Designer = () => {
             defaultViewport={defaultViewport}
           >
             <Controls />
-            <MiniMap style={{ backgroundColor: "#3182CE" }} />
+            {/* <MiniMap style={{ backgroundColor: "#3182CE" }} /> */}
             <Background
               gap={10}
               color="#f2f2f2"
