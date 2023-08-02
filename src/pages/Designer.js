@@ -915,7 +915,7 @@ const Designer = () => {
             }
             onEdgeUpdateStart={onEdgeUpdateStart}
             onEdgeUpdateEnd={(_, edge) => onEdgeUpdateEnd(nodes, edge)}
-            onEdgeDoubleClick={onEdgeClick}
+            onEdgeClick={onEdgeClick}
             nodesFocusable={true}
             defaultViewport={defaultViewport}
           >
