@@ -10,7 +10,7 @@ import "./../App.css";
 import { Input, FormLabel, Button, Checkbox } from "@chakra-ui/react";
 import DeployModal from "./Modal/DeployModal";
 import { useKeycloak } from "@react-keycloak/web";
-import { ArrowRightIcon } from "@chakra-ui/icons";
+import { ArrowRightIcon, ArrowLeftIcon } from "@chakra-ui/icons";
 
 const Sidebar = ({
   isUINodeEnabled,
@@ -73,14 +73,14 @@ const Sidebar = ({
           position: "fixed",
           left: 0,
           overflow: "hidden",
-          // height: "94vh",
-          height: isContentVisible ? "94vh" : "50px",
+          height: isContentVisible ? "91.5vh" : "50px",
           width: isContentVisible ? "auto" : "40px",
-          marginBottom: isContentVisible ? "auto" : "10px",
           backgroundColor: "fff",
-          boxShadow: "1px 1px 2px #e2e8f0",
+          border: "1px solid #e2e8f0",
+          boxShadow: "1px 1px 20px 1px #e2e8f0",
           display: "flex",
           flexDirection: "column",
+          margin: "10px",
         }}
       >
         <ArrowRightIcon
@@ -89,7 +89,6 @@ const Sidebar = ({
             cursor: "pointer",
             marginBottom: "50px",
             display: isContentVisible ? "none" : "block",
-            
           }}
           onClick={handleToggleContent}
         />
@@ -114,7 +113,7 @@ const Sidebar = ({
             <FormLabel fontWeight="bold" style={{ margin: "0" }}>
               Project Name
             </FormLabel>
-            <ArrowRightIcon
+            <ArrowLeftIcon
               style={{ fontSize: "9px", cursor: "pointer" }}
               onClick={handleToggleContent}
             />
