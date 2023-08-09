@@ -142,7 +142,12 @@ const ServiceModal = ({
                 variant="outline"
                 id="applicationName"
                 placeholder="Name"
-                borderColor={duplicateApplicationNameError ? "red" : "black"}
+                borderColor={
+                  duplicateApplicationNameError ||
+                  !ApplicationData.applicationName
+                    ? "red"
+                    : "black"
+                }
                 maxLength="32"
                 value={ApplicationData.applicationName}
                 onChange={(e) => handleData("label", e.target.value)}
@@ -151,8 +156,8 @@ const ServiceModal = ({
             {appNameCheck && (
               <Alert
                 status="error"
-                // height="12px"
                 fontSize="12px"
+                padding="4px"
                 borderRadius="3px"
                 mb={2}
               >
@@ -163,7 +168,7 @@ const ServiceModal = ({
             {duplicateApplicationNameError && (
               <Alert
                 status="error"
-                // height="12px"
+                padding="4px"
                 fontSize="12px"
                 borderRadius="3px"
                 mb={2}
@@ -200,7 +205,7 @@ const ServiceModal = ({
                 variant="outline"
                 id="packagename"
                 placeholder="packageName"
-                borderColor={"black"}
+                borderColor={!ApplicationData.packageName ? "red" : "black"}
                 maxLength="32"
                 value={ApplicationData.packageName}
                 onChange={(e) => handleData("packageName", e.target.value)}
@@ -209,7 +214,7 @@ const ServiceModal = ({
             {packageNameCheck && (
               <Alert
                 status="error"
-                height="12px"
+                padding="4px"
                 fontSize="12px"
                 borderRadius="3px"
                 mb={2}
@@ -226,7 +231,7 @@ const ServiceModal = ({
                 variant="outline"
                 id="serverport"
                 placeholder="9000"
-                borderColor={"black"}
+                borderColor={!ApplicationData.serverPort ? "red" : "black"}
                 value={ApplicationData.serverPort}
                 maxLength="4"
                 onKeyPress={handleKeyPress}
@@ -236,7 +241,7 @@ const ServiceModal = ({
             {serverPortCheck && (
               <Alert
                 status="error"
-                height="12px"
+                padding="4px"
                 fontSize="12px"
                 borderRadius="3px"
                 mb={2}
@@ -253,7 +258,7 @@ const ServiceModal = ({
             style={{ display: "block", margin: "0 auto" }}
             isDisabled={isSubmitDisabled || appNameCheck || serverPortCheck}
           >
-            Submit
+            Save
           </Button>
         </ModalBody>
       </ModalContent>

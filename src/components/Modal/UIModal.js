@@ -116,7 +116,7 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
                 variant="outline"
                 id="applicationName"
                 placeholder="Name"
-                borderColor={"black"}
+                borderColor={!UiData.applicationName ? "red" : "black"}
                 maxLength="32"
                 value={UiData.applicationName}
                 onChange={(e) => handleData("label", e.target.value)}
@@ -124,7 +124,7 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
               {appNameCheck && (
                 <Alert
                   status="error"
-                  height="12px"
+                  padding="4px"
                   fontSize="12px"
                   borderRadius="3px"
                   mb={2}
@@ -160,7 +160,7 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
                 variant="outline"
                 id="packageName"
                 placeholder="packageName"
-                borderColor={"black"}
+                borderColor={!UiData.packageName ? "red" : "black"}
                 maxLength="32"
                 value={UiData.packageName}
                 onChange={(e) => handleData("packageName", e.target.value)}
@@ -169,7 +169,7 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
             {packageNameCheck && (
               <Alert
                 status="error"
-                height="12px"
+                padding="4px"
                 fontSize="12px"
                 borderRadius="3px"
                 mb={2}
@@ -185,7 +185,7 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
                 variant="outline"
                 id="serverPort"
                 placeholder="9000"
-                borderColor={"black"}
+                borderColor={!UiData.serverPort ? "red" : "black"}
                 value={UiData.serverPort}
                 maxLength="4"
                 onKeyPress={handleKeyPress}
@@ -195,7 +195,7 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
             {serverPortCheck && (
               <Alert
                 status="error"
-                height="12px"
+                padding="4px"
                 fontSize="12px"
                 borderRadius="3px"
                 mb={2}
@@ -210,7 +210,7 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode }) => {
             style={{ display: "block", margin: "0 auto" }}
             isDisabled={isEmptyUiSubmit || appNameCheck || serverPortCheck}
           >
-            Submit
+            Save
           </Button>
         </ModalBody>
       </ModalContent>
