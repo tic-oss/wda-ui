@@ -776,7 +776,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
                 </FormControl>
               )}
               <FormControl>
-                <FormLabel>Enable Monitoring</FormLabel>
+                <FormLabel>Enable Service Monitoring</FormLabel>
                 <Select
                   mb={4}
                   variant="outline"
@@ -793,7 +793,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
                 </Select>
               </FormControl>
               <FormControl>
-                <FormLabel>Enable Web UI</FormLabel>
+                <FormLabel>Enable Kubernetes Dashboard</FormLabel>
                 <Select
                   mb={4}
                   variant="outline"
