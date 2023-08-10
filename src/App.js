@@ -14,12 +14,15 @@ import Project from "./pages/Project";
 import React from "react";
 import { ReactKeycloakProvider } from "@react-keycloak/web";
 import keycloak from "./Keycloak";
+import { UserDataProvider } from './pages/ProjectDataContext';
 import PrivateRoute from "./helpers/PrivateRoute";
 
 function App() {
   return (
+
     <ReactKeycloakProvider authClient={keycloak}>
       <Router className="flex h-screen">
+      <UserDataProvider>
         <Navbar />
         <Switch>
           <Route exact path="/wda">
@@ -37,8 +40,13 @@ function App() {
           </Route>
           <Route exact path="/canvasToCode">
             {/* <PrivateRoute> */}
-            <Designer />
+            <Designer update={false}/>
             {/* </PrivateRoute> */}
+          </Route>
+          <Route exact path="/edit/:id">
+            <PrivateRoute>
+             <Designer update={true}/>
+            </PrivateRoute>
           </Route>
           <Route exact path="/projects">
             <PrivateRoute>
@@ -46,9 +54,9 @@ function App() {
             </PrivateRoute>
           </Route>
           <Route exact path="/projects/:id">
-            <PrivateRoute>
+            {/* <PrivateRoute> */}
               <Project />
-            </PrivateRoute>
+            {/* </PrivateRoute> */}
           </Route>
           <Route exact path="/docs">
             <DocHome />
@@ -67,6 +75,7 @@ function App() {
           </Route>
         </Switch>
         {/* <Footer /> */}
+      </UserDataProvider>
       </Router>
     </ReactKeycloakProvider>
   );
