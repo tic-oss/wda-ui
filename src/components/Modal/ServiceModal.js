@@ -52,7 +52,7 @@ const ServiceModal = ({
   //check whether port number is unique and lies within the range
   const ValidatePortNumber = (value) => {
     const isDuplicatePort = uniquePortNumbers.includes(value);
-    if ((isDuplicatePort && value !== "") || Number(value) <= 1023 || Number(value) > 65535) {
+    if (isDuplicatePort && value !== "") {
      setPortNumberError(true);
       return false;
     } else {
@@ -109,7 +109,11 @@ const ServiceModal = ({
   const reservedPorts = ["5601", "9200", "15021", "20001", "3000", "8080"];
   const serverPortCheck =
     ApplicationData.serverPort &&
-    reservedPorts.includes(ApplicationData.serverPort);
+    (reservedPorts.includes(ApplicationData.serverPort) ||
+    (Number(ApplicationData.serverPort)<=1023));
+
+  const PortNumberRangeCheck =
+    ApplicationData.serverPort && (Number(ApplicationData.serverPort)>65535);
 
   const appNameCheck = /[0-9_-]/.test(ApplicationData.applicationName);
 
@@ -224,7 +228,7 @@ const ServiceModal = ({
                 variant="outline"
                 id="serverport"
                 placeholder="9000"
-                borderColor={(PortNumberError||serverPortCheck) ? "red" : "black"}
+                borderColor={(PortNumberError||serverPortCheck||PortNumberRangeCheck) ? "red" : "black"}
                 value={ApplicationData.serverPort}
                 maxLength="5"
                 onKeyPress={handleKeyPress}
@@ -240,7 +244,7 @@ const ServiceModal = ({
                 mb={2}
               >
                 <AlertIcon style={{ width: "14px", height: "14px" }} />
-                The input cannot contain reserved port number
+                The input cannot contain reserved port number.
               </Alert>
             )}
             {PortNumberError && (
@@ -252,16 +256,29 @@ const ServiceModal = ({
                 mb={2}
               >
                 <AlertIcon style={{ width: "14px", height: "14px" }} />
-                Port Number Conflict
+                Port Number already exists. Please choose a unique Number.
                 </Alert>
             )}
+            {
+              PortNumberRangeCheck &&(
+                <Alert
+                status="error"
+                height="12px"
+                fontSize="12px"
+                borderRadius="3px"
+                mb={2}
+              >
+                <AlertIcon style={{ width: "14px", height: "14px" }} />
+                Port Number is out of the valid range.
+                </Alert>
+              )}
           </div>
           <Button
             onClick={() =>
               !duplicateApplicationNameError && onSubmit(ApplicationData)
             }
             style={{ display: "block", margin: "0 auto" }}
-            isDisabled={isSubmitDisabled || appNameCheck || serverPortCheck || PortNumberError}
+            isDisabled={isSubmitDisabled || appNameCheck || serverPortCheck || PortNumberError || PortNumberRangeCheck}
           >
             Submit
           </Button>

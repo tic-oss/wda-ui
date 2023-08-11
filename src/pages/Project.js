@@ -64,9 +64,7 @@ const Project = () => {
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
-
         const result = await response.json();
-        console.log(result);
         setVal(result);
         setmetadata(result.metadata)
         setUserData(result)
@@ -229,7 +227,6 @@ const Project = () => {
   };
 
   const onEdgeClick = (event, element) => {
-    console.log(element.data, "data");
     const EdgeData = element.data;
     if (EdgeData) {
       event.preventDefault();

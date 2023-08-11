@@ -157,7 +157,7 @@ function Projects() {
             },
           }
         );
-        if(response.status==200)
+        if(response.ok)
         {
          history.push({
           pathname: "/edit/" + id,

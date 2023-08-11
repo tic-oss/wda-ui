@@ -81,7 +81,6 @@ const Designer = ({update}) => {
   const location = useLocation();
   const [serviceInputCheck, setServiceInputCheck] = useState({});
   const addEdge = (edgeParams, edges) => {
-    console.log(edgeParams, "edgeee");
     const edgeId = `${edgeParams.source}-${edgeParams.target}`;
     const databaseEdge = edgeParams?.target.startsWith("Database");
     const groupEdge =
@@ -243,7 +242,6 @@ const Designer = ({update}) => {
   }, []);
 
   const [edges, setEdges] = useState({});
-  console.log("Edges", edges);
 
   const onEdgesChange = useCallback((Nodes, changes = []) => {
     setEdges((oldEdges) => {
@@ -540,7 +538,6 @@ const Designer = ({update}) => {
       document.title = "WDA";
       setShowDiv(true);
       if(update && userData){
-      console.log(userData);
       const nodes =userData.metadata.nodes;
       const edges=userData.metadata?.edges;
       setNodes(nodes)
@@ -554,8 +551,6 @@ const Designer = ({update}) => {
          }
         else if (key.toLowerCase().includes("service")) {
           service_id++;
-          console.log("abccccc",key)
-          console.log("ggggg",userData.metadata.nodes[key].data.label);
           setUniqueApplicationNames((prev) => [...prev, userData.metadata.nodes[key].data.label])
           setUniquePortNumbers((prev) => [...prev, userData.metadata.nodes[key].data.serverPort]);
           setServiceInputCheck((prev) => ({
