@@ -130,7 +130,7 @@ function Projects() {
   };
 
   const onSubmit =async (data) =>{
-    const response = await fetch(process.env.REACT_APP_API_BASE_URL + "/api/delete/" + data.id, {
+    const response = await fetch(process.env.REACT_APP_API_BASE_URL + "/api/blueprints/" + data.id, {
       method: "delete",
       headers: {
         "Content-Type": "application/json",

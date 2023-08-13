@@ -54,7 +54,7 @@ const Project = () => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch(process.env.REACT_APP_API_BASE_URL + "/blueprint/" + id, {
+        const response = await fetch(process.env.REACT_APP_API_BASE_URL + "/blueprints/" + id, {
           method: "get",
           headers: {
             "Content-Type": "application/json",
