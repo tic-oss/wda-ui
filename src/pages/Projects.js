@@ -16,11 +16,9 @@ import aws from "../../src/assets/aws.png";
 import minikube from "../../src/assets/mini.jpeg";
 import Footer from "../components/Footer";
 import DeploymentModal from "../components/Modal/DeploymentModal";
-import { useUserData } from './ProjectDataContext';
 import DeleteModal from '../components/Modal/DeleteModal';
 function Projects() {
   const history = useHistory();
-  const { setUserData } = useUserData();
   const [data, setData] = useState([]);
   const { keycloak, initialized } = useKeycloak();
   const [showData, setShowData] = useState(false);
@@ -52,7 +50,6 @@ function Projects() {
   const [depData, setDepData] = useState(DefaultData);
 
   const handleClick = async (data, column, id) => {
-    setUserData(data);
     if (column === "Architecture")
       history.push({
         pathname: "/projects/" + id,
@@ -146,7 +143,6 @@ function Projects() {
 
   const verifyData = async (data,id) => {
       try {
-        setUserData(data);
         const response = await fetch(
           process.env.REACT_APP_API_BASE_URL + "/api/user/" + id,
           {

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from 'react-router-dom'; 
 import {
   Modal,
   ModalOverlay,
@@ -22,10 +23,10 @@ import azure from "../../../src/assets/Azure.png";
 import aws from "../../../src/assets/aws.png";
 import { InfoIcon } from "@chakra-ui/icons";
 // import minikube from "../../assets/mini.png";
-import { useUserData } from '../../pages/ProjectDataContext';
 
 const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
-  const { userData } = useUserData();
+  const location = useLocation();
+  const [userData,setuserData] = useState(location?.state);
   const [selectedImage, setSelectedImage] = useState(null);
   const [checkLength, setCheckLength] = useState(false);
   const [DeploymentData, setDeploymentData] = useState({});
@@ -36,7 +37,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
     setDeploymentData(userData.metadata.deployment)
     }  
   }
-  },[userData])
+  },[userData,location?.state])
   const isCheckEmpty = () => {
     if (DeploymentData.cloudProvider === "azure") {
       return (

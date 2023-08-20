@@ -27,7 +27,6 @@ import CustomLocalenvironmentNode from "./Customnodes/CustomLocalenvironmentNode
 import AlertModal from "../components/Modal/AlertModal";
 import resizeableNode from "./Customnodes/ResizeableNode";
 import groupNode from "./Customnodes/GroupNode";
-import { useUserData } from './ProjectDataContext';
 import { useLocation } from 'react-router-dom'; 
 
 import "./../App.css";
@@ -64,7 +63,6 @@ const nodeTypes = {
 };
 
 const Designer = ({update}) => {
-  const {userData} = useUserData();
   const reactFlowWrapper = useRef(null);
   const { keycloak, initialized } = useKeycloak();
   const [nodes, setNodes] = useState({});
@@ -79,6 +77,7 @@ const Designer = ({update}) => {
   const [isEmptyUiSubmit, setIsEmptyUiSubmit] = useState(false);
   const [isEmptyServiceSubmit, setIsEmptyServiceSubmit] = useState(false);
   const location = useLocation();
+  const [userData,setuserData] = useState(location?.state);
   const [serviceInputCheck, setServiceInputCheck] = useState({});
   const addEdge = (edgeParams, edges) => {
     const edgeId = `${edgeParams.source}-${edgeParams.target}`;
@@ -212,7 +211,6 @@ const Designer = ({update}) => {
             delete updatedNodes[change.id];
             // Remove the applicationName from uniqueApplicationNames
             const deletedNode = oldNodes[change.id];
-            console.log("abcdef",deletedNode);
             if (deletedNode?.data?.applicationName) {
               deletedApplicationNames.push(
                 deletedNode.data.applicationName.trim()
@@ -235,14 +233,11 @@ const Designer = ({update}) => {
       setUniqueApplicationNames((prev) =>
         prev.filter((appName) => !deletedApplicationNames.includes(appName))
       );
-      console.log("yuusuju",deletedApplicationNames,deletedApplicationPorts);
-      console.log("hiiiiiiiii",updatedNodes);
       return updatedNodes;
     });
   }, []);
 
   const [edges, setEdges] = useState({});
-
   const onEdgesChange = useCallback((Nodes, changes = []) => {
     setEdges((oldEdges) => {
       const updatedEdges = { ...oldEdges };
@@ -537,15 +532,29 @@ const Designer = ({update}) => {
     useEffect(() => {
       document.title = "WDA";
       setShowDiv(true);
-      if(update && userData){
+      if(update){
+      const data = location?.state;
+      if (!data) {
+        const data = JSON.parse(localStorage.data);
+        setuserData(data);
+        setNodes(data?.metadata.nodes);
+        if (data.metadata?.edges) {
+          setEdges(data?.metadata.edges);
+        }
+      } else {
+        localStorage.data = JSON.stringify(userData);
+        if (userData?.metadata?.nodes) {
+          setNodes(userData?.metadata?.nodes);
+        }
+        if (userData?.metadata?.edges) {
+          setEdges(userData?.metadata?.edges);
+        }
+      }
       const nodes =userData.metadata.nodes;
-      const edges=userData.metadata?.edges;
-      setNodes(nodes)
-      if(edges)
-      setEdges(edges)
+      const edges =userData.metadata?.edges;
       setShowDiv(false)
       for (const key in nodes) {
-       if(key.toLowerCase().includes("servicediscovery")){
+        if(key.toLowerCase().includes("servicediscovery")){
            setIsServiceDiscovery(true);
            setServiceDiscoveryCount(1);
          }
@@ -585,11 +594,11 @@ const Designer = ({update}) => {
       }
     }
     return () => setShowDiv(false);
-    }, [userData]);
+    }, [location?.state]);
 
   const onChange = (Data) => {
     if (Data.applicationType === "gateway") {
-      setIsEmptyUiSubmit("false");
+      setIsEmptyUiSubmit(false);
       let updatedNodes = { ...nodes };
       if (updatedNodes["UI"]?.style) {
         updatedNodes["UI"].style.border = "1px solid black";
@@ -636,7 +645,7 @@ const Designer = ({update}) => {
       Data.label = Data.label.trim();
     }
     if (Data.serverPort) {
-      Data.serverPort = Data.serverPort.trim();
+      Data.serverPort = Data.serverPort;
     }
     if (Isopen === "aws" || Isopen === "azure") {
       UpdatedNodes["cloudProvider"].data = {
@@ -725,7 +734,6 @@ const Designer = ({update}) => {
         (edge) => edge.data && JSON.stringify(edge.data) !== "{}"
       )
     ) {
-      console.log("object");
       Data["communications"] = {};
       let communicationIndex = 0;
       for (const edgeInfo in NewEdges) {
@@ -996,6 +1004,7 @@ const Designer = ({update}) => {
             />
           </ReactFlow>
         </div>
+        {console.log("ggggggggg",isEmptyUiSubmit)}
         <Sidebar
           isUINodeEnabled={isUINodeEnabled}
           Service_Discovery_Data={nodes["serviceDiscoveryType"]?.data}

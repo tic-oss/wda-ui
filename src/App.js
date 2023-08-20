@@ -14,7 +14,6 @@ import Project from "./pages/Project";
 import React from "react";
 import { ReactKeycloakProvider } from "@react-keycloak/web";
 import keycloak from "./Keycloak";
-import { UserDataProvider } from './pages/ProjectDataContext';
 import PrivateRoute from "./helpers/PrivateRoute";
 
 function App() {
@@ -22,7 +21,6 @@ function App() {
 
     <ReactKeycloakProvider authClient={keycloak}>
       <Router className="flex h-screen">
-      <UserDataProvider>
         <Navbar />
         <Switch>
           <Route exact path="/wda">
@@ -75,7 +73,6 @@ function App() {
           </Route>
         </Switch>
         {/* <Footer /> */}
-      </UserDataProvider>
       </Router>
     </ReactKeycloakProvider>
   );

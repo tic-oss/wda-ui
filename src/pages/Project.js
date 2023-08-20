@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import ReactFlow, { ReactFlowProvider } from "reactflow";
-import { useParams } from 'react-router-dom';
 import "reactflow/dist/style.css";
 import { useLocation } from "react-router-dom";
 import CustomImageNode from "./Customnodes/CustomImageNode";
@@ -14,10 +13,6 @@ import CustomLocalenvironmentNode from "./Customnodes/CustomLocalenvironmentNode
 import ProjectModal from "../components/Modal/ProjectModal";
 import DeploymentModal from "../components/Modal/DeploymentModal";
 import ReadOnlyEdgeModal from "../components/Modal/ReadOnlyEdgeModal";
-import { useKeycloak } from "@react-keycloak/web";
-// import Webshare from "./Webshare";
-import { Button } from "react-bootstrap";
-import { useUserData } from './ProjectDataContext';
 
 const readOnlyNodeStyle = {
   border: "1px solid #ccc",
@@ -42,65 +37,36 @@ const nodeTypes = {
 
 const Project = () => {
   const location = useLocation();
-  const [metadata, setmetadata] = useState(location?.state.metadata);
+  const [metadata, setmetadata] = useState(location.state.metadata);
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [val,setVal] = useState();
-  const { id } = useParams();
-  const { keycloak, initialized } = useKeycloak();
-  const {setUserData} = useUserData();  
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        const response = await fetch(process.env.REACT_APP_API_BASE_URL + "/blueprints/" + id, {
-          method: "get",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+  const [val,setVal] = useState(location.state);
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
-        const result = await response.json();
-        setVal(result);
-        setmetadata(result.metadata)
-        setUserData(result)
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setIsLoading(false);
+  useEffect(() => {
+    const data = location?.state;
+    if (!data) {
+      const data = JSON.parse(localStorage.data);
+      setVal(data);
+      setmetadata(data.metadata);
+      setNodes(Object.values(data?.nodes));
+      if (data?.edges) {
+        setEdges(Object.values(data?.edges));
       }
-    };
-    fetchData();
-  }, [id]);
-
-  useEffect(() => {
-    if (!isLoading) {
-      if (!val) {
-        const storedData = JSON.parse(localStorage.metadata);
-        setmetadata(storedData);
-        setNodes(Object.values(storedData?.nodes));
-        if (storedData?.edges) {
-          setEdges(Object.values(storedData?.edges));
-        }
+    } else {
+      localStorage.data = JSON.stringify(val);
+      if (metadata?.nodes) {
+        setNodes(Object.values(metadata?.nodes));
+      } else if (metadata?.edges) {
+        setEdges(Object.values(data?.edges));
       } else {
-        localStorage.metadata = JSON.stringify(metadata);
-        if (metadata?.nodes) {
-          setNodes(Object.values(metadata?.nodes));
-        } else if (metadata?.edges) {
-          setEdges(Object.values(val?.edges));
-        } else {
-          setNodes([getDeploymentNode(metadata)]);
-        }
-        if (metadata?.edges) {
-          setEdges(Object.values(metadata?.edges));
-        }
+        setNodes([getDeploymentNode(metadata)]);
+      }
+      if (metadata?.edges) {
+        setEdges(Object.values(metadata?.edges));
       }
     }
-  }, [isLoading, val, metadata]);
+  }, [location?.state, metadata]);
+ 
 
   const reactFlowWrapper = useRef(null);
   const [serviceModal, setserviceModal] = useState(false);
@@ -221,7 +187,7 @@ const Project = () => {
       k8sWebUI: element.data?.data?.k8sWebUI,
       kubernetesNamespace: element.data?.data?.kubernetesNamespace,
       kubernetesUseDynamicStorage:
-      element.data?.data?.kubernetesUseDynamicStorage,
+        element.data?.data?.kubernetesUseDynamicStorage,
       monitoring: element.data?.data?.monitoring,
     }));
   };
@@ -244,9 +210,9 @@ const Project = () => {
   const handleContainerClose = () => {
     setserviceModal(false) || setEdgeModal(false) || setCloudModal(false);
   };
+  
 
- 
-  // edit functionality 
+   // edit functionality 
   // const handleEditClick = () => {
   //   if (!keycloak.authenticated) {
   //     keycloak.login();
@@ -292,7 +258,7 @@ const Project = () => {
             ref={reactFlowWrapper}
             style={{ width: "100%", height: "90%" }}
           >
-              {/* <div>
+             {/* <div>
                 <button style={{float:'right', marginRight:'25%',marginTop:'3%'}} onClick={(e)=>Webshare(id)}><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg></button>
                 <button style={{float:'right',marginTop:'3%',marginRight:'1%'}} onClick={(e)=>handleEditClick()}><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button>
               </div> */}
