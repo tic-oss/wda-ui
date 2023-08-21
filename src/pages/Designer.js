@@ -529,7 +529,7 @@ const Designer = ({update}) => {
     },
     [reactFlowInstance]
   );
-    useEffect(() => {
+  useEffect(() => {
       document.title = "WDA";
       setShowDiv(true);
       if(update){
@@ -542,14 +542,14 @@ const Designer = ({update}) => {
           setEdges(data?.metadata.edges);
         }
       } else {
-        localStorage.data = JSON.stringify(userData);
-        if (userData?.metadata?.nodes) {
-          setNodes(userData?.metadata?.nodes);
+          localStorage.data = JSON.stringify(userData);
+          if (userData?.metadata?.nodes) {
+            setNodes(userData?.metadata?.nodes);
+          }
+          if (userData?.metadata?.edges) {
+            setEdges(userData?.metadata?.edges);
+          }
         }
-        if (userData?.metadata?.edges) {
-          setEdges(userData?.metadata?.edges);
-        }
-      }
       const nodes =userData.metadata.nodes;
       const edges =userData.metadata?.edges;
       setShowDiv(false)
@@ -557,17 +557,16 @@ const Designer = ({update}) => {
         if(key.toLowerCase().includes("servicediscovery")){
            setIsServiceDiscovery(true);
            setServiceDiscoveryCount(1);
-         }
-        else if (key.toLowerCase().includes("service")) {
+         } 
+         else if (key.toLowerCase().includes("service")) {
           service_id++;
           setUniqueApplicationNames((prev) => [...prev, userData.metadata.nodes[key].data.label])
           setUniquePortNumbers((prev) => [...prev, userData.metadata.nodes[key].data.serverPort]);
           setServiceInputCheck((prev) => ({
             ...prev,
             [key.id]: false,
-          }
-          ));
-        }
+          }));
+        } 
         else if (key.toLowerCase().includes("database")) {
           database_id++;
         }
@@ -1004,7 +1003,6 @@ const Designer = ({update}) => {
             />
           </ReactFlow>
         </div>
-        {console.log("ggggggggg",isEmptyUiSubmit)}
         <Sidebar
           isUINodeEnabled={isUINodeEnabled}
           Service_Discovery_Data={nodes["serviceDiscoveryType"]?.data}

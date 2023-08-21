@@ -17,6 +17,7 @@ import minikube from "../../src/assets/mini.jpeg";
 import Footer from "../components/Footer";
 import DeploymentModal from "../components/Modal/DeploymentModal";
 import DeleteModal from '../components/Modal/DeleteModal';
+
 function Projects() {
   const history = useHistory();
   const [data, setData] = useState([]);
@@ -138,38 +139,37 @@ function Projects() {
     .finally(() => {
       window.location.replace("../../projects");
     });
-
   }
 
   const verifyData = async (data,id) => {
       try {
-        const response = await fetch(
-          process.env.REACT_APP_API_BASE_URL + "/api/user/" + id,
+          const response = await fetch(
+            process.env.REACT_APP_API_BASE_URL + "/api/user/" + id,
+            {
+              method: "get",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: initialized ? `Bearer ${keycloak?.token}` : undefined,
+              },
+            }
+          );
+          if(response.ok)
           {
-            method: "get",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: initialized ? `Bearer ${keycloak?.token}` : undefined,
-            },
+            history.push({
+              pathname: "/edit/" + id,
+              state: data,
+            });
           }
-        );
-        if(response.ok)
-        {
-         history.push({
-          pathname: "/edit/" + id,
-          state: data,
-        });
-        }
-      else
-      {
-        console.error("You are not authorized");
-        window.location.replace("../../");
-      }
-      }catch (error) {
+          else
+          {
+            console.error("You are not authorized");
+            window.location.replace("../../");
+          }
+      } catch (error) {
         console.error(error);
         
-      }
-    };
+        }
+  };
 
   return (
     <div>

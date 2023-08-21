@@ -47,13 +47,13 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode,uniquePortNumbers 
     const ValidatePortNumber = (value) => {
       const isDuplicatePort = uniquePortNumbers.includes(value);
       if ((isDuplicatePort && value !== "") || Number(value) <= 1023 || Number(value) > 65535) {
-       setPortNumberError(true);
+        setPortNumberError(true);
         return false;
       } else {
-        setPortNumberError(false);
-         return true;
-       }
-      };
+          setPortNumberError(false);
+          return true;
+        }
+    };
 
   const handleKeyPress = (event) => {
     const charCode = event.which ? event.which : event.keyCode;

@@ -30,14 +30,14 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [checkLength, setCheckLength] = useState(false);
   const [DeploymentData, setDeploymentData] = useState({});
+  
   useEffect(()=>{
-    if(update && userData){
-    if(userData.metadata?.deployment){
-    setSelectedImage(userData.metadata.deployment.cloudProvider)
-    setDeploymentData(userData.metadata.deployment)
-    }  
+    if(update && userData && userData.metadata?.deployment){
+      setSelectedImage(userData.metadata.deployment.cloudProvider)
+      setDeploymentData(userData.metadata.deployment) 
   }
   },[userData,location?.state])
+  
   const isCheckEmpty = () => {
     if (DeploymentData.cloudProvider === "azure") {
       return (

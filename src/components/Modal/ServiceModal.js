@@ -39,7 +39,6 @@ const ServiceModal = ({
     useState(false);
   const ValidateName = (value) => {
     const isDuplicateName = uniqueApplicationNames.includes(value);
-
     if (isDuplicateName && value !== "") {
       setDuplicateApplicationNameError(true);
       return false;
@@ -53,13 +52,13 @@ const ServiceModal = ({
   const ValidatePortNumber = (value) => {
     const isDuplicatePort = uniquePortNumbers.includes(value);
     if (isDuplicatePort && value !== "") {
-     setPortNumberError(true);
+      setPortNumberError(true);
       return false;
     } else {
-      setPortNumberError(false);
-       return true;
-     }
-    };
+        setPortNumberError(false);
+        return true;
+      }
+  };
 
   const handleKeyPress = (event) => {
     const charCode = event.which ? event.which : event.keyCode;
