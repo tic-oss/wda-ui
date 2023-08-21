@@ -21,6 +21,7 @@ const Sidebar = ({
   saveMetadata,
   Togglesave,
   nodes,
+  edges,
   isEmptyUiSubmit,
   isEmptyServiceSubmit,
   selectedColor,
@@ -61,6 +62,32 @@ const Sidebar = ({
     projectData.projectName
   );
   const [isContentVisible, setContentVisible] = useState(true);
+
+  const checkEdge = () => {
+    let updatedEdges = { ...edges };
+    if (Object.keys(updatedEdges).length !== 0) {
+      for (const key in updatedEdges) {
+        let edgeCheck = updatedEdges[key];
+        if (!edgeCheck?.data?.framework) {
+          return true;
+        }
+      }
+      return false;
+    }
+  };
+
+  const checkDisabled = () => {
+    if (
+      !checkNodeExists ||
+      !authenticationData ||
+      projectNameCheck ||
+      projectData.projectName === "" ||
+      isEmptyUiSubmit === true ||
+      isEmptyServiceSubmit === true
+    )
+      return true;
+    else return false;
+  };
 
   const handleToggleContent = () => {
     setContentVisible(!isContentVisible);
@@ -465,14 +492,7 @@ const Sidebar = ({
             borderColor="#3182CE"
             width="100px"
             type="submit"
-            isDisabled={
-              !checkNodeExists ||
-              !authenticationData ||
-              projectNameCheck ||
-              projectData.projectName === "" ||
-              isEmptyUiSubmit === true ||
-              isEmptyServiceSubmit === true
-            }
+            isDisabled={checkEdge() || checkDisabled()}
           >
             Next
           </Button>

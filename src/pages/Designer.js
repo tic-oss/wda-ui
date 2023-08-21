@@ -346,9 +346,9 @@ const Designer = () => {
       } else setCurrentNode(nodes[Id].data);
       setopen(Id);
     }
-  // };
+    // };
 
-  // const onSingleClick = (e, node) => {
+    // const onSingleClick = (e, node) => {
     // const Id = e.target.dataset.id || e.target.name || node.id;
     // console.log(Id);
     setNodeClick(Id);
@@ -526,7 +526,7 @@ const Designer = () => {
 
   const onChange = (Data) => {
     if (Data.applicationType === "gateway") {
-      setIsEmptyUiSubmit("false");
+      setIsEmptyUiSubmit(false);
       let updatedNodes = { ...nodes };
       if (updatedNodes["UI"]?.style) {
         updatedNodes["UI"].style.border = "1px solid black";
@@ -539,14 +539,11 @@ const Designer = () => {
           flag = true;
           setIsEmptyServiceSubmit(true);
         }
-        if (key.startsWith("Service")) {
-          const styleData = serviceInputCheck[key]?.style;
+        if (key.startsWith("Service") && Isopen === key) {
+          const styleData = serviceInputCheck[key];
           if (styleData) {
             let updatedNodes = { ...nodes };
-            updatedNodes[key].style = {
-              ...updatedNodes[key].style,
-              ...styleData,
-            };
+            updatedNodes[key].style.border = "1px solid black";
             setNodes(updatedNodes);
           }
         }
@@ -554,13 +551,6 @@ const Designer = () => {
 
       if (!flag) {
         setIsEmptyServiceSubmit(false);
-        let updatedNodes = { ...nodes };
-        for (let key in updatedNodes) {
-          if (key.startsWith("Service") && updatedNodes[key]?.style) {
-            updatedNodes[key].style.border = "1px solid black";
-          }
-        }
-        setNodes(updatedNodes);
       }
       setServiceInputCheck((prev) => ({
         ...prev,
