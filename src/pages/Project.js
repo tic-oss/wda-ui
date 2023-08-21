@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import ReactFlow, { ReactFlowProvider } from "reactflow";
 import "reactflow/dist/style.css";
+import { useHistory } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import CustomImageNode from "./Customnodes/CustomImageNode";
 import CustomServiceNode from "./Customnodes/CustomServiceNode";
@@ -13,6 +14,8 @@ import CustomLocalenvironmentNode from "./Customnodes/CustomLocalenvironmentNode
 import ProjectModal from "../components/Modal/ProjectModal";
 import DeploymentModal from "../components/Modal/DeploymentModal";
 import ReadOnlyEdgeModal from "../components/Modal/ReadOnlyEdgeModal";
+import { useKeycloak } from "@react-keycloak/web";
+import { useParams } from "react-router-dom";
 
 const readOnlyNodeStyle = {
   border: "1px solid #ccc",
@@ -41,6 +44,9 @@ const Project = () => {
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
   const [val,setVal] = useState(location.state);
+  const history = useHistory();
+  const { keycloak, initialized } = useKeycloak();
+  let {id}=useParams();
 
   useEffect(() => {
     const data = location?.state;
@@ -213,41 +219,40 @@ const Project = () => {
   
 
    // edit functionality 
-  // const handleEditClick = () => {
-  //   if (!keycloak.authenticated) {
-  //     keycloak.login();
-  //     return;
-  //   }
+  const handleEditClick = () => {
+    if (!keycloak.authenticated) {
+      keycloak.login();
+      return;
+    }
 
-  //   const verifyData = async () => {
-  //     try {
-  //       const response = await fetch(
-  //         process.env.REACT_APP_API_BASE_URL + "/api/user/" + id,
-  //         {
-  //           method: "get",
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //             Authorization: initialized ? `Bearer ${keycloak?.token}` : undefined,
-  //           },
-  //         }
-  //       );
-  //       if(response.status==200){
-  //       history.push({
-  //         pathname: "/edit/" + id,
-  //         state: val,
-  //       });
-  //       }
-  //       else{
-  //          console.error("You are not authorized");
-  //          window.location.replace("../../");
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-
-  //   verifyData();
-  // };
+    const verifyData = async () => {
+      try {
+        const response = await fetch(
+          process.env.REACT_APP_API_BASE_URL + "/api/user/" + id,
+          {
+            method: "get",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: initialized ? `Bearer ${keycloak?.token}` : undefined,
+            },
+          }
+        );
+        if(response.ok){
+        history.push({
+          pathname: "/edit/" + id,
+          state: val,
+        });
+        }
+        else{
+           console.error("You are not authorized");
+           window.location.replace("../../");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    verifyData();
+  };
 
   return (
     <>
@@ -258,10 +263,9 @@ const Project = () => {
             ref={reactFlowWrapper}
             style={{ width: "100%", height: "90%" }}
           >
-             {/* <div>
-                <button style={{float:'right', marginRight:'25%',marginTop:'3%'}} onClick={(e)=>Webshare(id)}><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg></button>
-                <button style={{float:'right',marginTop:'3%',marginRight:'1%'}} onClick={(e)=>handleEditClick()}><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button>
-              </div> */}
+            <div>
+              <button style={{float:'right',marginTop:'3%',marginRight:'15%'}} onClick={(e)=>handleEditClick()}><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button>
+            </div>
             <ReactFlow
               nodes={nodes}
               edges={edges}
