@@ -65,10 +65,25 @@ const Sidebar = ({
 
   const checkEdge = () => {
     let updatedEdges = { ...edges };
+    let updatedNodes = { ...nodes };
+    if (Object.keys(updatedNodes).length !== 0) {
+      for (const key in updatedNodes) {
+        let databaseCheck = updatedNodes[key];
+        if (
+          databaseCheck?.id?.startsWith("Database") &&
+          !databaseCheck?.data?.isConnected
+        ) {
+          return true;
+        }
+      }
+    }
     if (Object.keys(updatedEdges).length !== 0) {
       for (const key in updatedEdges) {
         let edgeCheck = updatedEdges[key];
-        if (!edgeCheck?.data?.framework) {
+        if (
+          edgeCheck?.target?.startsWith("Service") &&
+          !edgeCheck?.data?.framework
+        ) {
           return true;
         }
       }
