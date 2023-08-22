@@ -212,7 +212,7 @@ const UiDataModal = ({
                 mb={4}
                 variant="outline"
                 id="serverPort"
-                placeholder="9000"
+                placeholder="Port number"
                 borderColor={
                   serverPortCheck || PortNumberError ? "red" : "black"
                 }

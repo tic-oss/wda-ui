@@ -253,7 +253,7 @@ const ServiceModal = ({
                 defaultValue={9000}
                 variant="outline"
                 id="serverport"
-                placeholder="9000"
+                placeholder="Port number"
                 borderColor={
                   PortNumberError || serverPortCheck || PortNumberRangeCheck
                     ? "red"
