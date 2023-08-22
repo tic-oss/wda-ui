@@ -26,6 +26,8 @@ const Sidebar = ({
   isEmptyServiceSubmit,
   selectedColor,
   handleColorClick,
+  userData,
+  update
 }) => {
   const onDragStart = (event, nodeType, Name) => {
     event.dataTransfer.setData("Name", Name);
@@ -37,11 +39,13 @@ const Sidebar = ({
   const toggleOption = (option) => {
     setSelectedOption((prevOption) => (prevOption === option ? null : option));
   };
+  var applicationName = ""
+  if(update && userData?.projectName)
+  applicationName=userData?.projectName;
   const IntialState = {
-    projectName: "",
+    projectName: applicationName,
   };
   const [projectData, setprojectData] = useState(IntialState);
-
   const handleProjectData = (column, value) => {
     setprojectData((prev) => ({ ...prev, [column]: value }));
   };
@@ -518,6 +522,7 @@ const Sidebar = ({
               projectData={projectData}
               onClose={handleCloseModal}
               Service_Discovery_Data={Service_Discovery_Data}
+              update={update}
             />
           )}
 
