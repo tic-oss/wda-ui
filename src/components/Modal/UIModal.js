@@ -237,13 +237,13 @@ const UiDataModal = ({
             {PortNumberError && (
               <Alert
                 status="error"
-                height="12px"
+                padding="4px"
                 fontSize="12px"
                 borderRadius="3px"
                 mb={2}
               >
                 <AlertIcon style={{ width: "14px", height: "14px" }} />
-                Port Number Conflict
+                Port Number already exists. Please choose a unique Number.
               </Alert>
             )}
           </div>

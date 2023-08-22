@@ -280,7 +280,7 @@ const ServiceModal = ({
             {PortNumberError && (
               <Alert
                 status="error"
-                height="12px"
+                padding="4px"
                 fontSize="12px"
                 borderRadius="3px"
                 mb={2}
@@ -292,7 +292,7 @@ const ServiceModal = ({
             {PortNumberRangeCheck && (
               <Alert
                 status="error"
-                height="12px"
+                padding="4px"
                 fontSize="12px"
                 borderRadius="3px"
                 mb={2}
