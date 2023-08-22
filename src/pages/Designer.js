@@ -254,6 +254,9 @@ const Designer = ({ update }) => {
             let [sourceId, targetId] = change.id.split("-");
             if (targetId.startsWith("Database")) {
               UpdatedNodes[targetId].data.isConnected = false;
+              if (UpdatedNodes[targetId]?.style) {
+                UpdatedNodes[targetId].style.border = "1px solid red";
+              }
               if (sourceId.startsWith("Service") || sourceId.startsWith("UI"))
                 delete UpdatedNodes[sourceId].data.prodDatabaseType;
               setNodes(UpdatedNodes);
@@ -320,6 +323,10 @@ const Designer = ({ update }) => {
           let UpdatedNodes = { ...Nodes };
           delete UpdatedNodes[edge.source].data.prodDatabaseType;
           UpdatedNodes[edge.target].data.isConnected = false;
+          if(UpdatedNodes[edge.target]){
+            console.log(UpdatedNodes[edge.target].style.border,"iiiiiiiiiiiiiiiiiiii")
+            UpdatedNodes[edge.target].style.border = "1px solid red"
+          }
           setNodes(UpdatedNodes);
         }
         delete AllEdges[edge.id];
@@ -407,7 +414,7 @@ const Designer = ({ update }) => {
           type: "selectorNode",
           position,
           data: { prodDatabaseType: prodDatabaseType, isConnected: false },
-          style: { border: "1px solid", padding: "4px 4px" },
+          style: { border: "1px solid red", padding: "4px 4px" },
         };
         setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
       } else if (name.startsWith("Discovery") && servicecount === 0) {
@@ -846,6 +853,11 @@ const Designer = ({ update }) => {
         setEdges((eds) => addEdge(params, eds, Nodes));
         MergeData(params.source, params.target, Nodes);
       }
+      let updatedNodes = { ...Nodes };
+      if (updatedNodes[targetNode?.id]?.style) {
+        updatedNodes[targetNode?.id].style.border = "1px solid black";
+      }
+      setNodes(updatedNodes);
     } else {
       setEdges((eds) => addEdge(params, eds, Nodes));
     }
