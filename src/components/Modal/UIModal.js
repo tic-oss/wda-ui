@@ -40,7 +40,11 @@ const UiDataModal = ({
 
   const reservedPorts = ["5601", "9200", "15021", "20001", "3000", "8080"];
   const serverPortCheck =
-    UiData.serverPort && reservedPorts.includes(UiData.serverPort);
+    UiData.serverPort && (reservedPorts.includes(UiData.serverPort)||
+    Number(UiData.serverPort) <= 1023);
+
+  const PortNumberRangeCheck =
+    UiData.serverPort && Number(UiData.serverPort) > 65535;
 
   const appNameCheck = !/^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$/g.test(
     UiData.applicationName
@@ -52,11 +56,7 @@ const UiDataModal = ({
 
   const ValidatePortNumber = (value) => {
     const isDuplicatePort = uniquePortNumbers.includes(value);
-    if (
-      (isDuplicatePort && value !== "") ||
-      Number(value) <= 1023 ||
-      Number(value) > 65535
-    ) {
+    if (isDuplicatePort && value !== "") {
       setPortNumberError(true);
       return false;
     } else {
@@ -214,7 +214,9 @@ const UiDataModal = ({
                 id="serverPort"
                 placeholder="Port number"
                 borderColor={
-                  serverPortCheck || PortNumberError ? "red" : "black"
+                  PortNumberError || serverPortCheck || PortNumberRangeCheck
+                  ? "red" 
+                  : "black"
                 }
                 value={UiData.serverPort}
                 maxLength="5"
@@ -231,7 +233,7 @@ const UiDataModal = ({
                 mb={2}
               >
                 <AlertIcon style={{ width: "14px", height: "14px" }} />
-                The input cannot contain reserved port number
+                The input cannot contain reserved port number.
               </Alert>
             )}
             {PortNumberError && (
@@ -244,6 +246,18 @@ const UiDataModal = ({
               >
                 <AlertIcon style={{ width: "14px", height: "14px" }} />
                 Port Number already exists. Please choose a unique Number.
+              </Alert>
+            )}
+            {PortNumberRangeCheck && (
+              <Alert
+                status="error"
+                padding="4px"
+                fontSize="12px"
+                borderRadius="3px"
+                mb={2}
+              >
+                <AlertIcon style={{ width: "14px", height: "14px" }} />
+                Port Number is out of the valid range.
               </Alert>
             )}
           </div>
