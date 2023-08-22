@@ -20,7 +20,7 @@ const ServiceModal = ({
   onSubmit,
   CurrentNode,
   uniqueApplicationNames,
-  uniquePortNumbers
+  uniquePortNumbers,
 }) => {
   const IntialState = {
     label: "Service",
@@ -52,8 +52,7 @@ const ServiceModal = ({
 
   const [duplicateApplicationNameError, setDuplicateApplicationNameError] =
     useState(false);
-  const [PortNumberError, setPortNumberError] =
-    useState(false);
+  const [PortNumberError, setPortNumberError] = useState(false);
   const ValidateName = (value) => {
     const isDuplicateName = uniqueApplicationNames.includes(value);
     if (isDuplicateName && value !== "") {
@@ -64,7 +63,7 @@ const ServiceModal = ({
       return true;
     }
   };
-  
+
   //check whether port number is unique and lies within the range
   const ValidatePortNumber = (value) => {
     const isDuplicatePort = uniquePortNumbers.includes(value);
@@ -72,9 +71,9 @@ const ServiceModal = ({
       setPortNumberError(true);
       return false;
     } else {
-        setPortNumberError(false);
-        return true;
-      }
+      setPortNumberError(false);
+      return true;
+    }
   };
 
   const handleKeyPress = (event) => {
@@ -95,8 +94,7 @@ const ServiceModal = ({
         [column]: value,
         applicationName: value,
       }));
-    } 
-    else if (column === "serverPort") {
+    } else if (column === "serverPort") {
       ValidatePortNumber(value);
       setApplicationData((prev) => ({
         ...prev,
@@ -126,10 +124,10 @@ const ServiceModal = ({
   const serverPortCheck =
     ApplicationData.serverPort &&
     (reservedPorts.includes(ApplicationData.serverPort) ||
-    (Number(ApplicationData.serverPort)<=1023));
+      Number(ApplicationData.serverPort) <= 1023);
 
   const PortNumberRangeCheck =
-    ApplicationData.serverPort && (Number(ApplicationData.serverPort)>65535);
+    ApplicationData.serverPort && Number(ApplicationData.serverPort) > 65535;
 
   const appNameCheck = /[0-9_-]/.test(ApplicationData.applicationName);
 
@@ -256,7 +254,11 @@ const ServiceModal = ({
                 variant="outline"
                 id="serverport"
                 placeholder="9000"
-                borderColor={(PortNumberError||serverPortCheck||PortNumberRangeCheck) ? "red" : "black"}
+                borderColor={
+                  PortNumberError || serverPortCheck || PortNumberRangeCheck
+                    ? "red"
+                    : "black"
+                }
                 value={ApplicationData.serverPort}
                 maxLength="5"
                 onKeyPress={handleKeyPress}
@@ -285,11 +287,10 @@ const ServiceModal = ({
               >
                 <AlertIcon style={{ width: "14px", height: "14px" }} />
                 Port Number already exists. Please choose a unique Number.
-                </Alert>
+              </Alert>
             )}
-            {
-              PortNumberRangeCheck &&(
-                <Alert
+            {PortNumberRangeCheck && (
+              <Alert
                 status="error"
                 height="12px"
                 fontSize="12px"
@@ -298,15 +299,21 @@ const ServiceModal = ({
               >
                 <AlertIcon style={{ width: "14px", height: "14px" }} />
                 Port Number is out of the valid range.
-                </Alert>
-              )}
+              </Alert>
+            )}
           </div>
           <Button
             onClick={() =>
               !duplicateApplicationNameError && onSubmit(ApplicationData)
             }
             style={{ display: "block", margin: "0 auto" }}
-            isDisabled={isSubmitDisabled || appNameCheck || serverPortCheck || PortNumberError || PortNumberRangeCheck}
+            isDisabled={
+              isSubmitDisabled ||
+              appNameCheck ||
+              serverPortCheck ||
+              PortNumberError ||
+              PortNumberRangeCheck
+            }
           >
             Save
           </Button>

@@ -14,7 +14,13 @@ import {
   AlertIcon,
 } from "@chakra-ui/react";
 
-const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode,uniquePortNumbers }) => {
+const UiDataModal = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  CurrentNode,
+  uniquePortNumbers,
+}) => {
   const IntialState = {
     label: "UI",
     applicationName: "UI",
@@ -26,8 +32,9 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode,uniquePortNumbers 
     ...CurrentNode,
   };
   const [UiData, setUiDataData] = useState(IntialState);
-  const [PortNumberError, setPortNumberError] = useState(false);  
-  const isEmptyUiSubmit = UiData.applicationName === "" ||
+  const [PortNumberError, setPortNumberError] = useState(false);
+  const isEmptyUiSubmit =
+    UiData.applicationName === "" ||
     UiData.packageName === "" ||
     UiData.serverPort === "";
 
@@ -42,17 +49,21 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode,uniquePortNumbers 
   const packageNameCheck =
     UiData.packageName &&
     !/^[a-zA-Z](?:[a-zA-Z0-9_.-]*[a-zA-Z0-9])?$/g.test(UiData.packageName);
-    
-    const ValidatePortNumber = (value) => {
-      const isDuplicatePort = uniquePortNumbers.includes(value);
-      if ((isDuplicatePort && value !== "") || Number(value) <= 1023 || Number(value) > 65535) {
-        setPortNumberError(true);
-        return false;
-      } else {
-          setPortNumberError(false);
-          return true;
-        }
-    };
+
+  const ValidatePortNumber = (value) => {
+    const isDuplicatePort = uniquePortNumbers.includes(value);
+    if (
+      (isDuplicatePort && value !== "") ||
+      Number(value) <= 1023 ||
+      Number(value) > 65535
+    ) {
+      setPortNumberError(true);
+      return false;
+    } else {
+      setPortNumberError(false);
+      return true;
+    }
+  };
 
   const handleKeyPress = (event) => {
     const charCode = event.which ? event.which : event.keyCode;
@@ -71,14 +82,14 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode,uniquePortNumbers 
         [column]: value,
         applicationName: value,
       }));
-    }else if (column === "serverPort") {
+    } else if (column === "serverPort") {
       ValidatePortNumber(value);
       setUiDataData((prev) => ({
         ...prev,
         [column]: value,
         serverPort: value,
       }));
-    }  else {
+    } else {
       setUiDataData((prev) => ({
         ...prev,
         [column]: value,
@@ -185,7 +196,9 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode,uniquePortNumbers 
                 variant="outline"
                 id="serverPort"
                 placeholder="9000"
-                borderColor={(serverPortCheck||PortNumberError) ? "red" : "black"}
+                borderColor={
+                  serverPortCheck || PortNumberError ? "red" : "black"
+                }
                 value={UiData.serverPort}
                 maxLength="5"
                 onKeyPress={handleKeyPress}
@@ -214,13 +227,18 @@ const UiDataModal = ({ isOpen, onClose, onSubmit, CurrentNode,uniquePortNumbers 
               >
                 <AlertIcon style={{ width: "14px", height: "14px" }} />
                 Port Number Conflict
-                </Alert>
+              </Alert>
             )}
           </div>
           <Button
             onClick={() => onSubmit(UiData)}
             style={{ display: "block", margin: "0 auto" }}
-            isDisabled={isEmptyUiSubmit || appNameCheck || serverPortCheck || PortNumberError}
+            isDisabled={
+              isEmptyUiSubmit ||
+              appNameCheck ||
+              serverPortCheck ||
+              PortNumberError
+            }
           >
             Save
           </Button>

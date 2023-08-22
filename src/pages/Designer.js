@@ -27,7 +27,7 @@ import CustomLocalenvironmentNode from "./Customnodes/CustomLocalenvironmentNode
 import AlertModal from "../components/Modal/AlertModal";
 import resizeableNode from "./Customnodes/ResizeableNode";
 import groupNode from "./Customnodes/GroupNode";
-import { useLocation } from 'react-router-dom'; 
+import { useLocation } from "react-router-dom";
 
 import "./../App.css";
 import EdgeModal from "../components/Modal/EdgeModal";
@@ -62,7 +62,7 @@ const nodeTypes = {
   GroupNode: groupNode,
 };
 
-const Designer = ({update}) => {
+const Designer = ({ update }) => {
   const reactFlowWrapper = useRef(null);
   const { keycloak, initialized } = useKeycloak();
   const [nodes, setNodes] = useState({});
@@ -77,7 +77,7 @@ const Designer = ({update}) => {
   const [isEmptyUiSubmit, setIsEmptyUiSubmit] = useState(false);
   const [isEmptyServiceSubmit, setIsEmptyServiceSubmit] = useState(false);
   const location = useLocation();
-  const [userData,setuserData] = useState(location?.state);
+  const [userData, setuserData] = useState(location?.state);
   const [serviceInputCheck, setServiceInputCheck] = useState({});
   const addEdge = (edgeParams, edges) => {
     const edgeId = `${edgeParams.source}-${edgeParams.target}`;
@@ -217,9 +217,7 @@ const Designer = ({update}) => {
               );
             }
             if (deletedNode?.data?.serverPort) {
-              deletedApplicationPorts.push(
-               deletedNode.data.serverPort.trim()
-              );
+              deletedApplicationPorts.push(deletedNode.data.serverPort.trim());
             }
             break;
           default:
@@ -228,8 +226,11 @@ const Designer = ({update}) => {
       });
       if (Object.keys(updatedNodes).length === 0) setShowDiv(true);
       // Remove deleted application names from uniqueApplicationNames
-      setUniquePortNumbers((prev)=>
-       prev.filter((portNumbers) => !deletedApplicationPorts.includes(portNumbers)));
+      setUniquePortNumbers((prev) =>
+        prev.filter(
+          (portNumbers) => !deletedApplicationPorts.includes(portNumbers)
+        )
+      );
       setUniqueApplicationNames((prev) =>
         prev.filter((appName) => !deletedApplicationNames.includes(appName))
       );
@@ -524,9 +525,9 @@ const Designer = ({update}) => {
     [reactFlowInstance]
   );
   useEffect(() => {
-      document.title = "WDA";
-      setShowDiv(true);
-      if(update){
+    document.title = "WDA";
+    setShowDiv(true);
+    if (update) {
       const data = location?.state;
       if (!data) {
         const data = JSON.parse(localStorage.data);
@@ -536,58 +537,59 @@ const Designer = ({update}) => {
           setEdges(data?.metadata.edges);
         }
       } else {
-          localStorage.data = JSON.stringify(userData);
-          if (userData?.metadata?.nodes) {
-            setNodes(userData?.metadata?.nodes);
-          }
-          if (userData?.metadata?.edges) {
-            setEdges(userData?.metadata?.edges);
-          }
+        localStorage.data = JSON.stringify(userData);
+        if (userData?.metadata?.nodes) {
+          setNodes(userData?.metadata?.nodes);
         }
-      const nodes =userData.metadata.nodes;
-      const edges =userData.metadata?.edges;
-      setShowDiv(false)
+        if (userData?.metadata?.edges) {
+          setEdges(userData?.metadata?.edges);
+        }
+      }
+      const nodes = userData.metadata.nodes;
+      const edges = userData.metadata?.edges;
+      setShowDiv(false);
       for (const key in nodes) {
-        if(key.toLowerCase().includes("servicediscovery")){
-           setIsServiceDiscovery(true);
-           setServiceDiscoveryCount(1);
-         } 
-         else if (key.toLowerCase().includes("service")) {
+        if (key.toLowerCase().includes("servicediscovery")) {
+          setIsServiceDiscovery(true);
+          setServiceDiscoveryCount(1);
+        } else if (key.toLowerCase().includes("service")) {
           service_id++;
-          setUniqueApplicationNames((prev) => [...prev, userData.metadata.nodes[key].data.label])
-          setUniquePortNumbers((prev) => [...prev, userData.metadata.nodes[key].data.serverPort]);
+          setUniqueApplicationNames((prev) => [
+            ...prev,
+            userData.metadata.nodes[key].data.label,
+          ]);
+          setUniquePortNumbers((prev) => [
+            ...prev,
+            userData.metadata.nodes[key].data.serverPort,
+          ]);
           setServiceInputCheck((prev) => ({
             ...prev,
             [key.id]: false,
           }));
-        } 
-        else if (key.toLowerCase().includes("database")) {
+        } else if (key.toLowerCase().includes("database")) {
           database_id++;
-        }
-        else if (key.toLowerCase().includes("group")) {
+        } else if (key.toLowerCase().includes("group")) {
           group_id++;
-        }
-        else if(key.toLowerCase().includes("auth")){
+        } else if (key.toLowerCase().includes("auth")) {
           setAuthProviderCount(1);
-        }
-        else if(key.toLowerCase().includes("messagebroker")){
+        } else if (key.toLowerCase().includes("messagebroker")) {
           setIsMessageBroker(true);
           setMessageBrokerCount(1);
-        }
-        else if(key.toLowerCase().includes("logmanagement")){
+        } else if (key.toLowerCase().includes("logmanagement")) {
           setLogManagementCount(1);
-        }
-        else if(key.toLowerCase().includes("localenvironment")){
+        } else if (key.toLowerCase().includes("localenvironment")) {
           setLocalenvironmentCount(1);
-        }
-        else if(key.toLowerCase().includes("ui")){
-          setUniquePortNumbers((prev) => [...prev, userData.metadata.nodes[key].data.serverPort]);
+        } else if (key.toLowerCase().includes("ui")) {
+          setUniquePortNumbers((prev) => [
+            ...prev,
+            userData.metadata.nodes[key].data.serverPort,
+          ]);
           setIsUINodeEnabled(true);
         }
       }
     }
     return () => setShowDiv(false);
-    }, [location?.state]);
+  }, [location?.state]);
 
   const onChange = (Data) => {
     if (Data.applicationType === "gateway") {
@@ -653,7 +655,6 @@ const Designer = ({update}) => {
   };
 
   const [showDiv, setShowDiv] = useState(false);
-
 
   const MergeData = (sourceId, targetId, Nodes) => {
     const sourceType = sourceId.split("_")[0];
@@ -740,8 +741,8 @@ const Designer = ({update}) => {
         deployment: Data?.deployment,
       };
     } else delete Data?.metadata;
-    if(update && userData){
-     Data.projectId=userData?.project_id;
+    if (update && userData) {
+      Data.projectId = userData?.project_id;
     }
     console.log(Data, "Finaaal Dataaaaaaaaaa");
     setNodes(NewNodes);
@@ -765,7 +766,6 @@ const Designer = ({update}) => {
         window.location.replace("../../");
       });
   };
-
 
   const onCheckEdge = (edges) => {
     let NewEdges = { ...edges };
@@ -856,7 +856,7 @@ const Designer = ({update}) => {
   };
 
   const [uniqueApplicationNames, setUniqueApplicationNames] = useState([]);
-  const [uniquePortNumbers, setUniquePortNumbers]= useState([]);
+  const [uniquePortNumbers, setUniquePortNumbers] = useState([]);
   const [selectedColor, setSelectedColor] = useState("");
 
   const handleColorClick = (color) => {
@@ -1002,8 +1002,8 @@ const Designer = ({update}) => {
           handleColorClick={handleColorClick}
           nodeClick={nodeClick}
           edges={edges}
-          userData = {userData}
-          update ={update}
+          userData={userData}
+          update={update}
         />
 
         {nodeType === "UI" && Isopen && (
