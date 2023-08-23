@@ -1020,7 +1020,6 @@ const Designer = ({ update }) => {
           isEmptyUiSubmit={isEmptyUiSubmit}
           isEmptyServiceSubmit={isEmptyServiceSubmit}
           selectedColor={selectedColor}
-          handleColorClick={handleColorClick}
           nodeClick={nodeClick}
           edges={edges}
           userData={userData}
@@ -1033,6 +1032,8 @@ const Designer = ({ update }) => {
             CurrentNode={CurrentNode}
             onClose={setopen}
             onSubmit={onChange}
+            selectedColor={selectedColor}
+            handleColorClick={handleColorClick}
             uniqueApplicationNames={uniqueApplicationNames}
             uniquePortNumbers={uniquePortNumbers}
           />

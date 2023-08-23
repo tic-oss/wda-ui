@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useId } from "react";
 import {
   Modal,
   ModalContent,
@@ -21,6 +21,8 @@ const UiDataModal = ({
   CurrentNode,
   uniqueApplicationNames,
   uniquePortNumbers,
+  handleColorClick,
+  selectedColor
 }) => {
   const IntialState = {
     label: "UI",
@@ -47,8 +49,7 @@ const UiDataModal = ({
 
   const PortNumberRangeCheck =
     UiData.serverPort &&
-    (Number(UiData.serverPort) < 1024 ||
-    Number(UiData.serverPort) > 65535);
+    (Number(UiData.serverPort) < 1024 || Number(UiData.serverPort) > 65535);
 
   const appNameCheck = !/^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$/g.test(
     UiData.applicationName
@@ -106,7 +107,6 @@ const UiDataModal = ({
         onClose();
       }
     };
-
     window.addEventListener("keydown", handleDeleteKeyPress);
     return () => {
       window.removeEventListener("keydown", handleDeleteKeyPress);
@@ -151,6 +151,87 @@ const UiDataModal = ({
           User Interface
         </ModalHeader>
         <ModalCloseButton />
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            marginBottom: "20px",
+            gap: "15px",
+          }}
+        >
+          <div
+            style={{
+              width: "30px",
+              height: "30px",
+              border:
+                selectedColor === "#ffc9c9"
+                  ? "2px solid black"
+                  : "1px solid transparent",
+              borderRadius: "50%",
+              backgroundColor: "#ffc9c9",
+              cursor: "pointer",
+            }}
+            onClick={() => handleColorClick("#ffc9c9")}
+          ></div>
+          <div
+            style={{
+              width: "30px",
+              height: "30px",
+              border:
+                selectedColor === "#b2f2bb"
+                  ? "2px solid black"
+                  : "1px solid transparent",
+              borderRadius: "50%",
+              backgroundColor: "#b2f2bb",
+              cursor: "pointer",
+            }}
+            onClick={() => handleColorClick("#b2f2bb")}
+          ></div>
+          <div
+            style={{
+              width: "30px",
+              height: "30px",
+              border:
+                selectedColor === "#a5d8ff"
+                  ? "2px solid black"
+                  : "1px solid transparent",
+              borderRadius: "50%",
+              backgroundColor: "#a5d8ff",
+              cursor: "pointer",
+            }}
+            onClick={() => handleColorClick("#a5d8ff")}
+          ></div>
+          <div
+            style={{
+              width: "30px",
+              height: "30px",
+              border:
+                selectedColor === "#ffec99"
+                  ? "2px solid black"
+                  : "1px solid transparent",
+              borderRadius: "50%",
+              backgroundColor: "#ffec99",
+              cursor: "pointer",
+            }}
+            onClick={() => handleColorClick("#ffec99")}
+          ></div>
+          <div
+            style={{
+              width: "30px",
+              height: "30px",
+              border:
+                selectedColor === "#fff"
+                  ? "2px solid black"
+                  : "1px solid #cfcfcf",
+              borderRadius: "50%",
+              backgroundColor: "#fff",
+              cursor: "pointer",
+            }}
+            onClick={() => handleColorClick("#fff")}
+          ></div>
+        </div>
         <ModalBody>
           <div
             style={{
