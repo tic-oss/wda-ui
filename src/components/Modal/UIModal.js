@@ -19,6 +19,7 @@ const UiDataModal = ({
   onClose,
   onSubmit,
   CurrentNode,
+  uniqueApplicationNames,
   uniquePortNumbers,
 }) => {
   const IntialState = {
@@ -32,6 +33,8 @@ const UiDataModal = ({
     ...CurrentNode,
   };
   const [UiData, setUiDataData] = useState(IntialState);
+  const [duplicateApplicationNameError, setDuplicateApplicationNameError] =
+    useState(false);
   const [PortNumberError, setPortNumberError] = useState(false);
   const isEmptyUiSubmit =
     UiData.applicationName === "" ||
@@ -40,11 +43,12 @@ const UiDataModal = ({
 
   const reservedPorts = ["5601", "9200", "15021", "20001", "3000", "8080"];
   const serverPortCheck =
-    UiData.serverPort && (reservedPorts.includes(UiData.serverPort)||
-    Number(UiData.serverPort) <= 1023);
+    UiData.serverPort && reservedPorts.includes(UiData.serverPort);
 
   const PortNumberRangeCheck =
-    UiData.serverPort && Number(UiData.serverPort) > 65535;
+    UiData.serverPort &&
+    (Number(UiData.serverPort) < 1024 ||
+    Number(UiData.serverPort) > 65535);
 
   const appNameCheck = !/^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$/g.test(
     UiData.applicationName
@@ -54,8 +58,25 @@ const UiDataModal = ({
     UiData.packageName &&
     !/^[a-zA-Z](?:[a-zA-Z0-9_.-]*[a-zA-Z0-9])?$/g.test(UiData.packageName);
 
+  const ValidateName = (value) => {
+    const currentApplicationName = CurrentNode?.applicationName;
+    const isDuplicateName =
+      uniqueApplicationNames.includes(value) &&
+      value !== currentApplicationName;
+    if (isDuplicateName && value !== "") {
+      setDuplicateApplicationNameError(true);
+      return false;
+    } else {
+      setDuplicateApplicationNameError(false);
+      return true;
+    }
+  };
+
+  //check whether port number is unique and lies within the range
   const ValidatePortNumber = (value) => {
-    const isDuplicatePort = uniquePortNumbers.includes(value);
+    const currentServerPort = CurrentNode?.serverPort;
+    const isDuplicatePort =
+      uniquePortNumbers.includes(value) && value !== currentServerPort;
     if (isDuplicatePort && value !== "") {
       setPortNumberError(true);
       return false;
@@ -94,6 +115,7 @@ const UiDataModal = ({
 
   const handleData = (column, value) => {
     if (column === "label") {
+      ValidateName(value);
       setUiDataData((prev) => ({
         ...prev,
         [column]: value,
@@ -144,11 +166,27 @@ const UiDataModal = ({
                 variant="outline"
                 id="applicationName"
                 placeholder="Name"
-                borderColor={!UiData.applicationName ? "red" : "black"}
+                borderColor={
+                  duplicateApplicationNameError && !UiData.applicationName
+                    ? "red"
+                    : "black"
+                }
                 maxLength="32"
                 value={UiData.applicationName}
                 onChange={(e) => handleData("label", e.target.value)}
               />
+              {duplicateApplicationNameError && (
+                <Alert
+                  status="error"
+                  padding="4px"
+                  fontSize="12px"
+                  borderRadius="3px"
+                  mb={2}
+                >
+                  <AlertIcon style={{ width: "14px", height: "14px" }} />
+                  Application name already exists. Please choose a unique name.
+                </Alert>
+              )}
               {appNameCheck && (
                 <Alert
                   status="error"
@@ -215,8 +253,8 @@ const UiDataModal = ({
                 placeholder="Port number"
                 borderColor={
                   PortNumberError || serverPortCheck || PortNumberRangeCheck
-                  ? "red" 
-                  : "black"
+                    ? "red"
+                    : "black"
                 }
                 value={UiData.serverPort}
                 maxLength="5"
@@ -262,7 +300,7 @@ const UiDataModal = ({
             )}
           </div>
           <Button
-            onClick={() => onSubmit(UiData)}
+            onClick={() => !duplicateApplicationNameError && onSubmit(UiData)}
             style={{ display: "block", margin: "0 auto" }}
             isDisabled={
               isEmptyUiSubmit ||
