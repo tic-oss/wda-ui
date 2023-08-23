@@ -667,7 +667,7 @@ const Designer = ({ update }) => {
       UpdatedNodes[Isopen].selected = false;
     }
     setNodes(UpdatedNodes);
-    setopen(false);
+    // setopen(false);
   };
 
   const [showDiv, setShowDiv] = useState(false);
@@ -1044,6 +1044,8 @@ const Designer = ({ update }) => {
             CurrentNode={CurrentNode}
             onClose={setopen}
             onSubmit={onChange}
+            selectedColor={selectedColor}
+            handleColorClick={handleColorClick}
             uniqueApplicationNames={uniqueApplicationNames}
             uniquePortNumbers={uniquePortNumbers}
           />
