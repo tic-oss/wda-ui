@@ -22,7 +22,7 @@ const UiDataModal = ({
   uniqueApplicationNames,
   uniquePortNumbers,
   handleColorClick,
-  selectedColor
+  selectedColor,
 }) => {
   const IntialState = {
     label: "UI",
