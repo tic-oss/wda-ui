@@ -138,8 +138,12 @@ const ServiceModal = ({
     (Number(ApplicationData.serverPort) < 1024 ||
       Number(ApplicationData.serverPort) > 65535);
 
-  const appNameCheck = /[0-9_-]/.test(ApplicationData.applicationName);
-
+  // const appNameCheck = /[0-9_-]/.test(ApplicationData.applicationName);
+  const appNameCheck =
+    ApplicationData.applicationName &&
+    !/^[a-zA-Z](?:[a-zA-Z0-9_-]*[a-zA-Z0-9])?$/g.test(
+      ApplicationData.applicationName
+    );
   const packageNameCheck =
     ApplicationData.packageName &&
     !/^[a-zA-Z](?:[a-zA-Z0-9_.-]*[a-zA-Z0-9])?$/g.test(

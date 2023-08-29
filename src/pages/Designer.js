@@ -28,11 +28,15 @@ import AlertModal from "../components/Modal/AlertModal";
 import resizeableNode from "./Customnodes/ResizeableNode";
 import groupNode from "./Customnodes/GroupNode";
 import { useLocation } from "react-router-dom";
+import {
+  useHistory,
+} from "react-router-dom/cjs/react-router-dom.min";
 
 import "./../App.css";
 import EdgeModal from "../components/Modal/EdgeModal";
 import { useKeycloak } from "@react-keycloak/web";
 import { FiUploadCloud } from "react-icons/fi";
+import ActionModal from "../components/Modal/ActionModal";
 
 let service_id = 1;
 let database_id = 1;
@@ -77,9 +81,24 @@ const Designer = ({ update }) => {
   const [isEmptyUiSubmit, setIsEmptyUiSubmit] = useState(false);
   const [isEmptyServiceSubmit, setIsEmptyServiceSubmit] = useState(false);
   const location = useLocation();
-  const [userData, setuserData] = useState(location?.state);
+  const [userData, setuserData] = useState({});
   const [serviceInputCheck, setServiceInputCheck] = useState({});
+
+  const [updated, setUpdated] = useState(false);
+  const [isVisibleDialog, setVisibleDialog] = useState(false);
+  const history = useHistory();
+  const [triggerExit, setTriggerExit] = useState({
+    onOk: false,
+    path: "",
+  });
+
+  const handleGoToIntendedPage = useCallback(
+    (location) => history.push(location),
+    [history]
+  );
+
   const addEdge = (edgeParams, edges) => {
+    setUpdated(true);
     const edgeId = `${edgeParams.source}-${edgeParams.target}`;
     const databaseEdge = edgeParams?.target.startsWith("Database");
     const groupEdge =
@@ -112,6 +131,7 @@ const Designer = ({ update }) => {
   };
 
   const updateEdge = (oldEdge, newConnection, edges, Nodes) => {
+    setUpdated(true);
     console.log("OldEdge", oldEdge);
     console.log("New Connection", newConnection);
     console.log("Edges", edges);
@@ -131,6 +151,7 @@ const Designer = ({ update }) => {
   };
 
   const onNodesChange = useCallback((setShowDiv, edges, changes = []) => {
+    setUpdated(true);
     setNodes((oldNodes) => {
       const updatedNodes = { ...oldNodes };
       const updatedEdges = { ...edges };
@@ -153,20 +174,22 @@ const Designer = ({ update }) => {
               };
             break;
           case "position":
-            updatedNodes[change.id] = {
-              ...updatedNodes[change.id],
-              position: {
-                ...updatedNodes[change.id].position,
-                ...change.position,
-              },
-              positionAbsolute: {
-                x: 0,
-                y: 0,
-                ...updatedNodes[change.id].positionAbsolute,
-                ...change.positionAbsolute,
-              },
-              dragging: change.dragging,
-            };
+            if (change?.position) {
+              updatedNodes[change.id] = {
+                ...updatedNodes[change.id],
+                position: {
+                  ...updatedNodes[change.id].position,
+                  ...change.position,
+                },
+                positionAbsolute: {
+                  x: 0,
+                  y: 0,
+                  ...updatedNodes[change.id].positionAbsolute,
+                  ...change.positionAbsolute,
+                },
+                dragging: change.dragging,
+              };
+            }
             break;
           case "select":
             updatedNodes[change.id] = {
@@ -240,6 +263,7 @@ const Designer = ({ update }) => {
 
   const [edges, setEdges] = useState({});
   const onEdgesChange = useCallback((Nodes, changes = []) => {
+    setUpdated(true);
     setEdges((oldEdges) => {
       const updatedEdges = { ...oldEdges };
       console.log(changes, updatedEdges);
@@ -300,6 +324,7 @@ const Designer = ({ update }) => {
   }, []);
 
   const onEdgeUpdate = useCallback((Nodes, oldEdge, newConnection) => {
+    setUpdated(true);
     edgeUpdateSuccessful.current = true;
     console.log(oldEdge, newConnection, Nodes);
     if (
@@ -360,6 +385,30 @@ const Designer = ({ update }) => {
     // console.log(Id);
     setNodeClick(Id);
   };
+  const clear = () => {
+    setuserData({});
+    setNodes({});
+    setEdges({});
+    setIsServiceDiscovery(false);
+    setServiceDiscoveryCount(0);
+    setUniqueApplicationNames([]);
+    setUniquePortNumbers([]);
+    setServiceInputCheck([]);
+    database_id = 1;
+    group_id = 1;
+    service_id = 1;
+    setAuthProviderCount(0);
+    setIsMessageBroker(false);
+    setMessageBrokerCount(0);
+    setLogManagementCount(0);
+    setLocalenvironmentCount(0);
+    setIsUINodeEnabled(false);
+    setUpdated(false);
+    setTriggerExit({
+      onOk: false,
+      path: "",
+    });
+  };
 
   const onDrop = useCallback(
     (
@@ -370,12 +419,11 @@ const Designer = ({ update }) => {
       authcount,
       Localenvcount
     ) => {
+      setUpdated(true);
       event.preventDefault();
-      console.log(event);
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
       const type = event.dataTransfer.getData("application/reactflow");
       const name = event.dataTransfer.getData("Name");
-
       if (typeof type === "undefined" || !type) {
         setShowDiv(true);
         return;
@@ -385,7 +433,6 @@ const Designer = ({ update }) => {
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
       });
-
       if (name === "Service") {
         const newNode = {
           id: getId("Service"),
@@ -530,29 +577,41 @@ const Designer = ({ update }) => {
     },
     [reactFlowInstance]
   );
+
   useEffect(() => {
     document.title = "WDA";
     setShowDiv(true);
-    if (update) {
-      const data = location?.state;
-      if (!data) {
-        const data = JSON.parse(localStorage.data);
+    let data = location?.state;
+    if (!data) {
+      if (
+        localStorage?.data != undefined &&
+        localStorage.data != null &&
+        localStorage.data?.metadata?.nodes != ""
+      ) {
+        data = JSON.parse(localStorage.data);
         setuserData(data);
-        setNodes(data?.metadata.nodes);
+        if (data?.metadata?.nodes) {
+          setNodes(data?.metadata.nodes);
+        }
         if (data.metadata?.edges) {
           setEdges(data?.metadata.edges);
         }
-      } else {
-        localStorage.data = JSON.stringify(userData);
-        if (userData?.metadata?.nodes) {
-          setNodes(userData?.metadata?.nodes);
-        }
-        if (userData?.metadata?.edges) {
-          setEdges(userData?.metadata?.edges);
-        }
+        setShowDiv(false);
       }
-      const nodes = userData.metadata.nodes;
-      const edges = userData.metadata?.edges;
+    } else {
+      setuserData(data);
+      setNodes(data?.metadata.nodes);
+      if (data.metadata?.edges) {
+        setEdges(data?.metadata.edges);
+      }
+      setShowDiv(false);
+    }
+    if (
+      data != null &&
+      !(Object.keys(data).length === 0) &&
+      data?.metadata?.nodes
+    ) {
+      const nodes = data.metadata.nodes;
       setShowDiv(false);
       for (const key in nodes) {
         if (key.toLowerCase().includes("servicediscovery")) {
@@ -562,11 +621,11 @@ const Designer = ({ update }) => {
           service_id++;
           setUniqueApplicationNames((prev) => [
             ...prev,
-            userData.metadata.nodes[key].data.label,
+            data.metadata.nodes[key].data.label,
           ]);
           setUniquePortNumbers((prev) => [
             ...prev,
-            userData.metadata.nodes[key].data.serverPort,
+            data.metadata.nodes[key].data.serverPort,
           ]);
           setServiceInputCheck((prev) => ({
             ...prev,
@@ -588,16 +647,77 @@ const Designer = ({ update }) => {
         } else if (key.toLowerCase().includes("ui")) {
           setUniquePortNumbers((prev) => [
             ...prev,
-            userData.metadata.nodes[key].data.serverPort,
+            data.metadata.nodes[key].data.serverPort,
           ]);
           setIsUINodeEnabled(true);
         }
       }
     }
-    return () => setShowDiv(false);
-  }, [location?.state]);
+    return () => {
+      localStorage.clear();
+      service_id = 1;
+      database_id = 1;
+      group_id = 1;
+      setUpdated(false);
+    };
+  }, []);
+  useEffect(() => {
+    if (update && userData.project_id) {
+      var data = { ...userData };
+      data.metadata.nodes = nodes;
+      (data.metadata ??= {}).edges = edges;
+      setuserData(data);
+      if (!(Object.keys(data).length === 0)) {
+        localStorage.data = JSON.stringify(data);
+      }
+    }
+    if (!update) {
+      if (localStorage.data && JSON.parse(localStorage.data).projectName) {
+        userData.projectName = JSON.parse(localStorage.data).projectName;
+      }
+      var udata = { ...userData };
+      (udata.metadata ??= {}).nodes = nodes;
+      udata.metadata.edges = edges;
+      setuserData(udata);
+      if (!(Object.keys(udata).length === 0)) {
+        localStorage.data = JSON.stringify(udata);
+      }
+    }
+  }, [nodes, edges]);
+
+  useEffect(() => {
+    if (triggerExit.onOk) {
+      handleGoToIntendedPage(triggerExit.path);
+      localStorage.clear();
+      clear();
+      setShowDiv(true);
+    }
+    let unblock;
+    if (updated) {
+      unblock = history.block((location) => {
+        setVisibleDialog(true);
+        setTriggerExit((obj) => ({ ...obj, path: location.pathname }));
+        if (triggerExit.onOk) {
+          return true;
+        }
+        return false;
+      });
+    }
+    return () => {
+      if (unblock) {
+        unblock();
+      }
+    };
+  }, [
+    handleGoToIntendedPage,
+    history,
+    triggerExit.onOk,
+    triggerExit.path,
+    updated,
+  ]);
 
   const onChange = (Data) => {
+    setUpdated(true);
     if (Data.applicationType === "gateway") {
       setIsEmptyUiSubmit(false);
       let updatedNodes = { ...nodes };
@@ -697,6 +817,7 @@ const Designer = ({ update }) => {
   };
 
   const onsubmit = (Data) => {
+    setUpdated(false);
     const NewNodes = { ...nodes };
     const NewEdges = { ...edges };
     let Service_Discovery_Data = nodes["serviceDiscoveryType"]?.data;
@@ -750,14 +871,14 @@ const Designer = ({ update }) => {
         }
       }
     }
-    if (saveMetadata || update) {
+    if (saveMetadata || userData?.project_id) {
       Data["metadata"] = {
         nodes: nodes,
         edges: edges,
         deployment: Data?.deployment,
       };
     } else delete Data?.metadata;
-    if (update && userData) {
+    if (userData?.project_id) {
       Data.projectId = userData?.project_id;
     }
     console.log(Data, "Finaaal Dataaaaaaaaaa");
@@ -779,6 +900,7 @@ const Designer = ({ update }) => {
       })
       .catch((error) => console.error(error))
       .finally(() => {
+        localStorage.clear();
         window.location.replace("../../");
       });
   };
@@ -848,6 +970,7 @@ const Designer = ({ update }) => {
   };
 
   const onConnect = useCallback((params, Nodes) => {
+    setUpdated(true);
     params.markerEnd = { type: MarkerType.ArrowClosed };
     params.type = "smoothstep";
     params.data = {};
@@ -1022,7 +1145,6 @@ const Designer = ({ update }) => {
           selectedColor={selectedColor}
           nodeClick={nodeClick}
           edges={edges}
-          userData={userData}
           update={update}
         />
 
@@ -1055,6 +1177,21 @@ const Designer = ({ update }) => {
             onClose={setopen}
             onSubmit={onChange}
             handleColorClick={handleColorClick}
+          />
+        )}
+
+        {isVisibleDialog && (
+          <ActionModal
+            isOpen={isVisibleDialog}
+            onClose={() => setVisibleDialog(false)}
+            onSubmit={() => {
+              setTriggerExit((obj) => ({
+                ...obj,
+                onOk: true,
+              }));
+              setVisibleDialog(false);
+            }}
+            actionType="clear"
           />
         )}
 
