@@ -775,13 +775,11 @@ const Designer = ({ update }) => {
       .then((response) => response.blob())
       .then((blob) => {
         setIsLoading(false);
-        // window.location.replace("../../success");
         history.push('/success')
         saveAs(blob, `${Data.projectName}.zip`); // Edit the name or ask the user for the project Name
       })
       .catch((error) => console.error(error))
       .finally(() => {
-        // window.location.replace("../../success");
         history.push('/success')
       });
   };
