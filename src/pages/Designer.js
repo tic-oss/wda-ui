@@ -583,12 +583,16 @@ const Designer = ({ update }) => {
       if (
         localStorage?.data != undefined &&
         localStorage.data != null &&
-        localStorage.data?.metadata != undefined
+        localStorage.data?.metadata?.nodes != ""
       ) {
         data = JSON.parse(localStorage.data);
         setuserData(data);
-        if (data?.metadata?.nodes) {
-          setNodes(data?.metadata.nodes);
+        if(data?.metadata?.nodes){
+          const nodee=data?.metadata?.nodes;
+          if (!(Object.keys(nodee).length === 0)) {
+            setShowDiv(false);
+            setNodes(data?.metadata.nodes);
+          }
         }
         if (data.metadata?.edges) {
           setEdges(data?.metadata.edges);
@@ -596,23 +600,24 @@ const Designer = ({ update }) => {
         if (data?.updated) {
           setUpdated(data.updated);
         }
-        setShowDiv(false);
       }
     } else {
       setuserData(data);
-      setNodes(data?.metadata.nodes);
+      if (data?.metadata?.nodes) {
+        setShowDiv(false);
+        setNodes(data?.metadata.nodes);
+      }
       if (data.metadata?.edges) {
         setEdges(data?.metadata.edges);
       }
-      setShowDiv(false);
     }
     if (
       data != null &&
       !(Object.keys(data).length === 0) &&
       data?.metadata?.nodes
     ) {
-      const nodes = data.metadata.nodes;
-      setShowDiv(false);
+      const nodes = data?.metadata?.nodes;
+      if (!(Object.keys(nodes).length === 0)) setShowDiv(false);
       for (const key in nodes) {
         if (key.toLowerCase().includes("servicediscovery")) {
           setIsServiceDiscovery(true);
@@ -682,6 +687,14 @@ const Designer = ({ update }) => {
       var udata = { ...userData };
       (udata.metadata ??= {}).nodes = nodes;
       udata.metadata.edges = edges;
+      if (
+        localStorage.data &&
+        JSON.parse(localStorage.data)?.metadata?.deployment
+      ) {
+        udata.metadata.deployment = JSON.parse(
+          localStorage.data
+        ).metadata.deployment;
+      }
       setuserData(udata);
       if (!(Object.keys(udata).length === 0)) {
         localStorage.data = JSON.stringify(udata);

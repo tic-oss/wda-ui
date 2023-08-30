@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from 'react-router-dom'; 
+import { useLocation } from "react-router-dom";
 import {
   Modal,
   ModalOverlay,
@@ -26,17 +26,38 @@ import { InfoIcon } from "@chakra-ui/icons";
 
 const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
   const location = useLocation();
-  const [userData, setuserData] = useState(location?.state);
   const [selectedImage, setSelectedImage] = useState(null);
   const [checkLength, setCheckLength] = useState(false);
   const [DeploymentData, setDeploymentData] = useState({});
+  const [userData, setUserData] = useState({});
+  useEffect(() => {
+    let data = location?.state;
+    if (!data) {
+      if (
+        localStorage?.data != undefined &&
+        localStorage.data != null &&
+        localStorage.data?.metadata?.deployment != ""
+      ) {
+        data = JSON.parse(localStorage.data);
+      }
+    }
+    if (data && data.metadata?.deployment) {
+      setUserData(data);
+      setSelectedImage(data.metadata.deployment.cloudProvider);
+      setDeploymentData(data.metadata.deployment);
+    }
+  }, [location?.state]);
 
   useEffect(() => {
-    if (update && userData && userData.metadata?.deployment) {
-      setSelectedImage(userData.metadata.deployment.cloudProvider);
-      setDeploymentData(userData.metadata.deployment);
+    let data = {};
+    if (localStorage?.data) {
+      data = JSON.parse(localStorage.data);
+      if (Object.keys(DeploymentData) != 0)
+        data.metadata.deployment = DeploymentData;
+      localStorage.data = JSON.stringify(data);
+      setUserData(data);
     }
-  }, [userData, location?.state]);
+  }, [DeploymentData]);
 
   const isCheckEmpty = () => {
     if (DeploymentData.cloudProvider === "azure") {
