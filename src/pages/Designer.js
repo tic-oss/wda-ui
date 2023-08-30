@@ -594,6 +594,9 @@ const Designer = ({ update }) => {
         if (data.metadata?.edges) {
           setEdges(data?.metadata.edges);
         }
+        if (data?.updated) {
+          setUpdated(data.updated);
+        }
         setShowDiv(false);
       }
     } else {
@@ -664,6 +667,7 @@ const Designer = ({ update }) => {
       var data = { ...userData };
       data.metadata.nodes = nodes;
       (data.metadata ??= {}).edges = edges;
+      data.updated = updated;
       setuserData(data);
       if (!(Object.keys(data).length === 0)) {
         localStorage.data = JSON.stringify(data);
@@ -672,6 +676,9 @@ const Designer = ({ update }) => {
     if (!update) {
       if (localStorage.data && JSON.parse(localStorage.data).projectName) {
         userData.projectName = JSON.parse(localStorage.data).projectName;
+      }
+      if (localStorage.data && JSON.parse(localStorage.data).updated) {
+        userData.updated = JSON.parse(localStorage.data).updated;
       }
       var udata = { ...userData };
       (udata.metadata ??= {}).nodes = nodes;
@@ -1143,6 +1150,9 @@ const Designer = ({ update }) => {
           nodeClick={nodeClick}
           edges={edges}
           update={update}
+          updated={updated}
+          setUpdated={setUpdated}
+          triggerExit={triggerExit}
         />
 
         {nodeType === "UI" && Isopen && (

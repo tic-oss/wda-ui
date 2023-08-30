@@ -27,6 +27,9 @@ const Sidebar = ({
   isEmptyServiceSubmit,
   selectedColor,
   update,
+  updated,
+  setUpdated,
+  triggerExit,
 }) => {
   const location = useLocation();
   const onDragStart = (event, nodeType, Name) => {
@@ -48,22 +51,19 @@ const Sidebar = ({
   };
   const [projectData, setprojectData] = useState(IntialState);
   useEffect(() => {
-    if (
-      (location.pathname =
-        "/canvasToCode" &&
-        !location?.state &&
-        (!localStorage.data ||
-          (localStorage.data && !JSON.parse(localStorage.data).projectName)))
-    ) {
+    if (triggerExit.onOk) {
       setprojectData({
         projectName: "",
       });
     }
-  }, []);
+  }, [triggerExit]);
+
   const handleProjectData = (column, value) => {
+    setUpdated(true);
     let data = {};
     if (localStorage?.data) data = JSON.parse(localStorage.data);
     data.projectName = value;
+    data.updated = updated;
     localStorage.data = JSON.stringify(data);
     setprojectData((prev) => ({ ...prev, [column]: value }));
   };

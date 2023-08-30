@@ -39,8 +39,8 @@ const ActionModal = ({
               </>
             ) : (
               <>
-                Leaving this page will result in the loss of unsaved changes.
-                Would you like to continue?
+                Navigating away from this page without saving will lead to the
+                loss of any unsaved changes
               </>
             )}
           </AlertDialogBody>
