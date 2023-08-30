@@ -28,9 +28,7 @@ import AlertModal from "../components/Modal/AlertModal";
 import resizeableNode from "./Customnodes/ResizeableNode";
 import groupNode from "./Customnodes/GroupNode";
 import { useLocation } from "react-router-dom";
-import {
-  useHistory,
-} from "react-router-dom/cjs/react-router-dom.min";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 import "./../App.css";
 import EdgeModal from "../components/Modal/EdgeModal";
@@ -881,7 +879,6 @@ const Designer = ({ update }) => {
     if (userData?.project_id) {
       Data.projectId = userData?.project_id;
     }
-    console.log(Data, "Finaaal Dataaaaaaaaaa");
     setNodes(NewNodes);
 
     setIsLoading(true);

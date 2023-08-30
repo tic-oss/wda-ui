@@ -92,6 +92,7 @@ export default function Header({ children }) {
                 py={1}
                 fontSize="md"
                 color={color}
+                bg={bg}
                 onMouseEnter={btnMouseEnterEvent}
                 onMouseLeave={btnMouseLeaveEvent}
                 style={{ cursor: "text" }}
@@ -104,6 +105,7 @@ export default function Header({ children }) {
                 fontSize="md"
                 bg={bg}
                 color={color}
+                borderColor={bg}
                 onMouseEnter={menuListMouseEnterEvent}
                 onMouseLeave={menuListMouseLeaveEvent}
               >

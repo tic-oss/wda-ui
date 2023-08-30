@@ -50,9 +50,6 @@ const UiDataModal = ({
     UiData.serverPort &&
     (Number(UiData.serverPort) < 1024 || Number(UiData.serverPort) > 65535);
 
-  // const appNameCheck = !/^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$/g.test(
-  //   UiData.applicationName
-  // );
   const appNameCheck =
     UiData.applicationName &&
     !/^[a-zA-Z](?:[a-zA-Z0-9_-]*[a-zA-Z0-9])?$/g.test(UiData.applicationName);
@@ -198,7 +195,7 @@ const UiDataModal = ({
                   mb={2}
                 >
                   <AlertIcon style={{ width: "14px", height: "14px" }} />
-                  Enter a valid application name
+                  Application Name should not contain -, _ or number.
                 </Alert>
               )}
             </FormControl>
@@ -369,7 +366,8 @@ const UiDataModal = ({
               isEmptyUiSubmit ||
               appNameCheck ||
               serverPortCheck ||
-              PortNumberError
+              PortNumberError ||
+              PortNumberRangeCheck
             }
           >
             Save
