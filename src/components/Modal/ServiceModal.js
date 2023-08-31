@@ -198,7 +198,7 @@ const ServiceModal = ({
                 mb={2}
               >
                 <AlertIcon style={{ width: "14px", height: "14px" }} />
-                Application Name should not contain -, _ or number.
+                Application Name should not contain -, _ or numbers.
               </Alert>
             )}
             {duplicateApplicationNameError && (

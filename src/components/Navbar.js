@@ -138,19 +138,6 @@ export default function Header({ children }) {
               Docs
             </Text>
           </Link>
-          {/* {initialized && keycloak.authenticated && (
-            <Link to="/projects">
-              <Text
-                fontSize="md"
-                color={color}
-                fontWeight={
-                  location.pathname === "/projects" ? "bold" : "normal"
-                }
-              >
-                Projects
-              </Text>
-            </Link>
-          )} */}
           {/* <Link to="/about">
             <Text
               fontSize="md"

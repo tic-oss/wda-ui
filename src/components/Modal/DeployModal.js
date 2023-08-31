@@ -48,12 +48,12 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
     let data = {};
     if (localStorage?.data) {
       data = JSON.parse(localStorage.data);
-      if (Object.keys(DeploymentData) !== 0)
+      if (Object.keys(DeploymentData).length >= 1)
         data.metadata.deployment = DeploymentData;
       localStorage.data = JSON.stringify(data);
       setUserData(data);
     } else {
-      if (Object.keys(DeploymentData) !== 0)
+      if (Object.keys(DeploymentData).length >= 1)
         data.metadata.deployment = DeploymentData;
       localStorage.data = JSON.stringify(data);
       setUserData(data);

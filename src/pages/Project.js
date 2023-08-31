@@ -40,7 +40,7 @@ const nodeTypes = {
 
 const Project = () => {
   const location = useLocation();
-  const [metadata, setmetadata] = useState({});
+  const [metadata, setMetadata] = useState({});
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
   const [val, setVal] = useState({});
@@ -51,17 +51,17 @@ const Project = () => {
   useEffect(() => {
     let data = location?.state;
     if (!data) {
-      let datastorage = JSON.parse(localStorage.getItem("data"));
-      setVal(datastorage);
-      setmetadata(datastorage.metadata);
-      datastorage = datastorage.metadata;
-      setNodes(Object.values(datastorage?.nodes));
-      if (datastorage?.edges) {
-        setEdges(Object.values(datastorage?.edges));
+      let dataStorage = JSON.parse(localStorage.getItem("data"));
+      setVal(dataStorage);
+      setMetadata(dataStorage.metadata);
+      dataStorage = dataStorage.metadata;
+      setNodes(Object.values(dataStorage?.nodes));
+      if (dataStorage?.edges) {
+        setEdges(Object.values(dataStorage?.edges));
       }
     } else {
       setVal(data);
-      setmetadata(data.metadata);
+      setMetadata(data.metadata);
       data = data.metadata;
       setNodes(Object.values(data?.nodes));
       if (data?.edges) {
@@ -74,7 +74,7 @@ const Project = () => {
   }, [location?.state]);
 
   useEffect(() => {
-    if (!(Object.keys(val).length === 0))
+    if (Object.keys(val).length >= 1)
       localStorage.setItem("data", JSON.stringify(val));
   }, [val]);
 
