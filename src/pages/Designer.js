@@ -587,8 +587,8 @@ const Designer = ({ update }) => {
       ) {
         data = JSON.parse(localStorage.data);
         setuserData(data);
-        if(data?.metadata?.nodes){
-          const nodee=data?.metadata?.nodes;
+        if (data?.metadata?.nodes) {
+          const nodee = data?.metadata?.nodes;
           if (!(Object.keys(nodee).length === 0)) {
             setShowDiv(false);
             setNodes(data?.metadata.nodes);
