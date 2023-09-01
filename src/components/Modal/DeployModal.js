@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from 'react-router-dom'; 
 import {
   Modal,
   ModalOverlay,
@@ -25,19 +24,42 @@ import { InfoIcon } from "@chakra-ui/icons";
 // import minikube from "../../assets/mini.png";
 
 const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
-  const location = useLocation();
-  const [userData,setuserData] = useState(location?.state);
   const [selectedImage, setSelectedImage] = useState(null);
   const [checkLength, setCheckLength] = useState(false);
   const [DeploymentData, setDeploymentData] = useState({});
-  
-  useEffect(()=>{
-    if(update && userData && userData.metadata?.deployment){
-      setSelectedImage(userData.metadata.deployment.cloudProvider)
-      setDeploymentData(userData.metadata.deployment) 
-  }
-  },[userData,location?.state])
-  
+  const [userData, setUserData] = useState({});
+  useEffect(() => {
+    let data = {};
+    if (
+      localStorage?.data !== undefined &&
+      localStorage.data !== null &&
+      JSON.parse(localStorage.data)?.metadata?.deployment !== ""
+    ) {
+      data = JSON.parse(localStorage.data);
+    }
+    if (data && data.metadata?.deployment) {
+      setUserData(data);
+      setSelectedImage(data.metadata.deployment.cloudProvider);
+      setDeploymentData(data.metadata.deployment);
+    }
+  }, []);
+
+  useEffect(() => {
+    let data = {};
+    if (localStorage?.data) {
+      data = JSON.parse(localStorage.data);
+      if (Object.keys(DeploymentData).length >= 1)
+        data.metadata.deployment = DeploymentData;
+      localStorage.data = JSON.stringify(data);
+      setUserData(data);
+    } else {
+      if (Object.keys(DeploymentData).length >= 1)
+        data.metadata.deployment = DeploymentData;
+      localStorage.data = JSON.stringify(data);
+      setUserData(data);
+    }
+  }, [DeploymentData]);
+
   const isCheckEmpty = () => {
     if (DeploymentData.cloudProvider === "azure") {
       return (
@@ -233,7 +255,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
   const clusterNameCheck = /^[a-zA-Z][a-zA-Z0-9-]*$/.test(
     DeploymentData.clusterName
   );
-  const storageClassCheck = /^[a-z0-9]([-a-z0-9]*[a-z0-9])?$/.test(
+  const storageClassCheck = /^[a-z][a-z]*$/.test(
     DeploymentData.kubernetesStorageClassName
   );
 
@@ -255,11 +277,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
           !clusterNameCheck
         );
       else {
-        return (
-          !namespaceCheck ||
-          !domainNameCheck ||
-          !clusterNameCheck
-        );
+        return !namespaceCheck || !domainNameCheck || !clusterNameCheck;
       }
     }
     return (
@@ -309,7 +327,6 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
       delete FinalData?.tenantId;
       delete FinalData?.dockerRepositoryName;
     } else if (FinalData.cloudProvider === "azure") {
-      console.log("hloooooo");
       delete FinalData?.awsAccountId;
       delete FinalData?.awsRegion;
       delete FinalData?.kubernetesStorageClassName;
@@ -626,13 +643,14 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
               {DeploymentData.clusterName && !clusterNameCheck ? (
                 <Alert
                   status="error"
-                  height="12px"
+                  height="38px"
                   fontSize="12px"
                   borderRadius="3px"
                   mb={2}
                 >
                   <AlertIcon style={{ width: "14px", height: "14px" }} />
-                  Cluster Name should not contain special characters.
+                  Cluster Name should not contain special characters or start
+                  with number.
                 </Alert>
               ) : (
                 <></>
@@ -694,8 +712,8 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
                         mb={2}
                       >
                         <AlertIcon style={{ width: "14px", height: "14px" }} />
-                        Storage Class Name should not contain special characters
-                        or start with uppercase.
+                        Storage Class Name should not contain special
+                        characters, numbers or uppercase.
                       </Alert>
                     ) : (
                       <></>
@@ -721,13 +739,14 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
               {DeploymentData.kubernetesNamespace && !namespaceCheck ? (
                 <Alert
                   status="error"
-                  height="12px"
+                  height="38px"
                   fontSize="12px"
                   borderRadius="3px"
                   mb={2}
                 >
                   <AlertIcon style={{ width: "14px", height: "14px" }} />
-                  Namespace should not contain special characters.
+                  Namespace should not contain special characters or start with
+                  number.
                 </Alert>
               ) : (
                 <></>
@@ -939,13 +958,13 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
           {isLoading && (
             <Flex
               position="fixed"
-              top="0"
+              top="62"
               left="0"
               right="0"
               bottom="0"
               alignItems="center"
               justifyContent="center"
-              backgroundColor="rgba(240, 248, 255, 0.85)"
+              backgroundColor="#f5f5f5"
               zIndex="9999"
               display="flex"
               flexDirection="column"
