@@ -1,16 +1,17 @@
-import React, { useState } from "react";
-import db1 from "../assets/pstgrc.jpeg";
+import React, { useEffect, useState } from "react";
+import db1 from "../assets/postgresql.png";
 import db2 from "../assets/mongo.png";
-import eurkea from "../assets/eureka.jpg";
+import eurkea from "../assets/eureka.png";
 import keycloakIcon from "../assets/keycloak.png";
 import eck from "../assets/eck.png";
-// import mini from "../assets/mini.jpeg";
+// import mini from "../assets/mini.png";
 // import docker from "../assets/docker.png";
 import "./../App.css";
 import { Input, FormLabel, Button, Checkbox } from "@chakra-ui/react";
 import DeployModal from "./Modal/DeployModal";
 import { useKeycloak } from "@react-keycloak/web";
 import { ArrowRightIcon, ArrowLeftIcon } from "@chakra-ui/icons";
+import { useLocation } from "react-router-dom";
 
 const Sidebar = ({
   isUINodeEnabled,
@@ -21,27 +22,49 @@ const Sidebar = ({
   saveMetadata,
   Togglesave,
   nodes,
+  edges,
   isEmptyUiSubmit,
   isEmptyServiceSubmit,
   selectedColor,
-  handleColorClick,
+  update,
+  updated,
+  setUpdated,
+  triggerExit,
 }) => {
+  const location = useLocation();
   const onDragStart = (event, nodeType, Name) => {
     event.dataTransfer.setData("Name", Name);
     event.dataTransfer.setData("application/reactflow", nodeType);
     event.dataTransfer.effectAllowed = "move";
   };
-
   const [selectedOption, setSelectedOption] = useState(null);
   const toggleOption = (option) => {
     setSelectedOption((prevOption) => (prevOption === option ? null : option));
   };
+  var applicationName = "";
+  if (location?.state) applicationName = location.state.projectName;
+  else if (localStorage?.data) {
+    applicationName = JSON.parse(localStorage.data).projectName;
+  }
   const IntialState = {
-    projectName: "",
+    projectName: applicationName,
   };
   const [projectData, setprojectData] = useState(IntialState);
+  useEffect(() => {
+    if (triggerExit.onOk) {
+      setprojectData({
+        projectName: "",
+      });
+    }
+  }, [triggerExit]);
 
   const handleProjectData = (column, value) => {
+    setUpdated(true);
+    let data = {};
+    if (localStorage?.data) data = JSON.parse(localStorage.data);
+    data.projectName = value;
+    data.updated = updated;
+    localStorage.data = JSON.stringify(data);
     setprojectData((prev) => ({ ...prev, [column]: value }));
   };
   const [showModal, setShowModal] = useState(false);
@@ -61,6 +84,47 @@ const Sidebar = ({
     projectData.projectName
   );
   const [isContentVisible, setContentVisible] = useState(true);
+
+  const checkEdge = () => {
+    let updatedEdges = { ...edges };
+    let updatedNodes = { ...nodes };
+    if (Object.keys(updatedNodes).length !== 0) {
+      for (const key in updatedNodes) {
+        let databaseCheck = updatedNodes[key];
+        if (
+          databaseCheck?.id?.startsWith("Database") &&
+          !databaseCheck?.data?.isConnected
+        ) {
+          return true;
+        }
+      }
+    }
+    if (Object.keys(updatedEdges).length !== 0) {
+      for (const key in updatedEdges) {
+        let edgeCheck = updatedEdges[key];
+        if (
+          edgeCheck?.target?.startsWith("Service") &&
+          !edgeCheck?.data?.framework
+        ) {
+          return true;
+        }
+      }
+      return false;
+    }
+  };
+
+  const checkDisabled = () => {
+    if (
+      !checkNodeExists ||
+      !authenticationData ||
+      projectNameCheck ||
+      projectData.projectName === "" ||
+      isEmptyUiSubmit === true ||
+      isEmptyServiceSubmit === true
+    )
+      return true;
+    else return false;
+  };
 
   const handleToggleContent = () => {
     setContentVisible(!isContentVisible);
@@ -93,7 +157,7 @@ const Sidebar = ({
           onClick={handleToggleContent}
         />
         <div
-          class="sideBlock"
+          className="sideBlock"
           style={{
             position: "relative",
             flex: "1",
@@ -145,7 +209,7 @@ const Sidebar = ({
                 justifyContent: "space-between",
               }}
             >
-              You can drag these nodes to the pane on the left.
+              You can drag these nodes to the pane on the right.
             </h2>
           </div>
 
@@ -232,8 +296,8 @@ const Sidebar = ({
                 draggable
               >
                 <img
-                  width="120px"
-                  style={{ marginBottom: "10px" }}
+                  width="145px"
+                  style={{ marginTop: "10px" }}
                   src={db1}
                   alt="postgreslogo"
                 ></img>
@@ -245,7 +309,12 @@ const Sidebar = ({
                 }
                 draggable
               >
-                <img width="120px" src={db2} alt="mongologo"></img>
+                <img
+                  width="145px"
+                  style={{ margin: "10px 0px 10px 15px" }}
+                  src={db2}
+                  alt="mongologo"
+                ></img>
               </div>
             </>
           )}
@@ -278,7 +347,12 @@ const Sidebar = ({
                 }
                 draggable
               >
-                <img width="120px" src={eurkea} alt="eurekalogo"></img>
+                <img
+                  width="100px"
+                  height="40px"
+                  src={eurkea}
+                  alt="eurekalogo"
+                ></img>
               </div>
             </>
           )}
@@ -366,87 +440,6 @@ const Sidebar = ({
             flexDirection: "column",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-              marginBottom: "20px",
-              gap: "15px",
-            }}
-          >
-            <div
-              style={{
-                width: "30px",
-                height: "30px",
-                border:
-                  selectedColor === "#ffc9c9"
-                    ? "2px solid black"
-                    : "1px solid transparent",
-                borderRadius: "50%",
-                backgroundColor: "#ffc9c9",
-                cursor: "pointer",
-              }}
-              onClick={() => handleColorClick("#ffc9c9")}
-            ></div>
-            <div
-              style={{
-                width: "30px",
-                height: "30px",
-                border:
-                  selectedColor === "#b2f2bb"
-                    ? "2px solid black"
-                    : "1px solid transparent",
-                borderRadius: "50%",
-                backgroundColor: "#b2f2bb",
-                cursor: "pointer",
-              }}
-              onClick={() => handleColorClick("#b2f2bb")}
-            ></div>
-            <div
-              style={{
-                width: "30px",
-                height: "30px",
-                border:
-                  selectedColor === "#a5d8ff"
-                    ? "2px solid black"
-                    : "1px solid transparent",
-                borderRadius: "50%",
-                backgroundColor: "#a5d8ff",
-                cursor: "pointer",
-              }}
-              onClick={() => handleColorClick("#a5d8ff")}
-            ></div>
-            <div
-              style={{
-                width: "30px",
-                height: "30px",
-                border:
-                  selectedColor === "#ffec99"
-                    ? "2px solid black"
-                    : "1px solid transparent",
-                borderRadius: "50%",
-                backgroundColor: "#ffec99",
-                cursor: "pointer",
-              }}
-              onClick={() => handleColorClick("#ffec99")}
-            ></div>
-            <div
-              style={{
-                width: "30px",
-                height: "30px",
-                border:
-                  selectedColor === "#fff"
-                    ? "2px solid black"
-                    : "1px solid #cfcfcf",
-                borderRadius: "50%",
-                backgroundColor: "#fff",
-                cursor: "pointer",
-              }}
-              onClick={() => handleColorClick("#fff")}
-            ></div>
-          </div>
           {initialized && keycloak.authenticated && (
             <Checkbox
               size="md"
@@ -465,14 +458,7 @@ const Sidebar = ({
             borderColor="#3182CE"
             width="100px"
             type="submit"
-            isDisabled={
-              !checkNodeExists ||
-              !authenticationData ||
-              projectNameCheck ||
-              projectData.projectName === "" ||
-              isEmptyUiSubmit === true ||
-              isEmptyServiceSubmit === true
-            }
+            isDisabled={checkEdge() || checkDisabled()}
           >
             Next
           </Button>
@@ -483,6 +469,7 @@ const Sidebar = ({
               projectData={projectData}
               onClose={handleCloseModal}
               Service_Discovery_Data={Service_Discovery_Data}
+              update={update}
             />
           )}
 
