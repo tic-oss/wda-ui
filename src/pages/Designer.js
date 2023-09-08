@@ -80,6 +80,7 @@ const Designer = ({ update }) => {
   const location = useLocation();
   const [userData, setuserData] = useState({});
   const [serviceInputCheck, setServiceInputCheck] = useState({});
+  const [groupNodeData, setGroupNodeData] = useState({});
 
   const [updated, setUpdated] = useState(false);
   const [isVisibleDialog, setVisibleDialog] = useState(false);
@@ -145,7 +146,9 @@ const Designer = ({ update }) => {
   };
 
   const onNodesChange = useCallback((setShowDiv, edges, changes = []) => {
+
     setUpdated(true);
+    console.log(changes,"change")
     setNodes((oldNodes) => {
       const updatedNodes = { ...oldNodes };
       const updatedEdges = { ...edges };
@@ -431,7 +434,10 @@ const Designer = ({ update }) => {
             width: "120px",
             height: "40px",
             borderRadius: "15px",
+            backgroundColor: "rgba(255, 0, 0, 0.2)",
           },
+          parentNode:'group_1'
+
         };
         setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
         setIsEmptyServiceSubmit(true);
@@ -507,6 +513,7 @@ const Designer = ({ update }) => {
           },
         };
         setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
+        setGroupNodeData((prev) => ({ ...prev, [newNode.id]: newNode }));
       } else if (name.startsWith("MessageBroker") && messagecount >= 1) {
         setMessageBrokerCount(2);
       } else if (name.startsWith("Load") && loadcount === 0) {
@@ -723,7 +730,7 @@ const Designer = ({ update }) => {
         updatedNodes["UI"].style.border = "1px solid black";
       }
       setNodes(updatedNodes);
-    } else {
+    } else if (Data.applicationType === "microservice") {
       let flag = false;
       for (let key in serviceInputCheck) {
         if (key !== Isopen && serviceInputCheck[key] === true) {
@@ -747,7 +754,45 @@ const Designer = ({ update }) => {
         ...prev,
         [Isopen]: false,
       }));
+    } else {
+      console.log(groupNodeData, "hiiiiiiii");
+      for (let key in groupNodeData) {
+        // if (key !== Isopen && groupNodeData[key] === true) {
+        //   flag = true;
+        //   setIsEmptyServiceSubmit(true);
+        // }
+        console.log(key, "key");
+        console.log(nodes, "nodes");
+        if (key.startsWith("group") && Isopen === key) {
+          const styleData = groupNodeData[key];
+          console.log(styleData);
+          if (styleData) {
+            let updatedNodes = { ...nodes };
+            const xValue = parseInt(styleData.position.x);
+            const widthValue = parseInt(styleData.style.width);
+            const yValue = parseInt(styleData.position.y);
+            const heightValue = parseInt(styleData.style.height);
+
+            let xSum;
+            let ySum;
+
+            if (!isNaN(xValue) && !isNaN(widthValue)) {
+              xSum = xValue + widthValue;
+              console.log("xSum:", xSum);
+            }
+            if (!isNaN(yValue) && !isNaN(heightValue)) {
+              ySum = yValue + heightValue;
+              console.log("ySum:", ySum);
+            }
+            console.log(xValue, xSum, yValue, ySum, "coord");
+
+            // updatedNodes[key].style.border = "5px solid black";
+            setNodes(updatedNodes);
+          }
+        }
+      }
     }
+
     let UpdatedNodes = { ...nodes };
     if (Data.applicationName) {
       Data.applicationName = Data.applicationName.trim();
