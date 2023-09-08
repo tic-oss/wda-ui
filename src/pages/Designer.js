@@ -919,12 +919,32 @@ const Designer = ({ update }) => {
   const onEdgeClick = (e, edge) => {
     const sourceType = edge.source.split("_")[0];
     const targetType = edge.target.split("_")[0];
+  
     if (
       (sourceType === "UI" && targetType === "Service") ||
       (sourceType === "Service" && targetType === "Service")
     ) {
+      const updatedEdges = { ...edges };
+  
+      // Reset the style of all edges to the label-based colors
+      for (const edgeId in updatedEdges) {
+        if (updatedEdges[edgeId].label === "Rest") {
+          updatedEdges[edgeId].style = { stroke: "black" };
+        } else if (updatedEdges[edgeId].label === "RabbitMQ") {
+          updatedEdges[edgeId].style = { stroke: "#bcbaba" };
+        } else {
+          updatedEdges[edgeId].style = { stroke: "red" };
+        }
+      }
+  
+      if (updatedEdges[edge.id].label) {
+        // If a label is present, highlight the clicked edge with blue color
+        updatedEdges[edge.id].style = { stroke: "#0892d0" };
+      }
+  
       setEdgeopen(edge.id);
-      setCurrentEdge(edges[edge.id].data);
+      setCurrentEdge(updatedEdges[edge.id].data);
+      setEdges(updatedEdges);
     }
   };
 
