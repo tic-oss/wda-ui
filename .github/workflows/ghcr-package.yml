@@ -52,9 +52,8 @@ jobs:
       - name: Notify Repository C
         run: |
           curl -X POST \
-            -H "Authorization: Bearer ${{ secrets.ACCESS_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            -d '{"event_type": "ui-deploy"}' \
-            https://api.github.com/repos/tic-oss/hetzner/actions/workflows/ui-deploy.yml/dispatches
-
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token ${{ secrets.ACCESS_TOKEN }}" \
+            https://api.github.com/repos/tic-oss/hetzner/actions/workflows/ui-deploy.yml/dispatches \
+            -d '{"ref": "ui-workflow"}'
           
