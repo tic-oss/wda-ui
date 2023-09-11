@@ -3,7 +3,7 @@ name: Create and publish a Docker image
 # Configures this workflow to run every time a change is pushed to the branch called `main`.
 on:
   push:
-    branches: ['main']
+    branches: ['ui-workflow']
 
 # Defines two custom environment variables for the workflow. These are used for the Container registry domain, and a name for the Docker image that this workflow builds.
 env:
@@ -48,3 +48,13 @@ jobs:
           tags: |
             ghcr.io/tic-oss/wda-ui:latest
           labels: ${{ steps.meta.outputs.labels }}
+      
+      - name: Notify Repository C
+        run: |
+          curl -X POST \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{"event_type": "ui-deploy"}' \
+            https://api.github.com/repos/tic-oss/hetzner/actions/workflows/ui-deploy.yml/dispatches
+
+           
