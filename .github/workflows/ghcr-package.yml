@@ -55,6 +55,6 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.ACCESS_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d '{"event_type": "ui-deploy"}' \
-            https://api.github.com/repos/tic-oss/hetzner/dispatches
+            https://api.github.com/repos/tic-oss/hetzner/actions/workflows/ui-deploy.yml/dispatches
 
           
