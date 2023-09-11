@@ -52,9 +52,9 @@ jobs:
       - name: Notify Repository C
         run: |
           curl -X POST \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Authorization: Bearer ${{ secrets.ACCESS_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d '{"event_type": "ui-deploy"}' \
-            https://api.github.com/repos/tic-oss/hetzner/actions/workflows/ui-deploy.yml/dispatches
+            https://api.github.com/repos/tic-oss/hetzner/dispatches
 
-           
+          
