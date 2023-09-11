@@ -920,34 +920,36 @@ const Designer = ({ update }) => {
     const sourceType = edge.source.split("_")[0];
     const targetType = edge.target.split("_")[0];
   
+    const updatedEdges = { ...edges };
+  
+    // Reset the style of all edges to their default color (e.g., red)
+    for (const edgeId in updatedEdges) {
+      if (updatedEdges[edgeId].label === "Rest") {
+        updatedEdges[edgeId].style = { stroke: "black" };
+      } else if (updatedEdges[edgeId].label === "RabbitMQ") {
+        updatedEdges[edgeId].style = { stroke: "#bcbaba" };
+      } else {
+        updatedEdges[edgeId].style = { stroke: "red" };
+      }
+    }
+  
     if (
       (sourceType === "UI" && targetType === "Service") ||
       (sourceType === "Service" && targetType === "Service")
     ) {
-      const updatedEdges = { ...edges };
-  
-      // Reset the style of all edges to the label-based colors
-      for (const edgeId in updatedEdges) {
-        if (updatedEdges[edgeId].label === "Rest") {
-          updatedEdges[edgeId].style = { stroke: "black" };
-        } else if (updatedEdges[edgeId].label === "RabbitMQ") {
-          updatedEdges[edgeId].style = { stroke: "#bcbaba" };
-        } else {
-          updatedEdges[edgeId].style = { stroke: "red" };
-        }
-      }
-  
-      if (updatedEdges[edge.id].label) {
-        // If a label is present, highlight the clicked edge with blue color
-        updatedEdges[edge.id].style = { stroke: "#0892d0" };
-      }
-  
+      // Highlight the clicked edge with blue color
+      updatedEdges[edge.id].style = { stroke: "#0892d0" };
       setEdgeopen(edge.id);
       setCurrentEdge(updatedEdges[edge.id].data);
-      setEdges(updatedEdges);
+    } else {
+      // Clicked on another edge or somewhere else, so clear the selection
+      setEdgeopen(null);
+      setCurrentEdge(null);
     }
+  
+    setEdges(updatedEdges);
   };
-
+  
   const handleEdgeData = (Data) => {
     let UpdatedEdges = { ...edges };
 
