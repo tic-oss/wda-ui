@@ -140,7 +140,7 @@ const ServiceModal = ({
 
   const appNameCheck =
     ApplicationData.applicationName &&
-    !/^[a-zA-Z](?:[a-zA-Z0-9_-]*[a-zA-Z0-9])?$/g.test(
+    !/^[a-zA-Z](?:[a-zA-Z0-9]*[a-zA-Z0-9])?$/g.test(
       ApplicationData.applicationName
     );
 
@@ -198,7 +198,7 @@ const ServiceModal = ({
                 mb={2}
               >
                 <AlertIcon style={{ width: "14px", height: "14px" }} />
-                Application Name should not contain -, _ or numbers.
+                Application Name should not contain special characters.
               </Alert>
             )}
             {duplicateApplicationNameError && (
