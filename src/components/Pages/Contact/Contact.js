@@ -1,6 +1,7 @@
 import React from "react";
 import { Heading, Container } from "@chakra-ui/react";
 import Footer from "../Footer/Footer";
+import "./style.css";
 
 function Contact() {
   return (
@@ -14,38 +15,30 @@ function Contact() {
           don't hesitate to get in touch with us.
         </Heading>
         <br />
-        <p style={{ fontStyle: "italic", fontWeight: "bold" }}>
+        <p className="textStyle">
           Have a question?{" "}
           <a
             href="https://github.com/orgs/tic-oss/discussions"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ textDecoration: "underline", color: "blue" }}
+            className="linkStyle"
           >
             Click here
           </a>{" "}
           to post it on our discussion forum.
         </p>
         <br />
-        <p style={{ fontStyle: "italic", fontWeight: "bold" }}>Email:</p>
+        <p className="textStyle">Email:</p>
         <p>tic.dev@comakeit.com</p>
         <br />
-        <p style={{ fontStyle: "italic", fontWeight: "bold" }}>Phone:</p>
+        <p className="textStyle">Phone:</p>
         <p> 040 4035 1000</p>
         <br />
-        <p
-          style={{
-            fontStyle: "italic",
-            fontWeight: "bold",
-            marginBottom: "0px",
-          }}
-        >
-          Social Media:
-        </p>
+        <p className="textStyle">Social Media:</p>
         <p>Twitter: @tic-dev_support</p>
         <p>Facebook: facebook.com/tic-dev_support</p>
         <br />
-        <p style={{ fontStyle: "italic", fontWeight: "bold" }}>Address:</p>
+        <p className="textStyle">Address:</p>
         <p>
           9th Floor, Aurobindo Galaxy Plot No. 1, Forming part of Sy. No. 83/1,
           Hyderabad Knowledge City, TSIIC Raidurgam (Panmaktha) Village,

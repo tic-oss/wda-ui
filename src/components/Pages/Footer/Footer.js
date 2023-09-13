@@ -1,28 +1,12 @@
-const style = {
-  backgroundColor: "#3182CE",
-  borderTop: "1px solid #E7E7E7",
-  textAlign: "center",
-  padding: "20px",
-  position: "fixed",
-  left: "0",
-  bottom: "0",
-  height: "60px",
-  width: "100%",
-  color: "#FFFFFF",
-};
 
-const phantom = {
-  display: "block",
-  padding: "20px",
-  height: "60px",
-  width: "100%",
-};
+import React from 'react';
+import './style.css';
 
 function Footer() {
   return (
     <div>
-      <div style={phantom} />
-      <div style={style}>Created by TIC@coMakeIT</div>
+      <div className="phantom"/>
+      <div className="text">Created by TIC@coMakeIT</div>
     </div>
   );
 }

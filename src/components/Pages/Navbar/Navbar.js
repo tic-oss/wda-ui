@@ -95,7 +95,7 @@ export default function Header({ children }) {
                 bg={bg}
                 onMouseEnter={btnMouseEnterEvent}
                 onMouseLeave={btnMouseLeaveEvent}
-                style={{ cursor: "text" }}
+                style={{ cursor: "pointer" }}
               >
                 CanvasToCode{" "}
                 {isOpenMenu ? <ChevronUpIcon /> : <ChevronDownIcon />}
