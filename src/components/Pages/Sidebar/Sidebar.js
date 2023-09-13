@@ -10,6 +10,7 @@ import DeployModal from "../../Modal/DeployModal";
 import { useKeycloak } from "@react-keycloak/web";
 import { ArrowRightIcon, ArrowLeftIcon } from "@chakra-ui/icons";
 import { useLocation } from "react-router-dom";
+import "./style.css";
 
 const Sidebar = ({
   isUINodeEnabled,
@@ -131,54 +132,22 @@ const Sidebar = ({
   return (
     <>
       <aside
-        style={{
-          position: "fixed",
-          left: 0,
-          overflow: "hidden",
-          height: isContentVisible ? "91.5vh" : "50px",
-          width: isContentVisible ? "auto" : "40px",
-          backgroundColor: "fff",
-          border: "1px solid #e2e8f0",
-          boxShadow: "1px 1px 20px 1px #e2e8f0",
-          display: "flex",
-          flexDirection: "column",
-          margin: "10px",
-        }}
+        className={`sidebar-container ${
+          isContentVisible ? "sidebar-container-expanded" : ""
+        }`}
       >
         <ArrowRightIcon
-          style={{
-            fontSize: "18px",
-            cursor: "pointer",
-            marginBottom: "50px",
-            display: isContentVisible ? "none" : "block",
-          }}
+          className={`expand-style ${isContentVisible ? "hide" : ""}`}
           onClick={handleToggleContent}
         />
         <div
-          className="sideBlock"
-          style={{
-            position: "relative",
-            flex: "1",
-            overflowY: "auto",
-            display: isContentVisible ? "block" : "none",
-          }}
+          className={`sideBlock ${
+            isContentVisible ? "side-content visible" : ""
+          }`}
         >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              margin: "0px 8px 8px 0px",
-            }}
-          >
-            <FormLabel fontWeight="bold" style={{ margin: "0" }}>
-              Project Name
-            </FormLabel>
-            <ArrowLeftIcon
-              style={{ fontSize: "9px", cursor: "pointer" }}
-              onClick={handleToggleContent}
-            />
+          <div className="applicationDetails">
+            <FormLabel className="projectName">Project Name</FormLabel>
+            <ArrowLeftIcon className="collapse" onClick={handleToggleContent} />
           </div>
           <Input
             mb={1}
@@ -192,21 +161,10 @@ const Sidebar = ({
             onChange={(e) => handleProjectData("projectName", e.target.value)}
           ></Input>
           {projectData.projectName && projectNameCheck && (
-            <span style={{ color: "red", fontSize: "10px" }}>
-              Enter a valid project name
-            </span>
+            <span className="projectNameError">Enter a valid project name</span>
           )}
-
           <div className="description">
-            <h2
-              style={{
-                marginTop: "8px",
-                fontSize: "12px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
+            <h2 className="dragNodesDescription">
               You can drag these nodes to the pane on the right.
             </h2>
           </div>
@@ -238,13 +196,7 @@ const Sidebar = ({
             Group
           </div>
           <h1
-            style={{
-              cursor: "pointer",
-              fontSize: "20px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
+            className="nodeHeading"
             onClick={() => toggleOption("Authentication")}
           >
             Authentication{" "}
@@ -267,16 +219,7 @@ const Sidebar = ({
               </div>
             </>
           )}
-          <h1
-            style={{
-              cursor: "pointer",
-              fontSize: "20px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-            onClick={() => toggleOption("Database")}
-          >
+          <h1 className="nodeHeading" onClick={() => toggleOption("Database")}>
             Database{" "}
             {selectedOption === "Databases" ? (
               <span>&#x25B2;</span>
@@ -295,7 +238,7 @@ const Sidebar = ({
               >
                 <img
                   width="145px"
-                  style={{ marginTop: "10px" }}
+                  className="postgresqlStyle"
                   src={db1}
                   alt="postgreslogo"
                 ></img>
@@ -309,7 +252,7 @@ const Sidebar = ({
               >
                 <img
                   width="145px"
-                  style={{ margin: "10px 0px 10px 15px" }}
+                  className="mongoIconStyle"
                   src={db2}
                   alt="mongologo"
                 ></img>
@@ -319,13 +262,7 @@ const Sidebar = ({
 
           <h1>
             <span
-              style={{
-                cursor: "pointer",
-                fontSize: "20px",
-                justifyContent: "space-between",
-                display: "flex",
-                alignItems: "center",
-              }}
+              className="nodeHeading"
               onClick={() => toggleOption("serviceDiscovery")}
             >
               Service Discovery{" "}
@@ -356,13 +293,7 @@ const Sidebar = ({
           )}
           <h1>
             <span
-              style={{
-                cursor: "pointer",
-                fontSize: "20px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
+              className="nodeHeading"
               onClick={() => toggleOption("loadManagement")}
             >
               Log Management{" "}
@@ -386,58 +317,8 @@ const Sidebar = ({
               </div>
             </>
           )}
-          {/* <h1>
-          <span
-            style={{
-              cursor: "pointer",
-              fontSize: "20px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-            onClick={() => toggleOption("Localenvironment")}
-          >
-            Localenvironment{" "}
-            {selectedOption === "Localenvironment" ? (
-              <span>&#x25B2;</span>
-            ) : (
-              <span>&#x25BC;</span>
-            )}
-          </span>
-        </h1>
-        {selectedOption === "Localenvironment" && (
-          <>
-            <div
-              className="selectorNode7"
-              onDragStart={(event) =>
-                onDragStart(event, "default", "Localenvironment_minikube")
-              }
-              draggable
-            >
-              <img width="120px" src={mini} alt="minikubelogo" />
-            </div>
-
-            <div
-              className="selectorNode7"
-              onDragStart={(event) =>
-                onDragStart(event, "default", "Localenvironment_docker")
-              }
-              draggable
-            >
-              <img width="120px" src={docker} alt="dockerlogo" />
-            </div>
-          </>
-        )} */}
         </div>
-        <div
-          style={{
-            position: "sticky",
-            bottom: "0",
-            marginTop: "35px",
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
+        <div className="saveProject">
           {initialized && keycloak.authenticated && (
             <Checkbox
               size="md"
@@ -448,7 +329,6 @@ const Sidebar = ({
               Save Project
             </Checkbox>
           )}
-          {/* <div style={{ display:'flex', justifyContent:'center'}}> */}
           <Button
             onClick={handleButtonClick}
             mt={4}
@@ -472,28 +352,14 @@ const Sidebar = ({
           )}
 
           {!checkNodeExists ? (
-            <p
-              style={{
-                fontSize: "10px",
-                color: "red",
-                marginTop: "5px",
-              }}
-            >
+            <p className="errorMessage">
               Please ensure there exists atleast one application
             </p>
           ) : (
             <></>
           )}
           {!authenticationData ? (
-            <p
-              style={{
-                fontSize: "10px",
-                color: "red",
-                marginTop: "5px",
-              }}
-            >
-              Please select Authentication type
-            </p>
+            <p className="errorMessage">Please select Authentication type</p>
           ) : (
             <></>
           )}

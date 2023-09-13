@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 import logo from "../../../assets/TIC_logo.png";
 import { useKeycloak } from "@react-keycloak/web";
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
+import "./style.css";
 
 export default function Header({ children }) {
   const color = "#ffffff";
@@ -57,12 +58,7 @@ export default function Header({ children }) {
             <Image
               src={logo}
               alt="App Logo"
-              style={{
-                width: "18px",
-                height: "15px",
-                marginRight: "30px",
-                transform: "scale(3.5)",
-              }}
+              className="logoStyle"
             />
           </Link>
           <Link to="/">
@@ -95,7 +91,6 @@ export default function Header({ children }) {
                 bg={bg}
                 onMouseEnter={btnMouseEnterEvent}
                 onMouseLeave={btnMouseLeaveEvent}
-                style={{ cursor: "pointer" }}
               >
                 CanvasToCode{" "}
                 {isOpenMenu ? <ChevronUpIcon /> : <ChevronDownIcon />}

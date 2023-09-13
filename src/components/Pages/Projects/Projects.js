@@ -17,6 +17,7 @@ import minikube from "../../../assets/mini.png";
 import Footer from "../Footer/Footer";
 import DeploymentModal from "../../Modal/DeploymentModal";
 import ActionModal from "../../Modal/ActionModal";
+import "./style.css";
 
 function Projects() {
   const history = useHistory();
@@ -245,12 +246,12 @@ function Projects() {
                     </Td>
                   ) : (
                     <Td>
-                      <span style={{ lineHeight: "40px" }}>NA</span>
+                      <span className="noInfrastructure">NA</span>
                     </Td>
                   )}
                   <Td>
                     <button
-                      style={{ paddingLeft: "7px" }}
+                      className="editIconStyle"
                       onClick={() => verifyData(project, project.project_id)}
                     >
                       <svg
@@ -272,7 +273,7 @@ function Projects() {
                   </Td>
                   <Td>
                     <button
-                      style={{ paddingLeft: "10px" }}
+                      className="deleteIconStyle"
                       onClick={() =>
                         handleButtonClick(
                           project.project_id,
