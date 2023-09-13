@@ -3,7 +3,6 @@ import ReactFlow, {
   ReactFlowProvider,
   Controls,
   MarkerType,
-  MiniMap,
   ConnectionLineType,
   Background,
   BackgroundVariant,
@@ -124,7 +123,6 @@ const Designer = ({ update }) => {
       };
     }
     return { ...edges };
-    // return { ...edges, [edgeId]: { id: edgeId, ...edgeParams } };
   };
 
   const updateEdge = (oldEdge, newConnection, edges, Nodes) => {
@@ -366,10 +364,6 @@ const Designer = ({ update }) => {
       } else setCurrentNode(nodes[Id].data);
       setopen(Id);
     }
-    // };
-
-    // const onSingleClick = (e, node) => {
-    // const Id = e.target.dataset.id || e.target.name || node.id;
     setNodeClick(Id);
   };
   const clear = () => {
@@ -562,9 +556,9 @@ const Designer = ({ update }) => {
     let data = location?.state;
     if (!data) {
       if (
-        localStorage?.data != undefined &&
-        localStorage.data != null &&
-        localStorage.data?.metadata?.nodes != ""
+        localStorage?.data !== undefined &&
+        localStorage.data !== null &&
+        localStorage.data?.metadata?.nodes !== ""
       ) {
         data = JSON.parse(localStorage.data);
         setuserData(data);
@@ -1105,7 +1099,6 @@ const Designer = ({ update }) => {
             onDragOver={onDragOver}
             onDragLeave={() => setShowDiv(Object.keys(nodes).length === 0)}
             onNodeClick={onclick}
-            // onNodeClick={onSingleClick}
             deleteKeyCode={["Backspace", "Delete"]}
             fitView
             onEdgeUpdate={(oldEdge, newConnection) =>
@@ -1118,7 +1111,6 @@ const Designer = ({ update }) => {
             defaultViewport={defaultViewport}
           >
             <Controls />
-            {/* <MiniMap style={{ backgroundColor: "#3182CE" }} /> */}
             <Background
               gap={10}
               color="#f2f2f2"
