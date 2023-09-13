@@ -1,6 +1,5 @@
 import eureka from "../../assets/eureka.png";
 import { NodeResizer } from "reactflow";
-// import consol from "../../assets/consol.png";
 
 function CustomServiceNode({ data, isConnectable, selected }) {
   const serviceDiscoveryType = data.serviceDiscoveryType;

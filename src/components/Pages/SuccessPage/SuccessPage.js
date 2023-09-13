@@ -1,18 +1,10 @@
-import React, { useState } from "react";
-import {
-  Box,
-  Text,
-  Button,
-  Image,
-  Stack,
-  Flex,
-  Spinner,
-} from "@chakra-ui/react";
+import React from "react";
+import { Box, Text, Button, Image } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import logo from "../assets/success.png";
-import Footer from "../components/Footer";
+import logo from "../../../assets/success.png";
+import Footer from "../Footer/Footer";
 
-const SuccessPage = ({ isLoading }) => {
+const SuccessPage = () => {
   return (
     <div
       style={{ display: "flex", textAlign: "center", justifyContent: "center" }}

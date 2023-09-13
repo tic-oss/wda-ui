@@ -27,7 +27,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [checkLength, setCheckLength] = useState(false);
   const [DeploymentData, setDeploymentData] = useState({});
-  const [userData, setUserData] = useState({});
+  const [, setUserData] = useState({});
   useEffect(() => {
     let data = {};
     if (
@@ -366,7 +366,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
     }
   }
 
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, ] = useState(true);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -395,7 +395,6 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
         <ModalCloseButton onClick={onClose} />
         <ModalBody
           style={{
-            maxHeight: "calc(100vh - 200px)",
             overflowY: "auto",
             maxHeight: "600px",
           }}

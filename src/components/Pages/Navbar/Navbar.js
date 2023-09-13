@@ -13,7 +13,7 @@ import {
 import { useRef, useState } from "react";
 import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
-import logo from "../assets/TIC_logo.png";
+import logo from "../../../assets/TIC_logo.png";
 import { useKeycloak } from "@react-keycloak/web";
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 
@@ -138,15 +138,6 @@ export default function Header({ children }) {
               Docs
             </Text>
           </Link>
-          {/* <Link to="/about">
-            <Text
-              fontSize="md"
-              color={color}
-              fontWeight={location.pathname === "/about" ? "bold" : "normal"}
-            >
-              About
-            </Text>
-          </Link> */}
           <Link to="/contact">
             <Text
               fontSize="md"

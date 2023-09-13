@@ -3,17 +3,17 @@ import ReactFlow, { ReactFlowProvider } from "reactflow";
 import "reactflow/dist/style.css";
 import { useHistory } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import CustomImageNode from "./Customnodes/CustomImageNode";
-import CustomServiceNode from "./Customnodes/CustomServiceNode";
-import CustomIngressNode from "./Customnodes/CustomIngressNode";
-import CustomAuthNode from "./Customnodes/CustomAuthNode";
-import CustomMessageBrokerNode from "./Customnodes/CustomMessageBrokerNode";
-import CustomCloudNode from "./Customnodes/CustomCloudNode";
-import CustomLoadNode from "./Customnodes/CustomLoadNode";
-import CustomLocalenvironmentNode from "./Customnodes/CustomLocalenvironmentNode";
-import ProjectModal from "../components/Modal/ProjectModal";
-import DeploymentModal from "../components/Modal/DeploymentModal";
-import ReadOnlyEdgeModal from "../components/Modal/ReadOnlyEdgeModal";
+import CustomImageNode from "../../Customnodes/CustomImageNode";
+import CustomServiceNode from "../../Customnodes/CustomServiceNode";
+import CustomIngressNode from "../../Customnodes/CustomIngressNode";
+import CustomAuthNode from "../../Customnodes/CustomAuthNode";
+import CustomMessageBrokerNode from "../../Customnodes/CustomMessageBrokerNode";
+import CustomCloudNode from "../../Customnodes/CustomCloudNode";
+import CustomLoadNode from "../../Customnodes/CustomLoadNode";
+import CustomLocalenvironmentNode from "../../Customnodes/CustomLocalenvironmentNode";
+import ProjectModal from "../../Modal/ProjectModal";
+import DeploymentModal from "../../Modal/DeploymentModal";
+import ReadOnlyEdgeModal from "../../Modal/ReadOnlyEdgeModal";
 import { useKeycloak } from "@react-keycloak/web";
 import { useParams } from "react-router-dom";
 
@@ -40,7 +40,7 @@ const nodeTypes = {
 
 const Project = () => {
   const location = useLocation();
-  const [metadata, setMetadata] = useState({});
+  const [, setMetadata] = useState({});
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
   const [val, setVal] = useState({});
@@ -120,16 +120,6 @@ const Project = () => {
 
   const [appData, setAppData] = useState(DefaultAppData);
   const [data, setData] = useState(DefaultData);
-
-  const getDeploymentNode = (data) => {
-    return {
-      id: "Deployment",
-      type: "selectorNode5",
-      data: { data },
-      style: { border: "1px solid #8c8d8f", padding: "4px 4px" },
-      position: { x: 250, y: 5 },
-    };
-  };
 
   const onNodeClick = (event, element) => {
     event.preventDefault();

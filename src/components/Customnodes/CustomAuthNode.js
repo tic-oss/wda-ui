@@ -1,8 +1,6 @@
 import { NodeResizer } from "reactflow";
 import keycloak from "../../assets/keycloak.png";
 
-// const handleStyle = { left: 25 };
-
 function CustomAuthNode({ data, isConnectable, selected }) {
   const authenticationType = data.authenticationType;
 

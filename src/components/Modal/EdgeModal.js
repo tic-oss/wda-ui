@@ -66,7 +66,6 @@ const EdgeModal = ({
     if (edgeData.type === "asynchronous") {
       handleEdgeData(edgeData);
     } else if (edgeData.type === "synchronous") {
-      // isMessageBroker &&
       isServiceDiscovery && handleEdgeData(edgeData);
     }
   }
@@ -152,7 +151,6 @@ const EdgeModal = ({
               !isServiceDiscovery && (
                 <Alert
                   status="error"
-                  // height="12px"
                   fontSize="12px"
                   borderRadius="3px"
                   padding="4px"
@@ -162,20 +160,6 @@ const EdgeModal = ({
                   Please select a service discovery to establish communication
                 </Alert>
               )}
-            {/* {edgeData.type === "synchronous" &&
-              edgeData.framework === "rest" &&
-              !isMessageBroker && (
-                <Alert
-                  status="error"
-                  height="12px"
-                  fontSize="12px"
-                  borderRadius="3px"
-                  mb={2}
-                >
-                  <AlertIcon style={{ width: "14px", height: "14px" }} />
-                  Please select a message broker to save
-                </Alert>
-              )} */}
           </div>
         </ModalBody>
         <ModalFooter>

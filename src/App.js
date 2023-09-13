@@ -1,20 +1,19 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Home from "./components/Home";
-import Navbar from "./components/Navbar";
-import DocHome from "./components/Docs/DocHome";
-import Contact from "./components/Contact";
-import Designer from "./components/Designer";
-import Projects from "./components/Projects";
-import Project from "./components/Project";
+import Home from "./components/Pages/Home/Home";
+import Navbar from "./components/Pages/Navbar/Navbar";
+import DocHome from "./components/Pages/Docs/DocHome";
+import Contact from "./components/Pages/Contact/Contact";
+import Designer from "./components/Pages/Designer/Designer";
+import Projects from "./components/Pages/Projects/Projects";
+import Project from "./components/Pages/Project/Project";
 import React from "react";
 import { ReactKeycloakProvider } from "@react-keycloak/web";
 import keycloak from "./Keycloak";
 import PrivateRoute from "./helpers/PrivateRoute";
-import SuccessPage from "./components/SuccessPage";
+import SuccessPage from "./components/Pages/SuccessPage/SuccessPage";
 
 function App() {
   return (
-
     <ReactKeycloakProvider authClient={keycloak}>
       <Router className="flex h-screen">
         <Navbar />

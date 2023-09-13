@@ -1,8 +1,6 @@
 import eck from "../../assets/eck.png";
 import { NodeResizer } from "reactflow";
 
-// const handleStyle = { left: 25 };
-
 function CustomLoadNode({ data, selected }) {
   const logManagementType = data.logManagementType;
 

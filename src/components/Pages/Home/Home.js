@@ -1,8 +1,8 @@
 import React from "react";
 import { Box, Text, Button, Image, Stack } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import logo from "../assets/TIC.png";
-import Footer from "../components/Footer";
+import logo from "../../../assets/TIC.png";
+import Footer from "../Footer/Footer";
 
 function Home() {
   return (
@@ -12,9 +12,6 @@ function Home() {
         spacing={{ base: 10, md: 4 }}
       >
         <Box flex="1">
-          {/* <Heading size="xl" fontWeight="extrabold" mb={4}>
-            Welcome to Technology Innovation Center (TIC)
-          </Heading> */}
           <Text fontSize="l" mb={8}>
             The Technology Innovation Center (TIC) at coMakeIT serves as a
             dedicated facility for exploring new ideas, building cutting-edge

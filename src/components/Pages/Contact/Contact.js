@@ -1,7 +1,6 @@
 import React from "react";
 import { Heading, Container } from "@chakra-ui/react";
-// import { Link } from "react-router-dom";
-import Footer from "../components/Footer";
+import Footer from "../Footer/Footer";
 
 function Contact() {
   return (

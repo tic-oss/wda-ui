@@ -11,12 +11,12 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useKeycloak } from "@react-keycloak/web";
-import azure from "../../src/assets/Azure.png";
-import aws from "../../src/assets/aws.png";
-import minikube from "../../src/assets/mini.png";
-import Footer from "../components/Footer";
-import DeploymentModal from "../components/Modal/DeploymentModal";
-import ActionModal from "../components/Modal/ActionModal";
+import azure from "../../../assets/Azure.png";
+import aws from "../../../assets/aws.png";
+import minikube from "../../../assets/mini.png";
+import Footer from "../Footer/Footer";
+import DeploymentModal from "../../Modal/DeploymentModal";
+import ActionModal from "../../Modal/ActionModal";
 
 function Projects() {
   const history = useHistory();
@@ -134,7 +134,7 @@ function Projects() {
   };
 
   const onSubmit = async (data) => {
-    const response = await fetch(
+    await fetch(
       process.env.REACT_APP_API_BASE_URL + "/api/blueprints/" + data.id,
       {
         method: "delete",
