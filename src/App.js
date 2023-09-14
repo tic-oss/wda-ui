@@ -22,16 +22,14 @@ function App() {
             <Home />
           </Route>
           <Route exact path="/success">
-            <SuccessPage/>
+            <SuccessPage />
           </Route>
           <Route exact path="/canvasToCode">
-            {/* <PrivateRoute> */}
-            <Designer update={false}/>
-            {/* </PrivateRoute> */}
+            <Designer update={false} />
           </Route>
           <Route exact path="/edit/:id">
             <PrivateRoute>
-             <Designer update={true}/>
+              <Designer update={true} />
             </PrivateRoute>
           </Route>
           <Route exact path="/projects">
@@ -40,16 +38,11 @@ function App() {
             </PrivateRoute>
           </Route>
           <Route exact path="/projects/:id">
-            {/* <PrivateRoute> */}
-              <Project />
-            {/* </PrivateRoute> */}
+            <Project />
           </Route>
           <Route exact path="/docs">
             <DocHome />
           </Route>
-          {/* <Route exact path="/about">
-          <About />
-        </Route> */}
           <Route exact path="/contact">
             <Contact />
           </Route>
