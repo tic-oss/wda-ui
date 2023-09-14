@@ -919,14 +919,38 @@ const Designer = ({ update }) => {
   const onEdgeClick = (e, edge) => {
     const sourceType = edge.source.split("_")[0];
     const targetType = edge.target.split("_")[0];
+  
+    const updatedEdges = { ...edges };
+    console.log("Edge clicked!"); 
+  
+    // Reset the style of all edges to their default color (e.g., red)
+    for (const edgeId in updatedEdges) {
+      if (updatedEdges[edgeId].label === "Rest") {
+        updatedEdges[edgeId].style = { stroke: "black" };
+      } else if (updatedEdges[edgeId].label === "RabbitMQ") {
+        updatedEdges[edgeId].style = { stroke: "#bcbaba" };
+      } else {
+        updatedEdges[edgeId].style = { stroke: "red" };
+      }
+    }
+  
     if (
       (sourceType === "UI" && targetType === "Service") ||
       (sourceType === "Service" && targetType === "Service")
     ) {
+      // Highlight the clicked edge with blue color
+      updatedEdges[edge.id].style = { stroke: "#0892d0" };
       setEdgeopen(edge.id);
-      setCurrentEdge(edges[edge.id].data);
+      setCurrentEdge(updatedEdges[edge.id].data);
+    } else {
+      // Clicked on another edge or somewhere else, so clear the selection
+      //setEdgeopen(null);
+      //setCurrentEdge(null);
     }
+  
+    setEdges(updatedEdges);
   };
+
 
   const handleEdgeData = (Data) => {
     let UpdatedEdges = { ...edges };
