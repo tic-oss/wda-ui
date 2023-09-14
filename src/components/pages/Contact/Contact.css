@@ -1,0 +1,8 @@
+.textStyle {
+  font-style: italic;
+  font-weight: bold;
+}
+.linkStyle {
+  text-decoration: underline;
+  color: blue;
+}
