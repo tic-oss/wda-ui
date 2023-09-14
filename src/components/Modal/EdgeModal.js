@@ -159,7 +159,7 @@ const EdgeModal = ({
             isDisabled={isEmpty}
             onClick={() => handleSubmit(edgeData)}
           >
-            Submit
+            Save
           </Button>
         </ModalFooter>
       </ModalContent>
