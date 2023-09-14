@@ -37,3 +37,19 @@
   width: 14px !important;
   height: 14px !important;
 }
+.color1 {
+  background-color: #ffc9c9;
+}
+.color2 {
+  background-color: #b2f2bb;
+}
+.color3 {
+  background-color: #a5d8ff;
+}
+.color4 {
+  background-color: #ffec99;
+}
+.color5 {
+  border: 1px solid #cfcfcf;
+  background-color: #fff;
+}

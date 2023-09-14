@@ -105,28 +105,23 @@ const GroupDataModal = ({
           <FormLabel>Background Color</FormLabel>
           <div className="colorSelectBlock">
             <div
-              className="colorSelection"
-              style={{ backgroundColor: "#ffc9c9" }}
+              className="colorSelection color1"
               onClick={() => handleColorClick("#ffc9c9")}
             ></div>
             <div
-              className="colorSelection"
-              style={{ backgroundColor: "#b2f2bb" }}
+              className="colorSelection color2"
               onClick={() => handleColorClick("#b2f2bb")}
             ></div>
             <div
-              className="colorSelection"
-              style={{ backgroundColor: "#a5d8ff" }}
+              className="colorSelection color3"
               onClick={() => handleColorClick("#a5d8ff")}
             ></div>
             <div
-              className="colorSelection"
-              style={{ backgroundColor: "#ffec99" }}
+              className="colorSelection color4"
               onClick={() => handleColorClick("#ffec99")}
             ></div>
             <div
-              className="colorSelection"
-              style={{ border: "1px solid #cfcfcf", backgroundColor: "#fff" }}
+              className="colorSelection color5"
               onClick={() => handleColorClick("#fff")}
             ></div>
           </div>
