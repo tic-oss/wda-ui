@@ -24,7 +24,7 @@ const AlertModal = ({ isOpen, onClose, name }) => {
           <span>
             {"Already selected,Please delete existing to change your choice."}
           </span>
-          <ModalCloseButton />
+          <ModalCloseButton mt={0.5} />
         </ModalHeader>
         <ModalBody></ModalBody>
       </ModalContent>

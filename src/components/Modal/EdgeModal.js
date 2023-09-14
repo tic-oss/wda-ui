@@ -13,6 +13,7 @@ import {
   Alert,
   AlertIcon,
 } from "@chakra-ui/react";
+import "./modals.css";
 
 const EdgeModal = ({
   isOpen,
@@ -80,85 +81,77 @@ const EdgeModal = ({
           width: "300px",
         }}
       >
-        <ModalHeader>Communication</ModalHeader>
-        <ModalCloseButton />
+        <ModalHeader className="heading">Communication</ModalHeader>
+        <ModalCloseButton mt={1.5}/>
         <ModalBody>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "left",
-            }}
-          >
+          <FormControl>
+            <FormLabel>Type</FormLabel>
+            <Select
+              mb={4}
+              variant="outline"
+              id="type"
+              borderColor={"black"}
+              value={edgeData.type}
+              onChange={(e) => handleData("type", e.target.value)}
+            >
+              <option value="" disabled>
+                Select an option
+              </option>
+              <option value="asynchronous">Asynchronous</option>
+              <option value="synchronous">Synchronous</option>
+            </Select>
+          </FormControl>
+
+          {edgeData.type === "synchronous" && (
             <FormControl>
-              <FormLabel>Type</FormLabel>
+              <FormLabel>Framework</FormLabel>
               <Select
                 mb={4}
                 variant="outline"
-                id="type"
+                id="framework"
                 borderColor={"black"}
-                value={edgeData.type}
-                onChange={(e) => handleData("type", e.target.value)}
+                value={edgeData.framework}
+                onChange={(e) => handleData("framework", e.target.value)}
               >
                 <option value="" disabled>
                   Select an option
                 </option>
-                <option value="asynchronous">Asynchronous</option>
-                <option value="synchronous">Synchronous</option>
+                <option value="rest-api">REST</option>
               </Select>
             </FormControl>
-
-            {edgeData.type === "synchronous" && (
-              <FormControl>
-                <FormLabel>Framework</FormLabel>
-                <Select
-                  mb={4}
-                  variant="outline"
-                  id="framework"
-                  borderColor={"black"}
-                  value={edgeData.framework}
-                  onChange={(e) => handleData("framework", e.target.value)}
-                >
-                  <option value="" disabled>
-                    Select an option
-                  </option>
-                  <option value="rest-api">REST</option>
-                </Select>
-              </FormControl>
+          )}
+          {edgeData.type === "asynchronous" && (
+            <FormControl>
+              <FormLabel>Framework</FormLabel>
+              <Select
+                mb={4}
+                variant="outline"
+                id="framework"
+                borderColor={"black"}
+                value={edgeData.framework}
+                onChange={(e) => handleData("framework", e.target.value)}
+              >
+                <option value="" disabled>
+                  Select an option
+                </option>
+                <option value="rabbitmq">Rabbit MQ</option>
+              </Select>
+            </FormControl>
+          )}
+          {edgeData.type === "synchronous" &&
+            edgeData.framework === "rest-api" &&
+            !isServiceDiscovery && (
+              <Alert
+                status="error"
+                fontSize="12px"
+                borderRadius="3px"
+                padding="4px"
+                mb={2}
+              >
+                <AlertIcon style={{ width: "14px", height: "14px" }} />
+                Please select a service discovery to establish communication
+              </Alert>
             )}
-            {edgeData.type === "asynchronous" && (
-              <FormControl>
-                <FormLabel>Framework</FormLabel>
-                <Select
-                  mb={4}
-                  variant="outline"
-                  id="framework"
-                  borderColor={"black"}
-                  value={edgeData.framework}
-                  onChange={(e) => handleData("framework", e.target.value)}
-                >
-                  <option value="" disabled>
-                    Select an option
-                  </option>
-                  <option value="rabbitmq">Rabbit MQ</option>
-                </Select>
-              </FormControl>
-            )}
-            {edgeData.type === "synchronous" &&
-              edgeData.framework === "rest-api" &&
-              !isServiceDiscovery && (
-                <Alert
-                  status="error"
-                  fontSize="12px"
-                  borderRadius="3px"
-                  padding="4px"
-                  mb={2}
-                >
-                  <AlertIcon style={{ width: "14px", height: "14px" }} />
-                  Please select a service discovery to establish communication
-                </Alert>
-              )}
-          </div>
         </ModalBody>
         <ModalFooter>
           <Button

@@ -34,7 +34,8 @@ const ActionModal = ({
           <AlertDialogBody>
             {actionType === "delete" ? (
               <>
-                Are you sure you want to delete project "<strong>{name}</strong>
+                Are you sure to delete your project "
+                <strong>{name}</strong>
                 "?
               </>
             ) : (

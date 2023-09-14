@@ -11,6 +11,7 @@ import {
   FormLabel,
   FormControl,
 } from "@chakra-ui/react";
+import "./modals.css";
 
 const ProjectModal = ({
   nodeType,
@@ -31,21 +32,14 @@ const ProjectModal = ({
         isCentered={true}
       >
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent className="heading">
           {nodeType === "UI" ? (
             <ModalHeader>UI</ModalHeader>
           ) : (
             <ModalHeader>Service</ModalHeader>
           )}
-          <ModalCloseButton />
+          <ModalCloseButton mt={1.5}/>
           <ModalBody>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "Left",
-              }}
-            >
               <FormControl>
                 <FormLabel>Application name</FormLabel>
                 <Input
@@ -140,7 +134,6 @@ const ProjectModal = ({
                   </Select>
                 </FormControl>
               )}
-            </div>
           </ModalBody>
         </ModalContent>
       </Modal>

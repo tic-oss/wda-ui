@@ -42,11 +42,9 @@ const DeploymentModal = ({
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
-            <h2 style={{ display: "inline-block" }}>
-              Deployment Infrastructure
-            </h2>
+            <h2>Deployment Infrastructure</h2>
           </ModalHeader>
-          <ModalCloseButton onClick={handleContainerClose} />
+          <ModalCloseButton mt={1.5} onClick={handleContainerClose} />
           <ModalBody
             style={{
               overflowY: "auto",

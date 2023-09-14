@@ -22,6 +22,7 @@ import azure from "../../../src/assets/Azure.png";
 import aws from "../../../src/assets/aws.png";
 import { InfoIcon } from "@chakra-ui/icons";
 import minikube from "../../assets/mini.png";
+import "./modals.css";
 
 const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -366,18 +367,14 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
     }
   }
 
-  const [isOpen, ] = useState(true);
+  const [isOpen] = useState(true);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader
-        // style={{ display: "flex", justifyContent: "space-between" }}
-        >
-          <h2 style={{ display: "inline", marginRight: "10px" }}>
-            Deployment Infrastructure
-          </h2>
+        <ModalHeader>
+          <h2 className="deploymentHeading">Deployment Infrastructure</h2>
           <Tooltip
             hasArrow
             label="Select your infrastructure and provide required configuration"
@@ -399,62 +396,33 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
             maxHeight: "600px",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "center",
-            }}
-          >
+          <div className="deployIcons">
             <img
               width="120px"
               src={azure}
               alt="azurelogo"
               onClick={() => handleImageClick("azure")}
-              style={{
-                padding: "10px",
-                marginBottom: "10px",
-                width: "120px",
-                cursor: "pointer",
-                marginRight: "10px",
-                border:
-                  selectedImage === "azure"
-                    ? "2px solid #3182CE"
-                    : "2px solid #d9d9d9",
-              }}
+              className={`image-button ${
+                selectedImage === "azure" ? "selected-image-button" : ""
+              }`}
             />
             <img
               width="120px"
               src={aws}
               alt="awslogo"
               onClick={() => handleImageClick("aws")}
-              style={{
-                padding: "10px",
-                marginBottom: "10px",
-                width: "120px",
-                marginRight: "10px",
-                cursor: "pointer",
-                border:
-                  selectedImage === "aws"
-                    ? "2px solid #3182CE"
-                    : "2px solid #d9d9d9",
-              }}
+              className={`image-button ${
+                selectedImage === "aws" ? "selected-image-button" : ""
+              }`}
             />
             <img
               width="120px"
               src={minikube}
               alt="minikubelogo"
               onClick={() => handleImageClick("minikube")}
-              style={{
-                padding: "10px",
-                marginBottom: "10px",
-                width: "120px",
-                cursor: "pointer",
-                border:
-                  selectedImage === "minikube"
-                    ? "2px solid #3182CE"
-                    : "2px solid #d9d9d9",
-              }}
+              className={`image-button ${
+                selectedImage === "minikube" ? "selected-image-button" : ""
+              }`}
             />
           </div>
           {selectedImage === "azure" && (
