@@ -1,6 +1,6 @@
 import React from "react";
 import { Heading, Container } from "@chakra-ui/react";
-import Footer from "../footer/Footer";
+import Footer from "../Footer/Footer";
 import "./Contact.css";
 
 function Contact() {

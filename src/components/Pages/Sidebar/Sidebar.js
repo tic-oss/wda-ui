@@ -6,7 +6,7 @@ import keycloakIcon from "../../../assets/keycloak.png";
 import eck from "../../../assets/eck.png";
 import "../.././../App.css";
 import { Input, FormLabel, Button, Checkbox } from "@chakra-ui/react";
-import DeployModal from "../../Modal/DeployModal";
+import DeployModal from "../../modal/DeployModal";
 import { useKeycloak } from "@react-keycloak/web";
 import { ArrowRightIcon, ArrowLeftIcon } from "@chakra-ui/icons";
 import { useLocation } from "react-router-dom";

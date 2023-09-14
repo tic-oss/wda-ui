@@ -1,16 +1,16 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Home from "./components/Pages/home/Home";
-import Navbar from "./components/Pages/navbar/Navbar";
-import DocHome from "./components/Pages/docs/DocHome";
-import Contact from "./components/Pages/contact/Contact";
-import Designer from "./components/Pages/designer/Designer";
-import Projects from "./components/Pages/projects/Projects";
-import Project from "./components/Pages/project/Project";
+import Home from "./components/pages/Home";
+import Navbar from "./components/pages/Navbar";
+import DocHome from "./components/pages/DocHome";
+import Contact from "./components/pages/Contact";
+import Designer from "./components/pages/Designer";
+import Projects from "./components/pages/Projects";
+import Project from "./components/pages/Project";
 import React from "react";
 import { ReactKeycloakProvider } from "@react-keycloak/web";
 import keycloak from "./Keycloak";
 import PrivateRoute from "./helpers/PrivateRoute";
-import SuccessPage from "./components/Pages/successPage/SuccessPage";
+import SuccessPage from "./components/pages/SuccessPage";
 
 function App() {
   return (

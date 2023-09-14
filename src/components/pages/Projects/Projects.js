@@ -14,9 +14,9 @@ import { useKeycloak } from "@react-keycloak/web";
 import azure from "../../../assets/Azure.png";
 import aws from "../../../assets/aws.png";
 import minikube from "../../../assets/mini.png";
-import Footer from "../footer/Footer";
-import DeploymentModal from "../../Modal/DeploymentModal";
-import ActionModal from "../../Modal/ActionModal";
+import Footer from "../Footer";
+import DeploymentModal from "../../modals/DeploymentModal";
+import ActionModal from "../../modals/ActionModal";
 import "./Projects.css";
 
 function Projects() {
