@@ -389,7 +389,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
             />
           </Tooltip>
         </ModalHeader>
-        <ModalCloseButton onClick={onClose} />
+        <ModalCloseButton mt={1.5} onClick={onClose} />
         <ModalBody
           style={{
             overflowY: "auto",
