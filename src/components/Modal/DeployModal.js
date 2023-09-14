@@ -68,7 +68,6 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
         DeploymentData.clusterName === "" ||
         DeploymentData.kubernetesNamespace === "" ||
         DeploymentData.monitoring === "" ||
-        // DeploymentData.ingressDomain === "" ||
         DeploymentData.k8sWebUI === ""
       );
     } else if (DeploymentData.cloudProvider === "aws") {
@@ -91,7 +90,6 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
         DeploymentData.clusterName === "" ||
         DeploymentData.kubernetesNamespace === "" ||
         DeploymentData.monitoring === "" ||
-        // DeploymentData.ingressDomain === "" ||
         DeploymentData.k8sWebUI === ""
       );
     } else {
