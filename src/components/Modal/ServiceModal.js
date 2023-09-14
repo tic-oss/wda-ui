@@ -162,7 +162,7 @@ const ServiceModal = ({
         }}
       >
         <ModalHeader className="heading">Service</ModalHeader>
-        <ModalCloseButton mt={1.5}/>
+        <ModalCloseButton mt={1.5} />
         <ModalBody>
           <FormControl>
             <FormLabel>Application name</FormLabel>
@@ -310,38 +310,27 @@ const ServiceModal = ({
           <div className="colorSelectBlock">
             <div
               className="colorSelection"
-              style={{
-                backgroundColor: "#ffc9c9",
-              }}
+              style={{ backgroundColor: "#ffc9c9" }}
               onClick={() => handleColorClick("#ffc9c9")}
             ></div>
             <div
               className="colorSelection"
-              style={{
-                backgroundColor: "#b2f2bb",
-              }}
+              style={{ backgroundColor: "#b2f2bb" }}
               onClick={() => handleColorClick("#b2f2bb")}
             ></div>
             <div
               className="colorSelection"
-              style={{
-                backgroundColor: "#a5d8ff",
-              }}
+              style={{ backgroundColor: "#a5d8ff" }}
               onClick={() => handleColorClick("#a5d8ff")}
             ></div>
             <div
               className="colorSelection"
-              style={{
-                backgroundColor: "#ffec99",
-              }}
+              style={{ backgroundColor: "#ffec99" }}
               onClick={() => handleColorClick("#ffec99")}
             ></div>
             <div
               className="colorSelection"
-              style={{
-                border: "1px solid #cfcfcf",
-                backgroundColor: "#fff",
-              }}
+              style={{ border: "1px solid #cfcfcf", backgroundColor: "#fff" }}
               onClick={() => handleColorClick("#fff")}
             ></div>
           </div>

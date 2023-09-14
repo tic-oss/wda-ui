@@ -7,9 +7,7 @@ import "./successPage.css";
 
 const SuccessPage = () => {
   return (
-    <div
-      style={{ display: "flex", textAlign: "center", justifyContent: "center" }}
-    >
+    <div className="successBlock">
       <div>
         <Box flex="1">
           <Image src={logo} alt="Success" mt={20} />
