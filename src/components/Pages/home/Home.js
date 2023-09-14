@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Text, Button, Image, Stack } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import logo from "../../../assets/TIC.png";
-import Footer from "../Footer/Footer";
+import Footer from "../footer/Footer";
 
 function Home() {
   return (

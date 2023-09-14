@@ -2,8 +2,8 @@ import React from "react";
 import { Box, Text, Button, Image } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import logo from "../../../assets/success.png";
-import Footer from "../Footer/Footer";
-import "./successPage.css";
+import Footer from "../footer/Footer";
+import "./SuccessPage.css";
 
 const SuccessPage = () => {
   return (

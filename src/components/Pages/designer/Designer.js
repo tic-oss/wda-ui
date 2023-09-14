@@ -10,7 +10,7 @@ import ReactFlow, {
 import "reactflow/dist/style.css";
 import { Button } from "@chakra-ui/react";
 import { ArrowRightIcon } from "@chakra-ui/icons";
-import Sidebar from "../Sidebar/Sidebar";
+import Sidebar from "../sidebar/Sidebar";
 import { saveAs } from "file-saver";
 import ServiceModal from "../../Modal/ServiceModal";
 import UiDataModal from "../../Modal/UIModal";
@@ -33,7 +33,7 @@ import EdgeModal from "../../Modal/EdgeModal";
 import { useKeycloak } from "@react-keycloak/web";
 import { FiUploadCloud } from "react-icons/fi";
 import ActionModal from "../../Modal/ActionModal";
-import "./designer.css";
+import "./Designer.css";
 
 let service_id = 1;
 let database_id = 1;

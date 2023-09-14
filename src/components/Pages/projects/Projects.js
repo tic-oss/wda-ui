@@ -14,10 +14,10 @@ import { useKeycloak } from "@react-keycloak/web";
 import azure from "../../../assets/Azure.png";
 import aws from "../../../assets/aws.png";
 import minikube from "../../../assets/mini.png";
-import Footer from "../Footer/Footer";
+import Footer from "../footer/Footer";
 import DeploymentModal from "../../Modal/DeploymentModal";
 import ActionModal from "../../Modal/ActionModal";
-import "./projects.css";
+import "./Projects.css";
 
 function Projects() {
   const history = useHistory();
