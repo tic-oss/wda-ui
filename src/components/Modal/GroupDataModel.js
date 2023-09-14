@@ -98,7 +98,7 @@ const GroupDataModal = ({
               borderRadius="3px"
               mb={2}
             >
-              <AlertIcon style={{ width: "14px", height: "14px" }} />
+              <AlertIcon className="alertIconStyle" />
               Enter valid group name
             </Alert>
           )}

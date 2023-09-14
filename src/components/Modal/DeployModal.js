@@ -448,7 +448,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
                       borderRadius="3px"
                       mb={2}
                     >
-                      <AlertIcon style={{ width: "14px", height: "14px" }} />
+                      <AlertIcon className="alertIconStyle" />
                       Input value must be at least 36 characters
                     </Alert>
                   ) : (
@@ -459,7 +459,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
                       borderRadius="3px"
                       mb={2}
                     >
-                      <AlertIcon style={{ width: "14px", height: "14px" }} />
+                      <AlertIcon className="alertIconStyle" />
                       Input value does not match the required format
                     </Alert>
                   )}
@@ -488,7 +488,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
                       borderRadius="3px"
                       mb={2}
                     >
-                      <AlertIcon style={{ width: "14px", height: "14px" }} />
+                      <AlertIcon className="alertIconStyle" />
                       Input value must be at least 36 characters
                     </Alert>
                   ) : (
@@ -499,7 +499,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
                       borderRadius="3px"
                       mb={2}
                     >
-                      <AlertIcon style={{ width: "14px", height: "14px" }} />
+                      <AlertIcon className="alertIconStyle" />
                       Input value does not match the required format
                     </Alert>
                   )}
@@ -546,7 +546,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
                     borderRadius="3px"
                     mb={2}
                   >
-                    <AlertIcon style={{ width: "14px", height: "14px" }} />
+                    <AlertIcon className="alertIconStyle" />
                     Input value must be at least 12 digits
                   </Alert>
                 )}
@@ -613,7 +613,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
                   borderRadius="3px"
                   mb={2}
                 >
-                  <AlertIcon style={{ width: "14px", height: "14px" }} />
+                  <AlertIcon className="alertIconStyle" />
                   Cluster Name should not contain special characters or start
                   with number.
                 </Alert>
@@ -628,7 +628,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
                   borderRadius="3px"
                   mb={2}
                 >
-                  <AlertIcon style={{ width: "14px", height: "14px" }} />
+                  <AlertIcon className="alertIconStyle" />
                   The input cannot contain this reserved word
                 </Alert>
               )}
@@ -676,7 +676,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
                         borderRadius="3px"
                         mb={2}
                       >
-                        <AlertIcon style={{ width: "14px", height: "14px" }} />
+                        <AlertIcon className="alertIconStyle" />
                         Storage Class Name should not contain special
                         characters, numbers or uppercase.
                       </Alert>
@@ -709,7 +709,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
                   borderRadius="3px"
                   mb={2}
                 >
-                  <AlertIcon style={{ width: "14px", height: "14px" }} />
+                  <AlertIcon className="alertIconStyle" />
                   Namespace should not contain special characters or start with
                   number.
                 </Alert>
@@ -752,7 +752,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
                       borderRadius="3px"
                       mb={2}
                     >
-                      <AlertIcon style={{ width: "14px", height: "14px" }} />
+                      <AlertIcon className="alertIconStyle" />
                       Domain name validation is not satisfied.
                     </Alert>
                   ) : (
@@ -821,7 +821,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
                   borderRadius="3px"
                   mb={2}
                 >
-                  <AlertIcon style={{ width: "14px", height: "14px" }} />
+                  <AlertIcon className="alertIconStyle" />
                   Namespace should not contain special characters.
                 </Alert>
               ) : (

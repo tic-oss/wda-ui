@@ -190,7 +190,7 @@ const ServiceModal = ({
               borderRadius="3px"
               mb={2}
             >
-              <AlertIcon style={{ width: "14px", height: "14px" }} />
+              <AlertIcon className="alertIconStyle" />
               Application Name should not contain special characters.
             </Alert>
           )}
@@ -202,7 +202,7 @@ const ServiceModal = ({
               borderRadius="3px"
               mb={2}
             >
-              <AlertIcon style={{ width: "14px", height: "14px" }} />
+              <AlertIcon className="alertIconStyle" />
               Application name already exists. Please choose a unique name.
             </Alert>
           )}
@@ -247,7 +247,7 @@ const ServiceModal = ({
               borderRadius="3px"
               mb={2}
             >
-              <AlertIcon style={{ width: "14px", height: "14px" }} />
+              <AlertIcon className="alertIconStyle" />
               Enter a valid package name
             </Alert>
           )}
@@ -278,7 +278,7 @@ const ServiceModal = ({
               borderRadius="3px"
               mb={2}
             >
-              <AlertIcon style={{ width: "14px", height: "14px" }} />
+              <AlertIcon className="alertIconStyle" />
               The input cannot contain reserved port number.
             </Alert>
           )}
@@ -290,7 +290,7 @@ const ServiceModal = ({
               borderRadius="3px"
               mb={2}
             >
-              <AlertIcon style={{ width: "14px", height: "14px" }} />
+              <AlertIcon className="alertIconStyle" />
               Port Number already exists. Please choose a unique Number.
             </Alert>
           )}
@@ -302,7 +302,7 @@ const ServiceModal = ({
               borderRadius="3px"
               mb={2}
             >
-              <AlertIcon style={{ width: "14px", height: "14px" }} />
+              <AlertIcon className="alertIconStyle" />
               Port Number is out of the valid range.
             </Alert>
           )}

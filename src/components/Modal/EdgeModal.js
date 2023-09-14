@@ -148,7 +148,7 @@ const EdgeModal = ({
                 padding="4px"
                 mb={2}
               >
-                <AlertIcon style={{ width: "14px", height: "14px" }} />
+                <AlertIcon className="alertIconStyle" />
                 Please select a service discovery to establish communication
               </Alert>
             )}

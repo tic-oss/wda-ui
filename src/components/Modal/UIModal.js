@@ -173,7 +173,7 @@ const UiDataModal = ({
                 borderRadius="3px"
                 mb={2}
               >
-                <AlertIcon style={{ width: "14px", height: "14px" }} />
+                <AlertIcon className="alertIconStyle" />
                 Application name already exists. Please choose a unique name.
               </Alert>
             )}
@@ -185,7 +185,7 @@ const UiDataModal = ({
                 borderRadius="3px"
                 mb={2}
               >
-                <AlertIcon style={{ width: "14px", height: "14px" }} />
+                <AlertIcon className="alertIconStyle" />
                 Application Name should not contain special characters.
               </Alert>
             )}
@@ -230,7 +230,7 @@ const UiDataModal = ({
               borderRadius="3px"
               mb={2}
             >
-              <AlertIcon style={{ width: "14px", height: "14px" }} />
+              <AlertIcon className="alertIconStyle" />
               Enter a valid package name
             </Alert>
           )}
@@ -260,7 +260,7 @@ const UiDataModal = ({
               borderRadius="3px"
               mb={2}
             >
-              <AlertIcon style={{ width: "14px", height: "14px" }} />
+              <AlertIcon className="alertIconStyle" />
               The input cannot contain reserved port number.
             </Alert>
           )}
@@ -272,7 +272,7 @@ const UiDataModal = ({
               borderRadius="3px"
               mb={2}
             >
-              <AlertIcon style={{ width: "14px", height: "14px" }} />
+              <AlertIcon className="alertIconStyle" />
               Port Number already exists. Please choose a unique Number.
             </Alert>
           )}
@@ -284,7 +284,7 @@ const UiDataModal = ({
               borderRadius="3px"
               mb={2}
             >
-              <AlertIcon style={{ width: "14px", height: "14px" }} />
+              <AlertIcon className="alertIconStyle" />
               Port Number is out of the valid range.
             </Alert>
           )}
