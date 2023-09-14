@@ -33,6 +33,7 @@ import EdgeModal from "../../Modal/EdgeModal";
 import { useKeycloak } from "@react-keycloak/web";
 import { FiUploadCloud } from "react-icons/fi";
 import ActionModal from "../../Modal/ActionModal";
+import "./style.css";
 
 let service_id = 1;
 let database_id = 1;
@@ -1000,61 +1001,18 @@ const Designer = ({ update }) => {
   };
 
   return (
-    <div
-      className="dndflow"
-      style={{ overflow: "hidden !important", bottom: 0 }}
-    >
+    <div className="dndflow homePage">
       <ReactFlowProvider>
         <div className="reactflow-wrapper" ref={reactFlowWrapper}>
           {showDiv && (
-            <div
-              style={{
-                position: "absolute",
-                top: "50%",
-                left: "60%",
-                transform: "translate(-60%, -50%)",
-                display: "flex",
-                flexDirection: "column",
-                textAlign: "center",
-                padding: "50px",
-                justifyContent: "center",
-                border: "2px dashed #cfcfcf",
-                borderRadius: "8px",
-                zIndex: 1,
-              }}
-            >
-              <div
-                style={{
-                  marginBottom: "20px",
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <FiUploadCloud
-                  style={{
-                    fontSize: "62px",
-                    color: "#c3c3c3",
-                    marginBottom: "30px",
-                  }}
-                />
+            <div className="contentBlock">
+              <div className="iconBlock">
+                <FiUploadCloud className="iconStyle" />
               </div>
-              <div
-                style={{
-                  fontSize: "38px",
-                  fontWeight: "500",
-                  marginBottom: "10px",
-                }}
-              >
+              <div className="designText">
                 Design your application architecture here
               </div>
-              <div
-                style={{
-                  fontSize: "24px",
-                  fontWeight: "300",
-                  marginBottom: "30px",
-                  color: "#c3c3c3",
-                }}
-              >
+              <div className="subText">
                 Click next to auto generate code and setup infrastructure
               </div>
               <Button
@@ -1063,12 +1021,9 @@ const Designer = ({ update }) => {
                 borderColor="#3182CE"
                 alignContent="center"
                 color="#3182CE"
-                style={{ margin: "0 auto" }}
+                className="dragDropStyle"
               >
-                Drag & Drop{" "}
-                <ArrowRightIcon
-                  style={{ marginLeft: "10px", fontSize: "11px" }}
-                />
+                Drag & Drop <ArrowRightIcon className="arrowIconStyle" />
               </Button>
             </div>
           )}
