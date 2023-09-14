@@ -33,7 +33,7 @@ import EdgeModal from "../../Modal/EdgeModal";
 import { useKeycloak } from "@react-keycloak/web";
 import { FiUploadCloud } from "react-icons/fi";
 import ActionModal from "../../Modal/ActionModal";
-import "./style.css";
+import "./designer.css";
 
 let service_id = 1;
 let database_id = 1;

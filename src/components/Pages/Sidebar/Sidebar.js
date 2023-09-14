@@ -10,7 +10,7 @@ import DeployModal from "../../Modal/DeployModal";
 import { useKeycloak } from "@react-keycloak/web";
 import { ArrowRightIcon, ArrowLeftIcon } from "@chakra-ui/icons";
 import { useLocation } from "react-router-dom";
-import "./style.css";
+import "./sidebar.css";
 
 const Sidebar = ({
   isUINodeEnabled,

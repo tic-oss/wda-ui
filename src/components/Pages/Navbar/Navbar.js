@@ -16,7 +16,7 @@ import { Link } from "react-router-dom";
 import logo from "../../../assets/TIC_logo.png";
 import { useKeycloak } from "@react-keycloak/web";
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
-import "./style.css";
+import "./navbar.css";
 
 export default function Header({ children }) {
   const color = "#ffffff";

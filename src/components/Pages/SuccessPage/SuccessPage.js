@@ -3,7 +3,7 @@ import { Box, Text, Button, Image } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import logo from "../../../assets/success.png";
 import Footer from "../Footer/Footer";
-import "./style.css";
+import "./successPage.css";
 
 const SuccessPage = () => {
   return (

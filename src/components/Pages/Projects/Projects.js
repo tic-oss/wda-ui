@@ -17,7 +17,7 @@ import minikube from "../../../assets/mini.png";
 import Footer from "../Footer/Footer";
 import DeploymentModal from "../../Modal/DeploymentModal";
 import ActionModal from "../../Modal/ActionModal";
-import "./style.css";
+import "./projects.css";
 
 function Projects() {
   const history = useHistory();

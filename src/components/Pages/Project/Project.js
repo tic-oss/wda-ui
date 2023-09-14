@@ -16,7 +16,7 @@ import DeploymentModal from "../../Modal/DeploymentModal";
 import ReadOnlyEdgeModal from "../../Modal/ReadOnlyEdgeModal";
 import { useKeycloak } from "@react-keycloak/web";
 import { useParams } from "react-router-dom";
-import "./style.css";
+import "./project.css";
 
 const readOnlyNodeStyle = {
   border: "1px solid #ccc",
