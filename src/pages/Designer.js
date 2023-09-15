@@ -557,6 +557,47 @@ const Designer = ({ update }) => {
   );
 
   useEffect(() => {
+    let updatedEdges = { ...edges };
+    if (IsEdgeopen) {
+      updatedEdges[IsEdgeopen].style = { stroke: "blue" };
+      updatedEdges[IsEdgeopen].markerEnd = {
+        color: "blue",
+        type: MarkerType.ArrowClosed,
+      };
+    } else {
+      for (const edgeId in updatedEdges) {
+        const targetType = edgeId.split("-")[1];
+        if (updatedEdges[edgeId].label === "Rest") {
+          updatedEdges[edgeId].style = { stroke: "black" };
+          updatedEdges[edgeId].markerEnd = {
+            color: "black",
+            type: MarkerType.ArrowClosed,
+          };
+        } else if (updatedEdges[edgeId].label === "RabbitMQ") {
+          updatedEdges[edgeId].style = { stroke: "#bcbaba" };
+          updatedEdges[edgeId].markerEnd = {
+            color: "#bcbaba",
+            type: MarkerType.ArrowClosed,
+          };
+        } else if (targetType.split("_")[0] === "Database") {
+          updatedEdges[edgeId].style = { stroke: "#000" };
+          updatedEdges[edgeId].markerEnd = {
+            color: "#000",
+            type: MarkerType.ArrowClosed,
+          };
+        } else {
+          updatedEdges[edgeId].style = { stroke: "red" };
+          updatedEdges[edgeId].markerEnd = {
+            color: "red",
+            type: MarkerType.ArrowClosed,
+          };
+        }
+      }
+    }
+    setEdges(updatedEdges);
+  }, [IsEdgeopen]);
+
+  useEffect(() => {
     document.title = "WDA";
     setShowDiv(true);
     let data = location?.state;
@@ -919,42 +960,18 @@ const Designer = ({ update }) => {
   const onEdgeClick = (e, edge) => {
     const sourceType = edge.source.split("_")[0];
     const targetType = edge.target.split("_")[0];
-  
-    const updatedEdges = { ...edges };
-    console.log("Edge clicked!"); 
-  
-    // Reset the style of all edges to their default color (e.g., red)
-    for (const edgeId in updatedEdges) {
-      if (updatedEdges[edgeId].label === "Rest") {
-        updatedEdges[edgeId].style = { stroke: "black" };
-      } else if (updatedEdges[edgeId].label === "RabbitMQ") {
-        updatedEdges[edgeId].style = { stroke: "#bcbaba" };
-      } else {
-        updatedEdges[edgeId].style = { stroke: "red" };
-      }
-    }
-  
     if (
       (sourceType === "UI" && targetType === "Service") ||
       (sourceType === "Service" && targetType === "Service")
     ) {
-      // Highlight the clicked edge with blue color
-      updatedEdges[edge.id].style = { stroke: "#0892d0" };
       setEdgeopen(edge.id);
-      setCurrentEdge(updatedEdges[edge.id].data);
-    } else {
-      // Clicked on another edge or somewhere else, so clear the selection
-      //setEdgeopen(null);
-      //setCurrentEdge(null);
+      setCurrentEdge(edge[edge.id].data);
     }
-  
-    setEdges(updatedEdges);
+    setEdges(edges);
   };
-
 
   const handleEdgeData = (Data) => {
     let UpdatedEdges = { ...edges };
-
     if (Data.framework === "rest-api" && isServiceDiscovery) {
       UpdatedEdges[IsEdgeopen].label = "Rest";
     } else {
@@ -1216,7 +1233,6 @@ const Designer = ({ update }) => {
             actionType="clear"
           />
         )}
-
         {IsEdgeopen && (
           <EdgeModal
             isOpen={IsEdgeopen}
