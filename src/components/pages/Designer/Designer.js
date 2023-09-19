@@ -145,6 +145,50 @@ const Designer = ({ update }) => {
   };
 
   const groupFilteredData = {};
+  function isOverlap(updatedNode, groupFilteredData) {
+    for (const groupKey in groupFilteredData) {
+      console.log(groupFilteredData,"gtrgfgjkyuiiou")
+      console.log(groupKey,"groupKey")
+      if (groupFilteredData.hasOwnProperty(groupKey)) {
+        const group = groupFilteredData[groupKey];
+        console.log(group,"groupppp")
+        console.log(group?.[groupKey].coordinates, "kkkkkk");
+        const groupCoordArray = group?.[groupKey].coordinates;
+        console.log(Array.isArray(groupCoordArray),"lklklklklklklk")
+        if (group && groupCoordArray && Array.isArray(groupCoordArray)) {
+          // const groupCoordinates = group.coordinates;
+          const groupCoordinates = group?.[groupKey].coordinates;
+          console.log(Array.isArray(groupCoordinates),"kjkkljlkkjkjk")
+          console.log(groupCoordinates, "groupCooordinates");
+          // Check for overlap with the updatedNode
+          for (const coordinates of groupCoordinates) {
+            const [x, y] = coordinates;
+            console.log(x,updatedNode.position.x,updatedNode.position.x + updatedNode.style.width,"xxxxxxx")
+            console.log(y,updatedNode.position.y,updatedNode.position.y+updatedNode.style.height,"yyyyy")
+            console.log("-----------")
+// console.log(updatedNode.position.x,"xxxxxxxxxxxxxxxxxxxx",x,"xxxx",updatedNode.position.x < x)
+// console.log(updatedNode.position.x+updatedNode.style.width,"xxxxxxxxxxxxxxxxxxxx",x,updatedNode.position.x + updatedNode.style.width > x)
+// console.log(updatedNode.position.y,"yyyyyyyyyyyyyyyyyyyyyyyyy",y,"yyyyyy",updatedNode.position.y < y)
+// console.log(updatedNode.position.y+updatedNode.style.height,"yyyyyyyyyyyyyyyyy",y,"yyyyyyy",updatedNode.position.y + updatedNode.style.height > y)
+            
+
+if (
+              updatedNode.position.x < x ||
+              updatedNode.position.x + updatedNode.style.width < x &&
+              updatedNode.position.y < y ||
+              updatedNode.position.y + updatedNode.style.height < y
+            ) {
+              // Overlap detected, take appropriate action here
+              console.log(`Overlap detected with group node ${groupKey}`);
+              // You can handle the overlap situation here, e.g., move the updatedNode
+              // or prevent the change depending on your requirements
+            }
+          }
+        }
+      }
+    }
+  }
+
   const onNodesChange = useCallback((setShowDiv, edges, changes = []) => {
     setUpdated(true);
     setNodes((oldNodes) => {
@@ -157,47 +201,48 @@ const Designer = ({ update }) => {
         switch (change.type) {
           case "dimensions":
             if (change.resizing)
-              updatedNodes[change.id] = {
-                ...updatedNodes[change.id],
-                position: {
-                  ...updatedNodes[change.id].position,
-                },
-                style: {
-                  ...updatedNodes[change.id].style,
-                  ...change.dimensions,
-                },
-              };
-            for (let key in updatedNodes) {
-              if (key.startsWith("group")) {
-                const styleData = updatedNodes[key];
-                if (styleData) {
-                  const xValue = parseInt(styleData.position.x);
-                  const widthValue = parseInt(styleData.style.width);
-                  const yValue = parseInt(styleData.position.y);
-                  const heightValue = parseInt(styleData.style.height);
-                  let xSum;
-                  let ySum;
+              // isOverlap(updatedNodes[change.id], groupFilteredData);
+            updatedNodes[change.id] = {
+              ...updatedNodes[change.id],
+              position: {
+                ...updatedNodes[change.id].position,
+              },
+              style: {
+                ...updatedNodes[change.id].style,
+                ...change.dimensions,
+              },
+            };
+            // for (let key in updatedNodes) {
+            //   if (key.startsWith("group")) {
+            //     const styleData = updatedNodes[key];
+            //     if (styleData) {
+            //       const xValue = parseInt(styleData.position.x);
+            //       const widthValue = parseInt(styleData.style.width);
+            //       const yValue = parseInt(styleData.position.y);
+            //       const heightValue = parseInt(styleData.style.height);
+            //       let xSum;
+            //       let ySum;
 
-                  if (!isNaN(xValue) && !isNaN(widthValue)) {
-                    xSum = xValue + widthValue;
-                  }
-                  if (!isNaN(yValue) && !isNaN(heightValue)) {
-                    ySum = yValue + heightValue;
-                  }
-                  const jsonObject = {};
-                  jsonObject[key] = {
-                    coordinates: [
-                      [xValue, yValue],
-                      [xSum, yValue],
-                      [xValue, ySum],
-                      [xSum, ySum],
-                    ],
-                  };
-                  groupFilteredData[key] = jsonObject;
-                }
-              }
-            }
-            console.log(groupFilteredData, "groupFilteredData");
+            //       if (!isNaN(xValue) && !isNaN(widthValue)) {
+            //         xSum = xValue + widthValue;
+            //       }
+            //       if (!isNaN(yValue) && !isNaN(heightValue)) {
+            //         ySum = yValue - heightValue;
+            //       }
+            //       const jsonObject = {};
+            //       jsonObject[key] = {
+            //         coordinates: [
+            //           [xValue, yValue],
+            //           [xSum, yValue],
+            //           [xValue, ySum],
+            //           [xSum, ySum],
+            //         ],
+            //       };
+            //       groupFilteredData[key] = jsonObject;
+            //     }
+            //   }
+            // }
+            // console.log(groupFilteredData, "groupFilteredData");
             break;
           case "position":
             if (change?.position) {
@@ -215,37 +260,38 @@ const Designer = ({ update }) => {
                 },
                 dragging: change.dragging,
               };
-              for (let key in updatedNodes) {
-                if (key.startsWith("group")) {
-                  const styleData = updatedNodes[key];
-                  if (styleData) {
-                    const xValue = parseInt(styleData.position.x);
-                    const widthValue = parseInt(styleData.style.width);
-                    const yValue = parseInt(styleData.position.y);
-                    const heightValue = parseInt(styleData.style.height);
-                    let xSum;
-                    let ySum;
+              console.log(updatedNodes,"lllllllllllll")
+              // for (let key in updatedNodes) {
+              //   if (key.startsWith("group")) {
+              //     const styleData = updatedNodes[key];
+              //     if (styleData) {
+              //       const xValue = parseInt(styleData.position.x);
+              //       const widthValue = parseInt(styleData.style.width);
+              //       const yValue = parseInt(styleData.position.y);
+              //       const heightValue = parseInt(styleData.style.height);
+              //       let xSum;
+              //       let ySum;
 
-                    if (!isNaN(xValue) && !isNaN(widthValue)) {
-                      xSum = xValue + widthValue;
-                    }
-                    if (!isNaN(yValue) && !isNaN(heightValue)) {
-                      ySum = yValue + heightValue;
-                    }
-                    const jsonObject = {};
-                    jsonObject[key] = {
-                      coordinates: [
-                        [xValue, yValue],
-                        [xSum, yValue],
-                        [xValue, ySum],
-                        [xSum, ySum],
-                      ],
-                    };
-                    groupFilteredData[key] = jsonObject;
-                  }
-                }
-              }
-              console.log(groupFilteredData, "groupFilteredData");
+              //       if (!isNaN(xValue) && !isNaN(widthValue)) {
+              //         xSum = xValue + widthValue;
+              //       }
+              //       if (!isNaN(yValue) && !isNaN(heightValue)) {
+              //         ySum = yValue - heightValue;
+              //       }
+              //       const jsonObject = {};
+              //       jsonObject[key] = {
+              //         coordinates: [
+              //           [xValue, yValue],
+              //           [xSum, yValue],
+              //           [xValue, ySum],
+              //           [xSum, ySum],
+              //         ],
+              //       };
+              //       groupFilteredData[key] = jsonObject;
+              //     }
+              //   }
+              // }
+              // console.log(groupFilteredData, "groupFilteredData");
             }
             break;
           case "select":
