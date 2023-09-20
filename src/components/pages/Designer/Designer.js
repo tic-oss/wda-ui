@@ -553,13 +553,17 @@ const Designer = ({ update }) => {
 
   useEffect(() => {
     let updatedEdges = { ...edges };
+   // console.log(edges)
     if (IsEdgeopen) {
+      console.log(IsEdgeopen,'checkingggggg')
       updatedEdges[IsEdgeopen].style = { stroke: "blue" };
       updatedEdges[IsEdgeopen].markerEnd = {
         color: "blue",
         type: MarkerType.ArrowClosed,
-      };
-    } else {
+      }    
+    }
+  
+     else {
       for (const edgeId in updatedEdges) {
         const targetType = edgeId.split("-")[1];
         if (updatedEdges[edgeId].label === "Rest") {
@@ -574,13 +578,16 @@ const Designer = ({ update }) => {
             color: "#bcbaba",
             type: MarkerType.ArrowClosed,
           };
-        } else if (targetType.split("_")[0] === "Database") {
+        } else if (targetType.split("_")[0] === "Database" ) {
+          if(updatedEdges[edgeId]?.selected===false){
           updatedEdges[edgeId].style = { stroke: "#000" };
           updatedEdges[edgeId].markerEnd = {
             color: "#000",
             type: MarkerType.ArrowClosed,
           };
-        } else {
+        }
+        } 
+        else {
           updatedEdges[edgeId].style = { stroke: "red" };
           updatedEdges[edgeId].markerEnd = {
             color: "red",
@@ -588,9 +595,9 @@ const Designer = ({ update }) => {
           };
         }
       }
-    }
-    setEdges(updatedEdges);
-  }, [IsEdgeopen]);
+    }  
+  }, [IsEdgeopen, edges]);
+  
 
   useEffect(() => {
     document.title = "WDA";
@@ -951,8 +958,9 @@ const Designer = ({ update }) => {
       }
     }
   };
-
   const onEdgeClick = (e, edge) => {
+    let updatedEdges = { ...edges };
+    console.log(edge)
     const sourceType = edge.source.split("_")[0];
     const targetType = edge.target.split("_")[0];
     if (
@@ -960,9 +968,23 @@ const Designer = ({ update }) => {
       (sourceType === "Service" && targetType === "Service")
     ) {
       setEdgeopen(edge.id);
-      setCurrentEdge(edge[edge.id].data);
+      setCurrentEdge(edges[edge.id].data);
+      updatedEdges[edge.id].selected=true;
     }
-    setEdges(edges);
+    else if (targetType === 'Database') {
+      Object.values(updatedEdges).forEach((edge) => {
+        edge.style = { stroke: undefined }; 
+        edge.markerEnd = undefined; 
+        edge.selected = false; 
+      });
+      updatedEdges[edge.id].style = { stroke: "blue" };
+      updatedEdges[edge.id].markerEnd = {
+        color: "blue",
+        type: MarkerType.ArrowClosed,
+      };
+      updatedEdges[edge.id].selected = true;
+    }
+    setEdges(updatedEdges);
   };
 
   const handleEdgeData = (Data) => {
