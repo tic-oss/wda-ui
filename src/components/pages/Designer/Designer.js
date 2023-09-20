@@ -963,6 +963,13 @@ const Designer = ({ update }) => {
     console.log(edge)
     const sourceType = edge.source.split("_")[0];
     const targetType = edge.target.split("_")[0];
+    if (sourceType != "Database" && targetType != "Database"){
+      Object.values(updatedEdges).forEach((edge) => {
+      edge.style = { stroke: undefined }; 
+      edge.markerEnd = undefined; 
+      edge.selected = false; 
+    });
+  }
     if (
       (sourceType === "UI" && targetType === "Service") ||
       (sourceType === "Service" && targetType === "Service")
