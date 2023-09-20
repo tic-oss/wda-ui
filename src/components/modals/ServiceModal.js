@@ -25,6 +25,7 @@ const ServiceModal = ({
   uniquePortNumbers,
 }) => {
   const IntialState = {
+    
     label: "Service",
     applicationName: "",
     applicationFramework: "java",

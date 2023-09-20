@@ -27,11 +27,11 @@ const ActionModal = ({
     >
       <AlertDialogOverlay>
         <AlertDialogContent>
-          <AlertDialogHeader fontSize="lg" fontWeight="bold">
+          <AlertDialogHeader data-testid ="delete" fontSize="lg" fontWeight="bold">
             {actionType === "delete" ? "Delete" : "Confirm Navigation"}
           </AlertDialogHeader>
 
-          <AlertDialogBody>
+          <AlertDialogBody  data-testid ="suredelete">
             {actionType === "delete" ? (
               <>
                 Are you sure to delete your project "
