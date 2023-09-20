@@ -145,44 +145,41 @@ const Designer = ({ update }) => {
 
   function handleCollision(node, nodes) {
     const updatedNodes = Object.values(nodes).map((element) => {
-      if (node.type === "GroupNode" && element.type === "GroupNode") {
-        if (element.id === node.id) {
-          let collidesWithOtherNodes = false;
-          for (const otherNode of Object.values(nodes)) {
-            if (node.type === "GroupNode" && otherNode.type === "GroupNode")
-              if (otherNode.id !== node.id) {
-                const nodeBoundingBox = {
-                  left: node.position.x,
-                  right: node.position.x + parseInt(node.style.width),
-                  top: node.position.y,
-                  bottom: node.position.y + parseInt(node.style.height),
-                };
+      if (element.id === node.id) {
+        let collidesWithOtherNodes = false;
+        for (const otherNode of Object.values(nodes)) {
+          if (node.type === "GroupNode" && otherNode.type === "GroupNode")
+            if (otherNode.id !== node.id) {
+              const nodeBoundingBox = {
+                left: node.position.x,
+                right: node.position.x + parseInt(node.style.width),
+                top: node.position.y,
+                bottom: node.position.y + parseInt(node.style.height),
+              };
 
-                const otherNodeBoundingBox = {
-                  left: otherNode.position.x,
-                  right: otherNode.position.x + parseInt(otherNode.style.width),
-                  top: otherNode.position.y,
-                  bottom:
-                    otherNode.position.y + parseInt(otherNode.style.height),
-                };
+              const otherNodeBoundingBox = {
+                left: otherNode.position.x,
+                right: otherNode.position.x + parseInt(otherNode.style.width),
+                top: otherNode.position.y,
+                bottom: otherNode.position.y + parseInt(otherNode.style.height),
+              };
 
-                if (
-                  nodeBoundingBox.right > otherNodeBoundingBox.left &&
-                  nodeBoundingBox.left < otherNodeBoundingBox.right &&
-                  nodeBoundingBox.bottom > otherNodeBoundingBox.top &&
-                  nodeBoundingBox.top < otherNodeBoundingBox.bottom
-                ) {
-                  collidesWithOtherNodes = true;
-                  node.position.x = otherNodeBoundingBox.right + 10;
-                }
+              if (
+                nodeBoundingBox.right > otherNodeBoundingBox.left &&
+                nodeBoundingBox.left < otherNodeBoundingBox.right &&
+                nodeBoundingBox.bottom > otherNodeBoundingBox.top &&
+                nodeBoundingBox.top < otherNodeBoundingBox.bottom
+              ) {
+                collidesWithOtherNodes = true;
+                node.position.x = otherNodeBoundingBox.right + 10;
               }
-          }
-          if (collidesWithOtherNodes) {
-            return {
-              ...element,
-              position: node.position,
-            };
-          }
+            }
+        }
+        if (collidesWithOtherNodes) {
+          return {
+            ...element,
+            position: node.position,
+          };
         }
       }
       return element;
@@ -426,49 +423,91 @@ const Designer = ({ update }) => {
   };
 
   const onNodeDragStop = (event, node) => {
-    console.log("pppp");
+    console.log("pppp", node);
     const updatedNodes = Object.values(nodes).map((element) => {
-      if (node.type === "GroupNode" && element.type === "GroupNode")
-        if (element.id === node.id) {
-          let collidesWithOtherNodes = false;
-          Object.values(nodes).forEach((otherNode) => {
+      // if (node.type === "GroupNode" && element.type === "GroupNode")
+      if (element.id === node.id) {
+        let collidesWithOtherNodes = false;
+        Object.values(nodes).forEach((otherNode) => {
+          if (otherNode.id !== node.id) {
+            const nodeBoundingBox = {
+              left: node.position.x,
+              right: node.position.x + node.width,
+              top: node.position.y,
+              bottom: node.position.y + node.height,
+            };
+            console.log(nodeBoundingBox, "nodeBoundingBox");
+            const otherNodeBoundingBox = {
+              left: otherNode.position.x,
+              right: otherNode.position.x + parseInt(otherNode.style.width),
+              top: otherNode.position.y,
+              bottom: otherNode.position.y + parseInt(otherNode.style.height),
+            };
+
+            console.log(otherNodeBoundingBox, "otherNodeBoundingBox");
+            console.log(node, otherNode, "ppppppp");
             if (node.type === "GroupNode" && otherNode.type === "GroupNode") {
-              if (otherNode.id !== node.id) {
-                const nodeBoundingBox = {
-                  left: node.position.x,
-                  right: node.position.x + node.width,
-                  top: node.position.y,
-                  bottom: node.position.y + node.height,
-                };
-                const otherNodeBoundingBox = {
-                  left: otherNode.position.x,
-                  right: otherNode.position.x + parseInt(otherNode.style.width),
-                  top: otherNode.position.y,
-                  bottom:
-                    otherNode.position.y + parseInt(otherNode.style.height),
-                };
+              if (
+                nodeBoundingBox.right > otherNodeBoundingBox.left &&
+                nodeBoundingBox.left < otherNodeBoundingBox.right &&
+                nodeBoundingBox.bottom > otherNodeBoundingBox.top &&
+                nodeBoundingBox.top < otherNodeBoundingBox.bottom
+              ) {
+                collidesWithOtherNodes = true;
+                node.position.x = otherNodeBoundingBox.right + 10;
+              }
+            } else if (
+              node.type == "GroupNode" ||
+              otherNode.type == "GroupNode"
+            ) {
+              console.log("oooooooooooooo")
+              if (node.type === "GroupNode") {
+                console.log("hhhhhh")
                 if (
-                  nodeBoundingBox.right > otherNodeBoundingBox.left &&
-                  nodeBoundingBox.left < otherNodeBoundingBox.right &&
-                  nodeBoundingBox.bottom > otherNodeBoundingBox.top &&
-                  nodeBoundingBox.top < otherNodeBoundingBox.bottom
+                  otherNodeBoundingBox.left < nodeBoundingBox.left < nodeBoundingBox.right <
+                  otherNodeBoundingBox.right   
+                  &&
+                  otherNodeBoundingBox.top > nodeBoundingBox.top > nodeBoundingBox.bottom >
+                  otherNodeBoundingBox.bottom
                 ) {
-                  collidesWithOtherNodes = true;
-                  node.position.x = otherNodeBoundingBox.right + 10;
+                  console.log(otherNodeBoundingBox.top > nodeBoundingBox.top > nodeBoundingBox.bottom >
+                    otherNodeBoundingBox.bottom,"qqqqqqqqqqqqqqqq")
+                  console.log(node.id,"node.id")
+                  return {
+                    ...element,
+                    parentNode: node.id,
+                  };
+                }
+              } else {
+                console.log("hjhjhjhjh")
+                if (
+                  nodeBoundingBox.left < otherNodeBoundingBox.left < otherNodeBoundingBox.right <
+                  nodeBoundingBox.right   
+                  &&
+                  nodeBoundingBox.top > otherNodeBoundingBox.top > otherNodeBoundingBox.bottom >
+                  nodeBoundingBox.bottom
+                ) {
+                  console.log(nodeBoundingBox.top > otherNodeBoundingBox.top > otherNodeBoundingBox.bottom >
+                    nodeBoundingBox.bottom ,"othernodebound")
+                  console.log(otherNode.id,"othernoode.id")
+                  return {
+                    ...element,
+                    parentNode: otherNode.id,
+                  };
                 }
               }
             }
-          });
-          if (collidesWithOtherNodes) {
-            return {
-              ...element,
-              position: node.position,
-            };
           }
+        });
+        if (collidesWithOtherNodes) {
+          return {
+            ...element,
+            position: node.position,
+          };
         }
+      }
       return element;
     });
-    console.log(updatedNodes);
     setNodes(
       updatedNodes.reduce((acc, node) => ({ ...acc, [node.id]: node }), {})
     );
