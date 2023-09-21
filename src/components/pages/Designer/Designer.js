@@ -497,8 +497,10 @@ const Designer = ({ update }) => {
 
         if (parent_id) {
           const relativePosition = {
-            x: copy_node.position.x - parent_id.position.x,
-            y: parent_id.position.y - copy_node.position.y,
+            // x: copy_node.position.x - parent_id.position.x,
+            // y: parent_id.position.y - copy_node.position.y,
+            x: node.position.x - parent_id.position.x,
+            y: node.position.y - parent_id.position.y,
           };
           console.log(relativePosition, "relarstivrrrr");
           return {
