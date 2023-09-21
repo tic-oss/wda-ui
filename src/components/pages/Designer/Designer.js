@@ -529,13 +529,16 @@ const Designer = ({ update }) => {
             position: relativePosition,
           };
         } else {
+          const relativePosition = {
+            x: node.position.x - parent_id.position.x,
+            y: node.position.y - parent_id.position.y,
+          };
           return {
             ...node,
             parentNode: null,
+            position: relativePosition,
           };
         }
-
-        
       }
       return element;
     });
