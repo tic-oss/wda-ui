@@ -554,9 +554,9 @@ const Designer = ({ update }) => {
   useEffect(() => {
     let updatedEdges = { ...edges };
     if (IsEdgeopen) {
-      updatedEdges[IsEdgeopen].style = { stroke: "#3182ce" };
+      updatedEdges[IsEdgeopen].style = { stroke: "#3367d9" };
       updatedEdges[IsEdgeopen].markerEnd = {
-        color: "#3182ce",
+        color: "#3367d9",
         type: MarkerType.ArrowClosed,
       }    
     }
@@ -1005,22 +1005,22 @@ const Designer = ({ update }) => {
         edge.markerEnd = "black"; 
         edge.selected = false; 
       });
-      updatedEdges[edge.id].style = { stroke: "#3182ce" };
+      updatedEdges[edge.id].style = { stroke: "#3367d9" };
       updatedEdges[edge.id].markerEnd = {
-        color: "#3182ce",
+        color: "#3367d9",
         type: MarkerType.ArrowClosed,
       };
       updatedEdges[edge.id].selected = true;
     }
     else if (targetType === 'group'|| sourceType==='group') {
       Object.values(updatedEdges).forEach((edge) => {
-        edge.style = { stroke: "orange" }; 
+        edge.style = { stroke: "black" }; 
         edge.markerEnd = "black"; 
         edge.selected = false; 
       });
-      updatedEdges[edge.id].style = { stroke: "#3182ce" };
+      updatedEdges[edge.id].style = { stroke: "#3367d9" };
       updatedEdges[edge.id].markerEnd = {
-        color: "#3182ce",
+        color: "#3367d9",
         type: MarkerType.ArrowClosed,
       };
       updatedEdges[edge.id].selected = true;
@@ -1122,9 +1122,9 @@ const Designer = ({ update }) => {
               <Button
                 mt={4}
                 border="2px"
-                borderColor="#3182CE"
+                borderColor="#3367d9"
                 alignContent="center"
-                color="#3182CE"
+                color="#3367d9"
                 className="dragDropStyle"
               >
                 Drag & Drop <ArrowRightIcon className="arrowIconStyle" />
