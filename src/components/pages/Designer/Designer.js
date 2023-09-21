@@ -519,8 +519,8 @@ const Designer = ({ update }) => {
         // }
         if (parent_id) {
           const relativePosition = {
-            x: node.position.x - parent_id.position.x,
-            y: node.position.y - parent_id.position.y,
+            x: copy_node.position.x - parent_id.position.x,
+            y: parent_id.position.y - copy_node.position.y,
           };
           console.log(relativePosition, "relarstivrrrr");
           return {
@@ -529,14 +529,14 @@ const Designer = ({ update }) => {
             position: relativePosition,
           };
         } else {
-          const relativePosition = {
-            x: node.position.x - parent_id.position.x,
-            y: node.position.y - parent_id.position.y,
-          };
+          // const relativePosition = {
+          //   x: node.position.x - parent_id.position.x,
+          //   y: node.position.y - parent_id.position.y,
+          // };
           return {
             ...node,
             parentNode: null,
-            position: relativePosition,
+            position: node.positionAbsolute,
           };
         }
       }
