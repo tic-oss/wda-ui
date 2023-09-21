@@ -558,12 +558,10 @@ const Designer = ({ update }) => {
 
   useEffect(() => {
     let updatedEdges = { ...edges };
-   // console.log(edges)
     if (IsEdgeopen) {
-      console.log(IsEdgeopen,'checkingggggg')
-      updatedEdges[IsEdgeopen].style = { stroke: "blue" };
+      updatedEdges[IsEdgeopen].style = { stroke: "#3182ce" };
       updatedEdges[IsEdgeopen].markerEnd = {
-        color: "blue",
+        color: "#3182ce",
         type: MarkerType.ArrowClosed,
       }    
     }
@@ -571,6 +569,7 @@ const Designer = ({ update }) => {
      else {
       for (const edgeId in updatedEdges) {
         const targetType = edgeId.split("-")[1];
+        const sourceType = edgeId.split("-")[0];
         if (updatedEdges[edgeId].label === "Rest") {
           updatedEdges[edgeId].style = { stroke: "black" };
           updatedEdges[edgeId].markerEnd = {
@@ -586,6 +585,16 @@ const Designer = ({ update }) => {
         } else if (targetType.split("_")[0] === "Database" ) {
           if(updatedEdges[edgeId]?.selected===false){
           updatedEdges[edgeId].style = { stroke: "#000" };
+          updatedEdges[edgeId].markerEnd = {
+            color: "#000",
+            type: MarkerType.ArrowClosed,
+          };
+        }
+        }
+        else if (targetType.split("_")[0] === "group"
+        ||sourceType.split("_")[0] === "group") {
+          if(updatedEdges[edgeId]?.selected===false){
+          updatedEdges[edgeId].style = { stroke: "black" };
           updatedEdges[edgeId].markerEnd = {
             color: "#000",
             type: MarkerType.ArrowClosed,
@@ -965,14 +974,26 @@ const Designer = ({ update }) => {
   };
   const onEdgeClick = (e, edge) => {
     let updatedEdges = { ...edges };
-    console.log(edge)
     const sourceType = edge.source.split("_")[0];
     const targetType = edge.target.split("_")[0];
     if (sourceType != "Database" && targetType != "Database"){
       Object.values(updatedEdges).forEach((edge) => {
-      edge.style = { stroke: undefined }; 
-      edge.markerEnd = undefined; 
+        if(edge.id.split("-")[1].split("_")[0]==="Database"){
+      edge.style = { stroke: "black" }; 
+      edge.markerEnd = {
+        color: "black",
+        type: MarkerType.ArrowClosed,
+      }; 
       edge.selected = false; 
+    }
+    else if(edge.id.split("-")[0].split("_")[0]==="group"||edge.id.split("-")[1].split("_")[0]==="group"){
+    edge.style = { stroke: "black" }; 
+    edge.markerEnd = {
+      color: "black",
+      type: MarkerType.ArrowClosed,
+    }; 
+    edge.selected = false; 
+  }
     });
   }
     if (
@@ -985,13 +1006,26 @@ const Designer = ({ update }) => {
     }
     else if (targetType === 'Database') {
       Object.values(updatedEdges).forEach((edge) => {
-        edge.style = { stroke: undefined }; 
-        edge.markerEnd = undefined; 
+        edge.style = { stroke: "black" }; 
+        edge.markerEnd = "black"; 
         edge.selected = false; 
       });
-      updatedEdges[edge.id].style = { stroke: "blue" };
+      updatedEdges[edge.id].style = { stroke: "#3182ce" };
       updatedEdges[edge.id].markerEnd = {
-        color: "blue",
+        color: "#3182ce",
+        type: MarkerType.ArrowClosed,
+      };
+      updatedEdges[edge.id].selected = true;
+    }
+    else if (targetType === 'group'|| sourceType==='group') {
+      Object.values(updatedEdges).forEach((edge) => {
+        edge.style = { stroke: "orange" }; 
+        edge.markerEnd = "black"; 
+        edge.selected = false; 
+      });
+      updatedEdges[edge.id].style = { stroke: "#3182ce" };
+      updatedEdges[edge.id].markerEnd = {
+        color: "#3182ce",
         type: MarkerType.ArrowClosed,
       };
       updatedEdges[edge.id].selected = true;

@@ -280,7 +280,7 @@ const Sidebar = ({
             onClick={() => toggleOption("Database")}
           >
             Database{" "}
-            {selectedOption === "Databases" ? (
+            {selectedOption === "Database" ? (
               <span>&#x25B2;</span>
             ) : (
               <span>&#x25BC;</span>
