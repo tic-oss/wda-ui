@@ -147,23 +147,25 @@ const Designer = ({ update }) => {
     const updatedNodes = Object.values(nodes).map((element) => {
       if (element.id === node.id) {
         let collidesWithOtherNodes = false;
+        let parent_id = false;
+        let copy_node;
         for (const otherNode of Object.values(nodes)) {
-          if (node.type === "GroupNode" && otherNode.type === "GroupNode")
-            if (otherNode.id !== node.id) {
-              const nodeBoundingBox = {
-                left: node.position.x,
-                right: node.position.x + parseInt(node.style.width),
-                top: node.position.y,
-                bottom: node.position.y + parseInt(node.style.height),
-              };
+          if (otherNode.id !== node.id) {
+            const nodeBoundingBox = {
+              left: node.position.x,
+              right: node.position.x + parseInt(node.style.width),
+              top: node.position.y,
+              bottom: node.position.y + parseInt(node.style.height),
+            };
 
-              const otherNodeBoundingBox = {
-                left: otherNode.position.x,
-                right: otherNode.position.x + parseInt(otherNode.style.width),
-                top: otherNode.position.y,
-                bottom: otherNode.position.y + parseInt(otherNode.style.height),
-              };
+            const otherNodeBoundingBox = {
+              left: otherNode.position.x,
+              right: otherNode.position.x + parseInt(otherNode.style.width),
+              top: otherNode.position.y,
+              bottom: otherNode.position.y + parseInt(otherNode.style.height),
+            };
 
+            if (node.type === "GroupNode" && otherNode.type === "GroupNode") {
               if (
                 nodeBoundingBox.right > otherNodeBoundingBox.left &&
                 nodeBoundingBox.left < otherNodeBoundingBox.right &&
@@ -173,12 +175,44 @@ const Designer = ({ update }) => {
                 collidesWithOtherNodes = true;
                 node.position.x = otherNodeBoundingBox.right + 10;
               }
+            } else if (node.type === "GroupNode") {
+              console.log("hhhhhh");
+              if (
+                otherNodeBoundingBox.left >= nodeBoundingBox.left &&
+                otherNodeBoundingBox.right <= nodeBoundingBox.right &&
+                otherNodeBoundingBox.top >= nodeBoundingBox.top &&
+                otherNodeBoundingBox.bottom <= nodeBoundingBox.bottom
+              ) {
+                parent_id = node;
+                copy_node = otherNode;
+              }
             }
+          }
         }
         if (collidesWithOtherNodes) {
           return {
             ...element,
             position: node.position,
+          };
+        }
+        if (parent_id) {
+          const relativePosition = {
+            // x: copy_node.position.x - parent_id.position.x,
+            // y: parent_id.position.y - copy_node.position.y,
+            x: node.position.x - parent_id.position.x,
+            y: node.position.y - parent_id.position.y,
+          };
+          console.log(relativePosition, "relarstivrrrr");
+          return {
+            ...node,
+            parentNode: parent_id.id,
+            position: relativePosition,
+          };
+        } else {
+          return {
+            ...node,
+            parentNode: null,
+            position: node.positionAbsolute,
           };
         }
       }
@@ -464,6 +498,10 @@ const Designer = ({ update }) => {
               console.log("oooooooooooooo");
               if (node.type === "GroupNode") {
                 console.log("hhhhhh");
+                console.log(otherNodeBoundingBox.left >= nodeBoundingBox.left,"leftttttt")
+                console.log(otherNodeBoundingBox.right <= nodeBoundingBox.right,"rightttttt")
+                console.log(otherNodeBoundingBox.top >= nodeBoundingBox.top,"topppppp")
+                console.log(otherNodeBoundingBox.bottom <= nodeBoundingBox.bottom,"bottommmmmm")
                 if (
                   otherNodeBoundingBox.left >= nodeBoundingBox.left &&
                   otherNodeBoundingBox.right <= nodeBoundingBox.right &&
