@@ -425,9 +425,10 @@ const Designer = ({ update }) => {
   const onNodeDragStop = (event, node) => {
     console.log("pppp", node);
     const updatedNodes = Object.values(nodes).map((element) => {
-      // if (node.type === "GroupNode" && element.type === "GroupNode")
       if (element.id === node.id) {
         let collidesWithOtherNodes = false;
+        let parent_id = false;
+        let copy_node;
         Object.values(nodes).forEach((otherNode) => {
           if (otherNode.id !== node.id) {
             const nodeBoundingBox = {
@@ -460,45 +461,45 @@ const Designer = ({ update }) => {
               node.type == "GroupNode" ||
               otherNode.type == "GroupNode"
             ) {
-              console.log("oooooooooooooo")
+              console.log("oooooooooooooo");
               if (node.type === "GroupNode") {
-                console.log("hhhhhh")
+                console.log("hhhhhh");
                 if (
-                  otherNodeBoundingBox.left < nodeBoundingBox.left < nodeBoundingBox.right <
-                  otherNodeBoundingBox.right   
-                  &&
-                  otherNodeBoundingBox.top > nodeBoundingBox.top > nodeBoundingBox.bottom >
-                  otherNodeBoundingBox.bottom
+                  otherNodeBoundingBox.left >= nodeBoundingBox.left &&
+                  otherNodeBoundingBox.right <= nodeBoundingBox.right &&
+                  otherNodeBoundingBox.top >= nodeBoundingBox.top &&
+                  otherNodeBoundingBox.bottom <= nodeBoundingBox.bottom
                 ) {
-                  console.log(otherNodeBoundingBox.top > nodeBoundingBox.top > nodeBoundingBox.bottom >
-                    otherNodeBoundingBox.bottom,"qqqqqqqqqqqqqqqq")
-                  console.log(node.id,"node.id")
-                  return {
-                    ...element,
-                    parentNode: node.id,
-                  };
+                  parent_id = node;
+                  copy_node = otherNode;
                 }
               } else {
-                console.log("hjhjhjhjh")
+                console.log("hjhjhjhjh");
                 if (
-                  nodeBoundingBox.left < otherNodeBoundingBox.left < otherNodeBoundingBox.right <
-                  nodeBoundingBox.right   
-                  &&
-                  nodeBoundingBox.top > otherNodeBoundingBox.top > otherNodeBoundingBox.bottom >
-                  nodeBoundingBox.bottom
+                  otherNodeBoundingBox.left < nodeBoundingBox.left &&
+                  otherNodeBoundingBox.right > nodeBoundingBox.right &&
+                  otherNodeBoundingBox.top < nodeBoundingBox.top &&
+                  otherNodeBoundingBox.bottom > nodeBoundingBox.bottom
                 ) {
-                  console.log(nodeBoundingBox.top > otherNodeBoundingBox.top > otherNodeBoundingBox.bottom >
-                    nodeBoundingBox.bottom ,"othernodebound")
-                  console.log(otherNode.id,"othernoode.id")
-                  return {
-                    ...element,
-                    parentNode: otherNode.id,
-                  };
+                  parent_id = otherNode;
+                  copy_node = node;
+                  console.log(otherNode.id, "othernoode.id");
                 }
               }
             }
           }
         });
+        if (parent_id) {
+          return {
+            ...copy_node,
+            parentNode: parent_id.id,
+            position: {
+              x: copy_node.position.x - parent_id.position.x,
+              y: parent_id.position.y - copy_node.position.y,
+            },
+          };
+        }
+
         if (collidesWithOtherNodes) {
           return {
             ...element,
@@ -508,6 +509,7 @@ const Designer = ({ update }) => {
       }
       return element;
     });
+    console.log(updatedNodes);
     setNodes(
       updatedNodes.reduce((acc, node) => ({ ...acc, [node.id]: node }), {})
     );
