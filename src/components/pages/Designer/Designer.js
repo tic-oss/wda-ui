@@ -483,29 +483,59 @@ const Designer = ({ update }) => {
                 ) {
                   parent_id = otherNode;
                   copy_node = node;
-                  console.log(otherNode.id, "othernoode.id");
                 }
               }
             }
           }
         });
-        if (parent_id) {
-          return {
-            ...copy_node,
-            parentNode: parent_id.id,
-            position: {
-              x: copy_node.position.x - parent_id.position.x,
-              y: parent_id.position.y - copy_node.position.y,
-            },
-          };
-        }
-
         if (collidesWithOtherNodes) {
           return {
             ...element,
             position: node.position,
           };
         }
+
+        // if (parent_id) {
+        //   console.log(
+        //     copy_node.position.x - parent_id.position.x,
+        //     parent_id.position.y - copy_node.position.y,
+        //     "xxxxxxxxxxyyyyyyyyyy"
+        //   );
+        //   return {
+        //     ...copy_node,
+        //     parentNode: parent_id.id,
+        //     position: {
+        //       x: copy_node.position.x - parent_id.position.x,
+        //       y: parent_id.position.y - copy_node.position.y,
+        //     },
+        //   };
+        // } else {
+        //   // If no parent is found or child node is not inside a parent node,
+        //   // set parent_id to null
+        //   return {
+        //     ...element,
+        //     parentNode: null,
+        //   };
+        // }
+        if (parent_id) {
+          const relativePosition = {
+            x: node.position.x - parent_id.position.x,
+            y: node.position.y - parent_id.position.y,
+          };
+          console.log(relativePosition, "relarstivrrrr");
+          return {
+            ...node,
+            parentNode: parent_id.id,
+            position: relativePosition,
+          };
+        } else {
+          return {
+            ...node,
+            parentNode: null,
+          };
+        }
+
+        
       }
       return element;
     });
