@@ -115,25 +115,6 @@ const ProjectModal = ({
                   isDisabled={true}
                 />
               </FormControl>
-              {nodeType === "UI" && (
-                <FormControl>
-                  <FormLabel>Want to have an Example</FormLabel>
-                  <Select
-                    mb={4}
-                    variant="outline"
-                    id="withExample"
-                    borderColor={"black"}
-                    value={withExample}
-                    isDisabled={true}
-                  >
-                    <option value="" disabled>
-                      Select an option
-                    </option>
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
-                  </Select>
-                </FormControl>
-              )}
           </ModalBody>
         </ModalContent>
       </Modal>

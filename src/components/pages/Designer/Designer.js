@@ -558,7 +558,8 @@ const Designer = ({ update }) => {
       updatedEdges[IsEdgeopen].markerEnd = {
         color: "#3367d9",
         type: MarkerType.ArrowClosed,
-      }    
+      }
+      console.log(updatedEdges)    
     }
   
      else {
@@ -1056,7 +1057,7 @@ const Designer = ({ update }) => {
       ...UpdatedEdges[IsEdgeopen].data,
       ...Data,
     };
-
+    UpdatedEdges[IsEdgeopen].selected=false;
     setEdges(UpdatedEdges);
     setEdgeopen(false);
   };
