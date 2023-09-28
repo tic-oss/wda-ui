@@ -148,8 +148,9 @@ const Designer = ({ update }) => {
     const updatedNodes = Object.values(nodes).map((element) => {
       if (element.id === node.id) {
         let collidesWithOtherNodes = false;
-        let parent_id = null;
+        let childNode = null;
         let child = null;
+        let flag = null;
         Object.values(nodes).forEach((otherNode) => {
           if (otherNode.id !== node.id) {
             const nodeBoundingBox = {
@@ -190,7 +191,12 @@ const Designer = ({ update }) => {
                   nodeBoundingBox.top < otherNodeBoundingBox.bottom
                 ) {
                   child = otherNode;
+                  // flag=true;
                 }
+                // else {
+                //   childNode = otherNode;
+                //   flag = false;
+                // }
               }
             }
           }
@@ -202,6 +208,7 @@ const Designer = ({ update }) => {
           };
         }
         if (child) {
+          console.log("yesssssssssssss",child)
           const relativePosition = {
             x: child.position.x - node.position.x,
             y: child.position.y - node.position.y,
@@ -212,15 +219,22 @@ const Designer = ({ update }) => {
             position: relativePosition,
           };
           return updatedChild;
-        } else {
-          return {
-            ...node,
-            parentNode: null,
-            position: node.positionAbsolute,
-          };
-        }
+        } 
+        //  else if (!flag){
+        //   console.log("nooooooooooooo",childNode)
+        //   const relativePosition = {
+        //     x: childNode.position.x - node.position.x,
+        //     y: childNode.position.y - node.position.y,
+        //   };
+        //   return {
+        //     ...childNode,
+        //     parentNode: null,
+        //     position: node.positionAbsolute,
+        //   };
+        // }
       }
     });
+    console.log(updatedNodes,"idsfisodfisdfjkj")
     setNodes((prev) => {
       let copy = { ...prev };
       for (const key in updatedNodes) {
