@@ -106,6 +106,7 @@ const GroupDataModal = ({
           <div className="colorSelectBlock">
             <div
               className="colorSelection color1"
+              data-testid="colorSelection color1"
               onClick={() => handleColorClick("#ffc9c9")}
             ></div>
             <div

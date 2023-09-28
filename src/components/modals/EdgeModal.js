@@ -82,7 +82,7 @@ const EdgeModal = ({
         }}
       >
         <ModalHeader className="heading">Communication</ModalHeader>
-        <ModalCloseButton mt={1.5}/>
+        <ModalCloseButton mt={1.5} />
         <ModalBody>
           <FormControl>
             <FormLabel>Type</FormLabel>
@@ -90,6 +90,7 @@ const EdgeModal = ({
               mb={4}
               variant="outline"
               id="type"
+              data-testid="type"
               borderColor={"black"}
               value={edgeData.type}
               onChange={(e) => handleData("type", e.target.value)}
@@ -109,6 +110,7 @@ const EdgeModal = ({
                 mb={4}
                 variant="outline"
                 id="framework"
+                data-testid="synchronousfw"
                 borderColor={"black"}
                 value={edgeData.framework}
                 onChange={(e) => handleData("framework", e.target.value)}
@@ -127,6 +129,7 @@ const EdgeModal = ({
                 mb={4}
                 variant="outline"
                 id="framework"
+                data-testid="asynchronousfw"
                 borderColor={"black"}
                 value={edgeData.framework}
                 onChange={(e) => handleData("framework", e.target.value)}
@@ -148,7 +151,7 @@ const EdgeModal = ({
                 padding="4px"
                 mb={2}
               >
-                <AlertIcon className="alertIconStyle" />
+                <AlertIcon data-testid = 'errormsg' className="alertIconStyle" />
                 Please select a service discovery to establish communication
               </Alert>
             )}

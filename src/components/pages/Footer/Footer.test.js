@@ -8,7 +8,7 @@ import Footer from './Footer';
 
 describe('Footer Component', () => {
 
-    it('should render without errors', () => {
+    it('1 should render without errors', () => {
         render(<Footer />);
     });
 

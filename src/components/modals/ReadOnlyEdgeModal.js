@@ -32,6 +32,7 @@ function ReadOnlyEdgeModal({
               mb={4}
               variant="outline"
               id="type"
+              data-testid="type"
               borderColor={"black"}
               value={type}
               isDisabled={true}
@@ -51,6 +52,7 @@ function ReadOnlyEdgeModal({
                 mb={4}
                 variant="outline"
                 id="framework"
+                data-testid="framework"
                 borderColor={"black"}
                 value={framework}
                 isDisabled={true}
@@ -69,6 +71,7 @@ function ReadOnlyEdgeModal({
                 mb={4}
                 variant="outline"
                 id="framework"
+                data-testid="framework"
                 borderColor={"black"}
                 value={framework}
                 isDisabled={true}

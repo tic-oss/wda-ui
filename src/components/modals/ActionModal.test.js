@@ -4,7 +4,7 @@ import ActionModal from './ActionModal';
 import '@testing-library/jest-dom'
 
 describe('ActionModal Component', () => {
-  it('renders "Delete" modal correctly', () => {
+  it(' 1 renders "Delete" modal correctly', () => {
     const onClose = jest.fn();
     const onSubmit = jest.fn();
     render(
@@ -30,7 +30,7 @@ describe('ActionModal Component', () => {
     fireEvent.click(deleteButton);
   });
 
-  it('renders "Confirm Navigation" modal correctly', () => {
+  it(' 2 renders "Confirm Navigation" modal correctly', () => {
     const onClose = jest.fn();
     const onSubmit = jest.fn();
     render(
@@ -59,7 +59,7 @@ describe('ActionModal Component', () => {
     expect(onSubmit).toHaveBeenCalledWith({ id: 1 });
   });
 
-  it('calls onClose when cancel button is clicked', () => {
+  it(' 3 calls onClose when cancel button is clicked', () => {
     const onClose = jest.fn();
     render(
       <ActionModal
@@ -77,7 +77,7 @@ describe('ActionModal Component', () => {
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
-  it('does not render with isOpen set to false', () => {
+  it(' 4 does not render with isOpen set to false', () => {
     render(
       <ActionModal
         isOpen={false}
