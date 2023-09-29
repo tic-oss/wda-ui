@@ -7,7 +7,7 @@ function Footer() {
     <div>
      
       <div className="phantom"/>
-      <div className="text" data-testid = 'createdby'>Created by TIC@coMakeIT</div>
+      <div className="text" data-testid = 'createdBy'>Created by TIC@coMakeIT</div>
     </div>
   );
 }

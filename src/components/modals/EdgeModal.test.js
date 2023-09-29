@@ -17,7 +17,7 @@ describe("EdgeModal Component", () => {
     
     it(" 3 calls handleEdgeData when Save button is clicked with valid data", () => {
         const handleEdgeData = jest.fn();
-        const { getByLabelText, getByText } = render(
+        const { getByText } = render(
             <EdgeModal isOpen={true} handleEdgeData={handleEdgeData} />
         );
         const typeSelect = screen.getByTestId("type");
@@ -31,7 +31,7 @@ describe("EdgeModal Component", () => {
 
     it("4 displays an error when synchronous type is selected without service discovery", () => {
         const handleEdgeData = jest.fn();
-        const { getByLabelText, getByText } = render(
+        render(
           <EdgeModal isOpen={true} handleEdgeData={handleEdgeData} />
         );
         const typeSelect = screen.getByTestId("type");
@@ -39,7 +39,7 @@ describe("EdgeModal Component", () => {
         const frameworkSelect =screen.getByTestId("synchronousfw");
         expect(frameworkSelect).toBeInTheDocument();
         fireEvent.change(frameworkSelect, { target: { value: "rest-api" } });
-        const errorText = screen.getByTestId('errormsg');
+        const errorText = screen.getByTestId('errorMsg');
         expect(errorText).toBeInTheDocument();
       });
 

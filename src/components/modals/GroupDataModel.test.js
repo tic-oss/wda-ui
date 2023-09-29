@@ -56,11 +56,7 @@ describe("GroupDataModal", () => {
     const saveButton = getByText("Save");
     fireEvent.click(saveButton);
 
-    // expect(onSubmit).toHaveBeenCalledWith({
-    //   label: "Test Group", // This should be the updated value if you change it in the test.
-    //   type: "Group",
-    //   color: "#000000",
-    // });
+    
   });
   
 });

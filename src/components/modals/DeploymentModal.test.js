@@ -61,7 +61,7 @@ describe("DeploymentModal", () => {
     );
 
     // Assert
-    expect(screen.getByTestId("awsaccountid")).toBeInTheDocument();
+    expect(screen.getByTestId("awsAccountId")).toBeInTheDocument();
     expect(screen.getByTestId("awsRegion")).toBeInTheDocument();
   });
 });

@@ -19,7 +19,7 @@ describe('ActionModal Component', () => {
     );
 
     expect(screen.getByTestId('delete')).toBeInTheDocument();
-    expect(screen.getByTestId('suredelete')).toBeInTheDocument();
+    expect(screen.getByTestId('sureDelete')).toBeInTheDocument();
 
     const cancelButton = screen.getByText('Cancel');
     const deleteButton = screen.getByTestId('delete');

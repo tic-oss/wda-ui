@@ -151,7 +151,7 @@ const EdgeModal = ({
                 padding="4px"
                 mb={2}
               >
-                <AlertIcon data-testid = 'errormsg' className="alertIconStyle" />
+                <AlertIcon data-testid = 'errorMsg' className="alertIconStyle" />
                 Please select a service discovery to establish communication
               </Alert>
             )}

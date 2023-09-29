@@ -192,7 +192,7 @@ const ServiceModal = ({
               borderRadius="3px"
               mb={2}
             >
-              <AlertIcon className="alertIconStyle" data-testid="invalidappname"/>
+              <AlertIcon className="alertIconStyle" data-testid="invalidAppName"/>
               Application Name should not contain special characters.
             </Alert>
           )}
@@ -250,7 +250,7 @@ const ServiceModal = ({
               borderRadius="3px"
               mb={2}
             >
-              <AlertIcon className="alertIconStyle" data-testid='invalidpackage'/>
+              <AlertIcon className="alertIconStyle" data-testid='invalidPackage'/>
               Enter a valid package name
             </Alert>
           )}
@@ -306,7 +306,7 @@ const ServiceModal = ({
               borderRadius="3px"
               mb={2}
             >
-              <AlertIcon className="alertIconStyle" data-testid='invalidport'/>
+              <AlertIcon className="alertIconStyle" data-testid='invalidPort'/>
               Port Number is out of the valid range.
             </Alert>
           )}

@@ -152,7 +152,7 @@ const Sidebar = ({
           <Input
             mb={1}
             variant="outline"
-            data-testid="projectname"
+            data-testid="projectName"
             id="projectName"
             borderColor={
               !projectData.projectName || projectNameCheck ? "red" : "#CFCFCF"
@@ -171,7 +171,7 @@ const Sidebar = ({
           </div>
 
           <div
-          data-testid="uigateway"
+          data-testid="uiGateway"
             className={`dndnode output ${isUINodeEnabled ? "disabled" : ""}`}
             onDragStart={(event) => onDragStart(event, "default", "UI+Gateway")}
             draggable={!isUINodeEnabled}
@@ -221,7 +221,7 @@ const Sidebar = ({
                 draggable
               >
                 <img width="145px" 
-                data-testid="keycloaklogo"
+                data-testid="keycloakLogo"
                 src={keycloakIcon} alt="keycloaklogo"></img>
               </div>
             </>
@@ -241,7 +241,7 @@ const Sidebar = ({
           {selectedOption === "Database" && (
             <>
               <div
-              data-testid="dbpostgresql"
+              data-testid="dbPostgresql"
                 className="selectorNode"
                 onDragStart={(event) =>
                   onDragStart(event, "default", "Database_postgresql")
@@ -256,7 +256,7 @@ const Sidebar = ({
                 ></img>
               </div>
               <div
-              data-testid="dbmongo"
+              data-testid="dbMongo"
                 className="selectorNode"
                 onDragStart={(event) =>
                   onDragStart(event, "default", "Database_mongodb")
@@ -276,7 +276,7 @@ const Sidebar = ({
           <h1>
             <span
               className="nodeHeading"
-              data-testid="servicediscovery"
+              data-testid="serviceDiscovery"
               onClick={() => toggleOption("serviceDiscovery")}
             >
               Service Discovery{" "}
@@ -290,7 +290,7 @@ const Sidebar = ({
           {selectedOption === "serviceDiscovery" && (
             <>
               <div
-              data-testid="discoveryeureka"
+              data-testid="discoveryEureka"
                 className="selectorNode1"
                 onDragStart={(event) =>
                   onDragStart(event, "default", "Discovery_eureka")
@@ -309,7 +309,7 @@ const Sidebar = ({
           <h1>
             <span
               className="nodeHeading"
-              data-testid="loadmanagement"
+              data-testid="loadManagement"
               onClick={() => toggleOption("loadManagement")}
             >
               Log Management{" "}
@@ -336,7 +336,7 @@ const Sidebar = ({
           )}
         </div>
         <div className="saveProject"
-        data-testid="saveproject">
+        data-testid="saveProject">
           {initialized && keycloak.authenticated && (
             <Checkbox
               size="md"

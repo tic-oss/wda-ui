@@ -65,7 +65,7 @@ describe("ServiceModal Component", () => {
     fireEvent.change(screen.getByTestId('applicationName'), { target: { value: 'Invalid@Name' } });
 
     // Assert
-    expect(screen.getByTestId('invalidappname')).toBeInTheDocument();
+    expect(screen.getByTestId('invalidAppName')).toBeInTheDocument();
   });
   // User enters invalid package name and submits
   it('4 should show error message when invalid package name is entered and submitted', () => {
@@ -95,7 +95,7 @@ describe("ServiceModal Component", () => {
     fireEvent.click(screen.getByTestId('save'));
 
     // Assert
-    expect(screen.getByTestId('invalidpackage')).toBeInTheDocument();
+    expect(screen.getByTestId('invalidPackage')).toBeInTheDocument();
   });
   // User enters invalid port number and submits
   it('5 should show error message when invalid port number is entered and submitted', () => {

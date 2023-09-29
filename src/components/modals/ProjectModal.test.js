@@ -23,7 +23,7 @@ describe('ProjectModal', () => {
         const withExample = false;
 
         // Act
-        const { getByLabelText } = render(<ProjectModal
+        render(<ProjectModal
             nodeType={nodeType}
             serviceModal={serviceModal}
             handleContainerClose={handleContainerClose}

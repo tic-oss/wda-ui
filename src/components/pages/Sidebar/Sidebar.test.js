@@ -42,7 +42,7 @@ describe("Sidebar Component", () => {
 
     it("2 updates project name input correctly", () => {
         render(<Sidebar {...props} />);
-        const projectNameInput = screen.getByTestId("projectname");
+        const projectNameInput = screen.getByTestId("projectName");
 
         // Simulate user input and check if the state is updated
         fireEvent.change(projectNameInput, { target: { value: "TestProject" } });
@@ -76,7 +76,7 @@ describe("Sidebar Component", () => {
     });
     it(" 5 toggles Service Discovery option correctly", () => {
         render(<Sidebar {...props} />);
-        const sdOption = screen.getByTestId("servicediscovery");
+        const sdOption = screen.getByTestId("serviceDiscovery");
 
         // Initially, the selected option should be null
         expect(sdOption.querySelector("span").textContent).toContain("▼");
@@ -89,7 +89,7 @@ describe("Sidebar Component", () => {
     });
     it(" 6 toggles Log Management option correctly", () => {
         render(<Sidebar {...props} />);
-        const lmOption = screen.getByTestId("loadmanagement");
+        const lmOption = screen.getByTestId("loadManagement");
 
         // Initially, the selected option should be null
         expect(lmOption.querySelector("span").textContent).toContain("▼");
@@ -103,7 +103,7 @@ describe("Sidebar Component", () => {
 
     it(" 7 toggles Save Project checkbox correctly", () => {
         render(<Sidebar {...props} />);
-        const saveProjectCheckbox = screen.getByTestId("saveproject");
+        const saveProjectCheckbox = screen.getByTestId("saveProject");
 
         // Initially, the checkbox should be unchecked
         expect(saveProjectCheckbox.querySelector("input").checked).toBe(false);
@@ -130,7 +130,7 @@ describe("Sidebar Component", () => {
 
     it('10 should initiate a drag event for UI+Gateway node', () => {
         render(<Sidebar {...props} />);
-        const uiGatewayNode = screen.getByTestId("uigateway");
+        const uiGatewayNode = screen.getByTestId("uiGateway");
 
         const mockEvent = new MouseEvent('dragstart', {
             dataTransfer: {
@@ -149,7 +149,7 @@ describe("Sidebar Component", () => {
     });
     it('11 should initiate a drag event for UI+Gateway node', () => {
         render(<Sidebar {...props} />);
-        const uiGatewayNode = screen.getByTestId("uigateway");
+        const uiGatewayNode = screen.getByTestId("uiGateway");
 
         const mockEvent = new MouseEvent('dragstart', {
             dataTransfer: {
@@ -217,7 +217,7 @@ describe("Sidebar Component", () => {
 
         // Click the Database option
         fireEvent.click(dbOption);
-        const dbNode = screen.getByTestId("dbpostgresql");
+        const dbNode = screen.getByTestId("dbPostgresql");
 
         const mockEvent = new MouseEvent('dragstart', {
             dataTransfer: {
@@ -246,7 +246,7 @@ describe("Sidebar Component", () => {
 
         // Click the Database option
         fireEvent.click(dbOption);
-        const dbNode = screen.getByTestId("dbmongo");
+        const dbNode = screen.getByTestId("dbMongo");
 
         const mockEvent = new MouseEvent('dragstart', {
             dataTransfer: {
@@ -269,14 +269,14 @@ describe("Sidebar Component", () => {
     it('16 should initiate a drag event for Service Discovery Eureka node', () => {
         render(<Sidebar {...props} />);
 
-        const servicediscovery = screen.getByTestId("servicediscovery");
+        const servicediscovery = screen.getByTestId("serviceDiscovery");
 
         // Initially, the selected option should be null
         expect(servicediscovery.querySelector("span").textContent).toContain("▼");
 
         // Click the Database option
         fireEvent.click(servicediscovery);
-        const eurekaNode = screen.getByTestId("discoveryeureka");
+        const eurekaNode = screen.getByTestId("discoveryEureka");
 
         const mockEvent = new MouseEvent('dragstart', {
             dataTransfer: {
@@ -295,7 +295,7 @@ describe("Sidebar Component", () => {
     });
     it('17 should initiate a drag event for Log Management Elastic node', () => {
         render(<Sidebar {...props} />);
-        const lmOption = screen.getByTestId("loadmanagement");
+        const lmOption = screen.getByTestId("loadManagement");
 
 
 
@@ -333,7 +333,7 @@ describe("Sidebar Component", () => {
 
         // Click the Database option
         fireEvent.click(authOption);
-        const keyclock = screen.getByTestId("keycloaklogo");
+        const keyclock = screen.getByTestId("keycloakLogo");
 
         const mockEvent = new MouseEvent('dragstart', {
             dataTransfer: {

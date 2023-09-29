@@ -96,7 +96,7 @@ const DeploymentModal = ({
                 <FormControl>
                   <FormLabel>AWS Account ID</FormLabel>
                   <Input
-                  data-testid="awsaccountid"
+                  data-testid="awsAccountId"
                     mb={4}
                     variant="outline"
                     type="text"

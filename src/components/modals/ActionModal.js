@@ -31,7 +31,7 @@ const ActionModal = ({
             {actionType === "delete" ? "Delete" : "Confirm Navigation"}
           </AlertDialogHeader>
 
-          <AlertDialogBody  data-testid ="suredelete">
+          <AlertDialogBody  data-testid ="sureDelete">
             {actionType === "delete" ? (
               <>
                 Are you sure to delete your project "

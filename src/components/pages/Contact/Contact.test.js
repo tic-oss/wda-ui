@@ -7,7 +7,7 @@ describe("Contact Page", () => {
     // Displays the Created by TIC@coMakeIT footer
     it('1 should display the Created by TIC@coMakeIT footer', () => {
         const { getByTestId } = render(<Contact />);
-        const footerElement = getByTestId('createdby');
+        const footerElement = getByTestId('createdBy');
         expect(footerElement).toBeInTheDocument();
         expect(footerElement).toHaveTextContent('Created by TIC@coMakeIT');
     });
