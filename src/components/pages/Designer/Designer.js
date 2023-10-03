@@ -1025,6 +1025,11 @@ const Designer = ({ update }) => {
       };
       updatedEdges[edge.id].selected = true;
     }
+    for(var highLighted in updatedEdges){
+      if(highLighted.id!==edge.id){
+        updatedEdges[highLighted.id].selected=false;
+      }
+    }
     setEdges(updatedEdges);
   };
 
@@ -1056,7 +1061,7 @@ const Designer = ({ update }) => {
       ...UpdatedEdges[IsEdgeopen].data,
       ...Data,
     };
-
+    UpdatedEdges[IsEdgeopen].selected = false;
     setEdges(UpdatedEdges);
     setEdgeopen(false);
   };
