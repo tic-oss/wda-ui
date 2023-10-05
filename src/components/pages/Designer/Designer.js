@@ -191,12 +191,7 @@ const Designer = ({ update }) => {
                   nodeBoundingBox.top < otherNodeBoundingBox.bottom
                 ) {
                   child = otherNode;
-                  // flag=true;
                 }
-                // else {
-                //   childNode = otherNode;
-                //   flag = false;
-                // }
               }
             }
           }
@@ -208,7 +203,6 @@ const Designer = ({ update }) => {
           };
         }
         if (child) {
-          console.log("yesssssssssssss",child)
           const relativePosition = {
             x: child.position.x - node.position.x,
             y: child.position.y - node.position.y,
@@ -219,22 +213,9 @@ const Designer = ({ update }) => {
             position: relativePosition,
           };
           return updatedChild;
-        } 
-        //  else if (!flag){
-        //   console.log("nooooooooooooo",childNode)
-        //   const relativePosition = {
-        //     x: childNode.position.x - node.position.x,
-        //     y: childNode.position.y - node.position.y,
-        //   };
-        //   return {
-        //     ...childNode,
-        //     parentNode: null,
-        //     position: node.positionAbsolute,
-        //   };
-        // }
+        }
       }
     });
-    console.log(updatedNodes,"idsfisodfisdfjkj")
     setNodes((prev) => {
       let copy = { ...prev };
       for (const key in updatedNodes) {
@@ -567,11 +548,12 @@ const Designer = ({ update }) => {
           };
           return updatedChild;
         } else {
-          return {
-            ...node,
-            parentNode: null,
-            position: node.positionAbsolute,
-          };
+          if (node.type === "ResizableNode")
+            return {
+              ...node,
+              parentNode: null,
+              position: node.positionAbsolute,
+            };
         }
       }
     });
@@ -777,10 +759,8 @@ const Designer = ({ update }) => {
       updatedEdges[IsEdgeopen].markerEnd = {
         color: "#3367d9",
         type: MarkerType.ArrowClosed,
-      }    
-    }
-  
-     else {
+      };
+    } else {
       for (const edgeId in updatedEdges) {
         const targetType = edgeId.split("-")[1];
         const sourceType = edgeId.split("-")[0];
@@ -796,26 +776,26 @@ const Designer = ({ update }) => {
             color: "#bcbaba",
             type: MarkerType.ArrowClosed,
           };
-        } else if (targetType.split("_")[0] === "Database" ) {
-          if(updatedEdges[edgeId]?.selected===false){
-          updatedEdges[edgeId].style = { stroke: "#000" };
-          updatedEdges[edgeId].markerEnd = {
-            color: "#000",
-            type: MarkerType.ArrowClosed,
-          };
-        }
-        }
-        else if (targetType.split("_")[0] === "group"
-        ||sourceType.split("_")[0] === "group") {
-          if(updatedEdges[edgeId]?.selected===false){
-          updatedEdges[edgeId].style = { stroke: "black" };
-          updatedEdges[edgeId].markerEnd = {
-            color: "#000",
-            type: MarkerType.ArrowClosed,
-          };
-        }
-        } 
-        else {
+        } else if (targetType.split("_")[0] === "Database") {
+          if (updatedEdges[edgeId]?.selected === false) {
+            updatedEdges[edgeId].style = { stroke: "#000" };
+            updatedEdges[edgeId].markerEnd = {
+              color: "#000",
+              type: MarkerType.ArrowClosed,
+            };
+          }
+        } else if (
+          targetType.split("_")[0] === "group" ||
+          sourceType.split("_")[0] === "group"
+        ) {
+          if (updatedEdges[edgeId]?.selected === false) {
+            updatedEdges[edgeId].style = { stroke: "black" };
+            updatedEdges[edgeId].markerEnd = {
+              color: "#000",
+              type: MarkerType.ArrowClosed,
+            };
+          }
+        } else {
           updatedEdges[edgeId].style = { stroke: "red" };
           updatedEdges[edgeId].markerEnd = {
             color: "red",
@@ -823,9 +803,8 @@ const Designer = ({ update }) => {
           };
         }
       }
-    }  
+    }
   }, [IsEdgeopen, edges]);
-  
 
   useEffect(() => {
     document.title = "WDA";
@@ -1191,39 +1170,52 @@ const Designer = ({ update }) => {
     let updatedEdges = { ...edges };
     const sourceType = edge.source.split("_")[0];
     const targetType = edge.target.split("_")[0];
-    if (sourceType != "Database" && targetType != "Database"){
+    if (sourceType != "Database" && targetType != "Database") {
       Object.values(updatedEdges).forEach((edge) => {
-        if(edge.id.split("-")[1].split("_")[0]==="Database"){
-      edge.style = { stroke: "black" }; 
-      edge.markerEnd = {
-        color: "black",
-        type: MarkerType.ArrowClosed,
-      }; 
-      edge.selected = false; 
+        if (edge.id.split("-")[1].split("_")[0] === "Database") {
+          edge.style = { stroke: "black" };
+          edge.markerEnd = {
+            color: "black",
+            type: MarkerType.ArrowClosed,
+          };
+          edge.selected = false;
+        } else if (
+          edge.id.split("-")[0].split("_")[0] === "group" ||
+          edge.id.split("-")[1].split("_")[0] === "group"
+        ) {
+          edge.style = { stroke: "black" };
+          edge.markerEnd = {
+            color: "black",
+            type: MarkerType.ArrowClosed,
+          };
+          edge.selected = false;
+        }
+      });
     }
-    else if(edge.id.split("-")[0].split("_")[0]==="group"||edge.id.split("-")[1].split("_")[0]==="group"){
-    edge.style = { stroke: "black" }; 
-    edge.markerEnd = {
-      color: "black",
-      type: MarkerType.ArrowClosed,
-    }; 
-    edge.selected = false; 
-  }
-    });
-  }
     if (
       (sourceType === "UI" && targetType === "Service") ||
       (sourceType === "Service" && targetType === "Service")
     ) {
       setEdgeopen(edge.id);
       setCurrentEdge(edges[edge.id].data);
-      updatedEdges[edge.id].selected=true;
-    }
-    else if (targetType === 'Database') {
+      updatedEdges[edge.id].selected = true;
+    } else if (targetType === "Database") {
       Object.values(updatedEdges).forEach((edge) => {
-        edge.style = { stroke: "black" }; 
-        edge.markerEnd = "black"; 
-        edge.selected = false; 
+        edge.style = { stroke: "black" };
+        edge.markerEnd = "black";
+        edge.selected = false;
+      });
+      updatedEdges[edge.id].style = { stroke: "#3367d9" };
+      updatedEdges[edge.id].markerEnd = {
+        color: "#3367d9",
+        type: MarkerType.ArrowClosed,
+      };
+      updatedEdges[edge.id].selected = true;
+    } else if (targetType === "group" || sourceType === "group") {
+      Object.values(updatedEdges).forEach((edge) => {
+        edge.style = { stroke: "black" };
+        edge.markerEnd = "black";
+        edge.selected = false;
       });
       updatedEdges[edge.id].style = { stroke: "#3367d9" };
       updatedEdges[edge.id].markerEnd = {
@@ -1232,22 +1224,9 @@ const Designer = ({ update }) => {
       };
       updatedEdges[edge.id].selected = true;
     }
-    else if (targetType === 'group'|| sourceType==='group') {
-      Object.values(updatedEdges).forEach((edge) => {
-        edge.style = { stroke: "black" }; 
-        edge.markerEnd = "black"; 
-        edge.selected = false; 
-      });
-      updatedEdges[edge.id].style = { stroke: "#3367d9" };
-      updatedEdges[edge.id].markerEnd = {
-        color: "#3367d9",
-        type: MarkerType.ArrowClosed,
-      };
-      updatedEdges[edge.id].selected = true;
-    }
-    for(var highLighted in updatedEdges){
-      if(highLighted.id!==edge.id){
-        updatedEdges[highLighted.id].selected=false;
+    for (var highLighted in updatedEdges) {
+      if (highLighted.id !== edge.id) {
+        updatedEdges[highLighted.id].selected = false;
       }
     }
     setEdges(updatedEdges);
