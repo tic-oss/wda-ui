@@ -399,6 +399,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
               width="120px"
               src={azure}
               alt="azurelogo"
+              data-testid="azurelogo"
               onClick={() => handleImageClick("azure")}
               className={`image-button ${
                 selectedImage === "azure" ? "selected-image-button" : ""
@@ -431,6 +432,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
                   mb={4}
                   variant="outline"
                   id="subscriptionId"
+                  data-testid="subscriptionId"
                   borderColor={"black"}
                   maxLength="36"
                   value={DeploymentData.subscriptionId}
@@ -471,6 +473,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
                   mb={4}
                   variant="outline"
                   id="tenantId"
+                  data-testid="tenantId"
                   borderColor={"black"}
                   maxLength="36"
                   value={DeploymentData.tenantId}
@@ -599,6 +602,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
                   mb={4}
                   variant="outline"
                   id="clusterName"
+                  data-testid="clusterName"
                   borderColor={"black"}
                   maxLength="63"
                   value={DeploymentData.clusterName}
@@ -766,6 +770,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
                   mb={4}
                   variant="outline"
                   id="monitoring"
+                  data-testid="monitoring"
                   borderColor={"black"}
                   value={DeploymentData.monitoring}
                   onChange={(e) => handleData("monitoring", e.target.value)}

@@ -18,6 +18,7 @@ function CustomServiceNode({ data, isConnectable, selected }) {
           name={serviceDiscoveryType}
           src={eureka}
           alt="eureka"
+          data-testid="eureka"
         />
       </div>
     </>
