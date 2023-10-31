@@ -1,6 +1,6 @@
-projectKey=react_UI_29sep
+projectKey=wda-ui
 serverUrl=http://localhost:9000
 serverVersion=10.2.1.78527
-dashboardUrl=http://localhost:9000/dashboard?id=react_UI_29sep
-ceTaskId=AYrfOW_SZf7BeiSjy8FF
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AYrfOW_SZf7BeiSjy8FF
+dashboardUrl=http://localhost:9000/dashboard?id=wda-ui
+ceTaskId=AYuEg4vVb5v1wDKN5DKH
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AYuEg4vVb5v1wDKN5DKH
