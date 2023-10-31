@@ -43,7 +43,7 @@ const UiDataModal = ({
     UiData.packageName === "" ||
     UiData.serverPort === "";
 
-  const reservedPorts = ["5601", "9200", "15021", "20001", "3000", "8080"];
+  const reservedPorts = ["5601", "9200", "15021", "20001", "3000", "8080", "9080"];
   const serverPortCheck =
     UiData.serverPort && reservedPorts.includes(UiData.serverPort);
 
