@@ -25,7 +25,6 @@ const ServiceModal = ({
   uniquePortNumbers,
 }) => {
   const IntialState = {
-    
     label: "Service",
     applicationName: "",
     applicationFramework: "java",
@@ -163,7 +162,7 @@ const ServiceModal = ({
         }}
       >
         <ModalHeader className="heading">Service</ModalHeader>
-        <ModalCloseButton data-testid = 'close' mt={1.5} />
+        <ModalCloseButton mt={1.5} />
         <ModalBody>
           <FormControl>
             <FormLabel>Application name</FormLabel>
@@ -171,11 +170,10 @@ const ServiceModal = ({
               mb={4}
               variant="outline"
               id="applicationName"
-              data-testid="applicationName"
               placeholder="Name"
               borderColor={
                 duplicateApplicationNameError ||
-                !ApplicationData.applicationName
+                  !ApplicationData.applicationName
                   ? "red"
                   : "black"
               }
@@ -192,7 +190,7 @@ const ServiceModal = ({
               borderRadius="3px"
               mb={2}
             >
-              <AlertIcon className="alertIconStyle" data-testid="invalidAppName"/>
+              <AlertIcon className="alertIconStyle" />
               Application Name should not contain special characters.
             </Alert>
           )}
@@ -234,7 +232,6 @@ const ServiceModal = ({
               mb={4}
               variant="outline"
               id="packagename"
-              data-testid="packagename"
               placeholder="packageName"
               borderColor={!ApplicationData.packageName ? "red" : "black"}
               maxLength="32"
@@ -250,7 +247,7 @@ const ServiceModal = ({
               borderRadius="3px"
               mb={2}
             >
-              <AlertIcon className="alertIconStyle" data-testid='invalidPackage'/>
+              <AlertIcon className="alertIconStyle" />
               Enter a valid package name
             </Alert>
           )}
@@ -261,7 +258,6 @@ const ServiceModal = ({
               defaultValue={9000}
               variant="outline"
               id="serverport"
-              data-testid="serverport"
               placeholder="Port number"
               borderColor={
                 PortNumberError || serverPortCheck || PortNumberRangeCheck
@@ -306,7 +302,7 @@ const ServiceModal = ({
               borderRadius="3px"
               mb={2}
             >
-              <AlertIcon className="alertIconStyle" data-testid='invalidPort'/>
+              <AlertIcon className="alertIconStyle" />
               Port Number is out of the valid range.
             </Alert>
           )}
@@ -337,7 +333,6 @@ const ServiceModal = ({
             onClick={() =>
               !duplicateApplicationNameError && onSubmit(ApplicationData)
             }
-            data-testid = 'save'
             style={{ display: "block", margin: "0 auto" }}
             isDisabled={
               isSubmitDisabled ||

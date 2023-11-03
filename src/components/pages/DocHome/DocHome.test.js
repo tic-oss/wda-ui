@@ -1,5 +1,5 @@
 import { React } from 'react-dom';
-import {createRoot} from 'react-dom/client';
+import { createRoot } from 'react-dom/client';
 import DocHome from './DocHome';
 
 describe('DocHome component', () => {
@@ -9,7 +9,7 @@ describe('DocHome component', () => {
         const div = document.createElement('div');
         document.body.appendChild(div);
         const root = createRoot(div);
-    root.render(<DocHome />);
+        root.render(<DocHome />);
         root.unmount();
         div.remove();
     });

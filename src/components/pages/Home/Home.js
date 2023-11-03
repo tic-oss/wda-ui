@@ -26,7 +26,7 @@ function Home() {
           <Link to="/canvasToCode">
             <Button size="lg" colorScheme="blue">
               CanvasToCode
-                  </Button>
+            </Button>
           </Link>
         </Box>
         <Box flex="1">
