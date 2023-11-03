@@ -401,27 +401,24 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
               alt="azurelogo"
               data-testid="azurelogo"
               onClick={() => handleImageClick("azure")}
-              className={`image-button ${
-                selectedImage === "azure" ? "selected-image-button" : ""
-              }`}
+              className={`image-button ${selectedImage === "azure" ? "selected-image-button" : ""
+                }`}
             />
             <img
               width="120px"
               src={aws}
               alt="awslogo"
               onClick={() => handleImageClick("aws")}
-              className={`image-button ${
-                selectedImage === "aws" ? "selected-image-button" : ""
-              }`}
+              className={`image-button ${selectedImage === "aws" ? "selected-image-button" : ""
+                }`}
             />
             <img
               width="120px"
               src={minikube}
               alt="minikubelogo"
               onClick={() => handleImageClick("minikube")}
-              className={`image-button ${
-                selectedImage === "minikube" ? "selected-image-button" : ""
-              }`}
+              className={`image-button ${selectedImage === "minikube" ? "selected-image-button" : ""
+                }`}
             />
           </div>
           {selectedImage === "azure" && (
@@ -672,7 +669,7 @@ const DeployModal = ({ onSubmit, isLoading, projectData, onClose, update }) => {
                       }
                     />
                     {DeploymentData.kubernetesStorageClassName &&
-                    !storageClassCheck ? (
+                      !storageClassCheck ? (
                       <Alert
                         status="error"
                         height="38px"

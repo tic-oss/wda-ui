@@ -1,5 +1,5 @@
 import React from "react";
-import { render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import Contact from "./Contact"; // Import your component
 import '@testing-library/jest-dom'
 
@@ -20,5 +20,5 @@ describe("Contact Page", () => {
         expect(linkElement).toHaveAttribute('target', '_blank');
         expect(linkElement).toHaveAttribute('rel', 'noopener noreferrer');
     });
-         
+
 });

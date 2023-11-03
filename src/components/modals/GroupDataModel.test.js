@@ -28,7 +28,7 @@ describe("GroupDataModal", () => {
     expect(getByText("Group")).toBeInTheDocument();
     expect(getByPlaceholderText("Name")).toHaveValue("Test Group");
   });
-  
+
   it("2 updates groupData.label when input changes", () => {
     const { getByPlaceholderText } = render(<GroupDataModal {...defaultProps} />);
     const input = getByPlaceholderText("Name");
@@ -56,7 +56,7 @@ describe("GroupDataModal", () => {
     const saveButton = getByText("Save");
     fireEvent.click(saveButton);
 
-    
+
   });
-  
+
 });

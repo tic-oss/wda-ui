@@ -10,7 +10,7 @@ import {
   Select,
 } from "@chakra-ui/react";
 import React from "react";
-import"./modals.css";
+import "./modals.css";
 
 function ReadOnlyEdgeModal({
   edgeModal,
@@ -24,7 +24,7 @@ function ReadOnlyEdgeModal({
       <ModalOverlay />
       <ModalContent>
         <ModalHeader className="heading">Communication</ModalHeader>
-        <ModalCloseButton mt={1.5}/>
+        <ModalCloseButton mt={1.5} />
         <ModalBody>
           <FormControl>
             <FormLabel>Type</FormLabel>

@@ -38,12 +38,12 @@ const DeploymentModal = ({
         isOpen={cloudModal}
         onClose={handleContainerClose}
         isCentered={true}
-       
+
       >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
-            <h2  data-testid="deploymentInfrastructure">Deployment Infrastructure</h2>
+            <h2 data-testid="deploymentInfrastructure">Deployment Infrastructure</h2>
           </ModalHeader>
           <ModalCloseButton mt={1.5} onClick={handleContainerClose} />
           <ModalBody
@@ -97,7 +97,7 @@ const DeploymentModal = ({
                 <FormControl>
                   <FormLabel>AWS Account ID</FormLabel>
                   <Input
-                  data-testid="awsAccountId"
+                    data-testid="awsAccountId"
                     mb={4}
                     variant="outline"
                     type="text"

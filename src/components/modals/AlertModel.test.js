@@ -10,10 +10,10 @@ describe('AlertModal Component', () => {
     render(
       <AlertModal isOpen={true} onClose={onClose} name={name} />
     );
-    
-      expect(screen.getByTestId('choiceText'))
+
+    expect(screen.getByTestId('choiceText'))
 
   });
- 
- 
+
+
 });

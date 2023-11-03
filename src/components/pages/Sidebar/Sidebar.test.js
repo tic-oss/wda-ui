@@ -116,7 +116,7 @@ describe("Sidebar Component", () => {
 
         // Click the Next button without selecting authentication type
         fireEvent.click(nextButton);
-        
+
         expect(getByText("Please ensure there exists atleast one application")).toBeInTheDocument();
 
     });

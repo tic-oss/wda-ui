@@ -233,7 +233,7 @@ const UiDataModal = ({
               borderRadius="3px"
               mb={2}
             >
-              <AlertIcon className="alertIconStyle"/>
+              <AlertIcon className="alertIconStyle" />
               Enter a valid package name
             </Alert>
           )}

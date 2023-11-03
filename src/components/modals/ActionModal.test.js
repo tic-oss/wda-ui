@@ -90,6 +90,6 @@ describe('ActionModal Component', () => {
     );
 
     // Make assertions based on the modal being closed
-   expect(screen.queryByText('Delete')).not.toBeInTheDocument();
+    expect(screen.queryByText('Delete')).not.toBeInTheDocument();
   });
 });

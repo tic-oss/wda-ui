@@ -38,7 +38,7 @@ describe('ProjectModal', () => {
         const packageNameInput = screen.getByTestId("packageName");
         const serverPortInput = screen.getByTestId("serverPort");
         expect(packageNameInput.value).toBe("");
-         
+
         expect(serverPortInput.value).toBe("");
     });
     // Modal opens with correct header and fields
@@ -52,7 +52,7 @@ describe('ProjectModal', () => {
         const applicationFramework = "";
         const packageName = "";
         const serverPort = "";
-         
+
 
         // Act
         render(<ProjectModal
@@ -64,18 +64,18 @@ describe('ProjectModal', () => {
             applicationFramework={applicationFramework}
             packageName={packageName}
             serverPort={serverPort}
-             
+
         />);
 
         // Assert
         expect(screen.getByText("UI")).toBeInTheDocument();
         expect(screen.getByTestId("applicationName")).toBeInTheDocument();
-        expect(screen.getByTestId("clientFramework")).toBeInTheDocument(); 
-        expect(screen.getByTestId("packageName")).toBeInTheDocument(); 
-        expect(screen.getByTestId("serverPort")).toBeInTheDocument(); 
-         
+        expect(screen.getByTestId("clientFramework")).toBeInTheDocument();
+        expect(screen.getByTestId("packageName")).toBeInTheDocument();
+        expect(screen.getByTestId("serverPort")).toBeInTheDocument();
+
     });
-    
+
     // Modal closes when close button is clicked
     it('3 should close modal when close button is clicked', () => {
         // Arrange
