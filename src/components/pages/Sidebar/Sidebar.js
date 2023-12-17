@@ -12,6 +12,7 @@ import { ArrowRightIcon, ArrowLeftIcon } from "@chakra-ui/icons";
 import { useLocation } from "react-router-dom";
 import "./Sidebar.css";
 
+
 const Sidebar = ({
   isUINodeEnabled,
   Service_Discovery_Data,
@@ -132,18 +133,16 @@ const Sidebar = ({
   return (
     <>
       <aside
-        className={`sidebar-container ${
-          isContentVisible ? "sidebar-container-expanded" : ""
-        }`}
+        className={`sidebar-container ${isContentVisible ? "sidebar-container-expanded" : ""
+          }`}
       >
         <ArrowRightIcon
           className={`expand-style ${isContentVisible ? "hide" : ""}`}
           onClick={handleToggleContent}
         />
         <div
-          className={`sideBlock ${
-            isContentVisible ? "side-content visible" : ""
-          }`}
+          className={`sideBlock ${isContentVisible ? "side-content visible" : ""
+            }`}
         >
           <div className="applicationDetails">
             <FormLabel className="projectName">Project Name</FormLabel>
@@ -152,6 +151,7 @@ const Sidebar = ({
           <Input
             mb={1}
             variant="outline"
+            data-testid="projectName"
             id="projectName"
             borderColor={
               !projectData.projectName || projectNameCheck ? "red" : "#CFCFCF"
@@ -170,6 +170,7 @@ const Sidebar = ({
           </div>
 
           <div
+            data-testid="uiGateway"
             className={`dndnode output ${isUINodeEnabled ? "disabled" : ""}`}
             onDragStart={(event) => onDragStart(event, "default", "UI+Gateway")}
             draggable={!isUINodeEnabled}
@@ -182,6 +183,7 @@ const Sidebar = ({
           </div>
 
           <div
+            data-testid="service"
             className="dndnode output"
             onDragStart={(event) => onDragStart(event, "default", "Service")}
             draggable
@@ -189,6 +191,7 @@ const Sidebar = ({
             Service
           </div>
           <div
+            data-testid="group"
             className="dndnode output"
             onDragStart={(event) => onDragStart(event, "default", "Group")}
             draggable
@@ -197,6 +200,7 @@ const Sidebar = ({
           </div>
           <h1
             className="nodeHeading"
+            data-testid="authentication"
             onClick={() => toggleOption("Authentication")}
           >
             Authentication{" "}
@@ -215,11 +219,16 @@ const Sidebar = ({
                 }
                 draggable
               >
-                <img width="145px" src={keycloakIcon} alt="keycloaklogo"></img>
+                <img width="145px"
+                  data-testid="keycloakLogo"
+                  src={keycloakIcon} alt="keycloaklogo"></img>
               </div>
             </>
           )}
-          <h1 className="nodeHeading" onClick={() => toggleOption("Database")}>
+          <h1 className="nodeHeading"
+            data-testid="database"
+
+            onClick={() => toggleOption("Database")}>
             Database{" "}
             {selectedOption === "Database" ? (
               <span>&#x25B2;</span>
@@ -227,9 +236,11 @@ const Sidebar = ({
               <span>&#x25BC;</span>
             )}
           </h1>
+
           {selectedOption === "Database" && (
             <>
               <div
+                data-testid="dbPostgresql"
                 className="selectorNode"
                 onDragStart={(event) =>
                   onDragStart(event, "default", "Database_postgresql")
@@ -244,6 +255,7 @@ const Sidebar = ({
                 ></img>
               </div>
               <div
+                data-testid="dbMongo"
                 className="selectorNode"
                 onDragStart={(event) =>
                   onDragStart(event, "default", "Database_mongodb")
@@ -263,6 +275,7 @@ const Sidebar = ({
           <h1>
             <span
               className="nodeHeading"
+              data-testid="serviceDiscovery"
               onClick={() => toggleOption("serviceDiscovery")}
             >
               Service Discovery{" "}
@@ -276,6 +289,7 @@ const Sidebar = ({
           {selectedOption === "serviceDiscovery" && (
             <>
               <div
+                data-testid="discoveryEureka"
                 className="selectorNode1"
                 onDragStart={(event) =>
                   onDragStart(event, "default", "Discovery_eureka")
@@ -294,6 +308,7 @@ const Sidebar = ({
           <h1>
             <span
               className="nodeHeading"
+              data-testid="loadManagement"
               onClick={() => toggleOption("loadManagement")}
             >
               Log Management{" "}
@@ -307,6 +322,7 @@ const Sidebar = ({
           {selectedOption === "loadManagement" && (
             <>
               <div
+                data-testid="load_eck"
                 className="selectorNode6"
                 onDragStart={(event) =>
                   onDragStart(event, "default", "Load_eck")
@@ -318,7 +334,8 @@ const Sidebar = ({
             </>
           )}
         </div>
-        <div className="saveProject">
+        <div className="saveProject"
+          data-testid="saveProject">
           {initialized && keycloak.authenticated && (
             <Checkbox
               size="md"
@@ -330,6 +347,7 @@ const Sidebar = ({
             </Checkbox>
           )}
           <Button
+            data-testid="next"
             onClick={handleButtonClick}
             mt={4}
             border="2px"
@@ -337,6 +355,7 @@ const Sidebar = ({
             width="100px"
             type="submit"
             isDisabled={checkEdge() || checkDisabled()}
+
           >
             Next
           </Button>
@@ -359,7 +378,9 @@ const Sidebar = ({
             <></>
           )}
           {!authenticationData ? (
-            <p className="errorMessage">Please select Authentication type</p>
+            <p className="errorMessage">
+              Please select Authentication type
+            </p>
           ) : (
             <></>
           )}

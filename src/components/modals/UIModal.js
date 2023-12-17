@@ -155,6 +155,7 @@ const UiDataModal = ({
               mb={4}
               variant="outline"
               id="applicationName"
+              data-testid="applicationName"
               placeholder="Name"
               borderColor={
                 duplicateApplicationNameError && !UiData.applicationName
@@ -196,6 +197,7 @@ const UiDataModal = ({
               mb={4}
               variant="outline"
               id="clientFramework"
+              data-testid="clientFramework"
               borderColor={"black"}
               value={UiData.clientFramework}
               onChange={(e) => handleData("clientFramework", e.target.value)}
@@ -215,6 +217,7 @@ const UiDataModal = ({
               mb={4}
               variant="outline"
               id="packageName"
+              data-testid="packageName"
               placeholder="packageName"
               borderColor={!UiData.packageName ? "red" : "black"}
               maxLength="32"
@@ -240,6 +243,7 @@ const UiDataModal = ({
               mb={4}
               variant="outline"
               id="serverPort"
+              data-testid="serverPort"
               placeholder="Port number"
               borderColor={
                 PortNumberError || serverPortCheck || PortNumberRangeCheck
@@ -290,7 +294,7 @@ const UiDataModal = ({
           )}
           <FormLabel>Background Color</FormLabel>
           <div className="colorSelectBlock">
-            <div
+            <div data-testid="colorSelection color1"
               className="colorSelection color1"
               onClick={() => handleColorClick("#ffc9c9")}
             ></div>

@@ -173,7 +173,7 @@ const ServiceModal = ({
               placeholder="Name"
               borderColor={
                 duplicateApplicationNameError ||
-                !ApplicationData.applicationName
+                  !ApplicationData.applicationName
                   ? "red"
                   : "black"
               }

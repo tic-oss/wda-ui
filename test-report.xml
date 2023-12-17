@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testExecutions version="1">
+  <file path="/home/kavithat/wda-ui/src/components/modals/UIModal.test.js">
+  </file>
+  <file path="/home/kavithat/wda-ui/src/components/modals/GroupDataModel.test.js">
+  </file>
+  <file path="/home/kavithat/wda-ui/src/components/modals/ReadOnlyEdgeModal.test.js">
+  </file>
+  <file path="/home/kavithat/wda-ui/src/components/modals/DeploymentModal.test.js">
+  </file>
+  <file path="/home/kavithat/wda-ui/src/components/modals/AlertModel.test.js">
+  </file>
+  <file path="/home/kavithat/wda-ui/src/components/modals/EdgeModal.test.js">
+  </file>
+  <file path="/home/kavithat/wda-ui/src/components/pages/DocHome/DocHome.test.js">
+    <testCase name="DocHome component should open the documentation URL in a new window and redirect" duration="19"/>
+  </file>
+  <file path="/home/kavithat/wda-ui/src/components/modals/ProjectModal.test.js">
+  </file>
+  <file path="/home/kavithat/wda-ui/src/components/modals/ActionModal.test.js">
+  </file>
+  <file path="/home/kavithat/wda-ui/src/components/modals/DeployModal.test.js">
+  </file>
+  <file path="/home/kavithat/wda-ui/src/components/pages/Contact/Contact.test.js">
+  </file>
+  <file path="/home/kavithat/wda-ui/src/components/pages/Sidebar/Sidebar.test.js">
+  </file>
+  <file path="/home/kavithat/wda-ui/src/components/customNodes/CustomLoadNode.test.js">
+  </file>
+  <file path="/home/kavithat/wda-ui/src/components/pages/Home/Home.test.js">
+  </file>
+  <file path="/home/kavithat/wda-ui/src/components/customNodes/CustomAuthNode.test.js">
+  </file>
+  <file path="/home/kavithat/wda-ui/src/components/pages/Footer/Footer.test.js">
+  </file>
+</testExecutions>
