@@ -1,0 +1,4 @@
+@welltested
+class Testcase{
+
+}

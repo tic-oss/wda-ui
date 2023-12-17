@@ -12,6 +12,7 @@ import { ArrowRightIcon, ArrowLeftIcon } from "@chakra-ui/icons";
 import { useLocation } from "react-router-dom";
 import "./Sidebar.css";
 
+
 const Sidebar = ({
   isUINodeEnabled,
   Service_Discovery_Data,
