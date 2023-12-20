@@ -42,7 +42,6 @@ let group_id = 1;
 const getId = (type = "") => {
   if (type === "Service") return `Service_${service_id++}`;
   else if (type === "Database") return `Database_${database_id++}`;
-  else if (type === "Authentication") return "Authentication_1";
   else if (type === "UI+Gateway") return "UI";
   else if (type === "Group") return `group_${group_id++}`;
   return "Id";
@@ -200,7 +199,7 @@ const Designer = ({ update }) => {
               setIsEmptyUiSubmit(false);
             } else if (change.id.startsWith("Service")) {
               setIsEmptyServiceSubmit(false);
-            } else if (change.id === "serviceDiscoveryType") {
+            } else if (change.id === "eureka") {
               setIsServiceDiscovery(false);
               setServiceDiscoveryCount(0);
               setIsServiceDiscovery(false);
@@ -215,7 +214,7 @@ const Designer = ({ update }) => {
               }
             } else if (change.id === "cloudProvider") {
               setCloudProviderCount(0);
-            } else if (change.id === "authenticationType") {
+            } else if (change.id === "oauth2") {
               setAuthProviderCount(0);
             } else if (change.id === "Localenvironment") {
               setLocalenvironmentCount(0);
@@ -451,7 +450,7 @@ const Designer = ({ update }) => {
       } else if (name.startsWith("Discovery") && servicecount === 0) {
         const serviceDiscoveryType = name.split("_").splice(1)[0];
         const newNode = {
-          id: "serviceDiscoveryType",
+          id: "eureka",
           type: "selectorNode1",
           position,
           data: { serviceDiscoveryType: serviceDiscoveryType },
@@ -465,7 +464,7 @@ const Designer = ({ update }) => {
       } else if (name.startsWith("Auth") && authcount === 0) {
         const authenticationType = name.split("_").splice(1)[0];
         const newNode = {
-          id: "authenticationType",
+          id: "oauth2",
           type: "selectorNode3",
           position,
           data: { authenticationType: authenticationType },
@@ -507,7 +506,7 @@ const Designer = ({ update }) => {
       } else if (name.startsWith("Load") && loadcount === 0) {
         const logManagementType = name.split("_").splice(1)[0];
         const newNode = {
-          id: "logManagement",
+          id: "eck",
           type: "selectorNode6",
           position,
           data: { logManagementType: logManagementType },
@@ -867,8 +866,8 @@ const Designer = ({ update }) => {
     setUpdated(false);
     const NewNodes = { ...nodes };
     const NewEdges = { ...edges };
-    let Service_Discovery_Data = nodes["serviceDiscoveryType"]?.data;
-    let authenticationData = nodes["authenticationType"]?.data;
+    let Service_Discovery_Data = nodes["eureka"]?.data;
+    let authenticationData = nodes["oauth2"]?.data;
     let logManagementData = nodes["logManagement"]?.data;
     if (logManagementData && Data?.deployment)
       Data.deployment.enableECK = "true";
@@ -1184,8 +1183,8 @@ const Designer = ({ update }) => {
         </div>
         <Sidebar
           isUINodeEnabled={isUINodeEnabled}
-          Service_Discovery_Data={nodes["serviceDiscoveryType"]?.data}
-          authenticationData={nodes["authenticationType"]?.data}
+          Service_Discovery_Data={nodes["eureka"]?.data}
+          authenticationData={nodes["oauth2"]?.data}
           nodes={nodes}
           onSubmit={onsubmit}
           saveMetadata={saveMetadata}
