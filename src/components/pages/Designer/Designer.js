@@ -33,6 +33,8 @@ import ShowContents from "../CanvasContent/CanvasContent";
 import "../../../App.css";
 import "./Designer.css";
 
+import Functions from "./utils";
+
 let service_id = 1;
 let database_id = 1;
 let group_id = 1;
@@ -320,54 +322,54 @@ const Designer = ({ update }) => {
     updated,
   ]);
 
-  const addEdge = (edgeParams, edges) => {
-    setUpdated(true);
-    const edgeId = `${edgeParams.source}-${edgeParams.target}`;
-    const databaseEdge = edgeParams?.target.startsWith("Database");
-    const groupEdge =
-      edgeParams?.target.startsWith("group") ||
-      edgeParams?.source.startsWith("group");
-    if (!edges[edgeId] && !databaseEdge && !groupEdge) {
-      edges[edgeId] = {
-        id: edgeId,
-        ...edgeParams,
-        markerEnd: {
-          color: "#ff0000",
-          type: MarkerType.ArrowClosed,
-        },
-        style: { stroke: "#ff0000" },
-      };
-    }
-    if (databaseEdge || groupEdge) {
-      edges[edgeId] = {
-        id: edgeId,
-        ...edgeParams,
-        markerEnd: {
-          color: "black",
-          type: MarkerType.ArrowClosed,
-        },
-        style: { stroke: "black" },
-      };
-    }
-    return { ...edges };
-  };
+  // const addEdge = (edgeParams, edges) => {
+  //   setUpdated(true);
+  //   const edgeId = `${edgeParams.source}-${edgeParams.target}`;
+  //   const databaseEdge = edgeParams?.target.startsWith("Database");
+  //   const groupEdge =
+  //     edgeParams?.target.startsWith("group") ||
+  //     edgeParams?.source.startsWith("group");
+  //   if (!edges[edgeId] && !databaseEdge && !groupEdge) {
+  //     edges[edgeId] = {
+  //       id: edgeId,
+  //       ...edgeParams,
+  //       markerEnd: {
+  //         color: "#ff0000",
+  //         type: MarkerType.ArrowClosed,
+  //       },
+  //       style: { stroke: "#ff0000" },
+  //     };
+  //   }
+  //   if (databaseEdge || groupEdge) {
+  //     edges[edgeId] = {
+  //       id: edgeId,
+  //       ...edgeParams,
+  //       markerEnd: {
+  //         color: "black",
+  //         type: MarkerType.ArrowClosed,
+  //       },
+  //       style: { stroke: "black" },
+  //     };
+  //   }
+  //   return { ...edges };
+  // };
 
-  const updateEdge = (oldEdge, newConnection, edges, Nodes) => {
-    setUpdated(true);
-    let newEdgeId = newConnection.source + "-" + newConnection.target;
-    newConnection.markerEnd = { type: MarkerType.ArrowClosed };
-    newConnection.type = "straight";
-    newConnection.data = {};
-    let updatedEdges = {
-      ...edges,
-      [newEdgeId]: { id: newEdgeId, ...newConnection },
-    };
-    if (oldEdge.id !== newEdgeId) delete updatedEdges[oldEdge.id];
-    const oldSourceNode = Nodes[oldEdge.source];
-    delete oldSourceNode?.data?.prodDatabaseType;
-    setNodes((prev) => ({ ...prev, [oldSourceNode.id]: oldSourceNode }));
-    return updatedEdges;
-  };
+  // const updateEdge = (oldEdge, newConnection, edges, Nodes) => {
+  //   setUpdated(true);
+  //   let newEdgeId = newConnection.source + "-" + newConnection.target;
+  //   newConnection.markerEnd = { type: MarkerType.ArrowClosed };
+  //   newConnection.type = "straight";
+  //   newConnection.data = {};
+  //   let updatedEdges = {
+  //     ...edges,
+  //     [newEdgeId]: { id: newEdgeId, ...newConnection },
+  //   };
+  //   if (oldEdge.id !== newEdgeId) delete updatedEdges[oldEdge.id];
+  //   const oldSourceNode = Nodes[oldEdge.source];
+  //   delete oldSourceNode?.data?.prodDatabaseType;
+  //   setNodes((prev) => ({ ...prev, [oldSourceNode.id]: oldSourceNode }));
+  //   return updatedEdges;
+  // };
 
   const onNodesChange = useCallback((setShowDiv, edges, changes = []) => {
     setUpdated(true);
@@ -522,20 +524,20 @@ const Designer = ({ update }) => {
     });
   }, []);
   
-  const onEdgeUpdate = useCallback((Nodes, oldEdge, newConnection) => {
-    setUpdated(true);
-    edgeUpdateSuccessful.current = true;
-    if (
-      !(
-        newConnection.target.startsWith("Database") &&
-        Nodes[newConnection.source]?.data["prodDatabaseType"]
-      )
-    ) {
-      // Validation of service Node to check if it has database or not
-      setEdges((els) => updateEdge(oldEdge, newConnection, els, Nodes));
-      MergeData(newConnection.source, newConnection.target, Nodes);
-    }
-  }, []);
+  // const onEdgeUpdate = useCallback((Nodes, oldEdge, newConnection) => {
+  //   setUpdated(true);
+  //   edgeUpdateSuccessful.current = true;
+  //   if (
+  //     !(
+  //       newConnection.target.startsWith("Database") &&
+  //       Nodes[newConnection.source]?.data["prodDatabaseType"]
+  //     )
+  //   ) {
+  //     // Validation of service Node to check if it has database or not
+  //     setEdges((els) => Functions.updateEdge(oldEdge, newConnection, els, Nodes, setNodes, MarkerType));
+  //     Functions.MergeData(newConnection.source, newConnection.target, Nodes, setNodes);
+  //   }
+  // }, []);
 
   const onEdgeUpdateEnd = useCallback((Nodes, edge) => {
     if (!edgeUpdateSuccessful.current) {
@@ -565,18 +567,6 @@ const Designer = ({ update }) => {
     setShowDiv(false);
   }, []);
 
-  const onclick = (e, node) => {
-    const Id = e.target.dataset.id || e.target.name || node.id;
-    if (Id) {
-      const type = Id.split("_")[0];
-      setNodeType(type);
-      if (type === "aws" || type === "azure") {
-        setCurrentNode(nodes["cloudProvider"].data);
-      } else setCurrentNode(nodes[Id].data);
-      setopen(Id);
-    }
-    setNodeClick(Id);
-  };
   const clear = () => {
     setuserData({});
     setNodes({});
@@ -601,7 +591,6 @@ const Designer = ({ update }) => {
       path: "",
     });
   };
-
   const onDrop = useCallback(
     (
       event,
@@ -760,9 +749,6 @@ const Designer = ({ update }) => {
     },
     [reactFlowInstance]
   );
-
- 
-
   const onChange = (Data) => {
     setUpdated(true);
     if (Data.applicationType === "gateway") {
@@ -1072,8 +1058,8 @@ const Designer = ({ update }) => {
       let isServiceConnected = Nodes[params.source]?.data["prodDatabaseType"];
       if (!isServiceConnected && !targetNode.data.isConnected) {
         targetNode.data.isConnected = true;
-        setEdges((eds) => addEdge(params, eds, Nodes));
-        MergeData(params.source, params.target, Nodes);
+        setEdges((eds) => Functions.addEdge(params, eds, Nodes, MarkerType));
+        Functions.MergeData(params.source, params.target, Nodes, setNodes);
       }
       if (!isServiceConnected) {
         let updatedNodes = { ...Nodes };
@@ -1085,7 +1071,7 @@ const Designer = ({ update }) => {
     } else if (
       !(targetNode.id.startsWith("UI") && sourceNode.id.startsWith("Service"))
     ) {
-      setEdges((eds) => addEdge(params, eds, Nodes));
+      setEdges((eds) => Functions.addEdge(params, eds, Nodes, MarkerType));
     }
   }, []);
 
@@ -1120,7 +1106,9 @@ const Designer = ({ update }) => {
             onEdgesChange={(changes) => onEdgesChange(nodes, changes)}
             onConnect={(params) => onConnect(params, nodes)}
             onInit={setReactFlowInstance}
-            onNodeDrag={onclick}
+            // onNodeDrag={onclick}
+            onNodeDrag={(e, node) => Functions.onclick(e, node, setNodeType, setCurrentNode, setopen, setNodeClick, nodes)}
+            onNodeClick={(e, node) => Functions.onclick(e, node, setNodeType, setCurrentNode, setopen, setNodeClick, nodes)}deleteKeyCode={["Backspace", "Delete"]}
             onDrop={(e) =>
               onDrop(
                 e,
@@ -1133,11 +1121,10 @@ const Designer = ({ update }) => {
             }
             onDragOver={onDragOver}
             onDragLeave={() => setShowDiv(Object.keys(nodes).length === 0)}
-            onNodeClick={onclick}
-            deleteKeyCode={["Backspace", "Delete"]}
+            // onNodeClick={onclick}
             fitView
             onEdgeUpdate={(oldEdge, newConnection) =>
-              onEdgeUpdate(nodes, oldEdge, newConnection)
+              Functions.onEdgeUpdate(nodes, oldEdge, newConnection, edgeUpdateSuccessful, setEdges, setNodes)
             }
             onEdgeUpdateStart={onEdgeUpdateStart}
             onEdgeUpdateEnd={(_, edge) => onEdgeUpdateEnd(nodes, edge)}
