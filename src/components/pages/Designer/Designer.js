@@ -8,8 +8,6 @@ import ReactFlow, {
   BackgroundVariant,
 } from "reactflow";
 import "reactflow/dist/style.css";
-import { Button } from "@chakra-ui/react";
-import { ArrowRightIcon } from "@chakra-ui/icons";
 import Sidebar from "../Sidebar/Sidebar";
 import { saveAs } from "file-saver";
 import ServiceModal from "../../modals/ServiceModal";
@@ -28,11 +26,11 @@ import resizeableNode from "../../customNodes/ResizeableNode";
 import groupNode from "../../customNodes/GroupNode";
 import { useLocation } from "react-router-dom";
 import { useHistory } from "react-router-dom";
-import "../../../App.css";
 import EdgeModal from "../../modals/EdgeModal";
 import { useKeycloak } from "@react-keycloak/web";
-import { FiUploadCloud } from "react-icons/fi";
 import ActionModal from "../../modals/ActionModal";
+import ShowContents from "../CanvasContent/CanvasContent";
+import "../../../App.css";
 import "./Designer.css";
 
 let service_id = 1;
@@ -79,7 +77,6 @@ const Designer = ({ update }) => {
   const location = useLocation();
   const [userData, setuserData] = useState({});
   const [serviceInputCheck, setServiceInputCheck] = useState({});
-
   const [updated, setUpdated] = useState(false);
   const [isVisibleDialog, setVisibleDialog] = useState(false);
   const history = useHistory();
@@ -87,11 +84,241 @@ const Designer = ({ update }) => {
     onOk: false,
     path: "",
   });
-
+  const [edges, setEdges] = useState({});
+  const [reactFlowInstance, setReactFlowInstance] = useState(null);
+  const [Isopen, setopen] = useState(false);
+  const [nodeClick, setNodeClick] = useState(false);
+  const [IsEdgeopen, setEdgeopen] = useState(false);
+  const [CurrentNode, setCurrentNode] = useState({});
+  const [CurrentEdge, setCurrentEdge] = useState({});
+  const edgeUpdateSuccessful = useRef(true);
+  const [isUINodeEnabled, setIsUINodeEnabled] = useState(false);
+  const [isMessageBroker, setIsMessageBroker] = useState(false);
+  const [isServiceDiscovery, setIsServiceDiscovery] = useState(false);
+  const [saveMetadata, setsaveMetadata] = useState(false);
+  const [showDiv, setShowDiv] = useState(false);
+  const [uniqueApplicationNames, setUniqueApplicationNames] = useState([]);
+  const [uniquePortNumbers, setUniquePortNumbers] = useState([]);
+  const [selectedColor, setSelectedColor] = useState("");
+  const onEdgeUpdateStart = useCallback(() => {
+    edgeUpdateSuccessful.current = false;
+  }, []);
   const handleGoToIntendedPage = useCallback(
     (location) => history.push(location),
     [history]
   );
+
+  useEffect(() => {
+    let updatedEdges = { ...edges };
+    if (IsEdgeopen) {
+      updatedEdges[IsEdgeopen].style = { stroke: "#3367d9" };
+      updatedEdges[IsEdgeopen].markerEnd = {
+        color: "#3367d9",
+        type: MarkerType.ArrowClosed,
+      }    
+    }
+  
+     else {
+      for (const edgeId in updatedEdges) {
+        const targetType = edgeId.split("-")[1];
+        const sourceType = edgeId.split("-")[0];
+        if (updatedEdges[edgeId].label === "Rest") {
+          updatedEdges[edgeId].style = { stroke: "black" };
+          updatedEdges[edgeId].markerEnd = {
+            color: "black",
+            type: MarkerType.ArrowClosed,
+          };
+        } else if (updatedEdges[edgeId].label === "RabbitMQ") {
+          updatedEdges[edgeId].style = { stroke: "#bcbaba" };
+          updatedEdges[edgeId].markerEnd = {
+            color: "#bcbaba",
+            type: MarkerType.ArrowClosed,
+          };
+        } else if (targetType.split("_")[0] === "Database" ) {
+          if(updatedEdges[edgeId]?.selected===false){
+          updatedEdges[edgeId].style = { stroke: "#000" };
+          updatedEdges[edgeId].markerEnd = {
+            color: "#000",
+            type: MarkerType.ArrowClosed,
+          };
+        }
+        }
+        else if (targetType.split("_")[0] === "group"
+        ||sourceType.split("_")[0] === "group") {
+          if(updatedEdges[edgeId]?.selected===false){
+          updatedEdges[edgeId].style = { stroke: "black" };
+          updatedEdges[edgeId].markerEnd = {
+            color: "#000",
+            type: MarkerType.ArrowClosed,
+          };
+        }
+        } 
+        else {
+          updatedEdges[edgeId].style = { stroke: "red" };
+          updatedEdges[edgeId].markerEnd = {
+            color: "red",
+            type: MarkerType.ArrowClosed,
+          };
+        }
+      }
+    }  
+  }, [IsEdgeopen, edges]);
+  useEffect(() => {
+    document.title = "WDA";
+    setShowDiv(true);
+    let data = location?.state;
+    if (!data) {
+      if (
+        localStorage?.data !== undefined &&
+        localStorage.data !== null &&
+        localStorage.data?.metadata?.nodes !== ""
+      ) {
+        data = JSON.parse(localStorage.data);
+        setuserData(data);
+        if (data?.metadata?.nodes) {
+          const nodee = data?.metadata?.nodes;
+          if (!(Object.keys(nodee).length === 0)) {
+            setShowDiv(false);
+            setNodes(data?.metadata.nodes);
+          }
+        }
+        if (data.metadata?.edges) {
+          setEdges(data?.metadata.edges);
+        }
+        if (data?.updated) {
+          setUpdated(data.updated);
+        }
+      }
+    } else {
+      setuserData(data);
+      if (data?.metadata?.nodes) {
+        setShowDiv(false);
+        setNodes(data?.metadata.nodes);
+      }
+      if (data.metadata?.edges) {
+        setEdges(data?.metadata.edges);
+      }
+    }
+    if (
+      data != null &&
+      !(Object.keys(data).length === 0) &&
+      data?.metadata?.nodes
+    ) {
+      const nodes = data?.metadata?.nodes;
+      if (!(Object.keys(nodes).length === 0)) setShowDiv(false);
+      for (const key in nodes) {
+        if (key.toLowerCase().includes("servicediscovery")) {
+          setIsServiceDiscovery(true);
+          setServiceDiscoveryCount(1);
+        } else if (key.toLowerCase().includes("service")) {
+          service_id++;
+          setUniqueApplicationNames((prev) => [
+            ...prev,
+            data.metadata.nodes[key].data.label,
+          ]);
+          setUniquePortNumbers((prev) => [
+            ...prev,
+            data.metadata.nodes[key].data.serverPort,
+          ]);
+          setServiceInputCheck((prev) => ({
+            ...prev,
+            [key.id]: false,
+          }));
+        } else if (key.toLowerCase().includes("database")) {
+          database_id++;
+        } else if (key.toLowerCase().includes("group")) {
+          group_id++;
+        } else if (key.toLowerCase().includes("auth")) {
+          setAuthProviderCount(1);
+        } else if (key.toLowerCase().includes("messagebroker")) {
+          setIsMessageBroker(true);
+          setMessageBrokerCount(1);
+        } else if (key.toLowerCase().includes("logmanagement")) {
+          setLogManagementCount(1);
+        } else if (key.toLowerCase().includes("localenvironment")) {
+          setLocalenvironmentCount(1);
+        } else if (key.toLowerCase().includes("ui")) {
+          setUniquePortNumbers((prev) => [
+            ...prev,
+            data.metadata.nodes[key].data.serverPort,
+          ]);
+          setIsUINodeEnabled(true);
+        }
+      }
+    }
+    return () => {
+      localStorage.clear();
+      service_id = 1;
+      database_id = 1;
+      group_id = 1;
+      setUpdated(false);
+    };
+  }, []);
+  useEffect(() => {
+    if (update && userData.project_id) {
+      var data = { ...userData };
+      data.metadata.nodes = nodes;
+      (data.metadata ??= {}).edges = edges;
+      data.updated = updated;
+      setuserData(data);
+      if (!(Object.keys(data).length === 0)) {
+        localStorage.data = JSON.stringify(data);
+      }
+    }
+    if (!update) {
+      if (localStorage.data && JSON.parse(localStorage.data).projectName) {
+        userData.projectName = JSON.parse(localStorage.data).projectName;
+      }
+      if (localStorage.data && JSON.parse(localStorage.data).updated) {
+        userData.updated = JSON.parse(localStorage.data).updated;
+      }
+      var udata = { ...userData };
+      (udata.metadata ??= {}).nodes = nodes;
+      udata.metadata.edges = edges;
+      if (
+        localStorage.data &&
+        JSON.parse(localStorage.data)?.metadata?.deployment
+      ) {
+        udata.metadata.deployment = JSON.parse(
+          localStorage.data
+        ).metadata.deployment;
+      }
+      setuserData(udata);
+      if (!(Object.keys(udata).length === 0)) {
+        localStorage.data = JSON.stringify(udata);
+      }
+    }
+  }, [nodes, edges]);
+  useEffect(() => {
+    if (triggerExit.onOk) {
+      handleGoToIntendedPage(triggerExit.path);
+      localStorage.clear();
+      clear();
+      setShowDiv(true);
+    }
+    let unblock;
+    if (updated) {
+      unblock = history.block((location) => {
+        setVisibleDialog(true);
+        setTriggerExit((obj) => ({ ...obj, path: location.pathname }));
+        if (triggerExit.onOk) {
+          return true;
+        }
+        return false;
+      });
+    }
+    return () => {
+      if (unblock) {
+        unblock();
+      }
+    };
+  }, [
+    handleGoToIntendedPage,
+    history,
+    triggerExit.onOk,
+    triggerExit.path,
+    updated,
+  ]);
 
   const addEdge = (edgeParams, edges) => {
     setUpdated(true);
@@ -252,7 +479,7 @@ const Designer = ({ update }) => {
     });
   }, []);
 
-  const [edges, setEdges] = useState({});
+  
   const onEdgesChange = useCallback((Nodes, changes = []) => {
     setUpdated(true);
     setEdges((oldEdges) => {
@@ -294,23 +521,7 @@ const Designer = ({ update }) => {
       return updatedEdges;
     });
   }, []);
-
-  const [reactFlowInstance, setReactFlowInstance] = useState(null);
-  const [Isopen, setopen] = useState(false);
-  const [nodeClick, setNodeClick] = useState(false);
-  const [IsEdgeopen, setEdgeopen] = useState(false);
-  const [CurrentNode, setCurrentNode] = useState({});
-  const [CurrentEdge, setCurrentEdge] = useState({});
-  const edgeUpdateSuccessful = useRef(true);
-  const [isUINodeEnabled, setIsUINodeEnabled] = useState(false);
-  const [isMessageBroker, setIsMessageBroker] = useState(false);
-  const [isServiceDiscovery, setIsServiceDiscovery] = useState(false);
-  const [saveMetadata, setsaveMetadata] = useState(false);
-
-  const onEdgeUpdateStart = useCallback(() => {
-    edgeUpdateSuccessful.current = false;
-  }, []);
-
+  
   const onEdgeUpdate = useCallback((Nodes, oldEdge, newConnection) => {
     setUpdated(true);
     edgeUpdateSuccessful.current = true;
@@ -550,220 +761,7 @@ const Designer = ({ update }) => {
     [reactFlowInstance]
   );
 
-  useEffect(() => {
-    let updatedEdges = { ...edges };
-    if (IsEdgeopen) {
-      updatedEdges[IsEdgeopen].style = { stroke: "#3367d9" };
-      updatedEdges[IsEdgeopen].markerEnd = {
-        color: "#3367d9",
-        type: MarkerType.ArrowClosed,
-      }    
-    }
-  
-     else {
-      for (const edgeId in updatedEdges) {
-        const targetType = edgeId.split("-")[1];
-        const sourceType = edgeId.split("-")[0];
-        if (updatedEdges[edgeId].label === "Rest") {
-          updatedEdges[edgeId].style = { stroke: "black" };
-          updatedEdges[edgeId].markerEnd = {
-            color: "black",
-            type: MarkerType.ArrowClosed,
-          };
-        } else if (updatedEdges[edgeId].label === "RabbitMQ") {
-          updatedEdges[edgeId].style = { stroke: "#bcbaba" };
-          updatedEdges[edgeId].markerEnd = {
-            color: "#bcbaba",
-            type: MarkerType.ArrowClosed,
-          };
-        } else if (targetType.split("_")[0] === "Database" ) {
-          if(updatedEdges[edgeId]?.selected===false){
-          updatedEdges[edgeId].style = { stroke: "#000" };
-          updatedEdges[edgeId].markerEnd = {
-            color: "#000",
-            type: MarkerType.ArrowClosed,
-          };
-        }
-        }
-        else if (targetType.split("_")[0] === "group"
-        ||sourceType.split("_")[0] === "group") {
-          if(updatedEdges[edgeId]?.selected===false){
-          updatedEdges[edgeId].style = { stroke: "black" };
-          updatedEdges[edgeId].markerEnd = {
-            color: "#000",
-            type: MarkerType.ArrowClosed,
-          };
-        }
-        } 
-        else {
-          updatedEdges[edgeId].style = { stroke: "red" };
-          updatedEdges[edgeId].markerEnd = {
-            color: "red",
-            type: MarkerType.ArrowClosed,
-          };
-        }
-      }
-    }  
-  }, [IsEdgeopen, edges]);
-  
-
-  useEffect(() => {
-    document.title = "WDA";
-    setShowDiv(true);
-    let data = location?.state;
-    if (!data) {
-      if (
-        localStorage?.data !== undefined &&
-        localStorage.data !== null &&
-        localStorage.data?.metadata?.nodes !== ""
-      ) {
-        data = JSON.parse(localStorage.data);
-        setuserData(data);
-        if (data?.metadata?.nodes) {
-          const nodee = data?.metadata?.nodes;
-          if (!(Object.keys(nodee).length === 0)) {
-            setShowDiv(false);
-            setNodes(data?.metadata.nodes);
-          }
-        }
-        if (data.metadata?.edges) {
-          setEdges(data?.metadata.edges);
-        }
-        if (data?.updated) {
-          setUpdated(data.updated);
-        }
-      }
-    } else {
-      setuserData(data);
-      if (data?.metadata?.nodes) {
-        setShowDiv(false);
-        setNodes(data?.metadata.nodes);
-      }
-      if (data.metadata?.edges) {
-        setEdges(data?.metadata.edges);
-      }
-    }
-    if (
-      data != null &&
-      !(Object.keys(data).length === 0) &&
-      data?.metadata?.nodes
-    ) {
-      const nodes = data?.metadata?.nodes;
-      if (!(Object.keys(nodes).length === 0)) setShowDiv(false);
-      for (const key in nodes) {
-        if (key.toLowerCase().includes("servicediscovery")) {
-          setIsServiceDiscovery(true);
-          setServiceDiscoveryCount(1);
-        } else if (key.toLowerCase().includes("service")) {
-          service_id++;
-          setUniqueApplicationNames((prev) => [
-            ...prev,
-            data.metadata.nodes[key].data.label,
-          ]);
-          setUniquePortNumbers((prev) => [
-            ...prev,
-            data.metadata.nodes[key].data.serverPort,
-          ]);
-          setServiceInputCheck((prev) => ({
-            ...prev,
-            [key.id]: false,
-          }));
-        } else if (key.toLowerCase().includes("database")) {
-          database_id++;
-        } else if (key.toLowerCase().includes("group")) {
-          group_id++;
-        } else if (key.toLowerCase().includes("auth")) {
-          setAuthProviderCount(1);
-        } else if (key.toLowerCase().includes("messagebroker")) {
-          setIsMessageBroker(true);
-          setMessageBrokerCount(1);
-        } else if (key.toLowerCase().includes("logmanagement")) {
-          setLogManagementCount(1);
-        } else if (key.toLowerCase().includes("localenvironment")) {
-          setLocalenvironmentCount(1);
-        } else if (key.toLowerCase().includes("ui")) {
-          setUniquePortNumbers((prev) => [
-            ...prev,
-            data.metadata.nodes[key].data.serverPort,
-          ]);
-          setIsUINodeEnabled(true);
-        }
-      }
-    }
-    return () => {
-      localStorage.clear();
-      service_id = 1;
-      database_id = 1;
-      group_id = 1;
-      setUpdated(false);
-    };
-  }, []);
-  useEffect(() => {
-    if (update && userData.project_id) {
-      var data = { ...userData };
-      data.metadata.nodes = nodes;
-      (data.metadata ??= {}).edges = edges;
-      data.updated = updated;
-      setuserData(data);
-      if (!(Object.keys(data).length === 0)) {
-        localStorage.data = JSON.stringify(data);
-      }
-    }
-    if (!update) {
-      if (localStorage.data && JSON.parse(localStorage.data).projectName) {
-        userData.projectName = JSON.parse(localStorage.data).projectName;
-      }
-      if (localStorage.data && JSON.parse(localStorage.data).updated) {
-        userData.updated = JSON.parse(localStorage.data).updated;
-      }
-      var udata = { ...userData };
-      (udata.metadata ??= {}).nodes = nodes;
-      udata.metadata.edges = edges;
-      if (
-        localStorage.data &&
-        JSON.parse(localStorage.data)?.metadata?.deployment
-      ) {
-        udata.metadata.deployment = JSON.parse(
-          localStorage.data
-        ).metadata.deployment;
-      }
-      setuserData(udata);
-      if (!(Object.keys(udata).length === 0)) {
-        localStorage.data = JSON.stringify(udata);
-      }
-    }
-  }, [nodes, edges]);
-
-  useEffect(() => {
-    if (triggerExit.onOk) {
-      handleGoToIntendedPage(triggerExit.path);
-      localStorage.clear();
-      clear();
-      setShowDiv(true);
-    }
-    let unblock;
-    if (updated) {
-      unblock = history.block((location) => {
-        setVisibleDialog(true);
-        setTriggerExit((obj) => ({ ...obj, path: location.pathname }));
-        if (triggerExit.onOk) {
-          return true;
-        }
-        return false;
-      });
-    }
-    return () => {
-      if (unblock) {
-        unblock();
-      }
-    };
-  }, [
-    handleGoToIntendedPage,
-    history,
-    triggerExit.onOk,
-    triggerExit.path,
-    updated,
-  ]);
+ 
 
   const onChange = (Data) => {
     setUpdated(true);
@@ -838,8 +836,6 @@ const Designer = ({ update }) => {
     setNodes(UpdatedNodes);
     setopen(false);
   };
-
-  const [showDiv, setShowDiv] = useState(false);
 
   const MergeData = (sourceId, targetId, Nodes) => {
     const sourceType = sourceId.split("_")[0];
@@ -970,7 +966,7 @@ const Designer = ({ update }) => {
     let updatedEdges = { ...edges };
     const sourceType = edge.source.split("_")[0];
     const targetType = edge.target.split("_")[0];
-    if (sourceType != "Database" && targetType != "Database"){
+    if (sourceType !== "Database" && targetType !== "Database"){
       Object.values(updatedEdges).forEach((edge) => {
         if(edge.id.split("-")[1].split("_")[0]==="Database"){
       edge.style = { stroke: "black" }; 
@@ -1096,11 +1092,7 @@ const Designer = ({ update }) => {
   const UpdateSave = () => {
     setsaveMetadata((prev) => !prev);
   };
-
-  const [uniqueApplicationNames, setUniqueApplicationNames] = useState([]);
-  const [uniquePortNumbers, setUniquePortNumbers] = useState([]);
-  const [selectedColor, setSelectedColor] = useState("");
-
+  
   const handleColorClick = (color) => {
     let UpdatedNodes = { ...nodes };
     setSelectedColor(color);
@@ -1113,27 +1105,7 @@ const Designer = ({ update }) => {
       <ReactFlowProvider>
         <div className="reactflow-wrapper" ref={reactFlowWrapper}>
           {showDiv && (
-            <div className="contentBlock">
-              <div className="iconBlock">
-                <FiUploadCloud className="iconStyle" />
-              </div>
-              <div className="designText">
-                Design your application architecture here
-              </div>
-              <div className="subText">
-                Click next to auto generate code and setup infrastructure
-              </div>
-              <Button
-                mt={4}
-                border="2px"
-                borderColor="#3367d9"
-                alignContent="center"
-                color="#3367d9"
-                className="dragDropStyle"
-              >
-                Drag & Drop <ArrowRightIcon className="arrowIconStyle" />
-              </Button>
-            </div>
+           <ShowContents/>
           )}
           <ReactFlow
             nodes={Object.values(nodes)}
