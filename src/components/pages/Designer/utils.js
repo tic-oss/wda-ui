@@ -56,10 +56,11 @@ const updateEdge = (
   newConnection,
   edges,
   Nodes,
+  updated,
   setNodes,
   MarkerType
 ) => {
-  // setUpdated(true);
+  updated=true;
   let newEdgeId = newConnection.source + "-" + newConnection.target;
   newConnection.markerEnd = { type: MarkerType.ArrowClosed };
   newConnection.type = "straight";
@@ -100,13 +101,13 @@ const useEdgeUpdate = () => {
       Nodes,
       oldEdge,
       newConnection,
-      setUpdated,
+      updated,
       edgeUpdateSuccessful,
       setEdges,
       setNodes,
       MarkerType
     ) => {
-      setUpdated(true);
+      updated = true;
       edgeUpdateSuccessful.current = true;
       if (
         !(
@@ -201,7 +202,6 @@ const useHandleNodesChange = () => {
     []
   );
 };
-
 
 const Functions = {
   onclick: onclick,

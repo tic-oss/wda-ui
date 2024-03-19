@@ -68,9 +68,6 @@ const Designer = ({ update }) => {
   const [nodes, setNodes] = useState({});
   const [nodeType, setNodeType] = useState(null);
   const [ServiceDiscoveryCount, setServiceDiscoveryCount] = useState(0);
-  const [MessageBrokerCount, setMessageBrokerCount] = useState(0);
-  const [CloudProviderCount, setCloudProviderCount] = useState(0);
-  const [LocalenvironmentCount, setLocalenvironmentCount] = useState(0);
   const [LogManagemntCount, setLogManagementCount] = useState(0);
   const [AuthProviderCount, setAuthProviderCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -232,13 +229,8 @@ const Designer = ({ update }) => {
           group_id++;
         } else if (key.toLowerCase().includes("auth")) {
           setAuthProviderCount(1);
-        } else if (key.toLowerCase().includes("messagebroker")) {
-          setIsMessageBroker(true);
-          setMessageBrokerCount(1);
         } else if (key.toLowerCase().includes("logmanagement")) {
           setLogManagementCount(1);
-        } else if (key.toLowerCase().includes("localenvironment")) {
-          setLocalenvironmentCount(1);
         } else if (key.toLowerCase().includes("ui")) {
           setUniquePortNumbers((prev) => [
             ...prev,
@@ -322,55 +314,6 @@ const Designer = ({ update }) => {
     updated,
   ]);
 
-  // const addEdge = (edgeParams, edges) => {
-  //   setUpdated(true);
-  //   const edgeId = `${edgeParams.source}-${edgeParams.target}`;
-  //   const databaseEdge = edgeParams?.target.startsWith("Database");
-  //   const groupEdge =
-  //     edgeParams?.target.startsWith("group") ||
-  //     edgeParams?.source.startsWith("group");
-  //   if (!edges[edgeId] && !databaseEdge && !groupEdge) {
-  //     edges[edgeId] = {
-  //       id: edgeId,
-  //       ...edgeParams,
-  //       markerEnd: {
-  //         color: "#ff0000",
-  //         type: MarkerType.ArrowClosed,
-  //       },
-  //       style: { stroke: "#ff0000" },
-  //     };
-  //   }
-  //   if (databaseEdge || groupEdge) {
-  //     edges[edgeId] = {
-  //       id: edgeId,
-  //       ...edgeParams,
-  //       markerEnd: {
-  //         color: "black",
-  //         type: MarkerType.ArrowClosed,
-  //       },
-  //       style: { stroke: "black" },
-  //     };
-  //   }
-  //   return { ...edges };
-  // };
-
-  // const updateEdge = (oldEdge, newConnection, edges, Nodes) => {
-  //   setUpdated(true);
-  //   let newEdgeId = newConnection.source + "-" + newConnection.target;
-  //   newConnection.markerEnd = { type: MarkerType.ArrowClosed };
-  //   newConnection.type = "straight";
-  //   newConnection.data = {};
-  //   let updatedEdges = {
-  //     ...edges,
-  //     [newEdgeId]: { id: newEdgeId, ...newConnection },
-  //   };
-  //   if (oldEdge.id !== newEdgeId) delete updatedEdges[oldEdge.id];
-  //   const oldSourceNode = Nodes[oldEdge.source];
-  //   delete oldSourceNode?.data?.prodDatabaseType;
-  //   setNodes((prev) => ({ ...prev, [oldSourceNode.id]: oldSourceNode }));
-  //   return updatedEdges;
-  // };
-
   const onNodesChange = useCallback((setShowDiv, edges, changes = []) => {
     setUpdated(true);
     setNodes((oldNodes) => {
@@ -419,11 +362,7 @@ const Designer = ({ update }) => {
             };
             break;
           case "remove": // Delete Functionality
-            if (change.id === "messageBroker") {
-              setIsMessageBroker(false);
-              onCheckEdge(edges);
-              setMessageBrokerCount(0);
-            } else if (change.id === "UI") {
+            if (change.id === "UI") {
               setIsUINodeEnabled(false);
               setIsEmptyUiSubmit(false);
             } else if (change.id.startsWith("Service")) {
@@ -441,12 +380,8 @@ const Designer = ({ update }) => {
                 }
                 setEdges(updatedEdges);
               }
-            } else if (change.id === "cloudProvider") {
-              setCloudProviderCount(0);
             } else if (change.id === "oauth2") {
               setAuthProviderCount(0);
-            } else if (change.id === "Localenvironment") {
-              setLocalenvironmentCount(0);
             } else if (change.id === "logManagement") {
               setLogManagementCount(0);
             }
@@ -523,21 +458,6 @@ const Designer = ({ update }) => {
       return updatedEdges;
     });
   }, []);
-  
-  // const onEdgeUpdate = useCallback((Nodes, oldEdge, newConnection) => {
-  //   setUpdated(true);
-  //   edgeUpdateSuccessful.current = true;
-  //   if (
-  //     !(
-  //       newConnection.target.startsWith("Database") &&
-  //       Nodes[newConnection.source]?.data["prodDatabaseType"]
-  //     )
-  //   ) {
-  //     // Validation of service Node to check if it has database or not
-  //     setEdges((els) => Functions.updateEdge(oldEdge, newConnection, els, Nodes, setNodes, MarkerType));
-  //     Functions.MergeData(newConnection.source, newConnection.target, Nodes, setNodes);
-  //   }
-  // }, []);
 
   const onEdgeUpdateEnd = useCallback((Nodes, edge) => {
     if (!edgeUpdateSuccessful.current) {
@@ -581,9 +501,7 @@ const Designer = ({ update }) => {
     service_id = 1;
     setAuthProviderCount(0);
     setIsMessageBroker(false);
-    setMessageBrokerCount(0);
     setLogManagementCount(0);
-    setLocalenvironmentCount(0);
     setIsUINodeEnabled(false);
     setUpdated(false);
     setTriggerExit({
@@ -685,7 +603,6 @@ const Designer = ({ update }) => {
         };
         setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
         setIsMessageBroker(true);
-        setMessageBrokerCount(1);
       } else if (name.startsWith("Group")) {
         const newNode = {
           id: getId(name),
@@ -701,8 +618,6 @@ const Designer = ({ update }) => {
           },
         };
         setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
-      } else if (name.startsWith("MessageBroker") && messagecount >= 1) {
-        setMessageBrokerCount(2);
       } else if (name.startsWith("Load") && loadcount === 0) {
         const logManagementType = name.split("_").splice(1)[0];
         const newNode = {
@@ -716,19 +631,6 @@ const Designer = ({ update }) => {
         setLogManagementCount(1);
       } else if (name.startsWith("Load") && loadcount >= 1) {
         setLogManagementCount(2);
-      } else if (name.startsWith("Localenvironment") && Localenvcount === 0) {
-        const Localenvironment = name.split("_").splice(1)[0];
-        const newNode = {
-          id: "Localenvironment",
-          type: "selectorNode7",
-          position,
-          data: { Localenvironment: Localenvironment },
-          style: { border: "1px solid", padding: "4px 4px" },
-        };
-        setNodes((nds) => ({ ...nds, [newNode.id]: newNode }));
-        setLocalenvironmentCount(1);
-      } else if (name.startsWith("Localenvironment") && Localenvcount >= 1) {
-        setLocalenvironmentCount(2);
       } else {
         const newNode = {
           id: getId("UI+Gateway"),
@@ -823,27 +725,6 @@ const Designer = ({ update }) => {
     setopen(false);
   };
 
-  const MergeData = (sourceId, targetId, Nodes) => {
-    const sourceType = sourceId.split("_")[0];
-    const targetType = targetId.split("_")[0];
-
-    if (sourceType !== targetType) {
-      if (
-        (sourceType === "Service" && targetType === "Database") ||
-        (sourceType === "UI" && targetType === "Database")
-      ) {
-        let AllNodes = { ...Nodes };
-        let sourceNode = AllNodes[sourceId];
-        let targetNode = AllNodes[targetId];
-        AllNodes[sourceId].data = {
-          ...sourceNode.data,
-          prodDatabaseType: targetNode.data.prodDatabaseType,
-        };
-        setNodes({ ...AllNodes });
-      }
-    }
-  };
-
   const onsubmit = (Data) => {
     setUpdated(false);
     const NewNodes = { ...nodes };
@@ -933,21 +814,6 @@ const Designer = ({ update }) => {
       });
   };
 
-  const onCheckEdge = (edges) => {
-    let NewEdges = { ...edges };
-    for (const key in NewEdges) {
-      const Edge = NewEdges[key];
-      if (Edge.id.startsWith("UI")) {
-        if (
-          Edge.data.type === "synchronous" &&
-          Edge.data.framework === "rest-api"
-        ) {
-          delete Edge.data.type;
-          delete Edge.data.framework;
-        }
-      }
-    }
-  };
   const onEdgeClick = (e, edge) => {
     let updatedEdges = { ...edges };
     const sourceType = edge.source.split("_")[0];
@@ -1106,25 +972,21 @@ const Designer = ({ update }) => {
             onEdgesChange={(changes) => onEdgesChange(nodes, changes)}
             onConnect={(params) => onConnect(params, nodes)}
             onInit={setReactFlowInstance}
-            // onNodeDrag={onclick}
             onNodeDrag={(e, node) => Functions.onclick(e, node, setNodeType, setCurrentNode, setopen, setNodeClick, nodes)}
             onNodeClick={(e, node) => Functions.onclick(e, node, setNodeType, setCurrentNode, setopen, setNodeClick, nodes)}deleteKeyCode={["Backspace", "Delete"]}
             onDrop={(e) =>
               onDrop(
                 e,
                 ServiceDiscoveryCount,
-                MessageBrokerCount,
                 LogManagemntCount,
                 AuthProviderCount,
-                LocalenvironmentCount
               )
             }
             onDragOver={onDragOver}
             onDragLeave={() => setShowDiv(Object.keys(nodes).length === 0)}
-            // onNodeClick={onclick}
             fitView
             onEdgeUpdate={(oldEdge, newConnection) =>
-              Functions.onEdgeUpdate(nodes, oldEdge, newConnection, edgeUpdateSuccessful, setEdges, setNodes)
+              Functions.onEdgeUpdate(nodes, oldEdge, newConnection, edgeUpdateSuccessful, setEdges, setNodes, updated)
             }
             onEdgeUpdateStart={onEdgeUpdateStart}
             onEdgeUpdateEnd={(_, edge) => onEdgeUpdateEnd(nodes, edge)}
@@ -1159,7 +1021,6 @@ const Designer = ({ update }) => {
           setUpdated={setUpdated}
           triggerExit={triggerExit}
         />
-
         {nodeType === "UI" && Isopen && (
           <UiDataModal
             isOpen={Isopen}
@@ -1191,7 +1052,6 @@ const Designer = ({ update }) => {
             handleColorClick={handleColorClick}
           />
         )}
-
         {isVisibleDialog && (
           <ActionModal
             isOpen={isVisibleDialog}
@@ -1216,29 +1076,14 @@ const Designer = ({ update }) => {
             isMessageBroker={isMessageBroker}
           />
         )}
-
         {ServiceDiscoveryCount === 2 && (
           <AlertModal
             isOpen={true}
             onClose={() => setServiceDiscoveryCount(1)}
           />
         )}
-
-        {MessageBrokerCount === 2 && (
-          <AlertModal isOpen={true} onClose={() => setMessageBrokerCount(1)} />
-        )}
-
-        {CloudProviderCount === 2 && (
-          <AlertModal isOpen={true} onClose={() => setCloudProviderCount(1)} />
-        )}
         {LogManagemntCount === 2 && (
           <AlertModal isOpen={true} onClose={() => setLogManagementCount(1)} />
-        )}
-        {LocalenvironmentCount === 2 && (
-          <AlertModal
-            isOpen={true}
-            onClose={() => setLocalenvironmentCount(1)}
-          />
         )}
         {AuthProviderCount === 2 && (
           <AlertModal isOpen={true} onClose={() => setAuthProviderCount(1)} />
